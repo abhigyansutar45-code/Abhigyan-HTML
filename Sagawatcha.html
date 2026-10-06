@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAGAWATCHA — Time, Redefined.</title>
+<meta name="description" content="SAGAWATCHA: a fictional luxury watch showroom with original concept watches, a 3D viewer, comparison and a demo cart.">
+<meta property="og:title" content="SAGAWATCHA — Time, Redefined.">
+<meta property="og:description" content="An interactive digital luxury-watch showroom (fictional brand, demo store).">
+<link id="fav" rel="icon" href="">
+<style>
+:root{--bg:#050506;--p:#0c0c0f;--b:#232328;--t:#ece8df;--m:#8d8a82;--g:#c9a96a;--g2:#e8d3a2;--serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;--sans:system-ui,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(1200px 600px at 70% -10%,#1b1710 0,transparent 60%),var(--bg);color:var(--t);font:15px/1.55 var(--sans);overflow-x:hidden}
+body.rm *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+button,select,input{font:inherit;color:inherit;background:#101014;border:1px solid var(--b);border-radius:4px;padding:8px 12px}
+button{cursor:pointer;transition:.2s}
+button:hover{border-color:var(--g);color:var(--g2)}
+:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:.02em}
+.btn{background:var(--g);color:#120d04;border:0;font-weight:600;letter-spacing:.12em;font-size:12px;padding:13px 22px}
+.btn:hover{background:var(--g2);color:#000}
+.btn.o{background:none;color:var(--t);border:1px solid var(--g)}
+.sw{width:100%;height:100%}
+.logo-m{display:inline-flex;width:36px;height:36px}
+.logo-m svg{width:100%;height:100%}
+/* loader */
+#ld{position:fixed;inset:0;background:#000;z-index:200;display:grid;place-items:center;text-align:center;transition:opacity .8s,visibility .8s}
+#ld.off{opacity:0;visibility:hidden}
+.lr{position:relative;width:130px;height:130px;margin:auto}
+.lr::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid #2a2417;border-top-color:var(--g);animation:sp 1.2s linear infinite}
+.lr .logo-m{position:absolute;inset:25px;width:80px;height:80px}
+#ld p{margin-top:22px;letter-spacing:.5em;font-family:var(--serif);font-size:20px;animation:fi 1.2s .4s both}
+#lp{color:var(--m);font-size:12px;letter-spacing:.2em}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes fi{from{opacity:0}}
+/* header */
+header{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:20px;padding:16px 32px;transition:.3s}
+header.sc{background:#050506e6;backdrop-filter:blur(14px);padding:9px 32px;border-bottom:1px solid var(--b)}
+.br{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:21px;letter-spacing:.3em;color:var(--t);text-decoration:none}
+#nv{display:flex;gap:22px;margin-left:auto}
+#nv a{color:var(--m);text-decoration:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+#nv a:hover{color:var(--g2)}
+.ic{display:flex;gap:6px}
+.ic button{position:relative;padding:6px 10px;font-size:13px}
+.ic b{font-weight:600;color:var(--g);margin-left:4px}
+#hm{display:none}
+#bn{display:none}
+/* hero */
+#hero{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:20px;padding:110px 6vw 60px;position:relative;overflow:hidden}
+#pc{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+#hero>div{position:relative;z-index:1}
+.ey{font-size:12px;letter-spacing:.4em;color:var(--g)}
+#hero h1{font-size:clamp(52px,8vw,118px);line-height:.95;margin:14px 0 18px}
+#hero p{max-width:480px;color:var(--m);font-size:17px;margin-bottom:28px}
+.hb{display:flex;gap:12px;flex-wrap:wrap}
+.hw{perspective:1100px;display:grid;place-items:center}
+.hw .sp{width:min(440px,80vw);aspect-ratio:1;transform-style:preserve-3d;animation:hs 14s ease-in-out infinite;filter:drop-shadow(0 40px 50px #000)}
+@keyframes hs{0%,100%{transform:rotateY(-24deg) rotateX(6deg)}50%{transform:rotateY(24deg) rotateX(-4deg) translateY(-10px)}}
+.dc{text-align:center;color:var(--m);font-size:11px;letter-spacing:.2em;margin-top:14px}
+/* sections */
+section{padding:90px 6vw;position:relative}
+section>h2{font-size:clamp(32px,4vw,52px);margin-bottom:8px}
+.sub{color:var(--m);max-width:620px;margin-bottom:34px}
+.rv{opacity:0;transform:translateY(26px);transition:.8s}
+.rv.in{opacity:1;transform:none}
+/* catalog */
+.tl{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:8px;margin-bottom:12px}
+.rc{color:var(--m);font-size:13px;margin:6px 0 18px}
+#gr{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+body.cp #gr{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.cd{background:linear-gradient(160deg,#121217,#0a0a0d);border:1px solid var(--b);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px;transition:.35s}
+.cd:hover{transform:translateY(-6px);border-color:var(--g);box-shadow:0 22px 50px #000a,0 0 30px #c9a96a14}
+.cd .im{aspect-ratio:1;cursor:pointer;display:grid;place-items:center}
+.cd .im svg{width:78%;transition:.5s}
+.cd:hover .im svg{transform:scale(1.07) rotate(-3deg)}
+.tg{font-size:10px;letter-spacing:.2em;color:var(--g)}
+.cd h3{font-size:20px}
+.pr{font-family:var(--serif);font-size:24px;color:var(--g2)}
+.mt{color:var(--m);font-size:12px}
+.cd p{color:var(--m);font-size:13px;flex:1}
+.ac{display:flex;gap:6px;margin-top:6px}
+.ac button{flex:1;padding:7px 4px;font-size:11px;letter-spacing:.06em}
+.ac button.on{border-color:var(--g);color:var(--g)}
+.bd{display:inline-block;border:1px solid var(--g);color:var(--g);font-size:9px;letter-spacing:.14em;padding:2px 6px;border-radius:3px;width:max-content}
+/* craft */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--b);border:1px solid var(--b)}
+.cg div{background:var(--p);padding:26px 22px}
+.cg b{font-family:var(--serif);font-size:30px;color:var(--g)}
+.cg h3{font-size:20px;margin:4px 0}
+.cg p{color:var(--m);font-size:13px}
+.mv{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.mv svg{width:100%;max-width:440px;margin:auto;display:block}
+.g1{animation:sp 24s linear infinite;transform-origin:150px 150px}
+.g2{animation:sp 12s linear infinite reverse;transform-origin:262px 120px}
+.g3{animation:sp 8s linear infinite;transform-origin:120px 250px}
+.bw{animation:bw 1s ease-in-out infinite alternate;transform-origin:250px 250px}
+@keyframes bw{from{transform:rotate(-80deg)}to{transform:rotate(80deg)}}
+.tm{border-left:1px solid var(--g);padding-left:24px;display:grid;gap:22px}
+.tm div{position:relative}
+.tm div::before{content:"";position:absolute;left:-29px;top:7px;width:9px;height:9px;border-radius:50%;background:var(--g)}
+.tm b{font-family:var(--serif);font-size:22px;color:var(--g2)}
+.jr{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.jr article{border:1px solid var(--b);padding:22px;border-radius:8px;background:var(--p)}
+.jr h3{font-size:22px;margin-bottom:6px}
+.jr p{color:var(--m);font-size:14px}
+footer{border-top:1px solid var(--b);padding:60px 6vw 90px;display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:30px;background:#030304}
+footer h4{font-family:var(--serif);font-size:18px;margin-bottom:8px;color:var(--g2)}
+footer a{display:block;color:var(--m);text-decoration:none;font-size:13px;padding:2px 0}
+footer a:hover{color:var(--g2)}
+.fl{grid-column:1/-1;color:var(--m);font-size:12px;border-top:1px solid var(--b);padding-top:18px}
+/* panels */
+#ov{position:fixed;inset:0;background:#000c;backdrop-filter:blur(6px);z-index:100;display:none;place-items:center;padding:18px}
+#ov.on{display:grid}
+.pn{position:relative;background:var(--p);border:1px solid var(--b);border-radius:12px;width:min(980px,100%);max-height:92vh;overflow:auto;padding:30px;animation:fi .3s}
+.pn.side{margin-left:auto;width:min(440px,100%);height:100%;max-height:none;border-radius:0}
+#ov:has(.side){padding:0}
+.x{position:absolute;right:12px;top:12px;padding:4px 9px;z-index:3}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.dg .sp{max-width:340px;margin:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+td,th{padding:7px 8px;border-bottom:1px solid var(--b);text-align:left}
+th{color:var(--m);font-weight:500}
+.row{display:grid;grid-template-columns:70px 1fr auto;gap:12px;align-items:center;border-bottom:1px solid var(--b);padding:10px 0}
+.row .sp{width:70px}
+.q{display:inline-flex;gap:6px;align-items:center}
+.q button{padding:1px 8px}
+.v3 h3{font-size:26px}
+.stage{height:min(52vh,430px);perspective:1100px;display:grid;place-items:center;cursor:grab;touch-action:none;background:radial-gradient(circle at 50% 40%,#1d1a13,#050506 70%);border:1px solid var(--b);border-radius:10px;margin:14px 0;overflow:hidden;user-select:none}
+.w3{position:relative;width:300px;height:300px;transform-style:preserve-3d}
+.w3>*{position:absolute;backface-visibility:visible}
+.w3 .fr{inset:0;backface-visibility:hidden}
+.w3 .ly{left:63px;top:63px;width:174px;height:174px;border-radius:50%;background:conic-gradient(#6a5a3a,#e8d3a2,#4b402a,#c9a96a,#6a5a3a)}
+.w3 .bk{left:63px;top:63px;width:174px;height:174px;border-radius:50%;background:#15130e;border:5px solid var(--g);display:grid;place-items:center;text-align:center;font-size:9px;letter-spacing:.18em;color:var(--g);backface-visibility:hidden;transform:translateZ(-30px) rotateY(180deg)}
+.vb{display:flex;gap:8px;flex-wrap:wrap}
+.an{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#16140e;border:1px solid var(--g);padding:10px 18px;border-radius:6px;z-index:300;animation:fi .25s}
+#cu{position:fixed;width:34px;height:34px;border:1px solid var(--g);border-radius:50%;pointer-events:none;z-index:400;transition:width .2s,height .2s,background .2s;transform:translate(-50%,-50%);display:none}
+#cu.h{width:56px;height:56px;background:#c9a96a22}
+@media(hover:hover) and (pointer:fine){#cu.ok{display:block}}
+@media(max-width:900px){
+ body{padding-bottom:58px}
+ header{padding:12px 16px}#nv{display:none;position:fixed;inset:58px 0 0;background:#050506f5;flex-direction:column;padding:30px;margin:0}
+ #nv.on{display:flex}#nv a{font-size:16px}
+ #hm{display:block;margin-left:auto}.ic{margin-left:0}
+ #hero,.mv,.dg{grid-template-columns:1fr}
+ #hero{padding-top:90px}
+ .tl{grid-template-columns:1fr 1fr}.tl input{grid-column:1/-1}
+ footer{grid-template-columns:1fr 1fr}
+ #bn{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:70;background:#050506f2;border-top:1px solid var(--b);justify-content:space-around;padding:8px 0}
+ #bn button{border:0;background:none;font-size:11px;color:var(--m)}
+ .ic{display:none}
+}
+</style>
+</head>
+<body>
+<div id="ld"><div><div class="lr"><span class="logo-m"></span></div><p>SAGAWATCHA</p><div id="lp">0%</div></div></div>
+<div id="cu"></div>
+<header id="hd">
+ <a class="br" href="#top" aria-label="Sagawatcha home"><span class="logo-m"></span>SAGAWATCHA</a>
+ <nav id="nv">
+  <a href="#catalog">Collections</a><a href="#catalog">Watches</a><a href="#heritage">Heritage</a><a href="#craft">Craftsmanship</a><a href="#movement">Movement</a><a href="#journal">Journal</a><a href="#about">About</a>
+ </nav>
+ <div class="ic">
+  <button data-a="search" aria-label="Search">Search</button>
+  <button data-a="cmpv" aria-label="Compare">Compare<b id="nc">0</b></button>
+  <button data-a="wishv" aria-label="Wishlist">♡<b id="nw">0</b></button>
+  <button data-a="cartv" aria-label="Cart">Cart<b id="nk">0</b></button>
+  <button data-a="set" aria-label="Settings">⚙</button>
+ </div>
+ <button id="hm" aria-label="Menu">☰</button>
+</header>
+<main id="top">
+<div id="hero">
+ <canvas id="pc" aria-hidden="true"></canvas>
+ <div>
+  <div class="ey">FICTIONAL LUXURY HOROLOGY · DEMO SHOWROOM</div>
+  <h1>TIME,<br>REDEFINED.</h1>
+  <p>Precision engineered for those who measure moments differently.</p>
+  <div class="hb"><a href="#catalog"><button class="btn">EXPLORE COLLECTION</button></a><a href="#craft"><button class="btn o">DISCOVER THE CRAFT</button></a></div>
+ </div>
+ <div class="hw"><div><div class="sp" id="hsp"></div><div class="dc">SAGAWATCHA ORIGINAL CONCEPT</div></div></div>
+</div>
+<section id="catalog">
+ <h2 class="rv">The Collection</h2>
+ <p class="sub rv">Every watch here is an original Sagawatcha concept — a fictional showcase model, not a real-world product. Prices are simulated.</p>
+ <div class="tl">
+  <input id="q" type="search" placeholder="Search name, category, material, movement, price…" aria-label="Search watches">
+  <select id="ft" aria-label="Price tier"></select><select id="fc" aria-label="Category"></select><select id="fm" aria-label="Material"></select><select id="fv" aria-label="Movement"></select>
+  <select id="so" aria-label="Sort"><option value="f">Featured</option><option value="pa">Price low → high</option><option value="pd">Price high → low</option><option value="n">Newest</option><option value="p">Most popular</option><option value="r">Highest rated</option></select>
+ </div>
+ <div class="rc" id="rc"></div>
+ <div id="gr" aria-live="polite"></div>
+</section>
+<section id="craft">
+ <h2 class="rv">The Art of Precision</h2>
+ <p class="sub rv">Eight stages, imagined for every Sagawatcha concept.</p>
+ <div class="cg rv" id="cg"></div>
+</section>
+<section id="movement">
+ <div class="mv">
+  <div class="rv"><h2>Inside the Movement</h2><p class="sub">An educational visualization of a mechanical movement: gear train, balance wheel and escapement. It illustrates the idea and is not a physically accurate simulation.</p></div>
+  <svg viewBox="0 0 400 400" class="rv" role="img" aria-label="Animated gears and balance wheel">
+   <g class="g1"><circle cx="150" cy="150" r="80" fill="none" stroke="#c9a96a" stroke-width="14" stroke-dasharray="9 7"/><circle cx="150" cy="150" r="64" fill="none" stroke="#6a5a3a" stroke-width="3"/><path d="M150 90v120M90 150h120" stroke="#6a5a3a" stroke-width="3"/></g>
+   <g class="g2"><circle cx="262" cy="120" r="48" fill="none" stroke="#e8d3a2" stroke-width="12" stroke-dasharray="7 6"/><circle cx="262" cy="120" r="8" fill="#c9a96a"/></g>
+   <g class="g3"><circle cx="120" cy="250" r="52" fill="none" stroke="#8d8a82" stroke-width="12" stroke-dasharray="7 6"/><circle cx="120" cy="250" r="8" fill="#c9a96a"/></g>
+   <g class="bw"><circle cx="250" cy="250" r="56" fill="none" stroke="#c9a96a" stroke-width="5"/><path d="M194 250h112M250 194v112" stroke="#c9a96a" stroke-width="3"/><circle cx="250" cy="250" r="6" fill="#e8d3a2"/></g>
+   <path d="M312 290l22 12-22 12z" fill="#8d8a82"/>
+  </svg>
+ </div>
+</section>
+<section id="heritage">
+ <h2 class="rv">The Sagawatcha Story</h2>
+ <p class="sub rv">Brand fiction. Sagawatcha is an imaginary maison created for this showcase; none of this is real history.</p>
+ <div class="tm rv"><div><b>The Sketch</b><p class="mt">An imagined founding idea: a watch that rewards patience.</p></div><div><b>The Workshop</b><p class="mt">Fictional atelier where every concept is drawn, argued over and redrawn.</p></div><div><b>The Concepts</b><p class="mt">Aurelis, Eclipse, Chronos X, Orbit, Imperial and Infinity take shape.</p></div><div><b>The Showroom</b><p class="mt">This page: a digital space to inspect each concept in 3D.</p></div></div>
+</section>
+<section id="journal">
+ <h2 class="rv">Journal &amp; Care</h2>
+ <p class="sub rv">General educational notes on watches. Not manufacturer-specific advice.</p>
+ <div class="jr rv">
+  <article><h3>Mechanical vs. quartz</h3><p>Mechanical watches use a wound spring and escapement; quartz watches use a vibrating crystal regulated by a battery. Quartz is typically more accurate, mechanical is prized for craft.</p></article>
+  <article><h3>What a tourbillon does</h3><p>A tourbillon rotates the escapement in a cage to average out the effect of gravity on rate. It is largely a showcase of skill today.</p></article>
+  <article><h3>Sapphire crystal</h3><p>Synthetic sapphire is very scratch resistant, ranking 9 on the Mohs scale, though it can still chip on hard impact.</p></article>
+  <article><h3>Care basics</h3><p>Keep away from strong magnets, rinse after salt water only if rated for it, store mechanical watches dry, and service them periodically.</p></article>
+ </div>
+</section>
+</main>
+<footer id="about">
+ <div><div class="br" style="font-size:20px"><span class="logo-m"></span>SAGAWATCHA</div><p class="mt" style="margin-top:10px">TIME, REDEFINED.</p></div>
+ <div><h4>Collections</h4><a href="#catalog">Watches</a><a href="#craft">Craftsmanship</a></div>
+ <div><h4>Explore</h4><a href="#journal">Journal</a><a href="#heritage">About</a></div>
+ <div><h4>Legal</h4><a href="#about">Contact</a><a href="#about">Privacy</a><a href="#about">Terms</a></div>
+ <div class="fl">Sagawatcha is a fictional brand. All watches are original concepts; prices and ratings are simulated. Demo store: no real payment is processed.</div>
+</footer>
+<nav id="bn" aria-label="Mobile"><button data-a="home">HOME</button><button data-a="shop">WATCHES</button><button data-a="search">SEARCH</button><button data-a="wishv">WISHLIST</button><button data-a="cartv">CART</button></nav>
+<div id="ov"><div class="pn" id="pn"></div></div>
+<script>
+"use strict";
+/* ===== Helpers & brand mark (single SVG reused for header, loader, footer and favicon) ===== */
+const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
+const LOGO='<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="14" fill="#0a0a0c"/><circle cx="32" cy="32" r="23" fill="none" stroke="#c9a96a" stroke-width="2"/><circle cx="32" cy="32" r="18" fill="none" stroke="#c9a96a" stroke-opacity=".4"/><path d="M40 24c-2-4-16-4-16 3 0 8 16 3 16 11 0 7-14 7-16 2" fill="none" stroke="#e8d3a2" stroke-width="3.2" stroke-linecap="round"/><circle cx="32" cy="9" r="1.8" fill="#c9a96a"/></svg>';
+$$('.logo-m').forEach(e=>e.innerHTML=LOGO);
+$('#fav').href='data:image/svg+xml,'+encodeURIComponent(LOGO);
+const usd=n=>'$'+n.toLocaleString('en-US');
+/* ===== Product database (all original Sagawatcha concepts) ===== */
+const D={Classic:'A timeless three-hand concept with a polished case and a quiet, balanced dial.',Dress:'A slim, formal concept designed to sit beneath a cuff.',Sports:'A robust everyday concept with a textured dial and strong lume.',Diver:'A deep-water concept with a rotating bezel and screw-down crown.',Chronograph:'A two-register chronograph concept with a precise pusher feel.',GMT:'A dual-time concept for travellers, with a 24-hour hand.',Field:'A rugged, legible concept built for the outdoors.',Pilot:'An aviation-inspired concept with a large crown and clear numerals.',Tourbillon:'A high-complication concept showing a rotating escapement cage.',Skeleton:'An open-worked concept that exposes its mechanism.',Smart:'A futuristic connected-watch concept with a hybrid dial.','Limited Edition':'A numbered collector concept in an imagined tiny series.','Haute Horlogerie':'An extreme complication concept, hand-finished in imagination.'};
+const RAW=[['Pocket One','Field',10,'Resin','Quartz','#2c2c2c','#c9a96a'],['Daily Spark','Sports',49,'Stainless steel','Quartz','#1a2a3a','#e8d3a2'],['Field Scout','Field',89,'Stainless steel','Quartz','#2f3a2a','#c9a96a'],['Meridian','Classic',240,'Stainless steel','Quartz','#e8e4d8','#222'],['Voyager GMT','GMT',640,'Stainless steel','Automatic','#1c2230','#c9a96a'],['Tidal 40','Diver',890,'Stainless steel','Automatic','#0d2a3a','#e8d3a2'],['Helix Smart','Smart',1800,'Titanium','Concept movement','#101014','#6fd3c0'],['Aurelis','Dress',2400,'Rose gold','Automatic','#f1e4d0','#7a4a2a'],['Cadence Chrono','Chronograph',3800,'Stainless steel','Automatic','#15151a','#c9a96a'],['Aviator','Pilot',5200,'Titanium','Automatic','#111','#e8d3a2'],['Eclipse','Sports',18500,'Ceramic','Automatic','#050505','#c9a96a'],['Skeleton Vault','Skeleton',34000,'Titanium','Manual','#0b0b0e','#e8d3a2'],['Nocturne','Dress',62000,'Platinum','Manual','#16161c','#d8d8e0'],['Chronos X','Chronograph',128000,'Carbon fiber','Mechanical','#0a0a0a','#e04a3a'],['Orbit','Tourbillon',240000,'Titanium','Tourbillon','#0a1020','#9fb8ff'],['Regent GMT','GMT',410000,'Gold','Mechanical','#201810','#e8d3a2'],['Imperial','Limited Edition',1800000,'Platinum','Tourbillon','#10101a','#e8d3a2'],['Sapphire Void','Haute Horlogerie',4500000,'Sapphire','Tourbillon','#0a0a12','#9fd8ff'],['Grand Complication','Haute Horlogerie',9000000,'Gold','Tourbillon','#1a140c','#c9a96a'],['Singularity','Limited Edition',25000000,'Sapphire','Concept movement','#000','#c9a96a'],['Zenith Halo','Haute Horlogerie',48000000,'Platinum','Concept movement','#0c0c14','#e8d3a2'],['Infinity','Limited Edition',100000000,'Platinum','Concept movement','#000','#e8d3a2']];
+const P=RAW.map(([n,cat,price,mat,mov,dial,acc],i)=>{const h=(i*37+11)%100;return{id:i+1,name:'Sagawatcha '+n,cat,price,mat,mov,dial,acc,size:(34+h%12)+' mm',wr:cat=='Diver'?'300 m':h%3?'100 m':'50 m',res:mov=='Quartz'?'Battery':(40+h%60)+' h',year:2024+h%3,rating:(4+h%10/10).toFixed(1),pop:h,desc:D[cat]}});
+const byId=id=>P.find(p=>p.id==id);
+const TIERS=[['Entry ($10–$100)',10,100],['Affordable ($100–$1K)',100,1e3],['Premium ($1K–$10K)',1e3,1e4],['Luxury ($10K–$100K)',1e4,1e5],['Ultra-luxury ($100K–$1M)',1e5,1e6],['Collector ($1M–$10M)',1e6,1e7],['Extreme concept ($10M–$100M)',1e7,1e9]];
+/* ===== SVG watch illustration (used on cards, hero, viewer) ===== */
+function wsvg(p){let t='';for(let i=0;i<12;i++)t+='<rect x="99" y="'+(i%3?62:58)+'" width="2" height="'+(i%3?6:11)+'" fill="'+p.acc+'" transform="rotate('+i*30+' 100 100)"/>';
+ return '<svg class="sw" viewBox="0 0 200 200" role="img" aria-label="'+p.name+' illustration"><rect x="74" y="0" width="52" height="200" rx="12" fill="#17171b"/><path d="M80 10h40M80 24h40M80 176h40M80 190h40" stroke="#2a2a30" stroke-width="2"/><rect x="152" y="94" width="10" height="12" rx="2" fill="'+p.acc+'"/><circle cx="100" cy="100" r="60" fill="#14141a" stroke="'+p.acc+'" stroke-width="5"/><circle cx="100" cy="100" r="52" fill="'+p.dial+'" stroke="#000" stroke-opacity=".5"/>'+t+'<text x="100" y="80" text-anchor="middle" font-size="6" letter-spacing="1.5" fill="'+p.acc+'" font-family="Georgia">SAGAWATCHA</text><path d="M100 100l0-30" stroke="'+p.acc+'" stroke-width="3" stroke-linecap="round"/><path d="M100 100l22 14" stroke="'+p.acc+'" stroke-width="2.4" stroke-linecap="round"/><circle cx="100" cy="100" r="3" fill="'+p.acc+'"/><path d="M62 78a46 46 0 0 1 40-30l-30 52z" fill="#fff" opacity=".07"/></svg>'}
+/* ===== State & storage ===== */
+let S={wish:[],cart:{},cmp:[],rm:false,fx:true,cp:false};
+try{S=Object.assign(S,JSON.parse(localStorage.getItem('sagawatcha')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('sagawatcha',JSON.stringify(S))}catch(e){}};
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),2200)}
+function applySet(){document.body.classList.toggle('rm',S.rm);document.body.classList.toggle('cp',S.cp)}
+function counts(){$('#nw').textContent=S.wish.length;$('#nc').textContent=S.cmp.length;$('#nk').textContent=Object.values(S.cart).reduce((a,b)=>a+b,0)}
+/* ===== Catalog: search, filter, sort, render ===== */
+function fillSel(id,label,vals){$(id).innerHTML='<option value="">'+label+'</option>'+vals.map((v,i)=>'<option value="'+(Array.isArray(v)?i:v)+'">'+(Array.isArray(v)?v[0]:v)+'</option>').join('')}
+fillSel('#ft','All prices',TIERS);
+fillSel('#fc','All categories',Object.keys(D));
+fillSel('#fm','All materials',[...new Set(P.map(p=>p.mat))]);
+fillSel('#fv','All movements',[...new Set(P.map(p=>p.mov))]);
+function render(){
+ const q=$('#q').value.trim().toLowerCase(),t=$('#ft').value,c=$('#fc').value,m=$('#fm').value,v=$('#fv').value,s=$('#so').value;
+ let r=P.filter(p=>(!q||(p.name+' '+p.cat+' '+p.mat+' '+p.mov+' '+p.price+' '+p.desc+' concept').toLowerCase().includes(q))&&(t===''||p.price>=TIERS[t][1]&&p.price<TIERS[t][2])&&(!c||p.cat==c)&&(!m||p.mat==m)&&(!v||p.mov==v));
+ const k={pa:(a,b)=>a.price-b.price,pd:(a,b)=>b.price-a.price,n:(a,b)=>b.year-a.year||b.id-a.id,p:(a,b)=>b.pop-a.pop,r:(a,b)=>b.rating-a.rating}[s];if(k)r.sort(k);
+ $('#rc').textContent=q?'SEARCH RESULTS — '+r.length+' watch'+(r.length==1?'':'es'):r.length+' watches';
+ $('#gr').innerHTML=r.length?r.map(p=>'<article class="cd rv in"><span class="bd">SAGAWATCHA ORIGINAL CONCEPT</span><div class="im" data-a="view" data-id="'+p.id+'">'+wsvg(p)+'</div><div class="tg">'+p.cat.toUpperCase()+'</div><h3>'+p.name+'</h3><div class="pr">'+usd(p.price)+'</div><div class="mt">★ '+p.rating+' (demo rating) · '+p.mat+' · '+p.mov+'</div><p>'+p.desc+'</p><div class="ac"><button data-a="wish" data-id="'+p.id+'" class="'+(S.wish.includes(p.id)?'on':'')+'" aria-label="Wishlist">'+(S.wish.includes(p.id)?'♥':'♡')+'</button><button data-a="view" data-id="'+p.id+'">QUICK VIEW</button><button data-a="cart" data-id="'+p.id+'">ADD</button></div></article>').join(''):'<p class="sub">No results found. Try a different search or clear a filter.</p>'}
+['#q','#ft','#fc','#fm','#fv','#so'].forEach(i=>$(i).addEventListener('input',render));
+/* ===== Panels (modal / drawer) ===== */
+const ov=$('#ov'),pn=$('#pn');
+function panel(h,cls){pn.className='pn '+(cls||'');pn.innerHTML='<button class="x" data-a="close" aria-label="Close">✕</button>'+h;ov.classList.add('on');pn.scrollTop=0}
+const closeP=()=>{ov.classList.remove('on');pn.innerHTML=''};
+function view(id){const p=byId(id),tier=TIERS.find(t=>p.price>=t[1]&&p.price<t[2])[0];
+ panel('<div class="dg"><div class="sp">'+wsvg(p)+'</div><div><span class="bd">SAGAWATCHA ORIGINAL CONCEPT</span><h2>'+p.name+'</h2><div class="tg">'+p.cat.toUpperCase()+' · '+tier.toUpperCase()+'</div><div class="pr" style="font-size:34px;margin:6px 0">'+usd(p.price)+'</div><p class="mt">'+p.desc+' Fictional showcase model; price is simulated.</p><table><tr><th>Case material</th><td>'+p.mat+'</td></tr><tr><th>Movement</th><td>'+p.mov+'</td></tr><tr><th>Case size</th><td>'+p.size+'</td></tr><tr><th>Water resistance</th><td>'+p.wr+'</td></tr><tr><th>Power reserve</th><td>'+p.res+'</td></tr><tr><th>Concept year</th><td>'+p.year+'</td></tr><tr><th>Availability</th><td>Concept — demo purchase only</td></tr><tr><th>Demo rating</th><td>★ '+p.rating+'</td></tr></table><div class="vb"><button class="btn" data-a="cart" data-id="'+p.id+'">ADD TO COLLECTION</button><button data-a="wish" data-id="'+p.id+'">WISHLIST</button><button data-a="cmp" data-id="'+p.id+'">COMPARE</button><button data-a="3d" data-id="'+p.id+'">VIEW IN 3D</button></div></div></div>')}
+/* ===== 3D viewer (CSS 3D layers; drag, wheel, pinch, auto-rotate, lighting) ===== */
+let V=null;
+function open3D(id){const p=byId(id);let ly='';for(let i=0;i<10;i++)ly+='<div class="ly" style="transform:translateZ('+(4-i*3.4)+'px)"></div>';
+ panel('<div class="v3"><span class="bd">SAGAWATCHA ORIGINAL CONCEPT</span><h3>'+p.name+' — 3D showroom</h3><div class="stage" id="stg"><div class="w3" id="w3">'+ly+'<div class="bk">SAGAWATCHA<br>ORIGINAL<br>CONCEPT</div><div class="fr" style="transform:translateZ(6px)">'+wsvg(p)+'</div></div></div><div class="vb"><button id="v-a">AUTO ROTATE</button><button id="v-r">RESET</button><button id="v-i">ZOOM +</button><button id="v-o">ZOOM −</button></div><p class="mt" style="margin-top:8px">Drag to rotate · wheel or pinch to zoom · view the front, side and back of the case.</p></div>');
+ V={rx:-8,ry:-25,z:1,auto:!S.rm,pts:new Map(),d0:0};
+ const st=$('#stg'),w=$('#w3');
+ st.onpointerdown=e=>{st.setPointerCapture(e.pointerId);V.pts.set(e.pointerId,[e.clientX,e.clientY]);V.d0=0;st.style.cursor='grabbing'};
+ st.onpointermove=e=>{const o=V.pts.get(e.pointerId);if(!o)return;
+  if(V.pts.size==2){V.pts.set(e.pointerId,[e.clientX,e.clientY]);const [a,b]=[...V.pts.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(V.d0)V.z=Math.min(2.4,Math.max(.5,V.z*d/V.d0));V.d0=d;return}
+  V.ry+=(e.clientX-o[0])*.6;V.rx=Math.max(-80,Math.min(80,V.rx-(e.clientY-o[1])*.6));V.pts.set(e.pointerId,[e.clientX,e.clientY])};
+ st.onpointerup=st.onpointercancel=e=>{V.pts.delete(e.pointerId);st.style.cursor='grab'};
+ st.onwheel=e=>{e.preventDefault();V.z=Math.min(2.4,Math.max(.5,V.z*(e.deltaY>0?.92:1.08)))};
+ $('#v-a').onclick=()=>V.auto=!V.auto;$('#v-r').onclick=()=>Object.assign(V,{rx:-8,ry:-25,z:1});
+ $('#v-i').onclick=()=>V.z=Math.min(2.4,V.z*1.2);$('#v-o').onclick=()=>V.z=Math.max(.5,V.z/1.2);
+ (function f(){if(!document.body.contains(w))return;if(V.auto&&!V.pts.size)V.ry+=.45;
+  const c=Math.abs(Math.cos(V.ry*Math.PI/180));w.style.transform='scale('+V.z+') rotateX('+V.rx+'deg) rotateY('+V.ry+'deg)';w.style.filter='brightness('+(.6+.4*c).toFixed(2)+')';requestAnimationFrame(f)})()}
+/* ===== Wishlist, cart, compare, checkout ===== */
+function listP(ids){return ids.length?ids.map(id=>{const p=byId(id);return '<div class="row"><div class="sp">'+wsvg(p)+'</div><div><b>'+p.name+'</b><div class="mt">'+usd(p.price)+'</div></div><div class="vb"><button data-a="view" data-id="'+id+'">VIEW</button><button data-a="wish" data-id="'+id+'">REMOVE</button></div></div>'}).join(''):'<p class="mt">Nothing here yet.</p>'}
+function wishV(){panel('<h3>Wishlist</h3>'+listP(S.wish),'side')}
+function cartV(){const ids=Object.keys(S.cart),sub=ids.reduce((a,i)=>a+byId(i).price*S.cart[i],0),tax=Math.round(sub*.08);
+ panel('<h3>Your collection</h3><p class="mt">DEMO STORE — NO REAL PAYMENT IS PROCESSED</p>'+(ids.length?ids.map(i=>{const p=byId(i);return '<div class="row"><div class="sp">'+wsvg(p)+'</div><div><b>'+p.name+'</b><div class="mt">'+usd(p.price)+'</div><span class="q"><button data-a="dec" data-id="'+i+'">−</button>'+S.cart[i]+'<button data-a="inc" data-id="'+i+'">+</button></span></div><button data-a="rm" data-id="'+i+'">REMOVE</button></div>'}).join('')+'<table><tr><th>Subtotal</th><td>'+usd(sub)+'</td></tr><tr><th>Estimated tax (8%)</th><td>'+usd(tax)+'</td></tr><tr><th>Total</th><td><b>'+usd(sub+tax)+'</b></td></tr></table><div class="vb"><button class="btn" data-a="co">CHECKOUT (DEMO)</button><button data-a="clr">CLEAR CART</button></div>':'<p class="mt" style="margin-top:14px">Your cart is empty.</p>'),'side')}
+function cmpV(){const L=S.cmp.map(byId);panel('<h3>Compare watches</h3>'+(L.length<2?'<p class="mt">Add at least two watches with COMPARE.</p>':'')+(L.length?'<table><tr><th></th>'+L.map(p=>'<th>'+p.name.replace('Sagawatcha ','')+'</th>').join('')+'</tr>'+[['Price',p=>usd(p.price)],['Collection',p=>p.cat],['Case size',p=>p.size],['Material',p=>p.mat],['Movement',p=>p.mov],['Power reserve',p=>p.res],['Water resistance',p=>p.wr],['Availability',p=>'Concept']].map(([k,f])=>'<tr><th>'+k+'</th>'+L.map(p=>'<td>'+f(p)+'</td>').join('')+'</tr>').join('')+'</table><button data-a="cmpc">CLEAR</button>':''))}
+function checkout(){panel('<h3>Demo checkout</h3><p class="mt">DEMO CHECKOUT — NO REAL PAYMENT IS PROCESSED. Do not enter real personal or card details.</p><p style="margin:14px 0 6px">Customer details</p><input id="cn" placeholder="Demo name" style="width:100%;margin-bottom:8px"><p style="margin:8px 0 6px">Shipping</p><select id="cs" style="width:100%;margin-bottom:14px"><option>Standard (demo)</option><option>Express (demo)</option></select><button class="btn" data-a="place">PLACE DEMO ORDER</button>','side')}
+function setV(){panel('<h3>Settings</h3><p style="margin:14px 0"><label><input type="checkbox" id="s1" '+(S.rm?'checked':'')+'> Reduce motion</label></p><p style="margin:14px 0"><label><input type="checkbox" id="s2" '+(S.fx?'checked':'')+'> Background particles</label></p><p style="margin:14px 0"><label><input type="checkbox" id="s3" '+(S.cp?'checked':'')+'> Compact product grid</label></p>','side');
+ $('#s1').onchange=e=>{S.rm=e.target.checked;applySet();save()};$('#s2').onchange=e=>{S.fx=e.target.checked;save()};$('#s3').onchange=e=>{S.cp=e.target.checked;applySet();save()}}
+/* ===== Central click handler (event delegation) ===== */
+const tog=(a,id)=>{const i=a.indexOf(id);i<0?a.push(id):a.splice(i,1)};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const a=el.dataset.a,id=+el.dataset.id;
+ if(a=='close')closeP();else if(a=='view')view(id);else if(a=='3d')open3D(id);
+ else if(a=='wish'){tog(S.wish,id);toast(S.wish.includes(id)?'Added to wishlist':'Removed from wishlist');render();if($('.side h3')&&$('.side h3').textContent=='Wishlist')wishV()}
+ else if(a=='cart'){S.cart[id]=(S.cart[id]||0)+1;toast('Added to your collection')}
+ else if(a=='cmp'){if(!S.cmp.includes(id)){if(S.cmp.length>=4)S.cmp.shift();S.cmp.push(id)}toast('Added to compare ('+S.cmp.length+')')}
+ else if(a=='inc'){S.cart[id]++;cartV()}else if(a=='dec'){if(--S.cart[id]<=0)delete S.cart[id];cartV()}else if(a=='rm'){delete S.cart[id];cartV()}
+ else if(a=='clr'){S.cart={};cartV()}else if(a=='cmpc'){S.cmp=[];cmpV()}
+ else if(a=='wishv')wishV();else if(a=='cartv')cartV();else if(a=='cmpv')cmpV();else if(a=='set')setV();else if(a=='co')checkout();
+ else if(a=='place'){S.cart={};panel('<h3>Demo order confirmed</h3><p class="mt" style="margin-top:10px">Thank you, '+($('#cn')?.value||'collector')+'. This was a simulation: no payment was taken and nothing will ship.</p>','side')}
+ else if(a=='search'){location.hash='#catalog';setTimeout(()=>$('#q').focus(),400)}else if(a=='shop')location.hash='#catalog';else if(a=='home')scrollTo(0,0);
+ counts();save()});
+ov.addEventListener('click',e=>{if(e.target==ov)closeP()});
+addEventListener('keydown',e=>{if(e.key=='Escape')closeP()});
+$('#hm').onclick=()=>$('#nv').classList.toggle('on');$('#nv').onclick=()=>$('#nv').classList.remove('on');
+addEventListener('scroll',()=>$('#hd').classList.toggle('sc',scrollY>40),{passive:true});
+/* ===== Craft section, hero, scroll reveal, particles, cursor, loader ===== */
+$('#cg').innerHTML=[['Design','Sketches and proportion studies.'],['Engineering','Tolerances measured in microns.'],['Machining','Cases cut from solid blocks.'],['Polishing','Hand-brushed and mirror finishes.'],['Assembly','Movement and dial meet the case.'],['Regulation','Rate adjusted in several positions.'],['Testing','Water, shock and magnetism checks.'],['Final inspection','Every detail reviewed before release.']].map((c,i)=>'<div><b>0'+(i+1)+'</b><h3>'+c[0]+'</h3><p>'+c[1]+'</p></div>').join('');
+$('#hsp').innerHTML=wsvg(byId(11));
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.12});
+$$('.rv').forEach(e=>io.observe(e));
+(function(){const c=$('#pc'),x=c.getContext('2d');let w,h;const ps=Array.from({length:45},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.6+.4,s:Math.random()*.0004+.0001}));
+ const rs=()=>{w=c.width=c.offsetWidth;h=c.height=c.offsetHeight};rs();addEventListener('resize',rs);
+ (function f(){x.clearRect(0,0,w,h);if(S.fx)ps.forEach(p=>{if(!S.rm)p.y=(p.y-p.s+1)%1;x.fillStyle='rgba(201,169,106,.55)';x.beginPath();x.arc(p.x*w,p.y*h,p.r,0,7);x.fill()});requestAnimationFrame(f)})()})();
+const cu=$('#cu');
+addEventListener('pointermove',e=>{if(e.pointerType=='mouse')cu.classList.add('ok');cu.style.left=e.clientX+'px';cu.style.top=e.clientY+'px';cu.classList.toggle('h',!!e.target.closest('button,a,.im,.stage'))});
+applySet();counts();render();
+let pc=0;const li=setInterval(()=>{pc=Math.min(100,pc+4);$('#lp').textContent=pc+'%';if(pc>=100){clearInterval(li);setTimeout(()=>$('#ld').classList.add('off'),250)}},50);
+</script>
+</body>
+</html>
+ 

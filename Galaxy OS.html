@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>GalaxyOS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --bg:#07111f;--panel:rgba(16,27,45,.88);--panel2:rgba(25,40,64,.92);
+ --text:#eef7ff;--muted:#91a4bb;--accent:#5cc8ff;--accent2:#8b7cff;
+ --border:rgba(255,255,255,.11);--danger:#ff5f6d;--success:#52e0a0;
+ --taskbar:rgba(7,15,28,.86);--shadow:0 20px 60px rgba(0,0,0,.42)
+}
+body.light{
+ --bg:#dce7f2;--panel:rgba(255,255,255,.92);--panel2:#eef5fb;
+ --text:#172334;--muted:#607084;--border:rgba(0,0,0,.12);
+ --taskbar:rgba(255,255,255,.9);--shadow:0 20px 50px rgba(40,60,80,.22)
+}
+html,body{width:100%;height:100%;overflow:hidden;font-family:Inter,Segoe UI,Arial,sans-serif;background:#000;color:var(--text)}
+button,input,textarea,select{font:inherit}
+button{border:0;color:inherit;cursor:pointer}
+#os{position:fixed;inset:0;overflow:hidden;background:var(--bg)}
+#wallpaper{position:absolute;inset:0;transition:.5s;background:
+radial-gradient(circle at 20% 20%,rgba(83,128,255,.35),transparent 28%),
+radial-gradient(circle at 80% 30%,rgba(157,75,255,.3),transparent 30%),
+radial-gradient(circle at 50% 90%,rgba(0,210,255,.18),transparent 32%),
+linear-gradient(135deg,#030813,#0b1730 55%,#130c28)}
+#wallpaper:after{content:"";position:absolute;inset:0;opacity:.35;background-image:
+radial-gradient(#fff 1px,transparent 1px);background-size:90px 90px}
+.desktop{position:absolute;inset:0 0 58px;padding:22px;overflow:hidden}
+.desktop-icons{display:grid;grid-template-columns:repeat(1,90px);gap:12px;width:100px}
+.desktop-icon{width:82px;padding:8px 4px;text-align:center;border-radius:12px;color:white;text-shadow:0 1px 4px #000;transition:.15s}
+.desktop-icon:hover,.desktop-icon.selected{background:rgba(255,255,255,.12)}
+.desktop-icon .icon{font-size:35px;display:block;margin-bottom:5px}
+.desktop-icon span{font-size:12px;word-break:break-word}
+.taskbar{position:absolute;z-index:9000;bottom:0;left:0;right:0;height:58px;background:var(--taskbar);border-top:1px solid var(--border);backdrop-filter:blur(22px);display:flex;align-items:center;padding:7px 10px;gap:8px}
+.task-left,.task-center,.task-right{display:flex;align-items:center;gap:6px}
+.task-left{width:270px}.task-center{flex:1;justify-content:center}.task-right{width:270px;justify-content:flex-end}
+.task-btn{height:43px;min-width:43px;padding:0 11px;border-radius:11px;background:transparent;color:var(--text);display:flex;align-items:center;justify-content:center;gap:8px;transition:.15s}
+.task-btn:hover,.task-btn.active{background:rgba(120,180,255,.14)}
+.start-btn{font-size:22px}
+.search-task{width:170px;background:rgba(255,255,255,.07);justify-content:flex-start;color:var(--muted)}
+.app-task{position:relative;font-size:20px}
+.app-task.open:after{content:"";position:absolute;bottom:2px;width:18px;height:2px;border-radius:5px;background:var(--accent)}
+.system-item{font-size:12px;color:var(--muted);padding:0 5px;text-align:center}
+.clock{font-size:12px;line-height:17px;color:var(--text)}
+#startMenu{position:absolute;z-index:10000;left:10px;bottom:67px;width:410px;max-height:650px;background:var(--panel);border:1px solid var(--border);box-shadow:var(--shadow);border-radius:20px;backdrop-filter:blur(28px);padding:18px;display:none;animation:pop .15s}
+#startMenu.show{display:block}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.start-search{width:100%;height:42px;border:1px solid var(--border);background:rgba(255,255,255,.06);border-radius:11px;color:var(--text);padding:0 14px;outline:none}
+.start-title{font-weight:700;margin:18px 0 10px}
+.app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.start-app{padding:13px 5px;border-radius:12px;background:transparent;text-align:center}
+.start-app:hover{background:rgba(255,255,255,.08)}
+.start-app div{font-size:27px}.start-app small{display:block;margin-top:6px;font-size:11px}
+.start-bottom{margin-top:18px;border-top:1px solid var(--border);padding-top:12px;display:flex;justify-content:space-between}
+.power{display:flex;gap:5px}
+.power button{padding:9px;border-radius:9px;background:rgba(255,255,255,.06);font-size:12px}
+.window{position:absolute;z-index:100;width:700px;height:470px;min-width:300px;min-height:190px;background:var(--panel);border:1px solid var(--border);border-radius:15px;box-shadow:var(--shadow);overflow:hidden;backdrop-filter:blur(25px);animation:windowIn .18s}
+@keyframes windowIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.window.active{border-color:rgba(92,200,255,.38)}
+.titlebar{height:43px;background:rgba(255,255,255,.035);display:flex;align-items:center;padding:0 9px 0 13px;cursor:grab;user-select:none;border-bottom:1px solid var(--border)}
+.titlebar:active{cursor:grabbing}
+.title-icon{font-size:19px;margin-right:9px}.title-name{font-size:13px;font-weight:600;flex:1}
+.win-actions{display:flex;gap:3px}
+.win-actions button{width:32px;height:30px;border-radius:7px;background:transparent}
+.win-actions button:hover{background:rgba(255,255,255,.09)}
+.win-actions .close:hover{background:var(--danger);color:white}
+.window-content{height:calc(100% - 43px);overflow:auto}
+.resize{position:absolute;z-index:3}.r{right:0;top:10px;bottom:10px;width:6px;cursor:e-resize}.l{left:0;top:10px;bottom:10px;width:6px;cursor:w-resize}.b{left:10px;right:10px;bottom:0;height:6px;cursor:s-resize}.t{left:10px;right:10px;top:0;height:6px;cursor:n-resize}.br{right:0;bottom:0;width:13px;height:13px;cursor:se-resize}.bl{left:0;bottom:0;width:13px;height:13px;cursor:sw-resize}.tr{right:0;top:0;width:13px;height:13px;cursor:ne-resize}.tl{left:0;top:0;width:13px;height:13px;cursor:nw-resize}
+.pad{padding:18px}.toolbar{display:flex;align-items:center;gap:8px;padding:10px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.025)}
+.toolbtn{background:rgba(255,255,255,.06);padding:8px 11px;border-radius:8px;font-size:12px}.toolbtn:hover{background:rgba(92,200,255,.14)}
+input,textarea,select{background:rgba(255,255,255,.055);border:1px solid var(--border);color:var(--text);border-radius:9px;outline:none;padding:9px}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+.explorer{height:100%;display:flex}.side{width:175px;border-right:1px solid var(--border);padding:12px}.side-item{padding:9px;border-radius:8px;font-size:12px}.side-item:hover{background:rgba(255,255,255,.06)}
+.files-area{flex:1;overflow:auto}.pathbar{display:flex;gap:7px;align-items:center;padding:10px;border-bottom:1px solid var(--border)}.pathbar input{flex:1}
+.file-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;padding:14px}.file-item{padding:12px;text-align:center;border-radius:10px;cursor:pointer}.file-item:hover{background:rgba(255,255,255,.07)}.file-item.selected{background:rgba(92,200,255,.12)}.file-icon{font-size:35px}.file-name{font-size:11px;margin-top:6px;word-break:break-word}
+.notes{height:100%;display:flex;flex-direction:column}.note-toolbar{display:flex;gap:5px;padding:8px;border-bottom:1px solid var(--border);flex-wrap:wrap}.note-toolbar button{padding:6px 9px;background:rgba(255,255,255,.07);border-radius:6px}.note-title{width:190px}.editor{flex:1;padding:18px;outline:none;overflow:auto;line-height:1.6}
+.calc{height:100%;display:flex;flex-direction:column;padding:16px;max-width:430px;margin:auto}.calc-display{width:100%;height:65px;text-align:right;font-size:28px;margin-bottom:10px}.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;flex:1}.calc-grid button{font-size:17px;border-radius:10px;background:rgba(255,255,255,.065)}.calc-grid button:hover{background:rgba(92,200,255,.18)}
+.terminal{height:100%;background:#05090f;color:#d7f7e5;font-family:Consolas,monospace;display:flex;flex-direction:column;padding:13px}.terminal-output{flex:1;overflow:auto;white-space:pre-wrap;font-size:13px;line-height:1.5}.terminal-line{display:flex}.terminal-prompt{white-space:nowrap;color:#67e8a4}.terminal-input{flex:1;background:none;border:0;color:#fff;border-radius:0;padding:0 7px;font-family:inherit}
+.settings{padding:18px}.setting-section{padding:18px 0;border-bottom:1px solid var(--border)}.setting-section h3{margin-bottom:13px}.theme-row,.wall-row{display:flex;gap:9px;flex-wrap:wrap}.theme-card{padding:14px;border:1px solid var(--border);border-radius:11px;min-width:120px}.theme-card:hover{border-color:var(--accent)}.wall{height:80px;width:130px;border-radius:10px;border:2px solid transparent;cursor:pointer}.wall:hover{border-color:white}
+.dashboard{padding:20px}.welcome{font-size:28px;font-weight:700}.sub{color:var(--muted);margin-top:5px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}.card{background:rgba(255,255,255,.05);border:1px solid var(--border);padding:15px;border-radius:14px}.card-icon{font-size:25px}.card-value{font-size:22px;font-weight:700;margin-top:7px}.card-label{font-size:11px;color:var(--muted)}
+.notification-container{position:absolute;z-index:11000;right:15px;top:15px;width:310px;display:flex;flex-direction:column;gap:9px}.notification{background:var(--panel);border:1px solid var(--border);padding:14px;border-radius:13px;box-shadow:var(--shadow);animation:notify .2s}.notification strong{display:block;font-size:13px}.notification p{font-size:11px;color:var(--muted);margin-top:4px}@keyframes notify{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+.context{position:absolute;z-index:12000;display:none;width:190px;background:var(--panel);border:1px solid var(--border);box-shadow:var(--shadow);border-radius:11px;padding:5px}.context.show{display:block}.context button{width:100%;padding:9px;text-align:left;background:transparent;border-radius:7px;font-size:12px}.context button:hover{background:rgba(92,200,255,.13)}
+.lock,.boot,.power-screen{position:absolute;z-index:30000;inset:0;background:#02050a;color:white;display:flex;align-items:center;justify-content:center;flex-direction:column}.boot h1{font-size:48px;letter-spacing:7px}.boot p{color:#71839c;margin:10px}.progress{width:300px;height:5px;background:#152033;border-radius:5px;overflow:hidden;margin-top:25px}.progress div{height:100%;width:0;background:var(--accent);animation:load 2.5s forwards}@keyframes load{to{width:100%}}
+.lock{background:radial-gradient(circle at center,#112c50,#02050a)}.lock-time{font-size:60px;font-weight:300}.lock h2{margin:10px}.lock input{margin:14px;text-align:center;letter-spacing:8px}.lock button{padding:9px 20px;border-radius:9px;background:var(--accent);color:#00101b}
+.power-screen{display:none}.power-screen.show{display:flex}.power-screen h1{font-weight:400}
+.appstore-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:18px}.app-card{border:1px solid var(--border);background:rgba(255,255,255,.04);border-radius:13px;padding:15px}.app-card-icon{font-size:35px}.app-card h3{font-size:14px;margin:8px 0}.app-card p{font-size:11px;color:var(--muted);height:35px}.install{margin-top:12px;padding:7px 12px;border-radius:8px;background:var(--accent);color:#00111c;font-weight:600}
+.monitor{padding:18px}.graph{height:150px;border:1px solid var(--border);border-radius:10px;margin-top:12px;position:relative;overflow:hidden;background:rgba(0,0,0,.12)}canvas{width:100%;height:100%}
+.browser{height:100%;display:flex;flex-direction:column}.browser-bar{padding:8px;display:flex;gap:6px;border-bottom:1px solid var(--border)}.browser-bar input{flex:1}.browser-page{flex:1;padding:25px;overflow:auto}.browser-hero{padding:35px;border-radius:16px;background:linear-gradient(135deg,#102d55,#351b61)}.browser-page h1{font-size:35px}.browser-card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}
+.programmer{height:100%;display:flex;flex-direction:column}.code-tabs{display:flex;border-bottom:1px solid var(--border)}.code-tab{padding:9px 15px;font-size:12px}.code-tab.active{background:rgba(92,200,255,.12)}.code-body{display:flex;flex:1}.code-editor{flex:1;background:#070b12;color:#dbeafe;border:0;border-radius:0;resize:none;font:13px Consolas,monospace;padding:15px}.preview{flex:1;border-left:1px solid var(--border);background:white}.preview iframe{width:100%;height:100%;border:0}
+.toast{position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:20000;background:var(--panel);border:1px solid var(--border);padding:10px 17px;border-radius:10px;box-shadow:var(--shadow);display:none}
+.hidden{display:none!important}
+@media(max-width:700px){
+ .task-left{width:auto}.task-center{justify-content:flex-start;overflow:hidden}.task-right{width:auto}.search-task{display:none}
+ .window{left:3%!important;top:5%!important;width:94%!important;height:82%!important}
+ .side{width:125px}.cards{grid-template-columns:repeat(2,1fr)}.browser-card-grid{grid-template-columns:1fr}
+ #startMenu{width:94%;left:3%}.desktop-icons{grid-template-columns:repeat(2,90px)}
+}
+</style>
+</head>
+<body>
+<div id="os">
+<div id="wallpaper"></div>
+
+<div class="boot" id="boot">
+<h1>GALAXYOS</h1>
+<p id="bootText">Initializing Kernel...</p>
+<div class="progress"><div></div></div>
+</div>
+
+<div class="desktop" id="desktop">
+<div class="desktop-icons" id="desktopIcons"></div>
+</div>
+
+<div class="notification-container" id="notifications"></div>
+<div class="toast" id="toast"></div>
+
+<div class="context" id="desktopContext">
+<button onclick="refreshDesktop()">↻ Refresh</button>
+<button onclick="newFolder()">📁 New Folder</button>
+<button onclick="newTextFile()">📄 New Text File</button>
+<button onclick="openApp('settings')">🖥 Display Settings</button>
+<button onclick="openApp('settings')">🎨 Personalization</button>
+<button onclick="openApp('terminal')">💻 Open Terminal</button>
+</div>
+
+<div id="startMenu">
+<input class="start-search" id="startSearch" placeholder="Search applications..." oninput="renderStartApps()">
+<div class="start-title">Pinned Applications</div>
+<div class="app-grid" id="startApps"></div>
+<div class="start-title">Recent Files</div>
+<div id="recentFiles" style="font-size:12px;color:var(--muted)">No recent files</div>
+<div class="start-bottom">
+<div class="power">
+<button onclick="restartOS()">↻ Restart</button>
+<button onclick="sleepOS()">☾ Sleep</button>
+<button onclick="shutdownOS()">⏻ Shut Down</button>
+</div>
+</div>
+</div>
+
+<div class="taskbar">
+<div class="task-left">
+<button class="task-btn start-btn" onclick="toggleStart()">🌌</button>
+<button class="task-btn search-task" onclick="focusGlobalSearch()">🔎 Search</button>
+</div>
+<div class="task-center" id="taskApps"></div>
+<div class="task-right">
+<div class="system-item">◉ Online</div>
+<div class="system-item">🔋 87%</div>
+<div class="system-item">🔊</div>
+<div class="clock" id="clock"></div>
+</div>
+</div>
+
+<div class="lock hidden" id="lockScreen">
+<div class="lock-time" id="lockTime">12:00</div>
+<h2>GALAXYOS</h2>
+<div style="color:#91a4bb">Demo User</div>
+<input id="pin" type="password" maxlength="4" placeholder="••••">
+<button onclick="unlockOS()">Unlock</button>
+<div style="font-size:11px;color:#71839c;margin-top:12px">Demo PIN: 1234</div>
+</div>
+
+<div class="power-screen" id="powerScreen">
+<h1 id="powerText">Shutting down GalaxyOS...</h1>
+</div>
+</div>
+
+<script>
+/* ============================================================
+   GALAXYOS CORE ENGINE
+   Single-file browser operating-system simulation
+   ============================================================ */
+
+const $=id=>document.getElementById(id);
+
+const APP_DEFS={
+ dashboard:{id:"dashboard",name:"GalaxyOS",icon:"🌌",version:"1.0",category:"System",installed:true},
+ explorer:{id:"explorer",name:"File Explorer",icon:"📁",version:"1.0",category:"System",installed:true},
+ notes:{id:"notes",name:"Galaxy Notes",icon:"📝",version:"1.0",category:"Productivity",installed:true},
+ calculator:{id:"calculator",name:"Calculator",icon:"🧮",version:"1.0",category:"Utilities",installed:true},
+ terminal:{id:"terminal",name:"Terminal",icon:"💻",version:"1.0",category:"System",installed:true},
+ browser:{id:"browser",name:"Space Browser",icon:"🌐",version:"1.0",category:"Internet",installed:true},
+ settings:{id:"settings",name:"Settings",icon:"⚙️",version:"1.0",category:"System",installed:true},
+ recycle:{id:"recycle",name:"Recycle Bin",icon:"♻️",version:"1.0",category:"System",installed:true},
+ appstore:{id:"appstore",name:"App Store",icon:"🛒",version:"1.0",category:"System",installed:true},
+ monitor:{id:"monitor",name:"System Monitor",icon:"📊",version:"1.0",category:"System",installed:true},
+ programmer:{id:"programmer",name:"Code Studio",icon:"👨‍💻",version:"1.0",category:"Development",installed:false},
+ music:{id:"music",name:"Music Player",icon:"🎵",version:"1.0",category:"Media",installed:false},
+ photos:{id:"photos",name:"Photo Viewer",icon:"🖼️",version:"1.0",category:"Media",installed:false},
+ weather:{id:"weather",name:"Galaxy Weather",icon:"🌤️",version:"1.0",category:"Utilities",installed:false},
+ games:{id:"games",name:"Galaxy Games",icon:"🎮",version:"1.0",category:"Games",installed:false}
+};
+
+const STORE_APPS=["programmer","music","photos","weather","games"];
+
+const DEFAULT_STATE={
+ theme:"dark",
+ wallpaper:"galaxy",
+ username:"galaxyuser",
+ displayName:"Galaxy User",
+ avatar:"👨‍🚀",
+ created:new Date().toLocaleDateString(),
+ installed:["dashboard","explorer","notes","calculator","terminal","browser","settings","recycle","appstore","monitor"],
+ files:null,
+ recycle:[],
+ notes:[],
+ recent:[],
+ favorites:[],
+ notifications:true,
+ volume:70,
+ battery:87,
+ desktop:1,
+ windowCounter:100,
+ virtualDesktops:3
+};
+
+let state;
+let windows={};
+let activeWindow=null;
+let zCounter=100;
+let currentFolder="Desktop";
+let selectedFile=null;
+let terminalHistory=[];
+let terminalIndex=0;
+let calcExpression="";
+let calcHistory=[];
+let currentNote=null;
+let currentCodeTab="html";
+
+function loadState(){
+ try{
+  const saved=localStorage.getItem("GalaxyOS_State");
+  state=saved?JSON.parse(saved):structuredClone(DEFAULT_STATE);
+ }catch(e){state=structuredClone(DEFAULT_STATE)}
+ if(!state.files)state.files=createDefaultFS();
+ if(!state.installed)state.installed=[...DEFAULT_STATE.installed];
+}
+function saveState(){
+ try{localStorage.setItem("GalaxyOS_State",JSON.stringify(state))}
+ catch(e){notify("Storage","Unable to save GalaxyOS state.")}
+}
+function createDefaultFS(){
+ const now=new Date().toISOString();
+ return [
+  {id:"d1",name:"Desktop",type:"folder",parent:"ROOT",created:now,modified:now},
+  {id:"d2",name:"Documents",type:"folder",parent:"ROOT",created:now,modified:now},
+  {id:"d3",name:"Downloads",type:"folder",parent:"ROOT",created:now,modified:now},
+  {id:"d4",name:"Pictures",type:"folder",parent:"ROOT",created:now,modified:now},
+  {id:"d5",name:"Music",type:"folder",parent:"ROOT",created:now,modified:now},
+  {id:"d6",name:"Videos",type:"folder",parent:"ROOT",created:now,modified:now},
+  {id:"d7",name:"Projects",type:"folder",parent:"ROOT",created:now,modified:now},
+  {id:"d8",name:"GalaxyOS",type:"folder",parent:"ROOT",created:now,modified:now},
+  {id:"f1",name:"Welcome.note",type:"file",parent:"Documents",size:"1 KB",content:"Welcome to GalaxyOS!\\n\\nThis is your simulated computer environment.",created:now,modified:now},
+  {id:"f2",name:"ReadMe.txt",type:"file",parent:"Desktop",size:"2 KB",content:"GalaxyOS is a browser-based operating system simulation.",created:now,modified:now},
+  {id:"f3",name:"Galaxy.project",type:"file",parent:"Projects",size:"4 KB",content:"GalaxyOS Demo Project",created:now,modified:now}
+ ];
+}
+
+function boot(){
+ loadState();
+ applyTheme();
+ applyWallpaper();
+ updateClock();
+ setInterval(updateClock,1000);
+ setTimeout(()=>{ $("bootText").textContent="Loading Desktop..." },500);
+ setTimeout(()=>{ $("bootText").textContent="Starting Services..." },1000);
+ setTimeout(()=>{ $("bootText").textContent="Loading Applications..." },1500);
+ setTimeout(()=>{ $("bootText").textContent="Initializing User Environment..." },2000);
+ setTimeout(()=>{
+   $("boot").style.display="none";
+   renderDesktopIcons();
+   notify("Welcome to GalaxyOS","Your simulated desktop is ready.");
+ },3000);
+}
+function updateClock(){
+ const d=new Date();
+ $("clock").innerHTML=d.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})+"<br>"+d.toLocaleDateString();
+ $("lockTime").textContent=d.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+}
+function applyTheme(){
+ document.body.classList.toggle("light",state.theme==="light");
+}
+function applyWallpaper(){
+ const w={
+  galaxy:"radial-gradient(circle at 20% 20%,#536dff55,transparent 28%),radial-gradient(circle at 80% 30%,#b94cff44,transparent 30%),linear-gradient(135deg,#030813,#0b1730 55%,#130c28)",
+  nebula:"radial-gradient(circle at 30% 50%,#ff387855,transparent 25%),radial-gradient(circle at 75% 35%,#7b32ff66,transparent 30%),linear-gradient(135deg,#10051e,#250b3e,#06162e)",
+  earth:"radial-gradient(circle at 50% 45%,#2089d9 0 13%,#0c3555 14% 22%,transparent 23%),linear-gradient(135deg,#020913,#0b263e)",
+  space:"radial-gradient(circle at 15% 25%,white 0 1px,transparent 2px),radial-gradient(circle at 75% 70%,white 0 1px,transparent 2px),#01050c",
+  aurora:"radial-gradient(ellipse at 50% 0%,#21e6a455,transparent 35%),radial-gradient(ellipse at 30% 10%,#476dff55,transparent 35%),#03121c",
+  gradient:"linear-gradient(135deg,#07111f,#183e68 50%,#44266a)"
+ };
+ $("wallpaper").style.background=w[state.wallpaper]||w.galaxy;
+}
+function notify(title,message){
+ if(!state.notifications)return;
+ const n=document.createElement("div");
+ n.className="notification";
+ n.innerHTML=`<strong>${esc(title)}</strong><p>${esc(message)}</p>`;
+ $("notifications").appendChild(n);
+ setTimeout(()=>n.remove(),4500);
+}
+function toast(msg){
+ $("toast").textContent=msg;
+ $("toast").style.display="block";
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>$("toast").style.display="none",2200);
+}
+function esc(v){
+ return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+
+/* ============================================================
+   DESKTOP
+   ============================================================ */
+
+function renderDesktopIcons(){
+ const apps=[
+  ["explorer","📁","File Explorer"],
+  ["notes","📝","Notes"],
+  ["calculator","🧮","Calculator"],
+  ["terminal","💻","Terminal"],
+  ["browser","🌐","Browser"],
+  ["settings","⚙️","Settings"],
+  ["appstore","🛒","App Store"],
+  ["recycle","♻️","Recycle Bin"]
+ ];
+ $("desktopIcons").innerHTML=apps.map(a=>`
+ <div class="desktop-icon" ondblclick="openApp('${a[0]}')" onclick="selectDesktop(this,event)">
+   <span class="icon">${a[1]}</span><span>${a[2]}</span>
+ </div>`).join("");
+}
+function selectDesktop(el,e){
+ document.querySelectorAll(".desktop-icon").forEach(x=>x.classList.remove("selected"));
+ el.classList.add("selected");
+}
+function refreshDesktop(){
+ $("desktopContext").classList.remove("show");
+ renderDesktopIcons();
+ toast("Desktop refreshed");
+}
+$("desktop").addEventListener("contextmenu",e=>{
+ if(e.target.closest(".window"))return;
+ e.preventDefault();
+ const c=$("desktopContext");
+ c.style.left=Math.min(e.clientX,innerWidth-200)+"px";
+ c.style.top=Math.min(e.clientY,innerHeight-230)+"px";
+ c.classList.add("show");
+});
+document.addEventListener("click",e=>{
+ if(!e.target.closest(".context"))$("desktopContext").classList.remove("show");
+ if(!e.target.closest("#startMenu")&&!e.target.closest(".start-btn"))$("startMenu").classList.remove("show");
+});
+
+/* ============================================================
+   START MENU
+   ============================================================ */
+
+function toggleStart(){
+ $("startMenu").classList.toggle("show");
+ renderStartApps();
+}
+function renderStartApps(){
+ const q=($("startSearch").value||"").toLowerCase();
+ const apps=Object.values(APP_DEFS).filter(a=>state.installed.includes(a.id)&&a.name.toLowerCase().includes(q));
+ $("startApps").innerHTML=apps.map(a=>`
+ <button class="start-app" onclick="openApp('${a.id}');$('startMenu').classList.remove('show')">
+  <div>${a.icon}</div><small>${esc(a.name)}</small>
+ </button>`).join("");
+ const recent=state.recent.slice(0,5);
+ $("recentFiles").innerHTML=recent.length?recent.map(x=>`<div style="padding:5px">📄 ${esc(x)}</div>`).join(""):"No recent files";
+}
+function focusGlobalSearch(){
+ toggleStart();
+ setTimeout(()=>$("startSearch").focus(),50);
+}
+
+/* ============================================================
+   WINDOW MANAGER
+   ============================================================ */
+
+function openApp(id){
+ if(!APP_DEFS[id])return;
+ if(!state.installed.includes(id)){
+  notify("Application not installed",APP_DEFS[id].name+" must be installed from App Store.");
+  return;
+ }
+ $("startMenu").classList.remove("show");
+ if(windows[id]){
+   restoreWindow(id);
+   focusWindow(id);
+   return;
+ }
+ const app=APP_DEFS[id];
+ const w=document.createElement("div");
+ w.className="window active";
+ w.dataset.app=id;
+ w.style.left=Math.max(30,Math.random()*Math.max(30,innerWidth-760))+"px";
+ w.style.top=Math.max(30,Math.random()*Math.max(30,innerHeight-570))+"px";
+ w.style.width=id==="calculator"?"390px":id==="terminal"?"720px":"700px";
+ w.style.height=id==="calculator"?"500px":"470px";
+ w.innerHTML=`
+ <div class="titlebar" onmousedown="startDrag(event,'${id}')">
+   <span class="title-icon">${app.icon}</span>
+   <span class="title-name">${esc(app.name)}</span>
+   <div class="win-actions">
+    <button onclick="minimizeWindow('${id}')" title="Minimize">−</button>
+    <button onclick="maximizeWindow('${id}')" title="Maximize">□</button>
+    <button class="close" onclick="closeWindow('${id}')" title="Close">×</button>
+   </div>
+ </div>
+ <div class="window-content" id="content-${id}"></div>
+ <i class="resize r"></i><i class="resize l"></i><i class="resize b"></i><i class="resize t"></i>
+ <i class="resize br"></i><i class="resize bl"></i><i class="resize tr"></i><i class="resize tl"></i>`;
+ $("desktop").appendChild(w);
+ windows[id]={el:w,minimized:false,maximized:false,old:null};
+ zCounter++;
+ w.style.zIndex=zCounter;
+ attachResize(w,id);
+ w.addEventListener("mousedown",()=>focusWindow(id));
+ renderApp(id);
+ updateTaskbar();
+}
+function focusWindow(id){
+ if(!windows[id])return;
+ zCounter++;
+ windows[id].el.style.zIndex=zCounter;
+ activeWindow=id;
+ Object.entries(windows).forEach(([k,v])=>v.el.classList.toggle("active",k===id));
+}
+function minimizeWindow(id){
+ if(!windows[id])return;
+ windows[id].el.style.display="none";
+ windows[id].minimized=true;
+ updateTaskbar();
+}
+function restoreWindow(id){
+ if(!windows[id])return;
+ windows[id].el.style.display="";
+ windows[id].minimized=false;
+ focusWindow(id);
+}
+function closeWindow(id){
+ if(!windows[id])return;
+ windows[id].el.remove();
+ delete windows[id];
+ if(activeWindow===id)activeWindow=null;
+ updateTaskbar();
+}
+function maximizeWindow(id){
+ const w=windows[id];
+ if(!w)return;
+ if(!w.maximized){
+  w.old={left:w.el.style.left,top:w.el.style.top,width:w.el.style.width,height:w.el.style.height};
+  w.el.style.left="8px";w.el.style.top="8px";
+  w.el.style.width="calc(100% - 16px)";
+  w.el.style.height="calc(100% - 74px)";
+  w.maximized=true;
+ }else{
+  Object.assign(w.el.style,w.old);
+  w.maximized=false;
+ }
+ focusWindow(id);
+}
+function startDrag(e,id){
+ if(e.target.closest(".win-actions"))return;
+ const w=windows[id];
+ if(!w||w.maximized)return;
+ focusWindow(id);
+ const el=w.el;
+ const sx=e.clientX,sy=e.clientY;
+ const ox=el.offsetLeft,oy=el.offsetTop;
+ function move(ev){
+  let x=ox+ev.clientX-sx,y=oy+ev.clientY-sy;
+  x=Math.max(-el.offsetWidth+120,Math.min(innerWidth-80,x));
+  y=Math.max(0,Math.min(innerHeight-100,y));
+  el.style.left=x+"px";el.style.top=y+"px";
+ }
+ function up(){document.removeEventListener("mousemove",move);document.removeEventListener("mouseup",up)}
+ document.addEventListener("mousemove",move);document.addEventListener("mouseup",up);
+}
+function attachResize(el,id){
+ el.querySelectorAll(".resize").forEach(handle=>{
+  handle.addEventListener("mousedown",e=>{
+   e.preventDefault();e.stopPropagation();
+   const rect=el.getBoundingClientRect();
+   const sx=e.clientX,sy=e.clientY;
+   const sw=rect.width,sh=rect.height,sl=rect.left,st=rect.top;
+   const cls=handle.className;
+   function move(ev){
+    let dx=ev.clientX-sx,dy=ev.clientY-sy;
+    let left=sl,top=st,width=sw,height=sh;
+    if(cls.includes("r"))width=sw+dx;
+    if(cls.includes("l")){width=sw-dx;left=sl+dx}
+    if(cls.includes("b"))height=sh+dy;
+    if(cls.includes("t")){height=sh-dy;top=st+dy}
+    if(width>=300){el.style.width=width+"px";el.style.left=Math.max(0,left)+"px"}
+    if(height>=190){el.style.height=height+"px";el.style.top=Math.max(0,top)+"px"}
+   }
+   function up(){document.removeEventListener("mousemove",move);document.removeEventListener("mouseup",up)}
+   document.addEventListener("mousemove",move);document.addEventListener("mouseup",up);
+  });
+ });
+}
+function updateTaskbar(){
+ const open=Object.keys(windows);
+ $("taskApps").innerHTML=open.map(id=>{
+  const a=APP_DEFS[id],w=windows[id];
+  return `<button class="task-btn app-task ${w.minimized?"":"open"}" title="${esc(a.name)}" onclick="${w.minimized?`restoreWindow('${id}')`:`focusWindow('${id}')`}">${a.icon}</button>`;
+ }).join("");
+}
+
+/* ============================================================
+   APPLICATION RENDERER
+   ============================================================ */
+
+function renderApp(id){
+ const c=$("content-"+id);
+ if(!c)return;
+ switch(id){
+  case"dashboard":renderDashboard(c);break;
+  case"explorer":renderExplorer(c);break;
+  case"notes":renderNotes(c);break;
+  case"calculator":renderCalculator(c);break;
+  case"terminal":renderTerminal(c);break;
+  case"browser":renderBrowser(c);break;
+  case"settings":renderSettings(c);break;
+  case"recycle":renderRecycle(c);break;
+  case"appstore":renderAppStore(c);break;
+  case"monitor":renderMonitor(c);break;
+  case"programmer":renderProgrammer(c);break;
+  case"music":renderMusic(c);break;
+  case"photos":renderPhotos(c);break;
+  case"weather":renderWeather(c);break;
+  case"games":renderGames(c);break;
+ }
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+
+function renderDashboard(c){
+ c.innerHTML=`
+ <div class="dashboard">
+  <div class="welcome">Welcome back, ${esc(state.displayName)} 👋</div>
+  <div class="sub">GalaxyOS virtual environment • Desktop ${state.desktop}</div>
+  <div class="cards">
+   <div class="card"><div class="card-icon">🪟</div><div class="card-value">${Object.keys(windows).length}</div><div class="card-label">Open Windows</div></div>
+   <div class="card"><div class="card-icon">📁</div><div class="card-value">${state.files.length}</div><div class="card-label">Virtual Items</div></div>
+   <div class="card"><div class="card-icon">📦</div><div class="card-value">${state.installed.length}</div><div class="card-label">Installed Apps</div></div>
+   <div class="card"><div class="card-icon">💾</div><div class="card-value">87%</div><div class="card-label">Simulated Storage</div></div>
+  </div>
+  <div style="margin-top:22px;padding:20px;border:1px solid var(--border);border-radius:15px;background:rgba(255,255,255,.04)">
+   <h3>GalaxyOS Control Center</h3>
+   <p class="sub" style="margin-bottom:15px">A browser-powered desktop simulation.</p>
+   <button class="toolbtn" onclick="openApp('explorer')">📁 Files</button>
+   <button class="toolbtn" onclick="openApp('terminal')">💻 Terminal</button>
+   <button class="toolbtn" onclick="openApp('settings')">⚙️ Settings</button>
+   <button class="toolbtn" onclick="lockOS()">🔒 Lock</button>
+  </div>
+ </div>`;
+}
+
+/* ============================================================
+   FILE SYSTEM
+   ============================================================ */
+
+function folderItems(folder){
+ return state.files.filter(x=>x.parent===folder);
+}
+function renderExplorer(c){
+ const items=folderItems(currentFolder);
+ c.innerHTML=`
+ <div class="explorer">
+  <div class="side">
+   ${["Desktop","Documents","Downloads","Pictures","Music","Videos","Projects","GalaxyOS"].map(f=>
+    `<div class="side-item" onclick="navigateFolder('${f}')">📁 ${f}</div>`).join("")}
+   <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:10px">
+    <div class="side-item" onclick="openApp('recycle')">♻️ Recycle Bin</div>
+   </div>
+  </div>
+  <div class="files-area">
+   <div class="pathbar">
+    <button class="toolbtn" onclick="goRoot()">⌂</button>
+    <button class="toolbtn" onclick="goParent()">←</button>
+    <input value="${esc(currentFolder)}" readonly>
+    <button class="toolbtn" onclick="newFolder()">＋ Folder</button>
+    <button class="toolbtn" onclick="newTextFile()">＋ File</button>
+   </div>
+   <div style="padding:8px 14px;color:var(--muted);font-size:11px">
+    ${items.length} item(s) • Double-click folders/files
+   </div>
+   <div class="file-grid">
+   ${items.map(x=>`
+    <div class="file-item ${selectedFile===x.id?"selected":""}" onclick="selectFile('${x.id}')" ondblclick="openFile('${x.id}')" oncontextmenu="fileContext(event,'${x.id}')">
+     <div class="file-icon">${x.type==="folder"?"📁":fileIcon(x.name)}</div>
+     <div class="file-name">${esc(x.name)}</div>
+    </div>`).join("")}
+   </div>
+  </div>
+ </div>`;
+}
+function fileIcon(name){
+ const ext=name.split(".").pop().toLowerCase();
+ return {txt:"📄",note:"📝",galaxy:"🌌",photo:"🖼️",project:"🧩",html:"🌐",css:"🎨",js:"📜"}[ext]||"📄";
+}
+function navigateFolder(folder){
+ currentFolder=folder;selectedFile=null;
+ if(windows.explorer)renderExplorer($("content-explorer"));
+}
+function goRoot(){currentFolder="Desktop";renderExplorer($("content-explorer"))}
+function goParent(){currentFolder="ROOT";renderExplorer($("content-explorer"))}
+function selectFile(id){selectedFile=id;renderExplorer($("content-explorer"))}
+function newFolder(){
+ const name=prompt("Folder name:","New Folder");
+ if(!name)return;
+ if(folderItems(currentFolder).some(x=>x.name.toLowerCase()===name.toLowerCase())){alert("An item with that name already exists.");return}
+ const now=new Date().toISOString();
+ state.files.push({id:"f_"+Date.now(),name,type:"folder",parent:currentFolder,created:now,modified:now});
+ saveState();renderExplorer($("content-explorer"));notify("Folder created",name);
+}
+function newTextFile(){
+ const name=prompt("Text file name:","New File.txt");
+ if(!name)return;
+ const now=new Date().toISOString();
+ state.files.push({id:"f_"+Date.now(),name,type:"file",parent:currentFolder,size:"1 KB",content:"",created:now,modified:now});
+ saveState();renderExplorer($("content-explorer"));notify("File created",name);
+}
+function openFile(id){
+ const f=state.files.find(x=>x.id===id);
+ if(!f)return;
+ if(f.type==="folder"){currentFolder=f.name;selectedFile=null;renderExplorer($("content-explorer"));return}
+ if(!state.recent.includes(f.name))state.recent.unshift(f.name);
+ state.recent=state.recent.slice(0,10);saveState();
+ openApp("notes");
+ setTimeout(()=>loadNoteFile(f),50);
+}
+function loadNoteFile(f){
+ currentNote=f.id;
+ const title=document.querySelector("#noteTitle");
+ const editor=document.querySelector("#noteEditor");
+ if(title)title.value=f.name;
+ if(editor)editor.innerText=f.content||"";
+}
+function fileContext(e,id){
+ e.preventDefault();
+ selectedFile=id;
+ const f=state.files.find(x=>x.id===id);
+ const choice=prompt(`File: ${f.name}\nType "rename" to rename\nType "delete" to move to Recycle Bin`);
+ if(choice==="rename")renameFile(id);
+ if(choice==="delete")deleteFile(id);
+}
+function renameFile(id){
+ const f=state.files.find(x=>x.id===id);if(!f)return;
+ const n=prompt("New name:",f.name);if(!n)return;
+ f.name=n;f.modified=new Date().toISOString();saveState();renderExplorer($("content-explorer"));notify("Renamed",n);
+}
+function deleteFile(id){
+ const i=state.files.findIndex(x=>x.id===id);if(i<0)return;
+ const f=state.files[i];
+ state.recycle.push({...f,deleted:new Date().toISOString(),originalParent:f.parent});
+ state.files.splice(i,1);saveState();
+ if(windows.explorer)renderExplorer($("content-explorer"));
+ notify("Moved to Recycle Bin",f.name);
+}
+function searchFiles(q){
+ return state.files.filter(f=>f.name.toLowerCase().includes(q.toLowerCase()));
+}
+
+/* ============================================================
+   NOTES
+   ============================================================ */
+
+function renderNotes(c){
+ c.innerHTML=`
+ <div class="notes">
+  <div class="note-toolbar">
+   <input class="note-title" id="noteTitle" placeholder="Note title">
+   <button onclick="document.execCommand('bold')"><b>B</b></button>
+   <button onclick="document.execCommand('italic')"><i>I</i></button>
+   <button onclick="document.execCommand('underline')"><u>U</u></button>
+   <select onchange="document.execCommand('fontSize',false,this.value)">
+    <option value="3">Normal</option><option value="5">Large</option><option value="7">Huge</option>
+   </select>
+   <button onclick="document.execCommand('justifyLeft')">≡</button>
+   <button onclick="document.execCommand('justifyCenter')">☷</button>
+   <button onclick="saveCurrentNote()">💾 Save</button>
+   <button onclick="createNote()">＋ New</button>
+  </div>
+  <div class="editor" id="noteEditor" contenteditable="true"></div>
+ </div>`;
+ if(currentNote){
+  const f=state.files.find(x=>x.id===currentNote);
+  if(f)loadNoteFile(f);
+ }else{
+  $("noteTitle").value="Untitled.note";
+  $("noteEditor").innerHTML="Start writing...";
+ }
+}
+function createNote(){
+ currentNote=null;
+ $("noteTitle").value="Untitled.note";
+ $("noteEditor").innerHTML="";
+}
+function saveCurrentNote(){
+ const name=$("noteTitle").value.trim()||"Untitled.note";
+ const content=$("noteEditor").innerText;
+ if(currentNote){
+  const f=state.files.find(x=>x.id===currentNote);
+  if(f){f.name=name;f.content=content;f.modified=new Date().toISOString()}
+ }else{
+  const now=new Date().toISOString();
+  const f={id:"n_"+Date.now(),name,type:"file",parent:"Documents",size:Math.max(1,content.length/1024).toFixed(1)+" KB",content,created:now,modified:now};
+  state.files.push(f);currentNote=f.id;
+ }
+ saveState();notify("Notes","Note saved successfully.");
+}
+
+/* ============================================================
+   CALCULATOR
+   ============================================================ */
+
+function renderCalculator(c){
+ c.innerHTML=`
+ <div class="calc">
+  <input class="calc-display" id="calcDisplay" value="" readonly>
+  <div class="calc-grid">
+   <button onclick="calcClear()">C</button><button onclick="calcBack()">⌫</button><button onclick="calcAdd('(')">(</button><button onclick="calcAdd(')')">)</button>
+   <button onclick="calcAdd('7')">7</button><button onclick="calcAdd('8')">8</button><button onclick="calcAdd('9')">9</button><button onclick="calcAdd('/')">÷</button>
+   <button onclick="calcAdd('4')">4</button><button onclick="calcAdd('5')">5</button><button onclick="calcAdd('6')">6</button><button onclick="calcAdd('*')">×</button>
+   <button onclick="calcAdd('1')">1</button><button onclick="calcAdd('2')">2</button><button onclick="calcAdd('3')">3</button><button onclick="calcAdd('-')">−</button>
+   <button onclick="calcAdd('0')">0</button><button onclick="calcAdd('.')">.</button><button onclick="calcPercent()">%</button><button onclick="calcAdd('+')">+</button>
+   <button onclick="calcSqrt()">√</button><button onclick="calcAdd('**')">xʸ</button><button onclick="calcAdd('Math.PI')">π</button><button onclick="calcEquals()">=</button>
+  </div>
+ </div>`;
+}
+function calcAdd(v){calcExpression+=v;updateCalc()}
+function updateCalc(){if($("calcDisplay"))$("calcDisplay").value=calcExpression}
+function calcClear(){calcExpression="";updateCalc()}
+function calcBack(){calcExpression=calcExpression.slice(0,-1);updateCalc()}
+function calcPercent(){
+ try{calcExpression=String(Number(calcExpression)/100);updateCalc()}catch(e){calcExpression="Error";updateCalc()}
+}
+function calcSqrt(){
+ try{calcExpression=String(Math.sqrt(Function("return "+calcExpression)()));updateCalc()}catch(e){calcExpression="Error";updateCalc()}
+}
+function calcEquals(){
+ try{
+  if(!/^[0-9+\-*/().%\sA-Za-z_]+$/.test(calcExpression))throw Error();
+  const result=Function("return "+calcExpression)();
+  calcHistory.unshift(calcExpression+" = "+result);
+  calcHistory=calcHistory.slice(0,20);
+  calcExpression=String(result);updateCalc();
+ }catch(e){calcExpression="Error";updateCalc()}
+}
+
+/* ============================================================
+   TERMINAL
+   ============================================================ */
+
+function renderTerminal(c){
+ c.innerHTML=`
+ <div class="terminal">
+  <div class="terminal-output" id="terminalOutput">GalaxyOS Terminal v1.0
+Simulated command environment.
+Type "help" for available commands.
+
+</div>
+  <div class="terminal-line">
+   <span class="terminal-prompt">user@galaxyos:~$</span>
+   <input class="terminal-input" id="terminalInput" autocomplete="off">
+  </div>
+ </div>`;
+ const input=$("terminalInput");
+ input.focus();
+ input.addEventListener("keydown",e=>{
+  if(e.key==="Enter"){processCommand(input.value);input.value=""}
+  if(e.key==="ArrowUp"){if(terminalHistory.length){terminalIndex=Math.max(0,terminalIndex-1);input.value=terminalHistory[terminalIndex]||""}}
+  if(e.key==="ArrowDown"){terminalIndex=Math.min(terminalHistory.length,terminalIndex+1);input.value=terminalHistory[terminalIndex]||""}
+ });
+}
+function terminalPrint(s){
+ const out=$("terminalOutput");if(!out)return;
+ out.textContent+=s+"\\n";out.scrollTop=out.scrollHeight;
+}
+function processCommand(raw){
+ const input=raw.trim();if(!input)return;
+ terminalHistory.push(input);terminalIndex=terminalHistory.length;
+ terminalPrint("user@galaxyos:~$ "+input);
+ const parts=input.match(/(?:[^\s"]+|"[^"]*")+/g)||[];
+ const cmd=(parts.shift()||"").toLowerCase();
+ const args=parts.map(x=>x.replace(/^"|"$/g,""));
+ const commands={
+  help:()=>`Available commands:
+help clear date time pwd ls cd mkdir touch cat echo whoami systeminfo neofetch history
+search apps open rm rmdir tree`,
+  clear:()=>{$("terminalOutput").textContent="";return ""},
+  date:()=>new Date().toLocaleDateString(),
+  time:()=>new Date().toLocaleTimeString(),
+  pwd:()=>"/"+currentFolder,
+  ls:()=>folderItems(currentFolder).map(x=>x.type==="folder"?x.name+"/":x.name).join("\\n")||"(empty)",
+  cd:()=>terminalCd(args[0]),
+  mkdir:()=>terminalMkdir(args.join(" ")),
+  touch:()=>terminalTouch(args.join(" ")),
+  cat:()=>terminalCat(args.join(" ")),
+  echo:()=>args.join(" "),
+  whoami:()=>state.username,
+  systeminfo:()=>`GalaxyOS 1.0
+Browser: Google Chrome
+Environment: Browser Simulation
+Theme: ${state.theme}
+Wallpaper: ${state.wallpaper}
+Virtual Desktop: ${state.desktop}
+Installed Apps: ${state.installed.length}`,
+  neofetch:()=>`   ██████╗  ██████╗
+  ██╔════╝ ██╔════╝
+  ██║  ███╗██║
+  ██║   ██║██║
+  ╚██████╔╝╚██████╗
+   ╚═════╝  ╚═════╝
+
+OS: GalaxyOS
+Kernel: Virtual Browser Kernel
+Shell: GalaxyShell
+User: ${state.username}`,
+  history:()=>terminalHistory.join("\\n"),
+  search:()=>searchFiles(args.join(" ")).map(x=>x.name).join("\\n")||"No results.",
+  apps:()=>state.installed.map(id=>APP_DEFS[id].name).join("\\n"),
+  open:()=>{if(APP_DEFS[args[0]]){openApp(args[0]);return "Opening "+APP_DEFS[args[0]].name}else return "Unknown application."},
+  rm:()=>terminalRm(args.join(" ")),
+  rmdir:()=>terminalRm(args.join(" ")),
+  tree:()=>terminalTree()
+ };
+ let result;
+ try{result=commands[cmd]?commands[cmd]():`Command not found: ${cmd}`;if(result)terminalPrint(result)}
+ catch(e){terminalPrint("Error: "+e.message)}
+}
+function terminalCd(name){
+ if(!name||name==="/")return currentFolder="Desktop";
+ const folder=state.files.find(x=>x.type==="folder"&&x.name.toLowerCase()===name.toLowerCase());
+ if(folder){currentFolder=folder.name;return "Changed directory to "+folder.name}
+ return "Directory not found.";
+}
+function terminalMkdir(name){
+ if(!name)return "Usage: mkdir <name>";
+ const now=new Date().toISOString();
+ state.files.push({id:"t_"+Date.now(),name,type:"folder",parent:currentFolder,created:now,modified:now});
+ saveState();return "Directory created: "+name;
+}
+function terminalTouch(name){
+ if(!name)return"Usage: touch <name>";
+ const now=new Date().toISOString();
+ state.files.push({id:"t_"+Date.now(),name,type:"file",parent:currentFolder,size:"1 KB",content:"",created:now,modified:now});
+ saveState();return"File created: "+name;
+}
+function terminalCat(name){
+ const f=folderItems(currentFolder).find(x=>x.name===name);
+ return f?f.content||"(empty)":"File not found.";
+}
+function terminalRm(name){
+ const f=folderItems(currentFolder).find(x=>x.name===name);
+ if(!f)return"Item not found.";
+ deleteFile(f.id);return"Moved to Recycle Bin.";
+}
+function terminalTree(){
+ return state.files.map(x=>x.parent+" / "+x.name).join("\\n");
+}
+
+/* ============================================================
+   BROWSER SIMULATION
+   ============================================================ */
+
+function renderBrowser(c){
+ c.innerHTML=`
+ <div class="browser">
+  <div class="browser-bar">
+   <button class="toolbtn">←</button><button class="toolbtn">→</button><button class="toolbtn" onclick="renderBrowserPage('home')">↻</button>
+   <input id="browserAddress" value="galaxy://home" onkeydown="if(event.key==='Enter')browserNavigate()">
+   <button class="toolbtn" onclick="browserNavigate()">Go</button>
+  </div>
+  <div class="browser-page" id="browserPage">
+   ${browserHome()}
+  </div>
+ </div>`;
+}
+function browserHome(){
+ return `<div class="browser-hero"><h1>🌌 Galaxy Web</h1><p style="margin-top:8px;color:#c4d7ec">A simulated browser inside GalaxyOS.</p></div>
+ <div class="browser-card-grid">
+ <div class="card" onclick="renderBrowserPage('space')">🚀 Space News<br><small>Simulated page</small></div>
+ <div class="card" onclick="renderBrowserPage('docs')">📚 Galaxy Docs<br><small>System documentation</small></div>
+ <div class="card" onclick="renderBrowserPage('community')">👥 Community<br><small>Virtual network</small></div>
+ </div>`;
+}
+function renderBrowserPage(page){
+ const c=$("browserPage");if(!c)return;
+ const pages={
+ home:browserHome(),
+ space:`<h1>🚀 Galaxy Space</h1><p style="margin-top:12px;color:var(--muted)">Welcome to the simulated space portal.</p><div class="card" style="margin-top:20px">🌌 Deep Space exploration interface online.</div>`,
+ docs:`<h1>📚 GalaxyOS Documentation</h1><p style="margin-top:12px;color:var(--muted)">Use the Terminal, File Explorer, Settings and Application Manager to explore the virtual system.</p>`,
+ community:`<h1>👥 Galaxy Community</h1><p style="margin-top:12px;color:var(--muted)">This is fictional browser content stored inside GalaxyOS.</p>`
+ };
+ c.innerHTML=pages[page]||pages.home;
+ $("browserAddress").value="galaxy://"+page;
+}
+function browserNavigate(){
+ const v=$("browserAddress").value.toLowerCase();
+ renderBrowserPage(v.includes("space")?"space":v.includes("docs")?"docs":v.includes("community")?"community":"home");
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+
+function renderSettings(c){
+ c.innerHTML=`
+ <div class="settings">
+  <h2>⚙️ Settings</h2>
+  <div class="setting-section">
+   <h3>Appearance</h3>
+   <div class="theme-row">
+    <button class="theme-card" onclick="setTheme('dark')">🌙<br>Dark Mode</button>
+    <button class="theme-card" onclick="setTheme('light')">☀️<br>Light Mode</button>
+   </div>
+  </div>
+  <div class="setting-section">
+   <h3>Wallpapers</h3>
+   <div class="wall-row">
+    ${wallpapers().map(w=>`<div class="wall" title="${w[0]}" onclick="setWallpaper('${w[1]}')" style="background:${w[2]}"></div>`).join("")}
+   </div>
+  </div>
+  <div class="setting-section">
+   <h3>User Profile</h3>
+   <div style="display:flex;gap:12px;align-items:center">
+    <div style="font-size:42px">${state.avatar}</div>
+    <input id="profileName" value="${esc(state.displayName)}">
+    <button class="toolbtn" onclick="saveProfile()">Save</button>
+   </div>
+  </div>
+  <div class="setting-section">
+   <h3>Notifications</h3>
+   <label><input type="checkbox" ${state.notifications?"checked":""} onchange="state.notifications=this.checked;saveState()"> Enable notifications</label>
+  </div>
+  <div class="setting-section">
+   <h3>Simulated Battery</h3>
+   <input type="range" min="0" max="100" value="${state.battery}" oninput="state.battery=this.value;saveState()">
+   <span>${state.battery}%</span>
+  </div>
+  <div class="setting-section">
+   <h3>Security</h3>
+   <button class="toolbtn" onclick="lockOS()">🔒 Lock GalaxyOS</button>
+  </div>
+ </div>`;
+}
+function wallpapers(){
+ return [
+  ["Galaxy","galaxy","radial-gradient(circle at 30% 30%,#4d66ff,transparent 40%),#061021"],
+  ["Nebula","nebula","radial-gradient(circle,#bd3cff,#12051e)"],
+  ["Earth","earth","radial-gradient(circle,#1688d8 0 25%,#061021 27%)"],
+  ["Deep Space","space","radial-gradient(white 1px,transparent 1px),#02050b"],
+  ["Aurora","aurora","linear-gradient(135deg,#062f38,#132b65)"],
+  ["Minimal","gradient","linear-gradient(135deg,#07111f,#44266a)"]
+ ];
+}
+function setTheme(t){state.theme=t;applyTheme();saveState();notify("Theme changed",t+" mode enabled.");if(windows.settings)renderSettings($("content-settings"))}
+function setWallpaper(w){state.wallpaper=w;applyWallpaper();saveState();notify("Wallpaper","Wallpaper changed to "+w+".")}
+function saveProfile(){
+ const n=$("profileName").value.trim();
+ if(n)state.displayName=n;
+ saveState();notify("Profile","Profile updated.");renderDesktopIcons();
+}
+
+/* ============================================================
+   RECYCLE BIN
+   ============================================================ */
+
+function renderRecycle(c){
+ c.innerHTML=`
+ <div class="pad">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+   <h2>♻️ Recycle Bin</h2>
+   <button class="toolbtn" onclick="emptyRecycle()">Empty Recycle Bin</button>
+  </div>
+  <div style="margin-top:18px">
+   ${state.recycle.length?state.recycle.map((x,i)=>`
+    <div style="display:flex;align-items:center;padding:12px;border-bottom:1px solid var(--border);gap:10px">
+     <span style="font-size:25px">${fileIcon(x.name)}</span>
+     <div style="flex:1"><b>${esc(x.name)}</b><small style="display:block;color:var(--muted)">${esc(x.type)} • Deleted ${new Date(x.deleted).toLocaleString()}</small></div>
+     <button class="toolbtn" onclick="restoreRecycle(${i})">Restore</button>
+     <button class="toolbtn" onclick="deletePermanent(${i})">Delete</button>
+    </div>`).join(""):`<div style="text-align:center;color:var(--muted);padding:60px">♻️ Recycle Bin is empty</div>`}
+  </div>
+ </div>`;
+}
+function restoreRecycle(i){
+ const x=state.recycle[i];
+ const parent=state.files.some(f=>f.type==="folder"&&f.name===x.originalParent)?x.originalParent:"Desktop";
+ const copy={...x,parent};delete copy.deleted;delete copy.originalParent;
+ state.files.push(copy);state.recycle.splice(i,1);saveState();renderRecycle($("content-recycle"));notify("Restored",copy.name);
+}
+function deletePermanent(i){
+ state.recycle.splice(i,1);saveState();renderRecycle($("content-recycle"));notify("Recycle Bin","Item permanently deleted.");
+}
+function emptyRecycle(){
+ if(!state.recycle.length)return;
+ if(confirm("Empty Recycle Bin permanently?")){state.recycle=[];saveState();renderRecycle($("content-recycle"))}
+}
+
+/* ============================================================
+   APP STORE
+   ============================================================ */
+
+function renderAppStore(c){
+ c.innerHTML=`
+ <div class="appstore-grid">
+ ${STORE_APPS.map(id=>{
+  const a=APP_DEFS[id],installed=state.installed.includes(id);
+  return `<div class="app-card"><div class="app-card-icon">${a.icon}</div><h3>${a.name}</h3><p>${a.category} application • Version ${a.version}</p>
+  <button class="install" onclick="${installed?`openApp('${id}')`:`installApp('${id}')`}">${installed?"Open":"Install"}</button></div>`
+ }).join("")}
+ </div>`;
+}
+function installApp(id){
+ if(!state.installed.includes(id))state.installed.push(id);
+ saveState();renderAppStore($("content-appstore"));renderStartApps();
+ notify("App Installed",APP_DEFS[id].name+" has been installed.");
+}
+
+/* ============================================================
+   SYSTEM MONITOR
+   ============================================================ */
+
+function renderMonitor(c){
+ c.innerHTML=`
+ <div class="monitor">
+  <h2>📊 System Monitor</h2>
+  <p class="sub">Simulated GalaxyOS resource activity</p>
+  <div class="cards">
+   <div class="card"><div class="card-label">CPU</div><div class="card-value" id="cpuVal">--%</div></div>
+   <div class="card"><div class="card-label">Memory</div><div class="card-value" id="memVal">--%</div></div>
+   <div class="card"><div class="card-label">Storage</div><div class="card-value">42%</div></div>
+   <div class="card"><div class="card-label">Network</div><div class="card-value" id="netVal">-- KB/s</div></div>
+  </div>
+  <div class="graph"><canvas id="monitorCanvas"></canvas></div>
+  <div style="margin-top:15px"><b>Running Applications</b><div id="runningApps" style="margin-top:8px;color:var(--muted)"></div></div>
+ </div>`;
+ startMonitor();
+}
+function startMonitor(){
+ const canvas=$("monitorCanvas");if(!canvas)return;
+ const ctx=canvas.getContext("2d");
+ let data=Array.from({length:60},()=>30+Math.random()*40);
+ function draw(){
+  if(!document.body.contains(canvas))return;
+  const r=canvas.getBoundingClientRect();
+  canvas.width=r.width*devicePixelRatio;canvas.height=r.height*devicePixelRatio;
+  ctx.scale(devicePixelRatio,devicePixelRatio);
+  const w=r.width,h=r.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle="rgba(92,200,255,.8)";ctx.lineWidth=2;ctx.beginPath();
+  data.forEach((v,i)=>{const x=i*w/(data.length-1),y=h-v*h/100;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});
+  ctx.stroke();
+  data.push(20+Math.random()*70);data.shift();
+  const cpu=Math.round(data[data.length-1]),mem=Math.round(35+Math.random()*30),net=Math.round(80+Math.random()*500);
+  if($("cpuVal"))$("cpuVal").textContent=cpu+"%";
+  if($("memVal"))$("memVal").textContent=mem+"%";
+  if($("netVal"))$("netVal").textContent=net+" KB/s";
+  if($("runningApps"))$("runningApps").textContent=Object.keys(windows).map(x=>APP_DEFS[x].name).join(" • ")||"No applications";
+  requestAnimationFrame(draw);
+ }
+ draw();
+}
+
+/* ============================================================
+   PROGRAMMING ENVIRONMENT
+   ============================================================ */
+
+let codeFiles={
+ html:`<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{font-family:Arial;background:#101827;color:white;text-align:center;padding:50px}
+button{padding:12px 20px;border:0;border-radius:10px}
+</style>
+</head>
+<body>
+<h1>Hello from GalaxyOS Code Studio 🚀</h1>
+<p>Edit the HTML, CSS and JavaScript tabs.</p>
+<button onclick="demo()">Test JavaScript</button>
+<script>
+function demo(){alert("GalaxyOS preview works!")}
+<\/script>
+</body>
+</html>`,
+ css:"",
+ js:""
+};
+function renderProgrammer(c){
+ c.innerHTML=`
+ <div class="programmer">
+  <div class="code-tabs">
+   <button class="code-tab active" id="tab-html" onclick="codeTab('html')">index.html</button>
+   <button class="code-tab" id="tab-css" onclick="codeTab('css')">style.css</button>
+   <button class="code-tab" id="tab-js" onclick="codeTab('js')">script.js</button>
+   <button class="toolbtn" style="margin-left:auto" onclick="runCode()">▶ Run</button>
+   <button class="toolbtn" onclick="saveProject()">💾 Save Project</button>
+  </div>
+  <div class="code-body">
+   <textarea class="code-editor" id="codeEditor"></textarea>
+   <div class="preview"><iframe id="codePreview" sandbox="allow-scripts"></iframe></div>
+  </div>
+ </div>`;
+ $("codeEditor").value=codeFiles[currentCodeTab];
+}
+function codeTab(tab){
+ if($("codeEditor"))codeFiles[currentCodeTab]=$("codeEditor").value;
+ currentCodeTab=tab;
+ if(windows.programmer)renderProgrammer($("content-programmer"));
+}
+function runCode(){
+ codeFiles[currentCodeTab]=$("codeEditor").value;
+ let html=codeFiles.html;
+ if(codeFiles.css)html=html.replace("</head>","<style>"+codeFiles.css+"</style></head>");
+ if(codeFiles.js)html=html.replace("</body>","<script>"+codeFiles.js+"<\\/script></body>");
+ $("codePreview").srcdoc=html;
+}
+function saveProject(){
+ codeFiles[currentCodeTab]=$("codeEditor").value;
+ const now=new Date().toISOString();
+ const existing=state.files.find(x=>x.name==="GalaxyProject.galaxy");
+ const content=JSON.stringify(codeFiles);
+ if(existing)existing.content=content;
+ else state.files.push({id:"proj_"+Date.now(),name:"GalaxyProject.galaxy",type:"file",parent:"Projects",size:content.length+" B",content,created:now,modified:now});
+ saveState();notify("Code Studio","Project saved to Projects.");
+}
+
+/* ============================================================
+   MEDIA / EXTRA APPS
+   ============================================================ */
+
+function renderMusic(c){
+ c.innerHTML=`<div class="pad" style="text-align:center"><div style="font-size:80px">🎵</div><h2>Galaxy Music</h2><p class="sub">Simulated media player</p><div style="margin:30px auto;max-width:400px;padding:25px;border:1px solid var(--border);border-radius:15px"><b>🌌 Cosmic Journey</b><div style="height:5px;background:var(--border);margin:20px 0;border-radius:5px"><div style="width:35%;height:100%;background:var(--accent)"></div></div><button class="toolbtn" onclick="toast('Playing simulated track')">▶ Play</button> <button class="toolbtn">⏭ Next</button></div></div>`;
+}
+function renderPhotos(c){
+ c.innerHTML=`<div class="pad"><h2>🖼️ Photo Viewer</h2><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px">${["🌌","🌍","🚀","🌙","✨","🪐"].map((x,i)=>`<div style="height:130px;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:60px;background:rgba(255,255,255,.04)">${x}</div>`).join("")}</div></div>`;
+}
+function renderWeather(c){
+ c.innerHTML=`<div class="pad" style="text-align:center"><div style="font-size:75px">🌤️</div><h2>Galaxy Weather</h2><div class="card" style="margin-top:20px"><div style="font-size:35px">27°C</div><p class="sub">Simulated clear sky</p></div><div class="cards"><div class="card">☀️ 29°C<br><small>Tomorrow</small></div><div class="card">🌧️ 25°C<br><small>Saturday</small></div><div class="card">🌤️ 28°C<br><small>Sunday</small></div></div></div>`;
+}
+function renderGames(c){
+ c.innerHTML=`<div class="pad"><h2>🎮 Galaxy Games</h2><p class="sub">Mini games inside the simulated OS.</p><div class="cards"><div class="card"><div style="font-size:40px">🚀</div><b>Space Runner</b><p class="sub">Coming soon</p></div><div class="card"><div style="font-size:40px">🧠</div><b>Memory</b><p class="sub">Coming soon</p></div><div class="card"><div style="font-size:40px">🪐</div><b>Planet Quiz</b><p class="sub">Coming soon</p></div></div></div>`;
+}
+
+/* ============================================================
+   GLOBAL SEARCH
+   ============================================================ */
+
+function globalSearch(q){
+ q=q.toLowerCase();
+ const files=state.files.filter(f=>f.name.toLowerCase().includes(q));
+ const apps=Object.values(APP_DEFS).filter(a=>state.installed.includes(a.id)&&a.name.toLowerCase().includes(q));
+ return {files,apps};
+}
+
+/* ============================================================
+   POWER / LOCK
+   ============================================================ */
+
+function lockOS(){
+ $("startMenu").classList.remove("show");
+ $("lockScreen").classList.remove("hidden");
+ $("pin").value="";
+ setTimeout(()=>$("pin").focus(),100);
+}
+function unlockOS(){
+ if($("pin").value==="1234"){
+  $("lockScreen").classList.add("hidden");
+  notify("Unlocked","Welcome back.");
+ }else toast("Incorrect demo PIN");
+}
+function shutdownOS(){
+ $("startMenu").classList.remove("show");
+ $("powerScreen").classList.add("show");
+ $("powerText").textContent="Shutting down GalaxyOS...";
+ setTimeout(()=>{$("powerText").textContent="GalaxyOS is now powered off.";},1300);
+}
+function restartOS(){
+ $("startMenu").classList.remove("show");
+ Object.values(windows).forEach(w=>w.el.remove());
+ windows={};activeWindow=null;updateTaskbar();
+ $("powerScreen").classList.add("show");
+ $("powerText").textContent="Restarting GalaxyOS...";
+ setTimeout(()=>{
+  $("powerScreen").classList.remove("show");
+  $("boot").style.display="flex";
+  $("bootText").textContent="Initializing Kernel...";
+  setTimeout(()=>{$("boot").style.display="none";notify("GalaxyOS","Restart complete.")},2800);
+ },1500);
+}
+function sleepOS(){
+ $("startMenu").classList.remove("show");
+ $("powerScreen").classList.add("show");
+ $("powerText").textContent="☾ GalaxyOS is sleeping";
+ setTimeout(()=>$("powerScreen").classList.remove("show"),2500);
+}
+
+/* ============================================================
+   WINDOW SNAPPING
+   ============================================================ */
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"){
+  $("startMenu").classList.remove("show");
+  $("desktopContext").classList.remove("show");
+ }
+ if(e.key==="Meta"||e.key==="OS")toggleStart();
+
+ if(e.ctrlKey&&e.altKey&&e.key.toLowerCase()==="t"){
+  e.preventDefault();openApp("terminal");
+ }
+ if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="e"){
+  e.preventDefault();openApp("explorer");
+ }
+ if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==="n"){
+  e.preventDefault();newFolder();
+ }
+ if(e.altKey&&e.key==="Tab"){
+  e.preventDefault();
+  const ids=Object.keys(windows);
+  if(ids.length){
+   const i=Math.max(0,ids.indexOf(activeWindow));
+   const next=ids[(i+1)%ids.length];
+   restoreWindow(next);
+  }
+ }
+ if(e.key==="F11"){
+  e.preventDefault();
+  if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.();
+ }
+ if(windows.calculator&&document.activeElement?.id==="calcDisplay"){
+  if(/[0-9+\-*/().]/.test(e.key))calcAdd(e.key);
+  if(e.key==="Enter")calcEquals();
+  if(e.key==="Backspace")calcBack();
+ }
+});
+
+window.addEventListener("resize",()=>{
+ Object.values(windows).forEach(w=>{
+  const r=w.el.getBoundingClientRect();
+  if(r.right>innerWidth)w.el.style.left=Math.max(0,innerWidth-r.width-10)+"px";
+  if(r.bottom>innerHeight-58)w.el.style.top=Math.max(0,innerHeight-r.height-70)+"px";
+ });
+});
+
+/* ============================================================
+   VIRTUAL DESKTOPS
+   ============================================================ */
+
+function switchDesktop(n){
+ if(n<1||n>state.virtualDesktops)return;
+ state.desktop=n;saveState();
+ toast("Switched to Desktop "+n);
+}
+
+/* ============================================================
+   FILE SEARCH UI
+   ============================================================ */
+
+document.addEventListener("keydown",e=>{
+ if(e.ctrlKey&&e.key.toLowerCase()==="k"){
+  e.preventDefault();focusGlobalSearch();
+ }
+});
+
+/* ============================================================
+   INITIALIZATION
+   ============================================================ */
+
+boot();
+</script>
+</body>
+</html>

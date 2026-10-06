@@ -1,0 +1,3312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VivahSetu — Modern Matrimonial Platform</title>
+
+<style>
+/* =========================================================
+   VIVAHSETU — COMPLETE SINGLE-FILE DEMO
+   Fictional adult profiles only.
+   Front-end prototype: HTML + CSS + JavaScript in one file.
+   ========================================================= */
+
+:root {
+    --maroon: #711f32;
+    --maroon-dark: #4b1322;
+    --maroon-light: #9e4057;
+    --gold: #c79a45;
+    --gold-light: #e8c982;
+    --cream: #fbf7ef;
+    --white: #ffffff;
+    --text: #29232a;
+    --muted: #766e72;
+    --border: #e8ddd5;
+    --success: #2f8a62;
+    --danger: #b54242;
+    --shadow: 0 15px 45px rgba(61, 24, 34, 0.10);
+    --radius: 18px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    line-height: 1.6;
+}
+
+body.dark {
+    --cream: #151215;
+    --white: #211b20;
+    --text: #f4edf0;
+    --muted: #c0b4ba;
+    --border: #3b3035;
+    --shadow: 0 15px 45px rgba(0,0,0,0.30);
+    background: #151215;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+.container {
+    width: min(1180px, 92%);
+    margin: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.serif {
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.section {
+    padding: 85px 0;
+}
+
+.section-title {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 45px;
+}
+
+.section-title .eyebrow {
+    color: var(--maroon-light);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.section-title h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(30px, 5vw, 46px);
+    color: var(--maroon);
+    margin-bottom: 12px;
+}
+
+body.dark .section-title h2 {
+    color: var(--gold-light);
+}
+
+.section-title p {
+    color: var(--muted);
+}
+
+.btn {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 19px;
+    font-weight: 700;
+    transition: 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    color: white;
+    background: var(--maroon);
+    box-shadow: 0 8px 20px rgba(113,31,50,0.20);
+}
+
+.btn-primary:hover {
+    background: var(--maroon-dark);
+}
+
+.btn-outline {
+    color: var(--maroon);
+    background: transparent;
+    border: 1px solid var(--maroon);
+}
+
+body.dark .btn-outline {
+    color: var(--gold-light);
+    border-color: var(--gold-light);
+}
+
+.btn-gold {
+    color: #2e2110;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+}
+
+.btn-light {
+    color: var(--maroon);
+    background: white;
+}
+
+.card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(251,247,239,0.94);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--border);
+}
+
+body.dark .navbar {
+    background: rgba(21,18,21,0.94);
+}
+
+.nav-inner {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: Georgia, serif;
+    color: var(--maroon);
+    font-size: 25px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+body.dark .logo {
+    color: var(--gold-light);
+}
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: white;
+    background: linear-gradient(135deg, var(--maroon), var(--maroon-light));
+    box-shadow: 0 8px 20px rgba(113,31,50,0.2);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.nav-links a {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--maroon);
+}
+
+body.dark .nav-links a:hover {
+    color: var(--gold-light);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text);
+}
+
+.menu-btn {
+    display: none;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    min-height: 680px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    background:
+        radial-gradient(circle at 80% 25%, rgba(199,154,69,0.18), transparent 28%),
+        radial-gradient(circle at 15% 70%, rgba(113,31,50,0.10), transparent 30%),
+        var(--cream);
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    right: -180px;
+    top: 100px;
+    border: 1px solid rgba(199,154,69,0.25);
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    right: -110px;
+    top: 160px;
+    border: 1px solid rgba(113,31,50,0.12);
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+    gap: 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(199,154,69,0.12);
+    color: var(--maroon);
+    border: 1px solid rgba(199,154,69,0.30);
+    border-radius: 50px;
+    padding: 8px 13px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 22px;
+}
+
+body.dark .badge {
+    color: var(--gold-light);
+}
+
+.hero h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--maroon);
+    font-size: clamp(45px, 6vw, 74px);
+    line-height: 1.03;
+    margin-bottom: 22px;
+}
+
+body.dark .hero h1 {
+    color: var(--gold-light);
+}
+
+.hero h1 span {
+    color: var(--gold);
+}
+
+.hero p {
+    color: var(--muted);
+    font-size: 18px;
+    max-width: 590px;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.hero-note {
+    margin-top: 22px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.hero-visual {
+    min-height: 500px;
+    position: relative;
+    display: grid;
+    place-items: center;
+}
+
+.hero-card {
+    width: min(420px, 100%);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(60,20,30,0.16);
+    transform: rotate(2deg);
+}
+
+.hero-image {
+    height: 330px;
+    background:
+        linear-gradient(180deg, transparent 45%, rgba(44,20,27,0.45)),
+        url("https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=85")
+        center/cover;
+}
+
+.hero-card-info {
+    padding: 20px;
+}
+
+.hero-card-info h3 {
+    font-family: Georgia, serif;
+    color: var(--maroon);
+}
+
+body.dark .hero-card-info h3 {
+    color: var(--gold-light);
+}
+
+.hero-floating {
+    position: absolute;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 14px 17px;
+    animation: float 4s ease-in-out infinite;
+}
+
+.hero-floating.one {
+    top: 75px;
+    left: 5px;
+}
+
+.hero-floating.two {
+    right: 0;
+    bottom: 70px;
+    animation-delay: 1s;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
+}
+
+/* =========================================================
+   TRUST BAR
+   ========================================================= */
+
+.trust-bar {
+    background: var(--maroon);
+    color: white;
+    padding: 16px 0;
+}
+
+.trust-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    text-align: center;
+}
+
+.trust-item {
+    font-size: 13px;
+}
+
+.trust-item strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 2px;
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.search-box {
+    padding: 25px;
+    margin-top: -45px;
+    position: relative;
+    z-index: 5;
+}
+
+.search-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--muted);
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 11px 12px;
+    outline: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: var(--gold);
+}
+
+/* =========================================================
+   FEATURES
+   ========================================================= */
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.feature {
+    padding: 28px;
+    text-align: center;
+    transition: 0.25s;
+}
+
+.feature:hover {
+    transform: translateY(-6px);
+}
+
+.feature-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 16px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: rgba(113,31,50,0.08);
+    color: var(--maroon);
+    font-size: 25px;
+}
+
+body.dark .feature-icon {
+    color: var(--gold-light);
+}
+
+/* =========================================================
+   DISCOVER
+   ========================================================= */
+
+.discover-section {
+    background: #f5eee6;
+}
+
+body.dark .discover-section {
+    background: #1a1619;
+}
+
+.filter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 8px 14px;
+    background: var(--white);
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.filter-btn.active {
+    background: var(--maroon);
+    color: white;
+    border-color: var(--maroon);
+}
+
+.profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.profile-card {
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.profile-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 25px 55px rgba(61,24,34,0.16);
+}
+
+.profile-photo {
+    height: 270px;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(20,10,14,0.55));
+}
+
+.favorite-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 3;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.92);
+    color: var(--maroon);
+    font-size: 18px;
+}
+
+.profile-body {
+    padding: 19px;
+}
+
+.profile-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.profile-name {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    color: var(--maroon);
+}
+
+body.dark .profile-name {
+    color: var(--gold-light);
+}
+
+.verified {
+    color: var(--success);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.profile-meta {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 4px 0 12px;
+}
+
+.compatibility {
+    display: inline-flex;
+    background: rgba(47,138,98,0.10);
+    color: var(--success);
+    border-radius: 50px;
+    padding: 5px 9px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 12px 0 17px;
+}
+
+.tag {
+    padding: 5px 9px;
+    border-radius: 50px;
+    background: rgba(199,154,69,0.12);
+    color: #805d20;
+    font-size: 11px;
+}
+
+body.dark .tag {
+    color: var(--gold-light);
+}
+
+.profile-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.profile-actions .btn {
+    flex: 1;
+    padding: 10px 8px;
+    font-size: 12px;
+}
+
+/* =========================================================
+   HOW IT WORKS
+   ========================================================= */
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.step {
+    position: relative;
+    padding: 28px;
+}
+
+.step-number {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--maroon);
+    color: white;
+    font-weight: bold;
+    margin-bottom: 17px;
+}
+
+.step h3 {
+    font-family: Georgia, serif;
+    color: var(--maroon);
+    margin-bottom: 8px;
+}
+
+body.dark .step h3 {
+    color: var(--gold-light);
+}
+
+.step p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* =========================================================
+   SAFETY
+   ========================================================= */
+
+.safety {
+    background: linear-gradient(135deg, var(--maroon-dark), var(--maroon));
+    color: white;
+}
+
+.safety-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 55px;
+    align-items: center;
+}
+
+.safety h2 {
+    font-family: Georgia, serif;
+    font-size: clamp(32px, 5vw, 48px);
+    margin-bottom: 15px;
+}
+
+.safety p {
+    color: #eadde1;
+}
+
+.safety-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.safety-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.safety-check {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,0.12);
+    flex: 0 0 28px;
+}
+
+.safety-card {
+    background: white;
+    color: var(--text);
+    border-radius: 25px;
+    padding: 28px;
+}
+
+.safety-card h3 {
+    font-family: Georgia, serif;
+    color: var(--maroon);
+    margin-bottom: 15px;
+}
+
+.safety-alert {
+    background: #fff7e5;
+    color: #74551d;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 13px;
+}
+
+/* =========================================================
+   ABOUT
+   ========================================================= */
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 55px;
+    align-items: center;
+}
+
+.about-image {
+    min-height: 450px;
+    border-radius: 28px;
+    background:
+        linear-gradient(180deg, transparent, rgba(50,20,28,0.45)),
+        url("https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=85")
+        center/cover;
+    box-shadow: var(--shadow);
+}
+
+.about-content h2 {
+    font-family: Georgia, serif;
+    color: var(--maroon);
+    font-size: 43px;
+    line-height: 1.15;
+    margin-bottom: 17px;
+}
+
+body.dark .about-content h2 {
+    color: var(--gold-light);
+}
+
+.about-content p {
+    color: var(--muted);
+    margin-bottom: 15px;
+}
+
+/* =========================================================
+   FAQ
+   ========================================================= */
+
+.faq {
+    display: grid;
+    gap: 12px;
+    max-width: 850px;
+    margin: auto;
+}
+
+.faq-item {
+    border: 1px solid var(--border);
+    background: var(--white);
+    border-radius: 13px;
+    overflow: hidden;
+}
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--text);
+    text-align: left;
+    padding: 17px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.faq-answer {
+    display: none;
+    padding: 0 17px 17px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.faq-item.open .faq-answer {
+    display: block;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+    background: #28171d;
+    color: white;
+    padding: 60px 0 25px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(3, 1fr);
+    gap: 35px;
+}
+
+.footer-brand p {
+    color: #c9b8be;
+    font-size: 13px;
+    max-width: 300px;
+    margin-top: 12px;
+}
+
+.footer-col h4 {
+    margin-bottom: 13px;
+    color: var(--gold-light);
+}
+
+.footer-col a {
+    display: block;
+    color: #c9b8be;
+    font-size: 13px;
+    margin: 8px 0;
+}
+
+.footer-col a:hover {
+    color: white;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.10);
+    margin-top: 40px;
+    padding-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    color: #bdaeb4;
+    font-size: 12px;
+}
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,10,15,0.65);
+    backdrop-filter: blur(7px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: min(650px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--white);
+    color: var(--text);
+    border-radius: 22px;
+    padding: 27px;
+    box-shadow: 0 30px 90px rgba(0,0,0,0.30);
+    animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.modal-head h2 {
+    font-family: Georgia, serif;
+    color: var(--maroon);
+}
+
+body.dark .modal-head h2 {
+    color: var(--gold-light);
+}
+
+.close-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-full {
+    grid-column: 1 / -1;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* =========================================================
+   PROFILE DETAIL MODAL
+   ========================================================= */
+
+.detail-header {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 22px;
+    align-items: center;
+}
+
+.detail-photo {
+    width: 170px;
+    height: 190px;
+    border-radius: 17px;
+    background-size: cover;
+    background-position: center;
+}
+
+.detail-header h2 {
+    font-family: Georgia, serif;
+    color: var(--maroon);
+    font-size: 30px;
+}
+
+body.dark .detail-header h2 {
+    color: var(--gold-light);
+}
+
+.detail-section {
+    margin-top: 24px;
+}
+
+.detail-section h3 {
+    margin-bottom: 8px;
+    color: var(--maroon);
+    font-family: Georgia, serif;
+}
+
+body.dark .detail-section h3 {
+    color: var(--gold-light);
+}
+
+.detail-section p {
+    color: var(--muted);
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.dashboard {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    background: var(--cream);
+    overflow-y: auto;
+    display: none;
+}
+
+.dashboard.show {
+    display: block;
+}
+
+.dashboard-top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+}
+
+.dashboard-nav {
+    min-height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dashboard-content {
+    padding: 40px 0 70px;
+}
+
+.dashboard-title {
+    margin-bottom: 25px;
+}
+
+.dashboard-title h1 {
+    font-family: Georgia, serif;
+    color: var(--maroon);
+}
+
+body.dark .dashboard-title h1 {
+    color: var(--gold-light);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    padding: 22px;
+}
+
+.stat-card .stat-icon {
+    font-size: 23px;
+}
+
+.stat-card strong {
+    display: block;
+    font-size: 28px;
+    color: var(--maroon);
+}
+
+body.dark .stat-card strong {
+    color: var(--gold-light);
+}
+
+.stat-card span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.activity {
+    padding: 25px;
+}
+
+.activity-row {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.activity-row:last-child {
+    border-bottom: none;
+}
+
+.activity-row small {
+    color: var(--muted);
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 3000;
+    background: #25171d;
+    color: white;
+    border-left: 4px solid var(--gold);
+    padding: 14px 18px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    transform: translateY(130px);
+    opacity: 0;
+    transition: 0.3s;
+    max-width: 350px;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+    .nav-links {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-visual {
+        min-height: 420px;
+    }
+
+    .search-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .profiles-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .section {
+        padding: 60px 0;
+    }
+
+    .nav-actions .btn {
+        display: none;
+    }
+
+    .hero {
+        min-height: auto;
+        padding: 75px 0;
+    }
+
+    .hero-visual {
+        min-height: 370px;
+    }
+
+    .hero-card {
+        width: 90%;
+    }
+
+    .hero-image {
+        height: 270px;
+    }
+
+    .hero-floating.one {
+        left: 0;
+        top: 35px;
+    }
+
+    .hero-floating.two {
+        right: 0;
+        bottom: 25px;
+    }
+
+    .trust-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .search-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .features,
+    .profiles-grid,
+    .steps,
+    .safety-grid,
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profiles-grid {
+        gap: 16px;
+    }
+
+    .about-image {
+        min-height: 330px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-full {
+        grid-column: auto;
+    }
+
+    .detail-header {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-photo {
+        width: 100%;
+        height: 270px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     NAVIGATION
+     ========================================================= -->
+
+<nav class="navbar">
+    <div class="container nav-inner">
+
+        <a href="#home" class="logo">
+            <span class="logo-icon">💍</span>
+            VivahSetu
+        </a>
+
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#discover">Discover</a>
+            <a href="#how">How It Works</a>
+            <a href="#safety">Safety</a>
+            <a href="#about">About</a>
+        </div>
+
+        <div class="nav-actions">
+
+            <button class="icon-btn" id="themeBtn" title="Toggle theme">
+                🌙
+            </button>
+
+            <button class="btn btn-outline" onclick="openModal('signinModal')">
+                Sign In
+            </button>
+
+            <button class="btn btn-primary" onclick="openModal('registerModal')">
+                Create Profile
+            </button>
+
+            <button class="icon-btn menu-btn" onclick="showToast('Mobile navigation is available through the main sections below.')">
+                ☰
+            </button>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<section class="hero" id="home">
+
+    <div class="container hero-grid">
+
+        <div class="hero-content">
+
+            <div class="badge">
+                ✦ Adults-only matrimonial demo platform
+            </div>
+
+            <h1>
+                Find <span>Meaningful</span><br>
+                Connections
+            </h1>
+
+            <p>
+                Discover compatible matrimonial profiles through thoughtful
+                preferences, shared interests and a privacy-first experience.
+            </p>
+
+            <div class="hero-buttons">
+
+                <button class="btn btn-primary" onclick="openModal('registerModal')">
+                    Create Your Profile →
+                </button>
+
+                <button class="btn btn-outline" onclick="document.getElementById('discover').scrollIntoView()">
+                    Explore Matches
+                </button>
+
+            </div>
+
+            <div class="hero-note">
+                🔒 Demo uses fictional adult profiles. No private contact information is exposed.
+            </div>
+
+        </div>
+
+
+        <div class="hero-visual">
+
+            <div class="hero-floating one">
+                <strong>✓ Profile verified</strong>
+                <small>Demo status</small>
+            </div>
+
+            <div class="hero-card">
+
+                <div class="hero-image"></div>
+
+                <div class="hero-card-info">
+
+                    <div class="profile-top">
+                        <div>
+                            <h3>Arjun, 29</h3>
+                            <small>📍 Bengaluru · Software Architect</small>
+                        </div>
+
+                        <div class="compatibility">
+                            91% match
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="hero-floating two">
+                💛 <strong>New connection</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TRUST BAR
+     ========================================================= -->
+
+<section class="trust-bar">
+
+    <div class="container trust-grid">
+
+        <div class="trust-item">
+            <strong>🔐 Privacy-first</strong>
+            Designed around safer sharing
+        </div>
+
+        <div class="trust-item">
+            <strong>🛡️ Safety Center</strong>
+            Report & block tools
+        </div>
+
+        <div class="trust-item">
+            <strong>🎯 Preference Matching</strong>
+            Simple transparent algorithm
+        </div>
+
+        <div class="trust-item">
+            <strong>💬 Controlled Messaging</strong>
+            Connections before messaging
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SEARCH
+     ========================================================= -->
+
+<section class="container">
+
+    <div class="search-box card">
+
+        <div class="section-title" style="margin-bottom:25px;">
+            <div class="eyebrow">Discover</div>
+            <h2 style="font-size:32px;">Find Profiles by Preference</h2>
+            <p>
+                Explore fictional profiles using the demo search system.
+            </p>
+        </div>
+
+        <div class="search-grid">
+
+            <div class="field">
+                <label>AGE FROM</label>
+                <input type="number" id="ageFrom" value="25" min="18" max="80">
+            </div>
+
+            <div class="field">
+                <label>AGE TO</label>
+                <input type="number" id="ageTo" value="35" min="18" max="80">
+            </div>
+
+            <div class="field">
+                <label>LOCATION</label>
+                <select id="locationFilter">
+                    <option value="">Any city</option>
+                    <option>Delhi</option>
+                    <option>Mumbai</option>
+                    <option>Bengaluru</option>
+                    <option>Pune</option>
+                    <option>Hyderabad</option>
+                    <option>Chennai</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>EDUCATION</label>
+                <select id="educationFilter">
+                    <option value="">Any education</option>
+                    <option>Engineering</option>
+                    <option>Management</option>
+                    <option>Medicine</option>
+                    <option>Design</option>
+                    <option>Finance</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>PROFESSION</label>
+                <select id="professionFilter">
+                    <option value="">Any profession</option>
+                    <option>Engineer</option>
+                    <option>Doctor</option>
+                    <option>Designer</option>
+                    <option>Consultant</option>
+                    <option>Architect</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary" onclick="searchProfiles()">
+                    🔎 Search
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FEATURES
+     ========================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-title">
+            <div class="eyebrow">Built thoughtfully</div>
+            <h2>A More Considered Matrimonial Experience</h2>
+            <p>
+                The prototype combines discovery, preferences, privacy and
+                controlled communication into one experience.
+            </p>
+        </div>
+
+        <div class="features">
+
+            <div class="feature card">
+                <div class="feature-icon">🎯</div>
+                <h3>Preference Matching</h3>
+                <p>
+                    Compare non-sensitive profile preferences and interests
+                    to produce a transparent demo compatibility indicator.
+                </p>
+            </div>
+
+            <div class="feature card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Safety by Design</h3>
+                <p>
+                    Profiles include report and block actions, while private
+                    contact information stays hidden.
+                </p>
+            </div>
+
+            <div class="feature card">
+                <div class="feature-icon">💬</div>
+                <h3>Connection First</h3>
+                <p>
+                    A connection request comes before the simulated messaging
+                    experience.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     DISCOVER
+     ========================================================= -->
+
+<section class="section discover-section" id="discover">
+
+    <div class="container">
+
+        <div class="section-title">
+            <div class="eyebrow">Discover</div>
+            <h2>Suggested Profiles</h2>
+            <p>
+                These are fictional adult demo profiles created for this prototype.
+            </p>
+        </div>
+
+        <div class="filter-row">
+
+            <div class="filter-buttons">
+
+                <button class="filter-btn active" onclick="filterProfiles('all',this)">
+                    All
+                </button>
+
+                <button class="filter-btn" onclick="filterProfiles('high',this)">
+                    85%+ Match
+                </button>
+
+                <button class="filter-btn" onclick="filterProfiles('verified',this)">
+                    Verified Demo
+                </button>
+
+            </div>
+
+            <select class="field" id="sortProfiles"
+                    style="width:auto;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--white);color:var(--text);"
+                    onchange="sortProfiles()">
+                <option value="match">Highest Match</option>
+                <option value="age">Age</option>
+                <option value="name">Name</option>
+            </select>
+
+        </div>
+
+        <div class="profiles-grid" id="profilesGrid"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     HOW IT WORKS
+     ========================================================= -->
+
+<section class="section" id="how">
+
+    <div class="container">
+
+        <div class="section-title">
+            <div class="eyebrow">Simple process</div>
+            <h2>How VivahSetu Works</h2>
+            <p>
+                A simple journey from profile creation to a mutual connection.
+            </p>
+        </div>
+
+        <div class="steps">
+
+            <div class="step card">
+                <div class="step-number">1</div>
+                <h3>Create a Profile</h3>
+                <p>
+                    Build a profile using the information needed for this demo.
+                </p>
+            </div>
+
+            <div class="step card">
+                <div class="step-number">2</div>
+                <h3>Set Preferences</h3>
+                <p>
+                    Choose general preferences such as location, education,
+                    profession and interests.
+                </p>
+            </div>
+
+            <div class="step card">
+                <div class="step-number">3</div>
+                <h3>Discover</h3>
+                <p>
+                    Browse fictional profiles and inspect their compatibility
+                    information.
+                </p>
+            </div>
+
+            <div class="step card">
+                <div class="step-number">4</div>
+                <h3>Connect</h3>
+                <p>
+                    Send a connection request before using the simulated
+                    messaging interface.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SAFETY
+     ========================================================= -->
+
+<section class="section safety" id="safety">
+
+    <div class="container safety-grid">
+
+        <div>
+
+            <div class="badge">
+                🛡️ Safety Center
+            </div>
+
+            <h2>Privacy and Safety Come First</h2>
+
+            <p>
+                A real matrimonial service should treat privacy, consent,
+                security and moderation as core features rather than optional
+                additions.
+            </p>
+
+            <div class="safety-list">
+
+                <div class="safety-item">
+                    <div class="safety-check">✓</div>
+                    <div>
+                        <strong>Protect personal information</strong>
+                        <p>Don't publicly reveal sensitive private details.</p>
+                    </div>
+                </div>
+
+                <div class="safety-item">
+                    <div class="safety-check">✓</div>
+                    <div>
+                        <strong>Watch for financial scams</strong>
+                        <p>Never send money to someone you only know online.</p>
+                    </div>
+                </div>
+
+                <div class="safety-item">
+                    <div class="safety-check">✓</div>
+                    <div>
+                        <strong>Report suspicious profiles</strong>
+                        <p>Use reporting and blocking tools when needed.</p>
+                    </div>
+                </div>
+
+                <div class="safety-item">
+                    <div class="safety-check">✓</div>
+                    <div>
+                        <strong>Use sensible meeting precautions</strong>
+                        <p>For real services, follow appropriate public-meeting safety practices.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="safety-card">
+
+            <h3>⚠️ Important Demo Notice</h3>
+
+            <div class="safety-alert">
+                This webpage is a front-end prototype using fictional adult
+                profiles. The profile verification indicators shown here are
+                simulated and do not represent real identity verification.
+            </div>
+
+            <br>
+
+            <p>
+                A production platform would require secure backend
+                authentication, encrypted communication, server-side
+                validation, moderation, account controls and proper privacy
+                protections.
+            </p>
+
+            <br>
+
+            <button class="btn btn-primary" onclick="openModal('reportModal')">
+                🚩 Report Profile
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ABOUT
+     ========================================================= -->
+
+<section class="section" id="about">
+
+    <div class="container about-grid">
+
+        <div class="about-image"></div>
+
+        <div class="about-content">
+
+            <div class="badge">About VivahSetu</div>
+
+            <h2>
+                Designed for meaningful, respectful discovery.
+            </h2>
+
+            <p>
+                VivahSetu is a fictional matrimonial platform concept designed
+                to demonstrate how a modern profile-discovery application can
+                combine elegant design with privacy-conscious features.
+            </p>
+
+            <p>
+                The compatibility percentage shown in the demo is only a
+                simple preference comparison. It does not predict whether
+                two people will have a successful relationship.
+            </p>
+
+            <button class="btn btn-primary" onclick="openDashboard()">
+                Open Demo Dashboard
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FAQ
+     ========================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-title">
+            <div class="eyebrow">Help</div>
+            <h2>Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq">
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Is this a real matrimonial service?
+                    <span>+</span>
+                </button>
+                <div class="faq-answer">
+                    No. This is a front-end demonstration using fictional adult profiles and simulated features.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Is the compatibility percentage guaranteed?
+                    <span>+</span>
+                </button>
+                <div class="faq-answer">
+                    No. It is only a simple preference-match indicator and does not predict relationship success.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Can users really send messages?
+                    <span>+</span>
+                </button>
+                <div class="faq-answer">
+                    The prototype can simulate interface actions, but it does not provide real-time communication between real users.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Is browser storage secure enough for passwords?
+                    <span>+</span>
+                </button>
+                <div class="faq-answer">
+                    No. Browser storage should not be used as the security system for real passwords or sensitive information.
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer>
+
+    <div class="container">
+
+        <div class="footer-grid">
+
+            <div class="footer-brand">
+
+                <div class="logo" style="color:white;">
+                    <span class="logo-icon">💍</span>
+                    VivahSetu
+                </div>
+
+                <p>
+                    A fictional premium matrimonial platform prototype
+                    focused on discovery, privacy, safety and meaningful
+                    connections.
+                </p>
+
+            </div>
+
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <a href="#about">About</a>
+                <a href="#how">How It Works</a>
+                <a href="#discover">Discover</a>
+                <a href="#" onclick="openDashboard();return false;">Dashboard</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Safety</h4>
+                <a href="#safety">Safety Center</a>
+                <a href="#" onclick="openModal('reportModal');return false;">Report Profile</a>
+                <a href="#" onclick="showToast('Blocking is simulated in this prototype.');return false;">Block</a>
+                <a href="#" onclick="showToast('Privacy controls opened in demo mode.');return false;">Privacy</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="#" onclick="showToast('Demo Terms page.');return false;">Terms</a>
+                <a href="#" onclick="showToast('Demo Privacy Policy.');return false;">Privacy Policy</a>
+                <a href="#" onclick="showToast('Demo cookie preferences.');return false;">Cookies</a>
+                <a href="#" onclick="showToast('Contact: demo@vivahsetu.example');return false;">Contact</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <span>
+                © 2026 VivahSetu Demo. Fictional platform.
+            </span>
+
+            <span>
+                Adults only · Privacy · Safety · Consent
+            </span>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     SIGN IN MODAL
+     ========================================================= -->
+
+<div class="modal" id="signinModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h2>Welcome Back</h2>
+
+            <button class="close-btn" onclick="closeModal('signinModal')">
+                ×
+            </button>
+
+        </div>
+
+        <p style="color:var(--muted);margin-bottom:20px;">
+            Sign in to the fictional demo dashboard.
+        </p>
+
+        <div class="form-grid">
+
+            <div class="field form-full">
+                <label>EMAIL</label>
+                <input type="email" id="signinEmail" placeholder="demo@example.com">
+            </div>
+
+            <div class="field form-full">
+                <label>PASSWORD</label>
+                <input type="password" placeholder="Demo password">
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button class="btn btn-outline" onclick="closeModal('signinModal')">
+                Cancel
+            </button>
+
+            <button class="btn btn-primary" onclick="demoLogin()">
+                Sign In
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     REGISTER MODAL
+     ========================================================= -->
+
+<div class="modal" id="registerModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h2>Create Your Demo Profile</h2>
+
+            <button class="close-btn" onclick="closeModal('registerModal')">
+                ×
+            </button>
+
+        </div>
+
+        <p style="color:var(--muted);margin-bottom:20px;">
+            This demo is intended to represent an adults-only matrimonial
+            service and uses local browser data only.
+        </p>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>NAME</label>
+                <input id="regName" placeholder="Your display name">
+            </div>
+
+            <div class="field">
+                <label>AGE</label>
+                <input id="regAge" type="number" min="18" placeholder="18+">
+            </div>
+
+            <div class="field">
+                <label>CITY</label>
+                <select id="regCity">
+                    <option value="">Select city</option>
+                    <option>Delhi</option>
+                    <option>Mumbai</option>
+                    <option>Bengaluru</option>
+                    <option>Pune</option>
+                    <option>Hyderabad</option>
+                    <option>Chennai</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>PROFESSION</label>
+                <input id="regProfession" placeholder="Profession">
+            </div>
+
+            <div class="field">
+                <label>EDUCATION</label>
+                <select id="regEducation">
+                    <option value="">Select education</option>
+                    <option>Engineering</option>
+                    <option>Management</option>
+                    <option>Medicine</option>
+                    <option>Design</option>
+                    <option>Finance</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>LANGUAGE</label>
+                <input id="regLanguage" placeholder="e.g. Hindi, English">
+            </div>
+
+            <div class="field form-full">
+                <label>ABOUT</label>
+                <textarea id="regAbout" rows="4" placeholder="Write a short introduction..."></textarea>
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button class="btn btn-outline" onclick="closeModal('registerModal')">
+                Cancel
+            </button>
+
+            <button class="btn btn-primary" onclick="createProfile()">
+                Create Profile
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PROFILE DETAIL MODAL
+     ========================================================= -->
+
+<div class="modal" id="profileModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h2>Profile Details</h2>
+
+            <button class="close-btn" onclick="closeModal('profileModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div id="profileDetails"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     REPORT MODAL
+     ========================================================= -->
+
+<div class="modal" id="reportModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h2>Report Profile</h2>
+
+            <button class="close-btn" onclick="closeModal('reportModal')">
+                ×
+            </button>
+
+        </div>
+
+        <p style="color:var(--muted);margin-bottom:20px;">
+            Select a reason. This is recorded only inside the demo.
+        </p>
+
+        <div class="field">
+            <label>REASON</label>
+
+            <select id="reportReason">
+                <option>Fake profile</option>
+                <option>Spam</option>
+                <option>Harassment</option>
+                <option>Suspicious behavior</option>
+                <option>Inappropriate content</option>
+                <option>Other</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+
+            <button class="btn btn-outline" onclick="closeModal('reportModal')">
+                Cancel
+            </button>
+
+            <button class="btn btn-primary" onclick="submitReport()">
+                Submit Report
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     DASHBOARD
+     ========================================================= -->
+
+<div class="dashboard" id="dashboard">
+
+    <div class="dashboard-top">
+
+        <div class="container dashboard-nav">
+
+            <div class="logo">
+                <span class="logo-icon">💍</span>
+                VivahSetu
+            </div>
+
+            <div style="display:flex;gap:10px;align-items:center;">
+
+                <button class="icon-btn" onclick="toggleDashboardTheme()">
+                    🌙
+                </button>
+
+                <button class="btn btn-outline" onclick="closeDashboard()">
+                    ← Back to Website
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="container dashboard-content">
+
+        <div class="dashboard-title">
+
+            <h1>Good day, <span id="dashboardName">Demo User</span> 👋</h1>
+
+            <p style="color:var(--muted);">
+                Here's what's happening with your fictional demo profile.
+            </p>
+
+        </div>
+
+
+        <div class="stats-grid">
+
+            <div class="stat-card card">
+                <div class="stat-icon">💛</div>
+                <strong id="matchCount">12</strong>
+                <span>New Matches</span>
+            </div>
+
+            <div class="stat-card card">
+                <div class="stat-icon">🤝</div>
+                <strong id="requestCount">4</strong>
+                <span>Connection Requests</span>
+            </div>
+
+            <div class="stat-card card">
+                <div class="stat-icon">❤️</div>
+                <strong id="favoriteCount">7</strong>
+                <span>Favorites</span>
+            </div>
+
+            <div class="stat-card card">
+                <div class="stat-icon">💬</div>
+                <strong id="messageCount">3</strong>
+                <span>Unread Messages</span>
+            </div>
+
+        </div>
+
+
+        <div class="card activity">
+
+            <h2 style="font-family:Georgia,serif;color:var(--maroon);">
+                Recent Activity
+            </h2>
+
+            <div class="activity-row">
+                <span>✨ New suggested match discovered</span>
+                <small>10 min ago</small>
+            </div>
+
+            <div class="activity-row">
+                <span>👀 Your profile was viewed</span>
+                <small>1 hour ago</small>
+            </div>
+
+            <div class="activity-row">
+                <span>🤝 Connection request received</span>
+                <small>3 hours ago</small>
+            </div>
+
+            <div class="activity-row">
+                <span>❤️ Profile added to favorites</span>
+                <small>Yesterday</small>
+            </div>
+
+        </div>
+
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;">
+
+            <button class="btn btn-primary"
+                    onclick="closeDashboard();document.getElementById('discover').scrollIntoView();">
+                Discover Matches
+            </button>
+
+            <button class="btn btn-outline"
+                    onclick="showToast('Profile editor is simulated in this demo.')">
+                Edit Profile
+            </button>
+
+            <button class="btn btn-outline"
+                    onclick="showToast('Messaging interface is simulated in this demo.')">
+                Open Messages
+            </button>
+
+            <button class="btn btn-outline"
+                    onclick="showToast('Favorites are simulated using this browser session.')">
+                ❤️ Favorites
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+/* =========================================================
+   FICTIONAL DEMO DATA
+   ========================================================= */
+
+const profiles = [
+
+    {
+        id: 1,
+        name: "Arjun",
+        age: 29,
+        city: "Bengaluru",
+        profession: "Software Architect",
+        education: "Engineering",
+        language: "English, Hindi",
+        match: 91,
+        verified: true,
+        interests: ["Technology", "Travel", "Photography"],
+        about: "A fictional professional profile interested in technology, photography, travel and learning new things.",
+        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=700&q=85"
+    },
+
+    {
+        id: 2,
+        name: "Meera",
+        age: 28,
+        city: "Pune",
+        profession: "UX Designer",
+        education: "Design",
+        language: "English, Marathi",
+        match: 88,
+        verified: true,
+        interests: ["Design", "Music", "Travel"],
+        about: "A fictional designer who enjoys creative projects, music, weekend trips and photography.",
+        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=700&q=85"
+    },
+
+    {
+        id: 3,
+        name: "Rohan",
+        age: 31,
+        city: "Delhi",
+        profession: "Finance Consultant",
+        education: "Finance",
+        language: "Hindi, English",
+        match: 84,
+        verified: true,
+        interests: ["Finance", "Reading", "Sports"],
+        about: "A fictional finance professional who enjoys reading, sports, travel and exploring new cuisines.",
+        image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=700&q=85"
+    },
+
+    {
+        id: 4,
+        name: "Ananya",
+        age: 27,
+        city: "Mumbai",
+        profession: "Product Designer",
+        education: "Design",
+        language: "English, Hindi",
+        match: 86,
+        verified: false,
+        interests: ["Art", "Travel", "Music"],
+        about: "A fictional product designer interested in art, music, travel and thoughtful design.",
+        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=85"
+    },
+
+    {
+        id: 5,
+        name: "Kabir",
+        age: 30,
+        city: "Hyderabad",
+        profession: "Engineer",
+        education: "Engineering",
+        language: "English, Telugu",
+        match: 79,
+        verified: true,
+        interests: ["Technology", "Sports", "Reading"],
+        about: "A fictional engineer who enjoys technology projects, sports and reading.",
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=85"
+    },
+
+    {
+        id: 6,
+        name: "Isha",
+        age: 30,
+        city: "Chennai",
+        profession: "Doctor",
+        education: "Medicine",
+        language: "English, Tamil",
+        match: 93,
+        verified: true,
+        interests: ["Reading", "Travel", "Music"],
+        about: "A fictional medical professional who enjoys reading, travel, music and cultural experiences.",
+        image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=700&q=85"
+    }
+
+];
+
+
+/* =========================================================
+   RENDER PROFILES
+   ========================================================= */
+
+let currentProfiles = [...profiles];
+
+function renderProfiles(data = currentProfiles) {
+
+    const grid = document.getElementById("profilesGrid");
+
+    if (!data.length) {
+
+        grid.innerHTML = `
+            <div class="card" style="grid-column:1/-1;padding:45px;text-align:center;">
+                <div style="font-size:40px;margin-bottom:10px;">🔎</div>
+                <h3>No profiles found</h3>
+                <p style="color:var(--muted);">
+                    No fictional profiles match your current preferences.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    grid.innerHTML = data.map(profile => `
+
+        <article class="profile-card card">
+
+            <div class="profile-photo"
+                 style="background-image:url('${profile.image}')">
+
+                <button
+                    class="favorite-btn"
+                    onclick="favoriteProfile(${profile.id})"
+                    title="Favorite">
+                    ♡
+                </button>
+
+            </div>
+
+            <div class="profile-body">
+
+                <div class="profile-top">
+
+                    <div>
+
+                        <div class="profile-name">
+                            ${profile.name}, ${profile.age}
+                        </div>
+
+                        <div class="profile-meta">
+                            📍 ${profile.city}
+                        </div>
+
+                    </div>
+
+                    ${profile.verified
+                        ? `<span class="verified">✓ Demo verified</span>`
+                        : ""
+                    }
+
+                </div>
+
+                <div class="profile-meta">
+                    💼 ${profile.profession}
+                </div>
+
+                <div class="profile-meta">
+                    🎓 ${profile.education}
+                </div>
+
+                <div class="compatibility">
+                    ${profile.match}% preference match
+                </div>
+
+                <p style="font-size:13px;color:var(--muted);">
+                    ${profile.about}
+                </p>
+
+                <div class="tags">
+
+                    ${profile.interests.map(
+                        interest => `<span class="tag">${interest}</span>`
+                    ).join("")}
+
+                </div>
+
+                <div class="profile-actions">
+
+                    <button
+                        class="btn btn-outline"
+                        onclick="viewProfile(${profile.id})">
+                        View
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="connectProfile(${profile.id})">
+                        Connect
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    `).join("");
+}
+
+
+/* =========================================================
+   VIEW PROFILE
+   ========================================================= */
+
+function viewProfile(id) {
+
+    const profile =
+        profiles.find(p => p.id === id);
+
+    if (!profile) return;
+
+    const details =
+        document.getElementById("profileDetails");
+
+    details.innerHTML = `
+
+        <div class="detail-header">
+
+            <div class="detail-photo"
+                 style="background-image:url('${profile.image}')">
+            </div>
+
+            <div>
+
+                <h2>
+                    ${profile.name}, ${profile.age}
+                </h2>
+
+                <p style="color:var(--muted);">
+                    📍 ${profile.city}
+                </p>
+
+                <p style="color:var(--muted);">
+                    💼 ${profile.profession}
+                </p>
+
+                <p style="color:var(--muted);">
+                    🎓 ${profile.education}
+                </p>
+
+                <br>
+
+                <div class="compatibility">
+                    ${profile.match}% preference match
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>About</h3>
+
+            <p>
+                ${profile.about}
+            </p>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>Interests</h3>
+
+            <div class="tags">
+
+                ${profile.interests.map(
+                    i => `<span class="tag">${i}</span>`
+                ).join("")}
+
+            </div>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>Languages</h3>
+
+            <p>${profile.language}</p>
+
+        </div>
+
+        <div class="detail-section">
+
+            <h3>Safety</h3>
+
+            <p>
+                This profile is fictional. Never expose private contact
+                information through a public profile.
+            </p>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button class="btn btn-outline"
+                    onclick="favoriteProfile(${profile.id})">
+                ♡ Favorite
+            </button>
+
+            <button class="btn btn-outline"
+                    onclick="openModal('reportModal')">
+                🚩 Report
+            </button>
+
+            <button class="btn btn-primary"
+                    onclick="connectProfile(${profile.id})">
+                🤝 Send Connection
+            </button>
+
+        </div>
+    `;
+
+    openModal("profileModal");
+}
+
+
+/* =========================================================
+   FAVORITES
+   ========================================================= */
+
+function favoriteProfile(id) {
+
+    let favorites =
+        JSON.parse(
+            localStorage.getItem("vivahFavorites") || "[]"
+        );
+
+    if (!favorites.includes(id)) {
+
+        favorites.push(id);
+
+        localStorage.setItem(
+            "vivahFavorites",
+            JSON.stringify(favorites)
+        );
+
+        showToast("Profile added to your favorites.");
+
+    } else {
+
+        favorites =
+            favorites.filter(x => x !== id);
+
+        localStorage.setItem(
+            "vivahFavorites",
+            JSON.stringify(favorites)
+        );
+
+        showToast("Profile removed from favorites.");
+
+    }
+
+}
+
+
+/* =========================================================
+   CONNECTION REQUEST
+   ========================================================= */
+
+function connectProfile(id) {
+
+    const profile =
+        profiles.find(p => p.id === id);
+
+    if (!profile) return;
+
+    let requests =
+        JSON.parse(
+            localStorage.getItem("vivahRequests") || "[]"
+        );
+
+    if (!requests.includes(id)) {
+
+        requests.push(id);
+
+        localStorage.setItem(
+            "vivahRequests",
+            JSON.stringify(requests)
+        );
+
+        showToast(
+            `Connection request sent to ${profile.name}.`
+        );
+
+    } else {
+
+        showToast(
+            `A request to ${profile.name} is already pending.`
+        );
+
+    }
+
+    closeModal("profileModal");
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+function searchProfiles() {
+
+    const from =
+        Number(document.getElementById("ageFrom").value) || 18;
+
+    const to =
+        Number(document.getElementById("ageTo").value) || 100;
+
+    const location =
+        document.getElementById("locationFilter").value;
+
+    const education =
+        document.getElementById("educationFilter").value;
+
+    const profession =
+        document.getElementById("professionFilter").value;
+
+    currentProfiles =
+        profiles.filter(profile => {
+
+            return (
+                profile.age >= from &&
+                profile.age <= to &&
+                (!location || profile.city === location) &&
+                (!education || profile.education === education) &&
+                (!profession || profile.profession === profession)
+            );
+
+        });
+
+    renderProfiles(currentProfiles);
+
+    document.getElementById("discover")
+        .scrollIntoView({behavior:"smooth"});
+
+    showToast(
+        `${currentProfiles.length} fictional profile(s) found.`
+    );
+}
+
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+function filterProfiles(type, button) {
+
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach(btn => btn.classList.remove("active"));
+
+    button.classList.add("active");
+
+    if(type === "all") {
+
+        currentProfiles = [...profiles];
+
+    } else if(type === "high") {
+
+        currentProfiles =
+            profiles.filter(p => p.match >= 85);
+
+    } else if(type === "verified") {
+
+        currentProfiles =
+            profiles.filter(p => p.verified);
+
+    }
+
+    renderProfiles(currentProfiles);
+}
+
+
+/* =========================================================
+   SORT
+   ========================================================= */
+
+function sortProfiles() {
+
+    const type =
+        document.getElementById("sortProfiles").value;
+
+    if(type === "match") {
+
+        currentProfiles.sort(
+            (a,b) => b.match-a.match
+        );
+
+    } else if(type === "age") {
+
+        currentProfiles.sort(
+            (a,b) => a.age-b.age
+        );
+
+    } else if(type === "name") {
+
+        currentProfiles.sort(
+            (a,b) => a.name.localeCompare(b.name)
+        );
+
+    }
+
+    renderProfiles(currentProfiles);
+}
+
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+function openModal(id) {
+
+    document.getElementById(id)
+        .classList.add("show");
+
+}
+
+function closeModal(id) {
+
+    document.getElementById(id)
+        .classList.remove("show");
+
+}
+
+
+/* Close modal by clicking outside */
+
+document.querySelectorAll(".modal")
+.forEach(modal => {
+
+    modal.addEventListener("click", event => {
+
+        if(event.target === modal) {
+
+            modal.classList.remove("show");
+
+        }
+
+    });
+
+});
+
+
+/* =========================================================
+   CREATE PROFILE
+   ========================================================= */
+
+function createProfile() {
+
+    const name =
+        document.getElementById("regName").value.trim();
+
+    const age =
+        Number(document.getElementById("regAge").value);
+
+    const city =
+        document.getElementById("regCity").value;
+
+    const profession =
+        document.getElementById("regProfession").value.trim();
+
+    const education =
+        document.getElementById("regEducation").value;
+
+    const language =
+        document.getElementById("regLanguage").value.trim();
+
+    const about =
+        document.getElementById("regAbout").value.trim();
+
+
+    if(!name) {
+
+        showToast("Please complete the name field.");
+
+        return;
+
+    }
+
+    if(!age || age < 18) {
+
+        showToast(
+            "This demo platform is intended for adults aged 18+."
+        );
+
+        return;
+
+    }
+
+    if(!city || !profession || !education) {
+
+        showToast(
+            "Please complete the required profile fields."
+        );
+
+        return;
+
+    }
+
+
+    const userProfile = {
+
+        name,
+        age,
+        city,
+        profession,
+        education,
+        language,
+        about
+
+    };
+
+
+    localStorage.setItem(
+        "vivahUserProfile",
+        JSON.stringify(userProfile)
+    );
+
+
+    document.getElementById("dashboardName")
+        .textContent = name;
+
+
+    closeModal("registerModal");
+
+    showToast(
+        "Your demo profile was created successfully."
+    );
+
+    setTimeout(() => {
+
+        openDashboard();
+
+    }, 700);
+
+}
+
+
+/* =========================================================
+   DEMO LOGIN
+   ========================================================= */
+
+function demoLogin() {
+
+    const email =
+        document.getElementById("signinEmail").value.trim();
+
+    if(!email) {
+
+        showToast(
+            "Please enter the demo email address."
+        );
+
+        return;
+
+    }
+
+    closeModal("signinModal");
+
+    showToast(
+        "Demo sign-in successful."
+    );
+
+    setTimeout(() => {
+
+        openDashboard();
+
+    }, 600);
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+function openDashboard() {
+
+    const stored =
+        localStorage.getItem("vivahUserProfile");
+
+    if(stored) {
+
+        try {
+
+            const user =
+                JSON.parse(stored);
+
+            document.getElementById("dashboardName")
+                .textContent =
+                user.name || "Demo User";
+
+        } catch(error) {}
+
+    }
+
+    document.getElementById("dashboard")
+        .classList.add("show");
+
+    document.body.style.overflow = "hidden";
+
+}
+
+
+function closeDashboard() {
+
+    document.getElementById("dashboard")
+        .classList.remove("show");
+
+    document.body.style.overflow = "";
+
+}
+
+
+/* =========================================================
+   REPORTING
+   ========================================================= */
+
+function submitReport() {
+
+    const reason =
+        document.getElementById("reportReason").value;
+
+    let reports =
+        JSON.parse(
+            localStorage.getItem("vivahReports") || "[]"
+        );
+
+    reports.push({
+
+        reason,
+        time: new Date().toISOString()
+
+    });
+
+    localStorage.setItem(
+        "vivahReports",
+        JSON.stringify(reports)
+    );
+
+    closeModal("reportModal");
+
+    showToast(
+        `Report recorded in demo mode: ${reason}.`
+    );
+
+}
+
+
+/* =========================================================
+   FAQ
+   ========================================================= */
+
+function toggleFaq(button) {
+
+    const item =
+        button.parentElement;
+
+    const currentlyOpen =
+        item.classList.contains("open");
+
+    document
+        .querySelectorAll(".faq-item")
+        .forEach(faq => faq.classList.remove("open"));
+
+    if(!currentlyOpen) {
+
+        item.classList.add("open");
+
+    }
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer;
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove("show");
+
+        }, 3200);
+
+}
+
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+const themeBtn =
+    document.getElementById("themeBtn");
+
+
+function applyTheme(theme) {
+
+    if(theme === "dark") {
+
+        document.body.classList.add("dark");
+
+        themeBtn.textContent = "☀️";
+
+    } else {
+
+        document.body.classList.remove("dark");
+
+        themeBtn.textContent = "🌙";
+
+    }
+
+}
+
+
+themeBtn.addEventListener("click", () => {
+
+    const dark =
+        document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "vivahTheme",
+        dark ? "dark" : "light"
+    );
+
+    themeBtn.textContent =
+        dark ? "☀️" : "🌙";
+
+});
+
+
+function toggleDashboardTheme() {
+
+    const dark =
+        document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "vivahTheme",
+        dark ? "dark" : "light"
+    );
+
+    themeBtn.textContent =
+        dark ? "☀️" : "🌙";
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+const savedTheme =
+    localStorage.getItem("vivahTheme");
+
+if(savedTheme === "dark") {
+
+    applyTheme("dark");
+
+}
+
+renderProfiles();
+
+
+/* =========================================================
+   KEYBOARD ACCESS
+   ========================================================= */
+
+document.addEventListener("keydown", event => {
+
+    if(event.key === "Escape") {
+
+        document
+            .querySelectorAll(".modal.show")
+            .forEach(modal =>
+                modal.classList.remove("show")
+            );
+
+        closeDashboard();
+
+    }
+
+});
+
+
+/* =========================================================
+   NAVIGATION FEEDBACK
+   ========================================================= */
+
+document
+    .querySelectorAll("a[href^='#']")
+    .forEach(link => {
+
+        link.addEventListener("click", () => {
+
+            const target =
+                link.getAttribute("href");
+
+            if(target && target !== "#") {
+
+                const element =
+                    document.querySelector(target);
+
+                if(element) {
+
+                    element.scrollIntoView({
+                        behavior: "smooth"
+                    });
+
+                }
+
+            }
+
+        });
+
+    });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,5436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f7fff8">
+<meta name="description" content="Abhiminutes - Fast, simple and convenient quick-commerce shopping.">
+<title>Abhiminutes — Everything You Need. Delivered Fast.</title>
+
+<style>
+/* =========================================================
+   ABHIMINUTES
+   SINGLE-FILE QUICK COMMERCE WEBSITE
+   ========================================================= */
+
+:root{
+    --green:#16a34a;
+    --green-dark:#087f35;
+    --green-light:#e9f9ee;
+    --yellow:#ffd84d;
+    --orange:#ff8a1f;
+    --red:#ef4444;
+    --blue:#2563eb;
+    --purple:#7c3aed;
+    --text:#172018;
+    --muted:#6b7280;
+    --light:#f6faf7;
+    --border:#e5e7eb;
+    --white:#ffffff;
+    --shadow:0 8px 30px rgba(20,40,25,.07);
+    --shadow-hover:0 15px 40px rgba(20,40,25,.13);
+    --radius:18px;
+    --radius-small:12px;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:#f8fbf9;
+    color:var(--text);
+    line-height:1.5;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+img{
+    max-width:100%;
+    display:block;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid var(--border);
+}
+
+.header-inner{
+    max-width:1450px;
+    margin:auto;
+    min-height:76px;
+    padding:12px 24px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    min-width:185px;
+    cursor:pointer;
+}
+
+.logo-mark{
+    width:43px;
+    height:43px;
+    border-radius:13px;
+    background:linear-gradient(135deg,#16a34a,#8ee36c);
+    display:grid;
+    place-items:center;
+    color:white;
+    font-weight:1000;
+    font-size:20px;
+    box-shadow:0 7px 20px rgba(22,163,74,.22);
+}
+
+.logo-text{
+    font-size:24px;
+    font-weight:950;
+    letter-spacing:-1px;
+}
+
+.logo-text span{
+    color:var(--green);
+}
+
+.location{
+    display:flex;
+    flex-direction:column;
+    min-width:160px;
+    cursor:pointer;
+}
+
+.location-label{
+    color:var(--muted);
+    font-size:11px;
+    font-weight:700;
+}
+
+.location-value{
+    font-size:14px;
+    font-weight:850;
+}
+
+.search-wrap{
+    position:relative;
+    flex:1;
+}
+
+.search-box{
+    width:100%;
+    height:48px;
+    border:1px solid #dce5df;
+    border-radius:15px;
+    background:#f7faf8;
+    padding:0 48px;
+    outline:none;
+    transition:.2s;
+}
+
+.search-box:focus{
+    border-color:var(--green);
+    background:white;
+    box-shadow:0 0 0 4px rgba(22,163,74,.08);
+}
+
+.search-icon{
+    position:absolute;
+    left:17px;
+    top:13px;
+    font-size:20px;
+    color:var(--muted);
+}
+
+.clear-search{
+    position:absolute;
+    right:14px;
+    top:9px;
+    width:30px;
+    height:30px;
+    border:0;
+    background:transparent;
+    display:none;
+    font-size:20px;
+    color:var(--muted);
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.header-btn{
+    min-height:45px;
+    border:0;
+    background:white;
+    padding:7px 10px;
+    border-radius:12px;
+    font-weight:750;
+    color:#303630;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    transition:.2s;
+}
+
+.header-btn:hover{
+    background:var(--green-light);
+    color:var(--green-dark);
+}
+
+.cart-button{
+    position:relative;
+    background:#111c14;
+    color:white;
+    padding:10px 15px;
+}
+
+.cart-button:hover{
+    background:#1c2d20;
+    color:white;
+}
+
+.cart-count{
+    position:absolute;
+    right:-5px;
+    top:-7px;
+    min-width:20px;
+    height:20px;
+    border-radius:20px;
+    background:#ef4444;
+    color:white;
+    display:grid;
+    place-items:center;
+    font-size:11px;
+    font-weight:900;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+    max-width:1450px;
+    margin:22px auto 0;
+    padding:0 24px;
+}
+
+.hero-card{
+    min-height:365px;
+    border-radius:28px;
+    overflow:hidden;
+    position:relative;
+    background:
+        radial-gradient(circle at 80% 20%,rgba(255,255,255,.8),transparent 24%),
+        linear-gradient(120deg,#e9faed,#f7fff4 48%,#fff8db);
+    display:flex;
+    align-items:center;
+    padding:55px 7%;
+    box-shadow:var(--shadow);
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+    max-width:650px;
+}
+
+.hero-tag{
+    display:inline-flex;
+    padding:8px 13px;
+    border-radius:30px;
+    background:white;
+    color:var(--green-dark);
+    font-weight:850;
+    font-size:13px;
+    margin-bottom:16px;
+}
+
+.hero h1{
+    font-size:clamp(38px,5vw,67px);
+    line-height:1.02;
+    letter-spacing:-3px;
+    max-width:700px;
+}
+
+.hero h1 span{
+    color:var(--green);
+}
+
+.hero p{
+    margin-top:17px;
+    color:#536057;
+    max-width:580px;
+    font-size:17px;
+}
+
+.hero-actions{
+    display:flex;
+    gap:12px;
+    margin-top:26px;
+    flex-wrap:wrap;
+}
+
+.primary-btn{
+    border:0;
+    border-radius:13px;
+    background:var(--green);
+    color:white;
+    padding:13px 21px;
+    font-weight:900;
+    transition:.2s;
+    box-shadow:0 8px 18px rgba(22,163,74,.2);
+}
+
+.primary-btn:hover{
+    background:var(--green-dark);
+    transform:translateY(-2px);
+}
+
+.secondary-btn{
+    border:1px solid #dce6df;
+    border-radius:13px;
+    background:white;
+    color:#28332b;
+    padding:13px 21px;
+    font-weight:850;
+}
+
+.hero-art{
+    position:absolute;
+    right:4%;
+    bottom:-20px;
+    width:410px;
+    height:330px;
+}
+
+.delivery-orb{
+    position:absolute;
+    width:240px;
+    height:240px;
+    border-radius:50%;
+    right:70px;
+    top:40px;
+    background:linear-gradient(135deg,#d7f7dd,#fff1a9);
+}
+
+.delivery-box{
+    position:absolute;
+    width:180px;
+    height:130px;
+    right:95px;
+    top:102px;
+    border-radius:25px;
+    background:#fff;
+    box-shadow:0 20px 50px rgba(0,0,0,.12);
+    transform:rotate(-6deg);
+    display:grid;
+    place-items:center;
+    font-size:62px;
+}
+
+.speed-badge{
+    position:absolute;
+    right:10px;
+    top:65px;
+    background:#111c14;
+    color:white;
+    padding:11px 16px;
+    border-radius:13px;
+    font-weight:900;
+    transform:rotate(6deg);
+}
+
+.hero-floating{
+    position:absolute;
+    left:25px;
+    bottom:32px;
+    background:white;
+    padding:12px 16px;
+    border-radius:15px;
+    box-shadow:var(--shadow);
+    font-weight:800;
+}
+
+/* =========================================================
+   GENERAL SECTIONS
+   ========================================================= */
+
+.container{
+    max-width:1450px;
+    margin:auto;
+    padding:0 24px;
+}
+
+.section{
+    margin-top:45px;
+}
+
+.section-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:15px;
+    margin-bottom:18px;
+}
+
+.section-title{
+    font-size:27px;
+    letter-spacing:-.8px;
+    font-weight:950;
+}
+
+.section-subtitle{
+    color:var(--muted);
+    font-size:14px;
+    margin-top:3px;
+}
+
+.view-all{
+    border:0;
+    background:transparent;
+    color:var(--green-dark);
+    font-weight:850;
+}
+
+.horizontal{
+    display:flex;
+    overflow-x:auto;
+    gap:14px;
+    padding-bottom:6px;
+    scrollbar-width:none;
+}
+
+.horizontal::-webkit-scrollbar{
+    display:none;
+}
+
+/* =========================================================
+   CATEGORIES
+   ========================================================= */
+
+.category-card{
+    flex:0 0 135px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:15px 10px;
+    text-align:center;
+    transition:.25s;
+    cursor:pointer;
+}
+
+.category-card:hover{
+    transform:translateY(-5px);
+    box-shadow:var(--shadow-hover);
+    border-color:#bce7c8;
+}
+
+.category-icon{
+    width:76px;
+    height:76px;
+    margin:auto;
+    border-radius:23px;
+    background:var(--green-light);
+    display:grid;
+    place-items:center;
+    font-size:40px;
+}
+
+.category-name{
+    margin-top:10px;
+    font-weight:850;
+    font-size:13px;
+}
+
+/* =========================================================
+   PRODUCT GRID
+   ========================================================= */
+
+.products-grid{
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:16px;
+}
+
+.product-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:12px;
+    position:relative;
+    transition:.25s;
+    min-width:0;
+}
+
+.product-card:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-hover);
+    border-color:#d0e8d6;
+}
+
+.product-image{
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:14px;
+    background:#f6faf7;
+    display:grid;
+    place-items:center;
+    overflow:hidden;
+    position:relative;
+}
+
+.product-image .emoji{
+    font-size:74px;
+    filter:drop-shadow(0 8px 8px rgba(0,0,0,.08));
+}
+
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.discount{
+    position:absolute;
+    left:8px;
+    top:8px;
+    background:#eaf8ee;
+    color:#087f35;
+    border-radius:7px;
+    padding:4px 7px;
+    font-size:10px;
+    font-weight:950;
+}
+
+.stock{
+    position:absolute;
+    left:8px;
+    bottom:8px;
+    background:#fee2e2;
+    color:#b91c1c;
+    border-radius:7px;
+    padding:4px 7px;
+    font-size:10px;
+    font-weight:950;
+}
+
+.product-name{
+    font-size:15px;
+    font-weight:900;
+    margin-top:12px;
+    min-height:43px;
+}
+
+.product-quantity{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:3px;
+}
+
+.rating{
+    margin-top:7px;
+    font-size:11px;
+    display:flex;
+    gap:4px;
+    align-items:center;
+}
+
+.rating-star{
+    color:#f59e0b;
+    font-size:13px;
+}
+
+.reviews{
+    color:var(--muted);
+}
+
+.delivery{
+    display:inline-flex;
+    margin-top:9px;
+    background:#f0fdf4;
+    color:#15803d;
+    padding:5px 7px;
+    border-radius:7px;
+    font-size:10px;
+    font-weight:850;
+}
+
+.price-row{
+    margin-top:10px;
+    display:flex;
+    align-items:end;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+.price{
+    font-size:18px;
+    font-weight:950;
+}
+
+.old-price{
+    color:#9ca3af;
+    text-decoration:line-through;
+    font-size:11px;
+}
+
+.add-row{
+    margin-top:11px;
+    display:flex;
+    justify-content:flex-end;
+}
+
+.add-btn{
+    min-width:76px;
+    height:36px;
+    border-radius:10px;
+    border:1px solid #b8e5c5;
+    background:#f0fff3;
+    color:#087f35;
+    font-weight:950;
+}
+
+.add-btn:hover{
+    background:#dff8e5;
+}
+
+.quantity-control{
+    height:36px;
+    border-radius:10px;
+    background:var(--green);
+    color:white;
+    display:flex;
+    align-items:center;
+    overflow:hidden;
+}
+
+.quantity-control button{
+    border:0;
+    width:31px;
+    height:36px;
+    color:white;
+    background:transparent;
+    font-weight:950;
+    font-size:17px;
+}
+
+.quantity-control span{
+    min-width:25px;
+    text-align:center;
+    font-weight:900;
+}
+
+/* =========================================================
+   DEAL BANNER
+   ========================================================= */
+
+.deal-banner{
+    margin-top:45px;
+    border-radius:22px;
+    padding:30px;
+    background:linear-gradient(110deg,#fff3ca,#effbe9);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    overflow:hidden;
+}
+
+.deal-banner h2{
+    font-size:32px;
+    letter-spacing:-1px;
+}
+
+.deal-banner p{
+    color:var(--muted);
+    margin-top:4px;
+}
+
+.deal-icons{
+    display:flex;
+    gap:12px;
+    font-size:48px;
+}
+
+/* =========================================================
+   FILTER BAR
+   ========================================================= */
+
+.shop-controls{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin:20px 0;
+    flex-wrap:wrap;
+}
+
+.filter-buttons{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.filter-btn,
+.sort-select{
+    border:1px solid var(--border);
+    background:white;
+    padding:9px 13px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:750;
+}
+
+.filter-btn.active{
+    background:var(--green);
+    color:white;
+    border-color:var(--green);
+}
+
+.sort-select{
+    outline:none;
+}
+
+/* =========================================================
+   FAST DELIVERY
+   ========================================================= */
+
+.fast-section{
+    background:#f0faf2;
+    padding:30px;
+    border-radius:24px;
+}
+
+.fast-card{
+    background:white;
+    border-radius:16px;
+    padding:14px;
+    min-width:220px;
+    border:1px solid #e1eee4;
+}
+
+.fast-icon{
+    font-size:32px;
+}
+
+.fast-time{
+    color:var(--green-dark);
+    font-weight:900;
+    font-size:12px;
+    margin-top:6px;
+}
+
+/* =========================================================
+   TRUST
+   ========================================================= */
+
+.trust-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+}
+
+.trust-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:23px;
+}
+
+.trust-icon{
+    font-size:34px;
+}
+
+.trust-card h3{
+    margin-top:12px;
+    font-size:17px;
+}
+
+.trust-card p{
+    margin-top:5px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer{
+    margin-top:65px;
+    background:#111c14;
+    color:white;
+    padding:50px 0 25px;
+}
+
+.footer-grid{
+    max-width:1450px;
+    margin:auto;
+    padding:0 24px;
+    display:grid;
+    grid-template-columns:2fr repeat(3,1fr);
+    gap:35px;
+}
+
+.footer-brand{
+    max-width:350px;
+}
+
+.footer-brand .logo-text{
+    color:white;
+}
+
+.footer-brand p{
+    color:#b9c5bc;
+    margin-top:12px;
+    font-size:13px;
+}
+
+.footer h4{
+    margin-bottom:12px;
+}
+
+.footer ul{
+    list-style:none;
+}
+
+.footer li{
+    color:#b9c5bc;
+    margin:9px 0;
+    font-size:13px;
+    cursor:pointer;
+}
+
+.footer li:hover{
+    color:white;
+}
+
+.footer-bottom{
+    max-width:1450px;
+    margin:35px auto 0;
+    padding:18px 24px 0;
+    border-top:1px solid #2d3930;
+    color:#9daaa0;
+    font-size:12px;
+    display:flex;
+    justify-content:space-between;
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.42);
+    z-index:2000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.overlay.show{
+    display:flex;
+}
+
+.modal{
+    background:white;
+    width:min(100%,800px);
+    max-height:90vh;
+    overflow:auto;
+    border-radius:25px;
+    box-shadow:0 30px 90px rgba(0,0,0,.2);
+    animation:modalIn .2s ease;
+}
+
+@keyframes modalIn{
+    from{
+        transform:translateY(20px) scale(.97);
+        opacity:0;
+    }
+    to{
+        transform:none;
+        opacity:1;
+    }
+}
+
+.modal-header{
+    padding:20px 23px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.modal-header h2{
+    font-size:21px;
+}
+
+.close-btn{
+    width:36px;
+    height:36px;
+    border:0;
+    border-radius:50%;
+    background:#f3f5f3;
+    font-size:20px;
+}
+
+.modal-body{
+    padding:23px;
+}
+
+/* =========================================================
+   CART
+   ========================================================= */
+
+.cart-modal{
+    width:min(100%,600px);
+    margin-left:auto;
+    margin-right:0;
+    height:100%;
+    max-height:none;
+    border-radius:25px 0 0 25px;
+}
+
+.cart-item{
+    display:grid;
+    grid-template-columns:68px 1fr auto;
+    gap:12px;
+    align-items:center;
+    padding:13px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.cart-image{
+    width:68px;
+    height:68px;
+    border-radius:12px;
+    background:#f5faf6;
+    display:grid;
+    place-items:center;
+    font-size:35px;
+}
+
+.cart-name{
+    font-weight:850;
+    font-size:14px;
+}
+
+.cart-meta{
+    font-size:11px;
+    color:var(--muted);
+}
+
+.cart-price{
+    font-weight:900;
+    margin-top:3px;
+}
+
+.mini-quantity{
+    display:flex;
+    background:#eefaf0;
+    border-radius:9px;
+    overflow:hidden;
+}
+
+.mini-quantity button{
+    width:27px;
+    height:30px;
+    border:0;
+    background:transparent;
+    color:var(--green-dark);
+    font-weight:900;
+}
+
+.mini-quantity span{
+    min-width:25px;
+    display:grid;
+    place-items:center;
+    font-size:12px;
+    font-weight:900;
+}
+
+.bill{
+    margin-top:20px;
+    background:#f8faf8;
+    border-radius:15px;
+    padding:16px;
+}
+
+.bill-row{
+    display:flex;
+    justify-content:space-between;
+    padding:5px 0;
+    color:#566058;
+    font-size:13px;
+}
+
+.bill-row.total{
+    border-top:1px solid var(--border);
+    margin-top:7px;
+    padding-top:13px;
+    color:var(--text);
+    font-size:18px;
+    font-weight:950;
+}
+
+.checkout-btn{
+    width:100%;
+    margin-top:15px;
+    height:50px;
+    border:0;
+    border-radius:13px;
+    background:var(--green);
+    color:white;
+    font-weight:950;
+}
+
+/* =========================================================
+   PRODUCT DETAILS
+   ========================================================= */
+
+.product-detail{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+.detail-image{
+    min-height:400px;
+    border-radius:20px;
+    background:#f4faf5;
+    display:grid;
+    place-items:center;
+    font-size:150px;
+}
+
+.detail-title{
+    font-size:32px;
+    letter-spacing:-1px;
+}
+
+.detail-price{
+    font-size:30px;
+    font-weight:950;
+    margin-top:15px;
+}
+
+.detail-info{
+    color:var(--muted);
+    margin-top:8px;
+}
+
+.detail-actions{
+    display:flex;
+    gap:10px;
+    margin-top:22px;
+}
+
+.buy-btn{
+    border:0;
+    background:#111c14;
+    color:white;
+    border-radius:12px;
+    padding:13px 22px;
+    font-weight:900;
+}
+
+.detail-section{
+    margin-top:28px;
+    padding-top:25px;
+    border-top:1px solid var(--border);
+}
+
+.review{
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.review-top{
+    display:flex;
+    justify-content:space-between;
+    font-weight:850;
+}
+
+.review-text{
+    margin-top:5px;
+    color:#606b63;
+    font-size:13px;
+}
+
+/* =========================================================
+   CHECKOUT
+   ========================================================= */
+
+.checkout-steps{
+    display:flex;
+    gap:5px;
+    margin-bottom:25px;
+}
+
+.checkout-step{
+    flex:1;
+    padding:10px;
+    border-radius:9px;
+    text-align:center;
+    background:#f1f4f1;
+    color:#7b837c;
+    font-size:11px;
+    font-weight:850;
+}
+
+.checkout-step.active{
+    background:#e7f8eb;
+    color:var(--green-dark);
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+.field label{
+    font-size:12px;
+    font-weight:800;
+}
+
+.field input,
+.field select{
+    height:43px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:0 12px;
+    outline:none;
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:var(--green);
+}
+
+.payment-option{
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:14px;
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.payment-option.selected{
+    border-color:var(--green);
+    background:#f0fff3;
+}
+
+.payment-option input{
+    accent-color:var(--green);
+}
+
+/* =========================================================
+   ORDER CONFIRMATION
+   ========================================================= */
+
+.confirmation{
+    text-align:center;
+    padding:25px;
+}
+
+.success-icon{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    margin:auto;
+    background:#e7f8eb;
+    display:grid;
+    place-items:center;
+    font-size:40px;
+}
+
+.order-id{
+    display:inline-block;
+    margin-top:10px;
+    background:#f2f4f2;
+    padding:6px 10px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:850;
+}
+
+.timeline{
+    display:flex;
+    justify-content:space-between;
+    position:relative;
+    margin:35px 0 10px;
+}
+
+.timeline:before{
+    content:"";
+    position:absolute;
+    top:14px;
+    left:8%;
+    right:8%;
+    height:3px;
+    background:#dce9df;
+}
+
+.timeline-item{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    font-size:10px;
+    font-weight:800;
+    color:#657168;
+}
+
+.timeline-dot{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    background:#e7f8eb;
+    border:3px solid white;
+    box-shadow:0 0 0 1px #b8dfc1;
+    margin:auto auto 7px;
+    display:grid;
+    place-items:center;
+}
+
+/* =========================================================
+   ORDERS
+   ========================================================= */
+
+.order-card{
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:17px;
+    margin-bottom:12px;
+    background:white;
+}
+
+.order-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.order-number{
+    font-weight:900;
+}
+
+.order-status{
+    background:#e9f9ee;
+    color:#087f35;
+    padding:5px 8px;
+    border-radius:7px;
+    font-size:10px;
+    font-weight:900;
+}
+
+.order-products{
+    margin-top:10px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.order-bottom{
+    margin-top:13px;
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    font-weight:800;
+}
+
+/* =========================================================
+   ACCOUNT
+   ========================================================= */
+
+.account-grid{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:18px;
+}
+
+.account-menu{
+    border:1px solid var(--border);
+    background:white;
+    border-radius:16px;
+    padding:8px;
+}
+
+.account-menu button{
+    width:100%;
+    text-align:left;
+    border:0;
+    background:transparent;
+    padding:12px;
+    border-radius:10px;
+    font-weight:750;
+}
+
+.account-menu button.active,
+.account-menu button:hover{
+    background:#eaf8ee;
+    color:var(--green-dark);
+}
+
+.account-panel{
+    border:1px solid var(--border);
+    background:white;
+    border-radius:16px;
+    padding:22px;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast-container{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:5000;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.toast{
+    background:#111c14;
+    color:white;
+    padding:12px 15px;
+    border-radius:11px;
+    box-shadow:0 15px 35px rgba(0,0,0,.2);
+    font-size:13px;
+    font-weight:750;
+    animation:toastIn .25s ease;
+}
+
+@keyframes toastIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.empty{
+    text-align:center;
+    padding:50px 20px;
+}
+
+.empty-icon{
+    font-size:55px;
+}
+
+.empty h3{
+    margin-top:10px;
+    font-size:20px;
+}
+
+.empty p{
+    color:var(--muted);
+    margin:5px auto 18px;
+    max-width:400px;
+    font-size:13px;
+}
+
+/* =========================================================
+   MOBILE NAV
+   ========================================================= */
+
+.mobile-nav{
+    display:none;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:1500;
+    background:white;
+    border-top:1px solid var(--border);
+    padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+    grid-template-columns:repeat(5,1fr);
+}
+
+.mobile-nav button{
+    border:0;
+    background:transparent;
+    color:#6b746d;
+    font-size:10px;
+    font-weight:750;
+    padding:5px;
+}
+
+.mobile-nav button span{
+    display:block;
+    font-size:20px;
+}
+
+.mobile-nav button.active{
+    color:var(--green);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1200px){
+    .products-grid{
+        grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+
+    .location{
+        min-width:125px;
+    }
+
+    .header-actions .hide-tablet{
+        display:none;
+    }
+}
+
+@media(max-width:900px){
+    .header-inner{
+        flex-wrap:wrap;
+    }
+
+    .logo{
+        min-width:auto;
+    }
+
+    .location{
+        margin-left:auto;
+    }
+
+    .search-wrap{
+        order:5;
+        flex-basis:100%;
+    }
+
+    .hero-art{
+        opacity:.55;
+        right:-60px;
+    }
+
+    .products-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+
+    .trust-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .footer-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .product-detail{
+        grid-template-columns:1fr;
+    }
+
+    .detail-image{
+        min-height:300px;
+    }
+}
+
+@media(max-width:650px){
+    body{
+        padding-bottom:70px;
+    }
+
+    .header-inner{
+        padding:10px 13px;
+        gap:9px;
+    }
+
+    .logo-text{
+        font-size:20px;
+    }
+
+    .logo-mark{
+        width:37px;
+        height:37px;
+        font-size:17px;
+    }
+
+    .location{
+        display:none;
+    }
+
+    .header-actions{
+        margin-left:auto;
+    }
+
+    .header-btn{
+        padding:7px;
+    }
+
+    .header-btn .label{
+        display:none;
+    }
+
+    .search-box{
+        height:44px;
+    }
+
+    .hero{
+        margin-top:12px;
+        padding:0 13px;
+    }
+
+    .hero-card{
+        min-height:400px;
+        padding:32px 24px;
+        align-items:flex-start;
+    }
+
+    .hero h1{
+        font-size:42px;
+        letter-spacing:-2px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    .hero-art{
+        right:-110px;
+        bottom:-35px;
+        transform:scale(.75);
+    }
+
+    .container{
+        padding:0 13px;
+    }
+
+    .section{
+        margin-top:32px;
+    }
+
+    .section-title{
+        font-size:22px;
+    }
+
+    .category-card{
+        flex-basis:115px;
+    }
+
+    .category-icon{
+        width:65px;
+        height:65px;
+        font-size:32px;
+    }
+
+    .products-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+    }
+
+    .product-card{
+        padding:9px;
+        border-radius:14px;
+    }
+
+    .product-name{
+        font-size:13px;
+    }
+
+    .product-image .emoji{
+        font-size:55px;
+    }
+
+    .deal-banner{
+        padding:22px;
+    }
+
+    .deal-banner h2{
+        font-size:24px;
+    }
+
+    .deal-icons{
+        font-size:30px;
+    }
+
+    .trust-grid{
+        grid-template-columns:1fr;
+    }
+
+    .footer-grid{
+        grid-template-columns:1fr 1fr;
+        gap:25px;
+    }
+
+    .footer-brand{
+        grid-column:1/-1;
+    }
+
+    .footer-bottom{
+        display:block;
+    }
+
+    .footer-bottom div+div{
+        margin-top:6px;
+    }
+
+    .mobile-nav{
+        display:grid;
+    }
+
+    .account-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .timeline-item{
+        font-size:8px;
+    }
+}
+
+@media(max-width:430px){
+    .header-actions .header-btn:not(.cart-button){
+        display:none;
+    }
+
+    .hero h1{
+        font-size:36px;
+    }
+
+    .products-grid{
+        gap:8px;
+    }
+
+    .price{
+        font-size:16px;
+    }
+
+    .old-price{
+        font-size:10px;
+    }
+
+    .delivery{
+        font-size:9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header class="header">
+    <div class="header-inner">
+
+        <div class="logo" onclick="goHome()">
+            <div class="logo-mark">A⚡</div>
+            <div class="logo-text">Abhi<span>minutes</span></div>
+        </div>
+
+        <div class="location" onclick="showLocation()">
+            <span class="location-label">Deliver to</span>
+            <span class="location-value">📍 Sample Location ▾</span>
+        </div>
+
+        <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input
+                id="searchInput"
+                class="search-box"
+                type="search"
+                placeholder="Search for products, groceries, snacks and more..."
+                autocomplete="off"
+            >
+            <button id="clearSearch" class="clear-search" onclick="clearSearch()">×</button>
+        </div>
+
+        <div class="header-actions">
+
+            <button class="header-btn hide-tablet" onclick="openAccount()">
+                👤 <span class="label">Account</span>
+            </button>
+
+            <button class="header-btn hide-tablet" onclick="openOrders()">
+                📦 <span class="label">Orders</span>
+            </button>
+
+            <button class="header-btn hide-tablet" onclick="openWishlist()">
+                ♡ <span class="label">Wishlist</span>
+            </button>
+
+            <button class="header-btn cart-button" onclick="openCart()">
+                🛒 <span class="label">Cart</span>
+                <span id="cartCount" class="cart-count">0</span>
+            </button>
+
+        </div>
+
+    </div>
+</header>
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main>
+
+<!-- HERO -->
+
+<section class="hero">
+    <div class="hero-card">
+
+        <div class="hero-content">
+
+            <div class="hero-tag">
+                ⚡ Quick commerce made simple
+            </div>
+
+            <h1>
+                Everything you need.
+                <span>Delivered fast.</span>
+            </h1>
+
+            <p>
+                Groceries, snacks, kitchen essentials, school supplies,
+                cold treats and everyday products — all in one convenient place.
+            </p>
+
+            <div class="hero-actions">
+                <button class="primary-btn" onclick="scrollToShop()">
+                    Start Shopping →
+                </button>
+
+                <button class="secondary-btn" onclick="showOffers()">
+                    🎁 View Offers
+                </button>
+            </div>
+
+        </div>
+
+        <div class="hero-art">
+            <div class="delivery-orb"></div>
+            <div class="delivery-box">🛍️</div>
+            <div class="speed-badge">⚡ 10–20 MIN</div>
+            <div class="hero-floating">⭐ Easy • Fast • Convenient</div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- CATEGORIES -->
+
+<section class="section container" id="categories">
+
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Shop by Category</h2>
+            <p class="section-subtitle">
+                Find what you need quickly.
+            </p>
+        </div>
+    </div>
+
+    <div class="horizontal">
+
+        <div class="category-card" onclick="selectCategory('Vegetables & Fruits')">
+            <div class="category-icon">🥦</div>
+            <div class="category-name">Vegetables & Fruits</div>
+        </div>
+
+        <div class="category-card" onclick="selectCategory('Kitchen Items')">
+            <div class="category-icon">🍳</div>
+            <div class="category-name">Kitchen Items</div>
+        </div>
+
+        <div class="category-card" onclick="selectCategory('School Projects')">
+            <div class="category-icon">🎨</div>
+            <div class="category-name">School Projects</div>
+        </div>
+
+        <div class="category-card" onclick="selectCategory('Cold Food')">
+            <div class="category-icon">☕</div>
+            <div class="category-name">Cold Food</div>
+        </div>
+
+        <div class="category-card" onclick="selectCategory('Ice Cream')">
+            <div class="category-icon">🍦</div>
+            <div class="category-name">Ice Cream</div>
+        </div>
+
+        <div class="category-card" onclick="selectCategory('Cakes')">
+            <div class="category-icon">🍰</div>
+            <div class="category-name">Cakes</div>
+        </div>
+
+        <div class="category-card" onclick="selectCategory('Chocolates')">
+            <div class="category-icon">🍫</div>
+            <div class="category-name">Chocolates</div>
+        </div>
+
+        <div class="category-card" onclick="selectCategory('Drinks')">
+            <div class="category-icon">🧃</div>
+            <div class="category-name">Drinks</div>
+        </div>
+
+        <div class="category-card" onclick="selectCategory('Daily Essentials')">
+            <div class="category-icon">🛒</div>
+            <div class="category-name">Daily Essentials</div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- DEAL BANNER -->
+
+<section class="container">
+    <div class="deal-banner">
+
+        <div>
+            <h2>🔥 Today's Deals</h2>
+            <p>Save on selected products in our demo marketplace.</p>
+        </div>
+
+        <div class="deal-icons">
+            🥭 🍫 🍦
+        </div>
+
+    </div>
+</section>
+
+
+<!-- SHOP -->
+
+<section class="section container" id="shop">
+
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Popular Products</h2>
+            <p class="section-subtitle" id="resultText">
+                Showing products available in this prototype.
+            </p>
+        </div>
+    </div>
+
+    <div class="shop-controls">
+
+        <div class="filter-buttons">
+
+            <button class="filter-btn active" onclick="setCategoryFilter('All',this)">
+                All
+            </button>
+
+            <button class="filter-btn" onclick="setCategoryFilter('Vegetables & Fruits',this)">
+                🥦 Fresh
+            </button>
+
+            <button class="filter-btn" onclick="setCategoryFilter('Kitchen Items',this)">
+                🍳 Kitchen
+            </button>
+
+            <button class="filter-btn" onclick="setCategoryFilter('School Projects',this)">
+                🎨 School
+            </button>
+
+            <button class="filter-btn" onclick="setCategoryFilter('Cold Food',this)">
+                🍦 Cold
+            </button>
+
+            <button class="filter-btn" onclick="setCategoryFilter('Drinks',this)">
+                🧃 Drinks
+            </button>
+
+        </div>
+
+        <select class="sort-select" id="sortSelect" onchange="sortProducts()">
+            <option value="relevance">Sort: Relevance</option>
+            <option value="priceLow">Price: Low → High</option>
+            <option value="priceHigh">Price: High → Low</option>
+            <option value="rating">Rating</option>
+            <option value="delivery">Fastest Delivery</option>
+            <option value="discount">Discount</option>
+        </select>
+
+    </div>
+
+    <div id="productGrid" class="products-grid"></div>
+
+</section>
+
+
+<!-- FAST DELIVERY -->
+
+<section class="section container">
+
+    <div class="fast-section">
+
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">⚡ Delivered in Minutes</h2>
+                <p class="section-subtitle">
+                    Estimated delivery times for selected demo products.
+                </p>
+            </div>
+        </div>
+
+        <div class="horizontal">
+
+            <div class="fast-card">
+                <div class="fast-icon">🍎</div>
+                <strong>Fresh Apples</strong>
+                <div class="fast-time">⚡ 10–15 min</div>
+            </div>
+
+            <div class="fast-card">
+                <div class="fast-icon">🍦</div>
+                <strong>Ice Cream</strong>
+                <div class="fast-time">⚡ 10–15 min</div>
+            </div>
+
+            <div class="fast-card">
+                <div class="fast-icon">🍅</div>
+                <strong>Fresh Tomatoes</strong>
+                <div class="fast-time">⚡ 10–15 min</div>
+            </div>
+
+            <div class="fast-card">
+                <div class="fast-icon">🍫</div>
+                <strong>Chocolate</strong>
+                <div class="fast-time">⚡ 15–20 min</div>
+            </div>
+
+            <div class="fast-card">
+                <div class="fast-icon">🖍️</div>
+                <strong>Sketch Pens</strong>
+                <div class="fast-time">⚡ 15–25 min</div>
+            </div>
+
+            <div class="fast-card">
+                <div class="fast-icon">🥤</div>
+                <strong>Sparkling Water</strong>
+                <div class="fast-time">⚡ 10–20 min</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FRESH PRODUCE -->
+
+<section class="section container">
+
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">🥬 Fresh Vegetables & Fruits</h2>
+            <p class="section-subtitle">
+                Fresh-looking demo produce with clear prices and estimates.
+            </p>
+        </div>
+
+        <button class="view-all" onclick="selectCategory('Vegetables & Fruits')">
+            View all →
+        </button>
+    </div>
+
+    <div id="freshGrid" class="products-grid"></div>
+
+</section>
+
+
+<!-- KITCHEN -->
+
+<section class="section container">
+
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">🍳 Kitchen Essentials</h2>
+            <p class="section-subtitle">
+                Useful kitchen and storage products.
+            </p>
+        </div>
+
+        <button class="view-all" onclick="selectCategory('Kitchen Items')">
+            View all →
+        </button>
+    </div>
+
+    <div id="kitchenGrid" class="products-grid"></div>
+
+</section>
+
+
+<!-- SCHOOL -->
+
+<section class="section container">
+
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">🎨 School Project Essentials</h2>
+            <p class="section-subtitle">
+                Materials for creative school projects.
+            </p>
+        </div>
+
+        <button class="view-all" onclick="selectCategory('School Projects')">
+            View all →
+        </button>
+    </div>
+
+    <div id="schoolGrid" class="products-grid"></div>
+
+</section>
+
+
+<!-- COLD -->
+
+<section class="section container">
+
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">🍦 Cold Treats</h2>
+            <p class="section-subtitle">
+                Chilled and frozen treats.
+            </p>
+        </div>
+
+        <button class="view-all" onclick="selectCategory('Cold Food')">
+            View all →
+        </button>
+    </div>
+
+    <div id="coldGrid" class="products-grid"></div>
+
+</section>
+
+
+<!-- DRINKS -->
+
+<section class="section container">
+
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">🧃 Drinks & Refreshments</h2>
+            <p class="section-subtitle">
+                Non-alcoholic drinks and refreshments.
+            </p>
+        </div>
+
+        <button class="view-all" onclick="selectCategory('Drinks')">
+            View all →
+        </button>
+    </div>
+
+    <div id="drinksGrid" class="products-grid"></div>
+
+</section>
+
+
+<!-- TRUST -->
+
+<section class="section container">
+
+    <div class="section-header">
+        <div>
+            <h2 class="section-title">Why Abhiminutes?</h2>
+            <p class="section-subtitle">
+                Built around a simple quick-commerce experience.
+            </p>
+        </div>
+    </div>
+
+    <div class="trust-grid">
+
+        <div class="trust-card">
+            <div class="trust-icon">⚡</div>
+            <h3>Fast Delivery</h3>
+            <p>
+                Clear estimated delivery windows help shoppers
+                understand when eligible products may arrive.
+            </p>
+        </div>
+
+        <div class="trust-card">
+            <div class="trust-icon">🛒</div>
+            <h3>Wide Selection</h3>
+            <p>
+                Groceries, school supplies, kitchen items,
+                snacks and everyday essentials in one place.
+            </p>
+        </div>
+
+        <div class="trust-card">
+            <div class="trust-icon">⭐</div>
+            <h3>Clear Information</h3>
+            <p>
+                Prices, quantities, ratings, review counts and
+                delivery estimates are easy to scan.
+            </p>
+        </div>
+
+        <div class="trust-card">
+            <div class="trust-icon">🔒</div>
+            <h3>Demo-Safe Checkout</h3>
+            <p>
+                This prototype simulates checkout and does not
+                process real payments.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer class="footer">
+
+    <div class="footer-grid">
+
+        <div class="footer-brand">
+
+            <div class="logo">
+                <div class="logo-mark">A⚡</div>
+                <div class="logo-text">Abhi<span>minutes</span></div>
+            </div>
+
+            <p>
+                Abhiminutes is a fictional quick-commerce prototype
+                designed to demonstrate a modern online shopping
+                experience with fast-delivery concepts.
+            </p>
+
+        </div>
+
+        <div>
+            <h4>Shop</h4>
+            <ul>
+                <li onclick="selectCategory('Vegetables & Fruits')">Vegetables & Fruits</li>
+                <li onclick="selectCategory('Kitchen Items')">Kitchen</li>
+                <li onclick="selectCategory('School Projects')">School Projects</li>
+                <li onclick="selectCategory('Cold Food')">Cold Food</li>
+                <li onclick="selectCategory('Drinks')">Drinks</li>
+                <li onclick="selectCategory('Daily Essentials')">Essentials</li>
+            </ul>
+        </div>
+
+        <div>
+            <h4>Customer Support</h4>
+            <ul>
+                <li onclick="showHelp()">Help Center</li>
+                <li onclick="showHelp()">Contact</li>
+                <li onclick="openOrders()">Orders</li>
+                <li onclick="showHelp()">Delivery Information</li>
+            </ul>
+        </div>
+
+        <div>
+            <h4>Legal</h4>
+            <ul>
+                <li onclick="showLegal('Privacy')">Privacy</li>
+                <li onclick="showLegal('Terms')">Terms</li>
+                <li onclick="showLegal('Refund Policy')">Refund Policy</li>
+                <li onclick="showOffers()">Demo Offers</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <div>© 2026 Abhiminutes — Prototype</div>
+        <div>Made for demonstration purposes • No real payments</div>
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     MOBILE NAVIGATION
+     ========================================================= -->
+
+<nav class="mobile-nav">
+
+    <button class="active" onclick="goHome()">
+        <span>⌂</span>
+        Home
+    </button>
+
+    <button onclick="scrollToCategories()">
+        <span>☰</span>
+        Categories
+    </button>
+
+    <button onclick="openOrders()">
+        <span>📦</span>
+        Orders
+    </button>
+
+    <button onclick="openCart()">
+        <span>🛒</span>
+        Cart
+    </button>
+
+    <button onclick="openAccount()">
+        <span>👤</span>
+        Account
+    </button>
+
+</nav>
+
+
+<!-- =========================================================
+     UNIVERSAL MODAL
+     ========================================================= -->
+
+<div id="modalOverlay" class="overlay" onclick="overlayClick(event)">
+    <div id="modal" class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle">Abhiminutes</h2>
+            <button class="close-btn" onclick="closeModal()">×</button>
+        </div>
+        <div id="modalBody" class="modal-body"></div>
+    </div>
+</div>
+
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div id="toastContainer" class="toast-container"></div>
+
+
+<script>
+/* =========================================================
+   ABHIMINUTES APPLICATION DATA
+   ========================================================= */
+
+const products = [
+
+    {
+        id:1,
+        name:"Fresh Red Apples",
+        category:"Vegetables & Fruits",
+        subcategory:"Fruits",
+        quantity:"1 kg",
+        price:149,
+        oldPrice:179,
+        rating:4.7,
+        reviews:842,
+        delivery:15,
+        deliveryText:"15–20 min",
+        discount:17,
+        emoji:"🍎",
+        description:"Crisp and juicy red apples for everyday snacking.",
+        stock:true
+    },
+
+    {
+        id:2,
+        name:"Fresh Bananas",
+        category:"Vegetables & Fruits",
+        subcategory:"Fruits",
+        quantity:"1 dozen",
+        price:59,
+        oldPrice:69,
+        rating:4.6,
+        reviews:1205,
+        delivery:12,
+        deliveryText:"10–15 min",
+        discount:14,
+        emoji:"🍌",
+        description:"Fresh bananas suitable for breakfast and snacks.",
+        stock:true
+    },
+
+    {
+        id:3,
+        name:"Red Tomatoes",
+        category:"Vegetables & Fruits",
+        subcategory:"Vegetables",
+        quantity:"1 kg",
+        price:49,
+        oldPrice:59,
+        rating:4.5,
+        reviews:692,
+        delivery:12,
+        deliveryText:"10–15 min",
+        discount:17,
+        emoji:"🍅",
+        description:"Fresh red tomatoes for cooking and salads.",
+        stock:true
+    },
+
+    {
+        id:4,
+        name:"Fresh Potatoes",
+        category:"Vegetables & Fruits",
+        subcategory:"Vegetables",
+        quantity:"2 kg",
+        price:79,
+        oldPrice:95,
+        rating:4.4,
+        reviews:583,
+        delivery:13,
+        deliveryText:"10–15 min",
+        discount:17,
+        emoji:"🥔",
+        description:"Everyday potatoes suitable for multiple dishes.",
+        stock:true
+    },
+
+    {
+        id:5,
+        name:"Fresh Onions",
+        category:"Vegetables & Fruits",
+        subcategory:"Vegetables",
+        quantity:"1 kg",
+        price:69,
+        oldPrice:79,
+        rating:4.5,
+        reviews:734,
+        delivery:14,
+        deliveryText:"10–15 min",
+        discount:13,
+        emoji:"🧅",
+        description:"Fresh onions for daily cooking.",
+        stock:true
+    },
+
+    {
+        id:6,
+        name:"Orange Basket",
+        category:"Vegetables & Fruits",
+        subcategory:"Fruits",
+        quantity:"1 kg",
+        price:109,
+        oldPrice:129,
+        rating:4.6,
+        reviews:486,
+        delivery:16,
+        deliveryText:"15–20 min",
+        discount:16,
+        emoji:"🍊",
+        description:"Juicy oranges packed for convenience.",
+        stock:true
+    },
+
+    {
+        id:7,
+        name:"Green Grapes",
+        category:"Vegetables & Fruits",
+        subcategory:"Fruits",
+        quantity:"500 g",
+        price:89,
+        oldPrice:109,
+        rating:4.4,
+        reviews:399,
+        delivery:17,
+        deliveryText:"15–20 min",
+        discount:18,
+        emoji:"🍇",
+        description:"Sweet green grapes for snacking.",
+        stock:true
+    },
+
+    {
+        id:8,
+        name:"Fresh Mangoes",
+        category:"Vegetables & Fruits",
+        subcategory:"Fruits",
+        quantity:"1 kg",
+        price:139,
+        oldPrice:169,
+        rating:4.8,
+        reviews:941,
+        delivery:17,
+        deliveryText:"15–20 min",
+        discount:18,
+        emoji:"🥭",
+        description:"Seasonal mangoes with a sweet and fruity taste.",
+        stock:true
+    },
+
+    {
+        id:9,
+        name:"Fresh Carrots",
+        category:"Vegetables & Fruits",
+        subcategory:"Vegetables",
+        quantity:"500 g",
+        price:39,
+        oldPrice:49,
+        rating:4.4,
+        reviews:318,
+        delivery:13,
+        deliveryText:"10–15 min",
+        discount:20,
+        emoji:"🥕",
+        description:"Fresh carrots for salads, snacks and cooking.",
+        stock:true
+    },
+
+    {
+        id:10,
+        name:"Fresh Cucumber",
+        category:"Vegetables & Fruits",
+        subcategory:"Vegetables",
+        quantity:"500 g",
+        price:35,
+        oldPrice:45,
+        rating:4.3,
+        reviews:255,
+        delivery:13,
+        deliveryText:"10–15 min",
+        discount:22,
+        emoji:"🥒",
+        description:"Crunchy cucumbers for salads and meals.",
+        stock:true
+    },
+
+    {
+        id:11,
+        name:"Capsicum",
+        category:"Vegetables & Fruits",
+        subcategory:"Vegetables",
+        quantity:"500 g",
+        price:65,
+        oldPrice:79,
+        rating:4.5,
+        reviews:287,
+        delivery:16,
+        deliveryText:"15–20 min",
+        discount:18,
+        emoji:"🫑",
+        description:"Fresh green capsicum for cooking.",
+        stock:true
+    },
+
+    {
+        id:12,
+        name:"Spinach",
+        category:"Vegetables & Fruits",
+        subcategory:"Vegetables",
+        quantity:"250 g",
+        price:29,
+        oldPrice:35,
+        rating:4.3,
+        reviews:201,
+        delivery:11,
+        deliveryText:"10–15 min",
+        discount:17,
+        emoji:"🥬",
+        description:"Fresh leafy spinach.",
+        stock:true
+    },
+
+    {
+        id:13,
+        name:"Ceramic Dinner Plates",
+        category:"Kitchen Items",
+        quantity:"Set of 4",
+        price:399,
+        oldPrice:499,
+        rating:4.6,
+        reviews:347,
+        delivery:25,
+        deliveryText:"20–25 min",
+        discount:20,
+        emoji:"🍽️",
+        description:"Simple ceramic dinner plates for everyday use.",
+        stock:true
+    },
+
+    {
+        id:14,
+        name:"Steel Spoon Set",
+        category:"Kitchen Items",
+        quantity:"Set of 6",
+        price:149,
+        oldPrice:189,
+        rating:4.5,
+        reviews:622,
+        delivery:23,
+        deliveryText:"20–25 min",
+        discount:21,
+        emoji:"🥄",
+        description:"Stainless steel spoons for daily dining.",
+        stock:true
+    },
+
+    {
+        id:15,
+        name:"Reusable Water Bottle",
+        category:"Kitchen Items",
+        quantity:"750 ml",
+        price:249,
+        oldPrice:299,
+        rating:4.7,
+        reviews:812,
+        delivery:22,
+        deliveryText:"20–25 min",
+        discount:17,
+        emoji:"🧴",
+        description:"Reusable bottle for school, work and travel.",
+        stock:true
+    },
+
+    {
+        id:16,
+        name:"Food Storage Containers",
+        category:"Kitchen Items",
+        quantity:"Set of 5",
+        price:329,
+        oldPrice:399,
+        rating:4.6,
+        reviews:529,
+        delivery:24,
+        deliveryText:"20–25 min",
+        discount:18,
+        emoji:"🥡",
+        description:"Stackable storage containers for the kitchen.",
+        stock:true
+    },
+
+    {
+        id:17,
+        name:"Kitchen Organizer",
+        category:"Kitchen Items",
+        quantity:"1 piece",
+        price:279,
+        oldPrice:349,
+        rating:4.4,
+        reviews:289,
+        delivery:26,
+        deliveryText:"25–30 min",
+        discount:20,
+        emoji:"🗄️",
+        description:"Compact organizer for kitchen essentials.",
+        stock:true
+    },
+
+    {
+        id:18,
+        name:"Lunch Box",
+        category:"Kitchen Items",
+        quantity:"900 ml",
+        price:219,
+        oldPrice:269,
+        rating:4.5,
+        reviews:483,
+        delivery:22,
+        deliveryText:"20–25 min",
+        discount:19,
+        emoji:"🍱",
+        description:"Convenient lunch box with multiple compartments.",
+        stock:true
+    },
+
+    {
+        id:19,
+        name:"Chart Paper Pack",
+        category:"School Projects",
+        quantity:"10 sheets",
+        price:99,
+        oldPrice:129,
+        rating:4.7,
+        reviews:352,
+        delivery:19,
+        deliveryText:"15–25 min",
+        discount:23,
+        emoji:"📄",
+        description:"Bright chart papers for school projects.",
+        stock:true
+    },
+
+    {
+        id:20,
+        name:"Color Paper Pack",
+        category:"School Projects",
+        quantity:"20 sheets",
+        price:89,
+        oldPrice:109,
+        rating:4.6,
+        reviews:407,
+        delivery:18,
+        deliveryText:"15–25 min",
+        discount:18,
+        emoji:"🌈",
+        description:"Assorted colored paper for creative work.",
+        stock:true
+    },
+
+    {
+        id:21,
+        name:"Sketch Pens",
+        category:"School Projects",
+        quantity:"Pack of 24",
+        price:149,
+        oldPrice:179,
+        rating:4.8,
+        reviews:733,
+        delivery:18,
+        deliveryText:"15–25 min",
+        discount:17,
+        emoji:"🖍️",
+        description:"Bright sketch pens for drawing and projects.",
+        stock:true
+    },
+
+    {
+        id:22,
+        name:"Wax Crayons",
+        category:"School Projects",
+        quantity:"Pack of 24",
+        price:119,
+        oldPrice:149,
+        rating:4.7,
+        reviews:551,
+        delivery:18,
+        deliveryText:"15–25 min",
+        discount:20,
+        emoji:"🖍️",
+        description:"Smooth wax crayons in assorted colors.",
+        stock:true
+    },
+
+    {
+        id:23,
+        name:"Craft Glue",
+        category:"School Projects",
+        quantity:"100 ml",
+        price:49,
+        oldPrice:59,
+        rating:4.4,
+        reviews:261,
+        delivery:16,
+        deliveryText:"15–20 min",
+        discount:17,
+        emoji:"🧴",
+        description:"Craft glue for paper and school projects.",
+        stock:true
+    },
+
+    {
+        id:24,
+        name:"Safety Scissors",
+        category:"School Projects",
+        quantity:"1 piece",
+        price:59,
+        oldPrice:75,
+        rating:4.5,
+        reviews:238,
+        delivery:18,
+        deliveryText:"15–25 min",
+        discount:21,
+        emoji:"✂️",
+        description:"Compact scissors suitable for craft activities.",
+        stock:true
+    },
+
+    {
+        id:25,
+        name:"Glitter Sheets",
+        category:"School Projects",
+        quantity:"Pack of 10",
+        price:129,
+        oldPrice:159,
+        rating:4.6,
+        reviews:194,
+        delivery:21,
+        deliveryText:"20–25 min",
+        discount:19,
+        emoji:"✨",
+        description:"Colorful glitter sheets for decorations.",
+        stock:true
+    },
+
+    {
+        id:26,
+        name:"Foam Sheets",
+        category:"School Projects",
+        quantity:"Pack of 10",
+        price:139,
+        oldPrice:169,
+        rating:4.5,
+        reviews:174,
+        delivery:21,
+        deliveryText:"20–25 min",
+        discount:18,
+        emoji:"🟨",
+        description:"Foam sheets for models and crafts.",
+        stock:true
+    },
+
+    {
+        id:27,
+        name:"Chocolate Brownie",
+        category:"Cold Food",
+        quantity:"2 pieces",
+        price:129,
+        oldPrice:159,
+        rating:4.8,
+        reviews:912,
+        delivery:22,
+        deliveryText:"20–25 min",
+        discount:19,
+        emoji:"🍫",
+        description:"Soft chocolate brownie pieces.",
+        stock:true
+    },
+
+    {
+        id:28,
+        name:"Vanilla Ice Cream",
+        category:"Cold Food",
+        quantity:"500 ml",
+        price:149,
+        oldPrice:179,
+        rating:4.7,
+        reviews:1260,
+        delivery:13,
+        deliveryText:"10–15 min",
+        discount:17,
+        emoji:"🍦",
+        description:"Creamy vanilla frozen dessert.",
+        stock:true
+    },
+
+    {
+        id:29,
+        name:"Chocolate Ice Cream",
+        category:"Cold Food",
+        quantity:"500 ml",
+        price:169,
+        oldPrice:199,
+        rating:4.8,
+        reviews:1182,
+        delivery:13,
+        deliveryText:"10–15 min",
+        discount:15,
+        emoji:"🍨",
+        description:"Rich chocolate ice cream.",
+        stock:true
+    },
+
+    {
+        id:30,
+        name:"Cold Coffee",
+        category:"Cold Food",
+        quantity:"300 ml",
+        price:99,
+        oldPrice:119,
+        rating:4.6,
+        reviews:764,
+        delivery:14,
+        deliveryText:"10–15 min",
+        discount:17,
+        emoji:"☕",
+        description:"Chilled creamy coffee drink.",
+        stock:true
+    },
+
+    {
+        id:31,
+        name:"Chocolate Cake",
+        category:"Cold Food",
+        quantity:"500 g",
+        price:449,
+        oldPrice:549,
+        rating:4.7,
+        reviews:693,
+        delivery:32,
+        deliveryText:"25–35 min",
+        discount:18,
+        emoji:"🍰",
+        description:"Soft chocolate cake for celebrations.",
+        stock:true
+    },
+
+    {
+        id:32,
+        name:"Strawberry Milkshake",
+        category:"Cold Food",
+        quantity:"300 ml",
+        price:119,
+        oldPrice:139,
+        rating:4.6,
+        reviews:417,
+        delivery:15,
+        deliveryText:"10–20 min",
+        discount:14,
+        emoji:"🥤",
+        description:"Cold strawberry milkshake.",
+        stock:true
+    },
+
+    {
+        id:33,
+        name:"Milk Chocolate Bar",
+        category:"Cold Food",
+        quantity:"100 g",
+        price:89,
+        oldPrice:109,
+        rating:4.7,
+        reviews:1587,
+        delivery:15,
+        deliveryText:"10–20 min",
+        discount:18,
+        emoji:"🍫",
+        description:"Smooth milk chocolate bar.",
+        stock:true
+    },
+
+    {
+        id:34,
+        name:"Fruit Juice",
+        category:"Drinks",
+        quantity:"1 litre",
+        price:99,
+        oldPrice:119,
+        rating:4.5,
+        reviews:702,
+        delivery:14,
+        deliveryText:"10–20 min",
+        discount:17,
+        emoji:"🧃",
+        description:"Refreshing fruit beverage.",
+        stock:true
+    },
+
+    {
+        id:35,
+        name:"Orange Juice",
+        category:"Drinks",
+        quantity:"1 litre",
+        price:119,
+        oldPrice:139,
+        rating:4.6,
+        reviews:824,
+        delivery:14,
+        deliveryText:"10–20 min",
+        discount:14,
+        emoji:"🍊",
+        description:"Orange-flavored fruit beverage.",
+        stock:true
+    },
+
+    {
+        id:36,
+        name:"Sparkling Water",
+        category:"Drinks",
+        quantity:"750 ml",
+        price:49,
+        oldPrice:59,
+        rating:4.4,
+        reviews:317,
+        delivery:12,
+        deliveryText:"10–15 min",
+        discount:17,
+        emoji:"💧",
+        description:"Refreshing sparkling water.",
+        stock:true
+    },
+
+    {
+        id:37,
+        name:"Lemon Refreshment",
+        category:"Drinks",
+        quantity:"500 ml",
+        price:59,
+        oldPrice:69,
+        rating:4.5,
+        reviews:442,
+        delivery:12,
+        deliveryText:"10–15 min",
+        discount:14,
+        emoji:"🍋",
+        description:"Refreshing lemon-flavored beverage.",
+        stock:true
+    },
+
+    {
+        id:38,
+        name:"Cola Soft Drink",
+        category:"Drinks",
+        quantity:"750 ml",
+        price:59,
+        oldPrice:69,
+        rating:4.4,
+        reviews:954,
+        delivery:12,
+        deliveryText:"10–15 min",
+        discount:14,
+        emoji:"🥤",
+        description:"Classic carbonated soft drink.",
+        stock:true
+    },
+
+    {
+        id:39,
+        name:"Apple Juice",
+        category:"Drinks",
+        quantity:"1 litre",
+        price:109,
+        oldPrice:129,
+        rating:4.5,
+        reviews:536,
+        delivery:15,
+        deliveryText:"10–20 min",
+        discount:16,
+        emoji:"🍎",
+        description:"Apple-flavored fruit beverage.",
+        stock:true
+    },
+
+    {
+        id:40,
+        name:"Chocolate Cookies",
+        category:"Daily Essentials",
+        quantity:"200 g",
+        price:79,
+        oldPrice:99,
+        rating:4.7,
+        reviews:1120,
+        delivery:13,
+        deliveryText:"10–15 min",
+        discount:20,
+        emoji:"🍪",
+        description:"Crunchy chocolate cookies.",
+        stock:true
+    },
+
+    {
+        id:41,
+        name:"Whole Wheat Bread",
+        category:"Daily Essentials",
+        quantity:"400 g",
+        price:45,
+        oldPrice:55,
+        rating:4.5,
+        reviews:806,
+        delivery:12,
+        deliveryText:"10–15 min",
+        discount:18,
+        emoji:"🍞",
+        description:"Soft whole wheat bread.",
+        stock:true
+    },
+
+    {
+        id:42,
+        name:"Breakfast Cereal",
+        category:"Daily Essentials",
+        quantity:"500 g",
+        price:229,
+        oldPrice:279,
+        rating:4.6,
+        reviews:472,
+        delivery:18,
+        deliveryText:"15–20 min",
+        discount:18,
+        emoji:"🥣",
+        description:"Crunchy breakfast cereal.",
+        stock:true
+    },
+
+    {
+        id:43,
+        name:"Potato Chips",
+        category:"Daily Essentials",
+        quantity:"100 g",
+        price:39,
+        oldPrice:49,
+        rating:4.5,
+        reviews:1265,
+        delivery:11,
+        deliveryText:"10–15 min",
+        discount:20,
+        emoji:"🥔",
+        description:"Crispy potato snack.",
+        stock:true
+    },
+
+    {
+        id:44,
+        name:"Instant Noodles",
+        category:"Daily Essentials",
+        quantity:"Pack of 4",
+        price:84,
+        oldPrice:99,
+        rating:4.6,
+        reviews:1437,
+        delivery:13,
+        deliveryText:"10–15 min",
+        discount:15,
+        emoji:"🍜",
+        description:"Quick-cooking instant noodles.",
+        stock:true
+    },
+
+    {
+        id:45,
+        name:"Paper Towels",
+        category:"Daily Essentials",
+        quantity:"Pack of 4",
+        price:179,
+        oldPrice:219,
+        rating:4.4,
+        reviews:285,
+        delivery:20,
+        deliveryText:"15–25 min",
+        discount:18,
+        emoji:"🧻",
+        description:"Absorbent household paper towels.",
+        stock:true
+    },
+
+    {
+        id:46,
+        name:"Hand Wash",
+        category:"Daily Essentials",
+        quantity:"250 ml",
+        price:89,
+        oldPrice:109,
+        rating:4.5,
+        reviews:541,
+        delivery:16,
+        deliveryText:"15–20 min",
+        discount:18,
+        emoji:"🧼",
+        description:"Everyday liquid hand wash.",
+        stock:true
+    },
+
+    {
+        id:47,
+        name:"Pomegranate",
+        category:"Vegetables & Fruits",
+        subcategory:"Fruits",
+        quantity:"500 g",
+        price:139,
+        oldPrice:169,
+        rating:4.7,
+        reviews:428,
+        delivery:17,
+        deliveryText:"15–20 min",
+        discount:18,
+        emoji:"🔴",
+        description:"Fresh pomegranate fruit.",
+        stock:true
+    },
+
+    {
+        id:48,
+        name:"Watermelon",
+        category:"Vegetables & Fruits",
+        subcategory:"Fruits",
+        quantity:"1 piece",
+        price:119,
+        oldPrice:149,
+        rating:4.5,
+        reviews:363,
+        delivery:16,
+        deliveryText:"15–20 min",
+        discount:20,
+        emoji:"🍉",
+        description:"Refreshing watermelon.",
+        stock:true
+    }
+
+];
+
+
+/* =========================================================
+   APPLICATION STATE
+   ========================================================= */
+
+let cart = {};
+let wishlist = [];
+let currentCategory = "All";
+let searchTerm = "";
+let currentProducts = [...products];
+
+try{
+    cart = JSON.parse(localStorage.getItem("abhiminutes_cart") || "{}");
+}catch(e){
+    cart = {};
+}
+
+try{
+    wishlist = JSON.parse(localStorage.getItem("abhiminutes_wishlist") || "[]");
+}catch(e){
+    wishlist = [];
+}
+
+
+/* =========================================================
+   DOM REFERENCES
+   ========================================================= */
+
+const productGrid = document.getElementById("productGrid");
+const freshGrid = document.getElementById("freshGrid");
+const kitchenGrid = document.getElementById("kitchenGrid");
+const schoolGrid = document.getElementById("schoolGrid");
+const coldGrid = document.getElementById("coldGrid");
+const drinksGrid = document.getElementById("drinksGrid");
+const cartCount = document.getElementById("cartCount");
+const searchInput = document.getElementById("searchInput");
+const clearSearchButton = document.getElementById("clearSearch");
+
+
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    renderAllSections();
+    updateCartCount();
+
+    searchInput.addEventListener("input",function(){
+        searchTerm = this.value.trim().toLowerCase();
+
+        clearSearchButton.style.display =
+            searchTerm ? "block" : "none";
+
+        renderShopProducts();
+    });
+
+});
+
+
+/* =========================================================
+   PRODUCT CARD
+   ========================================================= */
+
+function productCard(product){
+
+    const quantity = cart[product.id] || 0;
+    const isWishlist = wishlist.includes(product.id);
+
+    return `
+        <article class="product-card">
+
+            <div
+                class="product-image"
+                onclick="openProduct(${product.id})"
+                style="cursor:pointer;"
+            >
+
+                <div class="emoji">
+                    ${product.emoji}
+                </div>
+
+                ${
+                    product.discount
+                    ?
+                    `<div class="discount">
+                        ${product.discount}% OFF
+                    </div>`
+                    :
+                    ""
+                }
+
+                ${
+                    !product.stock
+                    ?
+                    `<div class="stock">
+                        OUT OF STOCK
+                    </div>`
+                    :
+                    ""
+                }
+
+            </div>
+
+            <div
+                class="product-name"
+                onclick="openProduct(${product.id})"
+                style="cursor:pointer;"
+            >
+                ${product.name}
+            </div>
+
+            <div class="product-quantity">
+                ${product.quantity}
+            </div>
+
+            <div class="rating">
+                <span class="rating-star">★</span>
+                <strong>${product.rating}</strong>
+                <span class="reviews">
+                    (${formatNumber(product.reviews)})
+                </span>
+            </div>
+
+            <div class="delivery">
+                ⚡ ${product.deliveryText}
+            </div>
+
+            <div class="price-row">
+                <span class="price">
+                    ₹${product.price}
+                </span>
+
+                ${
+                    product.oldPrice
+                    ?
+                    `<span class="old-price">
+                        ₹${product.oldPrice}
+                    </span>`
+                    :
+                    ""
+                }
+            </div>
+
+            <div class="add-row">
+
+                ${
+                    !product.stock
+                    ?
+                    `
+                    <button
+                        class="add-btn"
+                        onclick="notifyMe(${product.id})"
+                    >
+                        Notify Me
+                    </button>
+                    `
+                    :
+                    quantity === 0
+                    ?
+                    `
+                    <button
+                        class="add-btn"
+                        onclick="addToCart(${product.id})"
+                    >
+                        ADD
+                    </button>
+                    `
+                    :
+                    `
+                    <div class="quantity-control">
+
+                        <button onclick="changeQuantity(${product.id},-1)">
+                            −
+                        </button>
+
+                        <span>
+                            ${quantity}
+                        </span>
+
+                        <button onclick="changeQuantity(${product.id},1)">
+                            +
+                        </button>
+
+                    </div>
+                    `
+                }
+
+            </div>
+
+            <button
+                onclick="toggleWishlist(${product.id})"
+                style="
+                    position:absolute;
+                    right:15px;
+                    top:15px;
+                    width:30px;
+                    height:30px;
+                    border:0;
+                    border-radius:50%;
+                    background:white;
+                    box-shadow:0 4px 12px rgba(0,0,0,.08);
+                    font-size:16px;
+                "
+                title="Wishlist"
+            >
+                ${isWishlist ? "♥" : "♡"}
+            </button>
+
+        </article>
+    `;
+}
+
+
+/* =========================================================
+   RENDERING
+   ========================================================= */
+
+function renderAllSections(){
+
+    renderShopProducts();
+
+    renderCategorySection(
+        freshGrid,
+        products.filter(p =>
+            p.category === "Vegetables & Fruits"
+        )
+    );
+
+    renderCategorySection(
+        kitchenGrid,
+        products.filter(p =>
+            p.category === "Kitchen Items"
+        )
+    );
+
+    renderCategorySection(
+        schoolGrid,
+        products.filter(p =>
+            p.category === "School Projects"
+        )
+    );
+
+    renderCategorySection(
+        coldGrid,
+        products.filter(p =>
+            p.category === "Cold Food"
+        )
+    );
+
+    renderCategorySection(
+        drinksGrid,
+        products.filter(p =>
+            p.category === "Drinks"
+        )
+    );
+
+}
+
+
+function renderCategorySection(element,list){
+
+    if(!element){
+        return;
+    }
+
+    element.innerHTML =
+        list
+        .slice(0,5)
+        .map(productCard)
+        .join("");
+
+}
+
+
+function renderShopProducts(){
+
+    let filtered = [...products];
+
+    if(currentCategory !== "All"){
+        filtered = filtered.filter(
+            p => p.category === currentCategory
+        );
+    }
+
+    if(searchTerm){
+
+        filtered = filtered.filter(p => {
+
+            const text = `
+                ${p.name}
+                ${p.category}
+                ${p.quantity}
+                ${p.description}
+            `.toLowerCase();
+
+            return text.includes(searchTerm);
+
+        });
+
+    }
+
+    currentProducts = filtered;
+
+    applySortToArray(currentProducts);
+
+    if(filtered.length === 0){
+
+        productGrid.innerHTML = `
+            <div class="empty" style="grid-column:1/-1;">
+
+                <div class="empty-icon">🔎</div>
+
+                <h3>We couldn't find that product.</h3>
+
+                <p>
+                    Try another search or explore one of our categories.
+                </p>
+
+                <button
+                    class="primary-btn"
+                    onclick="clearAllFilters()"
+                >
+                    Browse Products
+                </button>
+
+            </div>
+        `;
+
+        document.getElementById("resultText").textContent =
+            "No products matched your search.";
+
+        return;
+
+    }
+
+    productGrid.innerHTML =
+        filtered.map(productCard).join("");
+
+    document.getElementById("resultText").textContent =
+        `${filtered.length} product${filtered.length === 1 ? "" : "s"} found`;
+
+}
+
+
+/* =========================================================
+   SORTING
+   ========================================================= */
+
+function applySortToArray(array){
+
+    const mode =
+        document.getElementById("sortSelect").value;
+
+    if(mode === "priceLow"){
+        array.sort((a,b) => a.price - b.price);
+    }
+
+    if(mode === "priceHigh"){
+        array.sort((a,b) => b.price - a.price);
+    }
+
+    if(mode === "rating"){
+        array.sort((a,b) => b.rating - a.rating);
+    }
+
+    if(mode === "delivery"){
+        array.sort((a,b) => a.delivery - b.delivery);
+    }
+
+    if(mode === "discount"){
+        array.sort((a,b) => b.discount - a.discount);
+    }
+
+}
+
+
+function sortProducts(){
+
+    renderShopProducts();
+
+}
+
+
+/* =========================================================
+   CATEGORY FILTER
+   ========================================================= */
+
+function setCategoryFilter(category,button){
+
+    currentCategory = category;
+
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach(btn => btn.classList.remove("active"));
+
+    if(button){
+        button.classList.add("active");
+    }
+
+    renderShopProducts();
+
+    document
+        .getElementById("shop")
+        .scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+}
+
+
+function selectCategory(category){
+
+    currentCategory = category;
+
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach(btn => {
+
+            btn.classList.toggle(
+                "active",
+                category === "All"
+                    ? btn.textContent.trim() === "All"
+                    : btn.textContent.includes(category.split(" ")[0])
+            );
+
+        });
+
+    if(category === "Ice Cream"){
+        searchInput.value = "ice cream";
+        searchTerm = "ice cream";
+    }
+
+    else if(category === "Cakes"){
+        searchInput.value = "cake";
+        searchTerm = "cake";
+    }
+
+    else if(category === "Chocolates"){
+        searchInput.value = "chocolate";
+        searchTerm = "chocolate";
+    }
+
+    else{
+        searchInput.value = "";
+        searchTerm = "";
+    }
+
+    clearSearchButton.style.display =
+        searchTerm ? "block" : "none";
+
+    renderShopProducts();
+
+    scrollToShop();
+
+}
+
+
+function clearAllFilters(){
+
+    currentCategory = "All";
+    searchTerm = "";
+    searchInput.value = "";
+    clearSearchButton.style.display = "none";
+
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach((btn,index) => {
+            btn.classList.toggle("active",index === 0);
+        });
+
+    renderShopProducts();
+
+}
+
+
+function clearSearch(){
+
+    searchTerm = "";
+    searchInput.value = "";
+    clearSearchButton.style.display = "none";
+    renderShopProducts();
+
+}
+
+
+/* =========================================================
+   CART
+   ========================================================= */
+
+function addToCart(id){
+
+    const product =
+        products.find(p => p.id === id);
+
+    if(!product){
+        return;
+    }
+
+    if(!product.stock){
+        notifyMe(id);
+        return;
+    }
+
+    cart[id] = (cart[id] || 0) + 1;
+
+    saveCart();
+    updateCartCount();
+
+    renderAllSections();
+
+    showToast(
+        `${product.name} added to cart`
+    );
+
+}
+
+
+function changeQuantity(id,change){
+
+    if(!cart[id]){
+        cart[id] = 0;
+    }
+
+    cart[id] += change;
+
+    if(cart[id] <= 0){
+        delete cart[id];
+    }
+
+    saveCart();
+    updateCartCount();
+
+    renderAllSections();
+
+    if(
+        document.getElementById("modalOverlay")
+        .classList.contains("show")
+        &&
+        document.getElementById("modalTitle")
+        .textContent === "Your Cart"
+    ){
+        openCart();
+    }
+
+}
+
+
+function saveCart(){
+
+    localStorage.setItem(
+        "abhiminutes_cart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+function updateCartCount(){
+
+    const total =
+        Object.values(cart)
+        .reduce(
+            (sum,value) => sum + value,
+            0
+        );
+
+    cartCount.textContent = total;
+
+}
+
+
+function getCartItems(){
+
+    return Object.entries(cart)
+        .map(([id,quantity]) => {
+
+            const product =
+                products.find(
+                    p => p.id === Number(id)
+                );
+
+            return {
+                product,
+                quantity
+            };
+
+        })
+        .filter(item => item.product);
+
+}
+
+
+function getCartTotal(){
+
+    return getCartItems()
+        .reduce(
+            (sum,item) =>
+                sum +
+                item.product.price *
+                item.quantity,
+            0
+        );
+
+}
+
+
+/* =========================================================
+   CART MODAL
+   ========================================================= */
+
+function openCart(){
+
+    const items = getCartItems();
+
+    if(items.length === 0){
+
+        showModal(
+            "Your Cart",
+            `
+                <div class="empty">
+
+                    <div class="empty-icon">🛒</div>
+
+                    <h3>
+                        Your cart is waiting for something!
+                    </h3>
+
+                    <p>
+                        Add some products and they'll appear here.
+                    </p>
+
+                    <button
+                        class="primary-btn"
+                        onclick="closeModal();scrollToShop();"
+                    >
+                        Start Shopping
+                    </button>
+
+                </div>
+            `
+        );
+
+        return;
+    }
+
+    const itemHTML =
+        items.map(item => {
+
+            const p = item.product;
+
+            return `
+                <div class="cart-item">
+
+                    <div class="cart-image">
+                        ${p.emoji}
+                    </div>
+
+                    <div>
+
+                        <div class="cart-name">
+                            ${p.name}
+                        </div>
+
+                        <div class="cart-meta">
+                            ${p.quantity} • ⚡ ${p.deliveryText}
+                        </div>
+
+                        <div class="cart-price">
+                            ₹${p.price * item.quantity}
+                        </div>
+
+                    </div>
+
+                    <div class="mini-quantity">
+
+                        <button
+                            onclick="changeQuantity(${p.id},-1)"
+                        >
+                            −
+                        </button>
+
+                        <span>
+                            ${item.quantity}
+                        </span>
+
+                        <button
+                            onclick="changeQuantity(${p.id},1)"
+                        >
+                            +
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+    const itemTotal = getCartTotal();
+
+    const deliveryFee =
+        itemTotal >= 299 ? 0 : 29;
+
+    const discount =
+        itemTotal >= 500
+        ? Math.round(itemTotal * .1)
+        : 0;
+
+    const taxes =
+        Math.round(
+            Math.max(0,itemTotal - discount) * .02
+        );
+
+    const grandTotal =
+        itemTotal +
+        deliveryFee +
+        taxes -
+        discount;
+
+    showModal(
+        "Your Cart",
+        `
+            ${itemHTML}
+
+            <div class="bill">
+
+                <div class="bill-row">
+                    <span>Item total</span>
+                    <strong>₹${itemTotal}</strong>
+                </div>
+
+                <div class="bill-row">
+                    <span>Delivery fee</span>
+                    <strong>
+                        ${deliveryFee === 0 ? "FREE" : "₹" + deliveryFee}
+                    </strong>
+                </div>
+
+                <div class="bill-row">
+                    <span>Demo discount</span>
+                    <strong>
+                        -₹${discount}
+                    </strong>
+                </div>
+
+                <div class="bill-row">
+                    <span>Taxes / charges</span>
+                    <strong>₹${taxes}</strong>
+                </div>
+
+                <div class="bill-row total">
+                    <span>Grand total</span>
+                    <span>₹${grandTotal}</span>
+                </div>
+
+            </div>
+
+            <button
+                class="checkout-btn"
+                onclick="openCheckout()"
+            >
+                Proceed to Checkout →
+            </button>
+
+            <p
+                style="
+                    text-align:center;
+                    color:#7b847d;
+                    font-size:10px;
+                    margin-top:10px;
+                "
+            >
+                Demo checkout only. No real payment is processed.
+            </p>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   PRODUCT DETAILS
+   ========================================================= */
+
+function openProduct(id){
+
+    const p =
+        products.find(product => product.id === id);
+
+    if(!p){
+        return;
+    }
+
+    const isInCart =
+        cart[p.id] > 0;
+
+    showModal(
+        p.name,
+        `
+            <div class="product-detail">
+
+                <div class="detail-image">
+                    ${p.emoji}
+                </div>
+
+                <div>
+
+                    <h1 class="detail-title">
+                        ${p.name}
+                    </h1>
+
+                    <div class="rating" style="font-size:13px;">
+                        <span class="rating-star">★</span>
+                        <strong>${p.rating}</strong>
+                        <span class="reviews">
+                            ${formatNumber(p.reviews)} reviews
+                        </span>
+                    </div>
+
+                    <div class="detail-price">
+                        ₹${p.price}
+                    </div>
+
+                    ${
+                        p.oldPrice
+                        ?
+                        `
+                        <div style="margin-top:2px;">
+                            <span
+                                style="
+                                    text-decoration:line-through;
+                                    color:#9ca3af;
+                                    font-size:13px;
+                                "
+                            >
+                                ₹${p.oldPrice}
+                            </span>
+
+                            <span
+                                style="
+                                    color:#087f35;
+                                    font-size:12px;
+                                    font-weight:900;
+                                    margin-left:7px;
+                                "
+                            >
+                                ${p.discount}% OFF
+                            </span>
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
+                    <div class="detail-info">
+                        Quantity: <strong>${p.quantity}</strong>
+                    </div>
+
+                    <div class="delivery">
+                        ⚡ Estimated delivery ${p.deliveryText}
+                    </div>
+
+                    <p
+                        style="
+                            margin-top:15px;
+                            color:#5e6961;
+                            font-size:14px;
+                        "
+                    >
+                        ${p.description}
+                    </p>
+
+                    <div class="detail-actions">
+
+                        <button
+                            class="primary-btn"
+                            onclick="addToCart(${p.id});openProduct(${p.id});"
+                        >
+                            ${
+                                isInCart
+                                ? "Add Another"
+                                : "Add to Cart"
+                            }
+                        </button>
+
+                        <button
+                            class="buy-btn"
+                            onclick="buyNow(${p.id})"
+                        >
+                            Buy Now
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="detail-section">
+
+                <h3>Product Information</h3>
+
+                <p
+                    style="
+                        margin-top:8px;
+                        color:#68736b;
+                        font-size:13px;
+                    "
+                >
+                    ${p.description}
+                    This is fictional product information
+                    created for the Abhiminutes prototype.
+                </p>
+
+            </div>
+
+            <div class="detail-section">
+
+                <h3>
+                    Customer Reviews
+                </h3>
+
+                <div
+                    style="
+                        font-size:25px;
+                        font-weight:950;
+                        margin-top:8px;
+                    "
+                >
+                    ${p.rating} ★
+                </div>
+
+                <p
+                    style="
+                        color:#68736b;
+                        font-size:12px;
+                    "
+                >
+                    Based on ${formatNumber(p.reviews)}
+                    fictional demo reviews.
+                </p>
+
+                <div class="review">
+
+                    <div class="review-top">
+                        <span>Riya</span>
+                        <span>★★★★★</span>
+                    </div>
+
+                    <div class="review-text">
+                        Sample review for demonstration purposes.
+                    </div>
+
+                </div>
+
+                <div class="review">
+
+                    <div class="review-top">
+                        <span>Arjun</span>
+                        <span>★★★★☆</span>
+                    </div>
+
+                    <div class="review-text">
+                        Another fictional sample review.
+                    </div>
+
+                </div>
+
+                <div class="review">
+
+                    <div class="review-top">
+                        <span>Meera</span>
+                        <span>★★★★★</span>
+                    </div>
+
+                    <div class="review-text">
+                        Demo review content — not from a real customer.
+                    </div>
+
+                </div>
+
+            </div>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   BUY NOW
+   ========================================================= */
+
+function buyNow(id){
+
+    addToCart(id);
+    openCheckout();
+
+}
+
+
+/* =========================================================
+   CHECKOUT
+   ========================================================= */
+
+function openCheckout(){
+
+    const items = getCartItems();
+
+    if(items.length === 0){
+        closeModal();
+        showToast("Your cart is empty.");
+        return;
+    }
+
+    const total = getCartTotal();
+
+    showModal(
+        "Checkout",
+        `
+            <div class="checkout-steps">
+
+                <div class="checkout-step active">
+                    1. Delivery
+                </div>
+
+                <div class="checkout-step">
+                    2. Summary
+                </div>
+
+                <div class="checkout-step">
+                    3. Payment
+                </div>
+
+                <div class="checkout-step">
+                    4. Done
+                </div>
+
+            </div>
+
+            <h3>
+                Delivery Information
+            </h3>
+
+            <p
+                style="
+                    color:#6b746d;
+                    font-size:12px;
+                    margin-top:4px;
+                    margin-bottom:17px;
+                "
+            >
+                Use fictional information for this demo.
+            </p>
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label>Full Name</label>
+                    <input
+                        id="checkoutName"
+                        placeholder="Demo Customer"
+                    >
+                </div>
+
+                <div class="field">
+                    <label>Phone</label>
+                    <input
+                        id="checkoutPhone"
+                        placeholder="00000 00000"
+                    >
+                </div>
+
+                <div class="field full">
+                    <label>Sample Delivery Address</label>
+                    <input
+                        id="checkoutAddress"
+                        placeholder="123 Example Street, Sample City"
+                    >
+                </div>
+
+                <div class="field">
+                    <label>City</label>
+                    <input
+                        placeholder="Sample City"
+                    >
+                </div>
+
+                <div class="field">
+                    <label>PIN Code</label>
+                    <input
+                        placeholder="000000"
+                    >
+                </div>
+
+            </div>
+
+            <div
+                style="
+                    margin-top:20px;
+                    padding:14px;
+                    border-radius:12px;
+                    background:#f5faf6;
+                "
+            >
+                <div class="bill-row">
+                    <span>Items</span>
+                    <strong>₹${total}</strong>
+                </div>
+
+                <div class="bill-row">
+                    <span>Estimated delivery</span>
+                    <strong>10–35 min</strong>
+                </div>
+            </div>
+
+            <button
+                class="checkout-btn"
+                onclick="showPaymentStep()"
+            >
+                Continue →
+            </button>
+        `
+    );
+
+}
+
+
+function showPaymentStep(){
+
+    showModal(
+        "Checkout • Payment",
+        `
+            <div class="checkout-steps">
+
+                <div class="checkout-step active">
+                    1. Delivery
+                </div>
+
+                <div class="checkout-step active">
+                    2. Summary
+                </div>
+
+                <div class="checkout-step active">
+                    3. Payment
+                </div>
+
+                <div class="checkout-step">
+                    4. Done
+                </div>
+
+            </div>
+
+            <h3>
+                Select Demo Payment Method
+            </h3>
+
+            <div class="payment-option selected">
+
+                <input
+                    type="radio"
+                    checked
+                    name="payment"
+                >
+
+                <div>
+                    <strong>Demo UPI</strong>
+                    <div
+                        style="
+                            color:#6b746d;
+                            font-size:11px;
+                        "
+                    >
+                        Simulated payment — no real transaction.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="payment-option">
+
+                <input
+                    type="radio"
+                    name="payment"
+                >
+
+                <div>
+                    <strong>Demo Card</strong>
+                    <div
+                        style="
+                            color:#6b746d;
+                            font-size:11px;
+                        "
+                    >
+                        Test-only payment option.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="payment-option">
+
+                <input
+                    type="radio"
+                    name="payment"
+                >
+
+                <div>
+                    <strong>Cash on Delivery Demo</strong>
+                    <div
+                        style="
+                            color:#6b746d;
+                            font-size:11px;
+                        "
+                    >
+                        Demonstration option only.
+                    </div>
+                </div>
+
+            </div>
+
+            <button
+                class="checkout-btn"
+                onclick="placeOrder()"
+            >
+                Confirm Demo Order
+            </button>
+
+            <p
+                style="
+                    text-align:center;
+                    color:#8a938d;
+                    font-size:10px;
+                    margin-top:10px;
+                "
+            >
+                No real payment will be processed.
+            </p>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   PLACE ORDER
+   ========================================================= */
+
+function placeOrder(){
+
+    const items = getCartItems();
+
+    if(items.length === 0){
+        closeModal();
+        return;
+    }
+
+    const total = getCartTotal();
+
+    const orderId =
+        "ABM-" +
+        Date.now()
+        .toString()
+        .slice(-8);
+
+    const order = {
+
+        id:orderId,
+
+        date:new Date().toLocaleDateString(
+            "en-IN",
+            {
+                day:"2-digit",
+                month:"short",
+                year:"numeric"
+            }
+        ),
+
+        products:items.map(
+            item =>
+                `${item.product.name} × ${item.quantity}`
+        ),
+
+        total:total,
+
+        status:"Preparing",
+
+        delivery:"15–30 minutes"
+
+    };
+
+    let orders = [];
+
+    try{
+        orders =
+            JSON.parse(
+                localStorage.getItem(
+                    "abhiminutes_orders"
+                ) || "[]"
+            );
+    }catch(e){
+        orders = [];
+    }
+
+    orders.unshift(order);
+
+    localStorage.setItem(
+        "abhiminutes_orders",
+        JSON.stringify(orders)
+    );
+
+    cart = {};
+
+    saveCart();
+    updateCartCount();
+    renderAllSections();
+
+    showConfirmation(order);
+
+}
+
+
+function showConfirmation(order){
+
+    showModal(
+        "Order Confirmed",
+        `
+            <div class="confirmation">
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <h2 style="margin-top:15px;">
+                    🎉 Order Confirmed!
+                </h2>
+
+                <p
+                    style="
+                        color:#68736b;
+                        margin-top:5px;
+                        font-size:13px;
+                    "
+                >
+                    Your fictional demo order has been placed successfully.
+                </p>
+
+                <div class="order-id">
+                    Order ID: ${order.id}
+                </div>
+
+                <div
+                    style="
+                        margin-top:22px;
+                        background:#f7faf8;
+                        border-radius:14px;
+                        padding:15px;
+                        text-align:left;
+                    "
+                >
+
+                    <strong>
+                        Estimated arrival
+                    </strong>
+
+                    <div
+                        style="
+                            color:#087f35;
+                            font-size:20px;
+                            font-weight:950;
+                            margin-top:4px;
+                        "
+                    >
+                        ${order.delivery}
+                    </div>
+
+                    <div
+                        style="
+                            color:#6b746d;
+                            font-size:12px;
+                            margin-top:4px;
+                        "
+                    >
+                        Total: ₹${order.total}
+                    </div>
+
+                </div>
+
+                <div class="timeline">
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot">✓</div>
+                        Order Placed
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot">✓</div>
+                        Preparing
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot">•</div>
+                        Out for Delivery
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot">•</div>
+                        Delivered
+                    </div>
+
+                </div>
+
+                <button
+                    class="primary-btn"
+                    onclick="closeModal();openOrders();"
+                >
+                    View My Orders
+                </button>
+
+            </div>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   ORDERS
+   ========================================================= */
+
+function getOrders(){
+
+    try{
+        return JSON.parse(
+            localStorage.getItem(
+                "abhiminutes_orders"
+            ) || "[]"
+        );
+    }catch(e){
+        return [];
+    }
+
+}
+
+
+function openOrders(){
+
+    const orders = getOrders();
+
+    if(orders.length === 0){
+
+        showModal(
+            "My Orders",
+            `
+                <div class="empty">
+
+                    <div class="empty-icon">📦</div>
+
+                    <h3>No orders yet</h3>
+
+                    <p>
+                        Once you place a demo order,
+                        it will appear here.
+                    </p>
+
+                    <button
+                        class="primary-btn"
+                        onclick="closeModal();scrollToShop();"
+                    >
+                        Start Shopping
+                    </button>
+
+                </div>
+            `
+        );
+
+        return;
+    }
+
+    const html =
+        orders.map(order => {
+
+            return `
+                <div class="order-card">
+
+                    <div class="order-top">
+
+                        <div>
+                            <div class="order-number">
+                                ${order.id}
+                            </div>
+
+                            <div
+                                style="
+                                    color:#78817a;
+                                    font-size:11px;
+                                    margin-top:2px;
+                                "
+                            >
+                                ${order.date}
+                            </div>
+                        </div>
+
+                        <div class="order-status">
+                            ${order.status}
+                        </div>
+
+                    </div>
+
+                    <div class="order-products">
+                        ${order.products.join(", ")}
+                    </div>
+
+                    <div class="order-bottom">
+
+                        <span>
+                            Total ₹${order.total}
+                        </span>
+
+                        <span>
+                            ⚡ ${order.delivery}
+                        </span>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+    showModal(
+        "My Orders",
+        `
+            ${html}
+
+            <p
+                style="
+                    text-align:center;
+                    color:#8a938d;
+                    font-size:10px;
+                    margin-top:15px;
+                "
+            >
+                Orders shown here are fictional demo records
+                stored in your browser.
+            </p>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   WISHLIST
+   ========================================================= */
+
+function toggleWishlist(id){
+
+    if(wishlist.includes(id)){
+
+        wishlist =
+            wishlist.filter(
+                item => item !== id
+            );
+
+        showToast("Removed from wishlist.");
+
+    }else{
+
+        wishlist.push(id);
+
+        showToast("Added to wishlist.");
+
+    }
+
+    localStorage.setItem(
+        "abhiminutes_wishlist",
+        JSON.stringify(wishlist)
+    );
+
+    renderAllSections();
+
+}
+
+
+function openWishlist(){
+
+    const items =
+        products.filter(
+            p => wishlist.includes(p.id)
+        );
+
+    if(items.length === 0){
+
+        showModal(
+            "My Wishlist",
+            `
+                <div class="empty">
+
+                    <div class="empty-icon">♡</div>
+
+                    <h3>
+                        Your wishlist is empty.
+                    </h3>
+
+                    <p>
+                        Save products you want to find later.
+                    </p>
+
+                    <button
+                        class="primary-btn"
+                        onclick="closeModal();scrollToShop();"
+                    >
+                        Browse Products
+                    </button>
+
+                </div>
+            `
+        );
+
+        return;
+    }
+
+    showModal(
+        "My Wishlist",
+        `
+            <div class="products-grid">
+                ${items.map(productCard).join("")}
+            </div>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   ACCOUNT
+   ========================================================= */
+
+function openAccount(){
+
+    showModal(
+        "My Account",
+        `
+            <div class="account-grid">
+
+                <div class="account-menu">
+
+                    <button class="active">
+                        👤 Profile
+                    </button>
+
+                    <button onclick="openOrders()">
+                        📦 Orders
+                    </button>
+
+                    <button onclick="openWishlist()">
+                        ❤️ Wishlist
+                    </button>
+
+                    <button onclick="showHelp()">
+                        ❓ Help
+                    </button>
+
+                    <button onclick="showToast('Demo sign out selected.')">
+                        ↪ Sign Out
+                    </button>
+
+                </div>
+
+                <div class="account-panel">
+
+                    <h3>
+                        Profile
+                    </h3>
+
+                    <p
+                        style="
+                            color:#6b746d;
+                            font-size:12px;
+                            margin-top:5px;
+                        "
+                    >
+                        Demo account information.
+                    </p>
+
+                    <div class="form-grid" style="margin-top:18px;">
+
+                        <div class="field">
+                            <label>Name</label>
+                            <input
+                                value="Demo Customer"
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label>Email</label>
+                            <input
+                                value="demo@example.com"
+                            >
+                        </div>
+
+                        <div class="field full">
+                            <label>Sample Address</label>
+                            <input
+                                value="Sample Location"
+                            >
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="primary-btn"
+                        style="margin-top:17px;"
+                        onclick="showToast('Profile saved in demo mode.')"
+                    >
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </div>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   OFFERS
+   ========================================================= */
+
+function showOffers(){
+
+    showModal(
+        "🎁 Demo Offers",
+        `
+            <div
+                style="
+                    display:grid;
+                    gap:12px;
+                "
+            >
+
+                <div
+                    style="
+                        padding:18px;
+                        border:1px dashed #b7ddc0;
+                        background:#f0fff3;
+                        border-radius:15px;
+                    "
+                >
+                    <strong>WELCOME20</strong>
+
+                    <p
+                        style="
+                            color:#5f6a62;
+                            font-size:12px;
+                            margin-top:4px;
+                        "
+                    >
+                        Demo 20% discount on selected orders.
+                    </p>
+
+                    <small>
+                        Minimum order: ₹299
+                    </small>
+
+                </div>
+
+                <div
+                    style="
+                        padding:18px;
+                        border:1px dashed #e5d29a;
+                        background:#fffaf0;
+                        border-radius:15px;
+                    "
+                >
+                    <strong>SAVE50</strong>
+
+                    <p
+                        style="
+                            color:#5f6a62;
+                            font-size:12px;
+                            margin-top:4px;
+                        "
+                    >
+                        Demo ₹50 saving on qualifying orders.
+                    </p>
+
+                    <small>
+                        Minimum order: ₹499
+                    </small>
+
+                </div>
+
+            </div>
+
+            <p
+                style="
+                    color:#8a938d;
+                    font-size:10px;
+                    text-align:center;
+                    margin-top:17px;
+                "
+            >
+                These are fictional prototype offers and have no
+                monetary value.
+            </p>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   LOCATION
+   ========================================================= */
+
+function showLocation(){
+
+    showModal(
+        "📍 Delivery Location",
+        `
+            <div
+                style="
+                    background:#f3faf5;
+                    padding:20px;
+                    border-radius:15px;
+                "
+            >
+
+                <strong>
+                    Sample Location
+                </strong>
+
+                <p
+                    style="
+                        color:#68736b;
+                        font-size:12px;
+                        margin-top:4px;
+                    "
+                >
+                    This prototype intentionally uses a fictional
+                    location instead of accessing your precise address.
+                </p>
+
+            </div>
+
+            <div class="field" style="margin-top:15px;">
+                <label>Search sample area</label>
+                <input
+                    placeholder="Enter a fictional delivery area"
+                >
+            </div>
+
+            <button
+                class="checkout-btn"
+                onclick="closeModal();showToast('Sample location selected.')"
+            >
+                Use Sample Location
+            </button>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   HELP
+   ========================================================= */
+
+function showHelp(){
+
+    showModal(
+        "Help Center",
+        `
+            <div
+                style="
+                    display:grid;
+                    gap:10px;
+                "
+            >
+
+                <div
+                    style="
+                        padding:15px;
+                        background:#f7faf8;
+                        border-radius:12px;
+                    "
+                >
+                    <strong>How does delivery work?</strong>
+                    <p
+                        style="
+                            color:#6b746d;
+                            font-size:12px;
+                            margin-top:4px;
+                        "
+                    >
+                        Delivery estimates are fictional values
+                        shown for this prototype.
+                    </p>
+                </div>
+
+                <div
+                    style="
+                        padding:15px;
+                        background:#f7faf8;
+                        border-radius:12px;
+                    "
+                >
+                    <strong>Are payments real?</strong>
+                    <p
+                        style="
+                            color:#6b746d;
+                            font-size:12px;
+                            margin-top:4px;
+                        "
+                    >
+                        No. Checkout is simulated and does not
+                        process real payments.
+                    </p>
+                </div>
+
+                <div
+                    style="
+                        padding:15px;
+                        background:#f7faf8;
+                        border-radius:12px;
+                    "
+                >
+                    <strong>Are product reviews real?</strong>
+                    <p
+                        style="
+                            color:#6b746d;
+                            font-size:12px;
+                            margin-top:4px;
+                        "
+                    >
+                        No. Ratings and reviews are fictional demo data.
+                    </p>
+                </div>
+
+            </div>
+        `
+    );
+
+}
+
+
+/* =========================================================
+   LEGAL
+   ========================================================= */
+
+function showLegal(type){
+
+    let content = "";
+
+    if(type === "Privacy"){
+
+        content = `
+            <h3>Privacy</h3>
+
+            <p
+                style="
+                    color:#667168;
+                    margin-top:8px;
+                    font-size:13px;
+                "
+            >
+                This prototype does not provide a real shopping
+                backend. Demo cart and order information may be stored
+                locally in your browser using localStorage.
+            </p>
+        `;
+
+    }
+
+    if(type === "Terms"){
+
+        content = `
+            <h3>Terms</h3>
+
+            <p
+                style="
+                    color:#667168;
+                    margin-top:8px;
+                    font-size:13px;
+                "
+            >
+                Abhiminutes is a fictional demonstration interface.
+                Product availability, pricing, delivery estimates,
+                reviews and offers are sample data.
+            </p>
+        `;
+
+    }
+
+    if(type === "Refund Policy"){
+
+        content = `
+            <h3>Refund Policy</h3>
+
+            <p
+                style="
+                    color:#667168;
+                    margin-top:8px;
+                    font-size:13px;
+                "
+            >
+                No real purchases or transactions are performed in
+                this prototype, so no real refund transaction occurs.
+            </p>
+        `;
+
+    }
+
+    showModal(type,content);
+
+}
+
+
+/* =========================================================
+   OUT OF STOCK
+   ========================================================= */
+
+function notifyMe(id){
+
+    const product =
+        products.find(
+            p => p.id === id
+        );
+
+    if(product){
+        showToast(
+            `We'll notify you when ${product.name} is available.`
+        );
+    }
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function goHome(){
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+function scrollToShop(){
+
+    document
+        .getElementById("shop")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+
+function scrollToCategories(){
+
+    document
+        .getElementById("categories")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+
+/* =========================================================
+   MODAL SYSTEM
+   ========================================================= */
+
+function showModal(title,body){
+
+    document.getElementById("modalTitle").textContent =
+        title;
+
+    document.getElementById("modalBody").innerHTML =
+        body;
+
+    document.getElementById("modalOverlay")
+        .classList.add("show");
+
+    document.body.style.overflow = "hidden";
+
+}
+
+
+function closeModal(){
+
+    document.getElementById("modalOverlay")
+        .classList.remove("show");
+
+    document.body.style.overflow = "";
+
+}
+
+
+function overlayClick(event){
+
+    if(event.target === document.getElementById("modalOverlay")){
+        closeModal();
+    }
+
+}
+
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Escape"){
+            closeModal();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+function showToast(message){
+
+    const container =
+        document.getElementById("toastContainer");
+
+    const toast =
+        document.createElement("div");
+
+    toast.className = "toast";
+
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    setTimeout(
+        () => {
+            toast.remove();
+        },
+        3000
+    );
+
+}
+
+
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+
+function formatNumber(number){
+
+    return new Intl.NumberFormat(
+        "en-IN",
+        {
+            notation:"compact",
+            maximumFractionDigits:1
+        }
+    ).format(number);
+
+}
+
+
+/* =========================================================
+   SEARCH KEYBOARD SUPPORT
+   ========================================================= */
+
+searchInput.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            scrollToShop();
+
+            if(searchTerm){
+                showToast(
+                    `Searching for "${searchTerm}"`
+                );
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CATEGORY BUTTON FIX
+   ========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const categoryCard =
+            event.target.closest(".category-card");
+
+        if(categoryCard){
+
+            document
+                .querySelectorAll(".category-card")
+                .forEach(
+                    card => card.style.transform = ""
+                );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   DEMO DELIVERY STATUS
+   ========================================================= */
+
+setInterval(
+    function(){
+
+        const orders = getOrders();
+
+        if(orders.length === 0){
+            return;
+        }
+
+        let changed = false;
+
+        orders.forEach(order => {
+
+            if(order.status === "Preparing"){
+                /* Keep demo state stable instead of changing
+                   automatically. */
+            }
+
+        });
+
+        if(changed){
+
+            localStorage.setItem(
+                "abhiminutes_orders",
+                JSON.stringify(orders)
+            );
+
+        }
+
+    },
+    60000
+);
+
+
+/* =========================================================
+   PRODUCT QUICK ACCESS
+   ========================================================= */
+
+function findProductByName(name){
+
+    return products.find(
+        product =>
+            product.name.toLowerCase()
+            .includes(name.toLowerCase())
+    );
+
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+document
+    .querySelectorAll("button")
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "keydown",
+                function(event){
+
+                    if(
+                        event.key === "Enter" ||
+                        event.key === " "
+                    ){
+                        event.preventDefault();
+                        button.click();
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   DEMO WELCOME MESSAGE
+   ========================================================= */
+
+setTimeout(
+    function(){
+
+        showToast(
+            "Welcome to Abhiminutes ⚡"
+        );
+
+    },
+    900
+);
+
+
+/* =========================================================
+   END OF ABHIMINUTES APPLICATION
+   ========================================================= */
+</script>
+
+</body>
+</html>

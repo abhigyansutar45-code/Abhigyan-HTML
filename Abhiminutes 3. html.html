@@ -1,0 +1,6173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Abhiminutes - Fast, clean and modern quick-commerce marketplace">
+<title>Abhiminutes — Everything You Need. Delivered Fast.</title>
+
+<!-- =========================================================
+     ABHIMINUTES FAVICON
+========================================================= -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23d9f99d'/%3E%3Cpath d='M58 8L28 55h20L42 92l34-50H55z' fill='%23166534'/%3E%3C/svg%3E">
+
+<style>
+/* =========================================================
+   ABHIMINUTES
+   ORIGINAL QUICK-COMMERCE UI
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --green:#166534;
+    --green-dark:#14532d;
+    --green-light:#dcfce7;
+    --lime:#d9f99d;
+    --yellow:#fef3c7;
+    --orange:#f97316;
+    --orange-light:#ffedd5;
+    --cream:#fffdf7;
+    --bg:#f7f8f5;
+    --white:#ffffff;
+    --text:#17201a;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --danger:#dc2626;
+    --shadow:0 8px 25px rgba(20,40,20,.08);
+    --shadow-lg:0 18px 50px rgba(20,40,20,.14);
+    --radius:18px;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+img{
+    max-width:100%;
+    display:block;
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.top-strip{
+    background:#17351f;
+    color:white;
+    text-align:center;
+    padding:8px 15px;
+    font-size:12px;
+    letter-spacing:.2px;
+}
+
+.top-strip strong{
+    color:var(--lime);
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+}
+
+.header-main{
+    max-width:1500px;
+    margin:auto;
+    min-height:76px;
+    padding:12px 24px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.logo{
+    min-width:175px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:24px;
+    font-weight:900;
+    letter-spacing:-1px;
+}
+
+.logo-mark{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    background:var(--lime);
+    display:grid;
+    place-items:center;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(22,101,52,.12);
+}
+
+.logo-mark::before{
+    content:"";
+    width:0;
+    height:0;
+    border-left:11px solid transparent;
+    border-right:11px solid transparent;
+    border-bottom:27px solid var(--green);
+    transform:rotate(12deg);
+}
+
+.logo-mark::after{
+    content:"";
+    position:absolute;
+    width:7px;
+    height:17px;
+    background:var(--lime);
+    transform:rotate(28deg);
+    left:18px;
+    top:8px;
+}
+
+.logo-text span{
+    color:var(--green);
+}
+
+.location-box{
+    min-width:190px;
+    padding:8px 12px;
+    border-radius:13px;
+    transition:.2s;
+}
+
+.location-box:hover{
+    background:#f4f7f2;
+}
+
+.location-label{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.location-current{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    font-weight:750;
+    margin-top:2px;
+}
+
+.location-pin{
+    color:var(--green);
+}
+
+.search-wrap{
+    flex:1;
+    position:relative;
+}
+
+.search-box{
+    width:100%;
+    height:48px;
+    border:1px solid var(--border);
+    background:#f6f7f4;
+    border-radius:14px;
+    padding:0 48px 0 48px;
+    outline:none;
+    transition:.2s;
+}
+
+.search-box:focus{
+    background:white;
+    border-color:#a7c99d;
+    box-shadow:0 0 0 4px rgba(166,214,147,.18);
+}
+
+.search-icon{
+    position:absolute;
+    left:17px;
+    top:14px;
+    color:#667085;
+    pointer-events:none;
+}
+
+.clear-search{
+    position:absolute;
+    right:13px;
+    top:9px;
+    width:30px;
+    height:30px;
+    border:none;
+    background:transparent;
+    color:#777;
+    display:none;
+}
+
+.search-suggestions{
+    display:none;
+    position:absolute;
+    left:0;
+    right:0;
+    top:55px;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:8px;
+    box-shadow:var(--shadow-lg);
+    z-index:100;
+}
+
+.search-suggestions.active{
+    display:block;
+}
+
+.suggestion{
+    padding:11px 12px;
+    border-radius:10px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.suggestion:hover{
+    background:#f3f7f1;
+}
+
+.header-actions{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.header-action{
+    border:none;
+    background:white;
+    min-width:65px;
+    padding:8px 7px;
+    border-radius:12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    color:#27332a;
+    font-size:11px;
+    transition:.2s;
+}
+
+.header-action:hover{
+    background:#f2f6ef;
+    color:var(--green);
+}
+
+.header-action-icon{
+    font-size:20px;
+}
+
+.cart-action{
+    position:relative;
+}
+
+.cart-badge{
+    position:absolute;
+    right:7px;
+    top:4px;
+    min-width:18px;
+    height:18px;
+    border-radius:20px;
+    background:var(--orange);
+    color:white;
+    font-size:10px;
+    display:grid;
+    place-items:center;
+    font-weight:800;
+}
+
+/* =========================================================
+   LOCATION MODAL
+========================================================= */
+
+.modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    backdrop-filter:blur(5px);
+    z-index:5000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal-backdrop.active{
+    display:flex;
+}
+
+.location-modal{
+    width:min(650px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:white;
+    border-radius:25px;
+    padding:28px;
+    box-shadow:0 30px 100px rgba(0,0,0,.25);
+    animation:modalIn .25s ease;
+}
+
+@keyframes modalIn{
+    from{
+        transform:translateY(20px) scale(.97);
+        opacity:0;
+    }
+    to{
+        transform:translateY(0) scale(1);
+        opacity:1;
+    }
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.modal-head h2{
+    font-size:25px;
+}
+
+.close-modal{
+    border:none;
+    background:#f3f4f1;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+}
+
+.modal-subtitle{
+    color:var(--muted);
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+.state-search{
+    width:100%;
+    height:45px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:0 15px;
+    outline:none;
+    margin-bottom:15px;
+}
+
+.state-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+}
+
+.state-btn{
+    border:1px solid var(--border);
+    background:white;
+    padding:12px;
+    border-radius:12px;
+    text-align:left;
+    font-weight:650;
+    transition:.2s;
+}
+
+.state-btn:hover,
+.state-btn.selected{
+    border-color:#8ebc7c;
+    background:#eff8ea;
+    color:var(--green);
+}
+
+.state-note{
+    margin-top:17px;
+    padding:12px;
+    border-radius:12px;
+    background:#f6f8f4;
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    max-width:1500px;
+    margin:20px auto 0;
+    padding:0 24px;
+}
+
+.hero-inner{
+    min-height:390px;
+    border-radius:28px;
+    background:
+        radial-gradient(circle at 90% 20%,rgba(217,249,157,.75),transparent 30%),
+        radial-gradient(circle at 5% 100%,rgba(255,237,213,.8),transparent 32%),
+        linear-gradient(120deg,#f5faef,#fffdf7);
+    border:1px solid #e8eee2;
+    display:flex;
+    align-items:center;
+    padding:55px;
+    overflow:hidden;
+    position:relative;
+}
+
+.hero-copy{
+    width:60%;
+    position:relative;
+    z-index:2;
+}
+
+.hero-kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 12px;
+    border-radius:20px;
+    background:white;
+    border:1px solid #e1eadc;
+    color:var(--green);
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:18px;
+}
+
+.hero h1{
+    font-size:clamp(42px,5vw,70px);
+    line-height:.98;
+    letter-spacing:-4px;
+    max-width:700px;
+}
+
+.hero h1 span{
+    color:var(--green);
+}
+
+.hero p{
+    color:#667066;
+    max-width:600px;
+    line-height:1.7;
+    margin:20px 0 25px;
+    font-size:16px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.primary-btn{
+    border:none;
+    background:var(--green);
+    color:white;
+    padding:13px 22px;
+    border-radius:13px;
+    font-weight:800;
+    transition:.2s;
+    box-shadow:0 8px 20px rgba(22,101,52,.2);
+}
+
+.primary-btn:hover{
+    transform:translateY(-2px);
+    background:var(--green-dark);
+}
+
+.secondary-btn{
+    border:1px solid var(--border);
+    background:white;
+    padding:13px 22px;
+    border-radius:13px;
+    font-weight:750;
+}
+
+.hero-visual{
+    position:absolute;
+    right:-20px;
+    bottom:-40px;
+    width:45%;
+    height:100%;
+}
+
+.hero-circle{
+    position:absolute;
+    width:430px;
+    height:430px;
+    right:20px;
+    bottom:-130px;
+    border-radius:50%;
+    background:#e4f5ce;
+}
+
+.hero-fruit{
+    position:absolute;
+    width:190px;
+    height:190px;
+    object-fit:cover;
+    border-radius:35px;
+    box-shadow:var(--shadow-lg);
+}
+
+.hero-fruit.one{
+    right:230px;
+    top:70px;
+    transform:rotate(-8deg);
+}
+
+.hero-fruit.two{
+    right:55px;
+    top:135px;
+    width:170px;
+    height:170px;
+    transform:rotate(8deg);
+}
+
+/* =========================================================
+   CATEGORY BAR
+========================================================= */
+
+.category-strip{
+    max-width:1500px;
+    margin:20px auto;
+    padding:0 24px;
+}
+
+.category-scroll{
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    padding:3px 0;
+}
+
+.category-scroll::-webkit-scrollbar{
+    display:none;
+}
+
+.category-chip{
+    flex:0 0 auto;
+    border:1px solid var(--border);
+    background:white;
+    border-radius:30px;
+    padding:10px 16px;
+    font-size:13px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.category-chip:hover,
+.category-chip.active{
+    background:var(--green);
+    border-color:var(--green);
+    color:white;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+    max-width:1500px;
+    margin:auto;
+    padding:0 24px 100px;
+}
+
+.section{
+    margin-top:40px;
+}
+
+.section-heading{
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    gap:15px;
+    margin-bottom:18px;
+}
+
+.section-heading h2{
+    font-size:25px;
+    letter-spacing:-.8px;
+}
+
+.section-heading p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:4px;
+}
+
+.view-all{
+    border:none;
+    background:none;
+    color:var(--green);
+    font-weight:800;
+}
+
+/* =========================================================
+   PROMO CARDS
+========================================================= */
+
+.promo-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+.promo-card{
+    min-height:170px;
+    border-radius:20px;
+    padding:22px;
+    position:relative;
+    overflow:hidden;
+    border:1px solid var(--border);
+}
+
+.promo-card.green{
+    background:#eaf7df;
+}
+
+.promo-card.yellow{
+    background:#fff6d8;
+}
+
+.promo-card.orange{
+    background:#fff0e5;
+}
+
+.promo-card h3{
+    font-size:21px;
+    max-width:230px;
+}
+
+.promo-card p{
+    color:#667066;
+    margin:7px 0;
+    font-size:13px;
+    max-width:250px;
+}
+
+.promo-icon{
+    position:absolute;
+    right:22px;
+    bottom:12px;
+    font-size:70px;
+}
+
+/* =========================================================
+   PRODUCT GRID
+========================================================= */
+
+.product-layout{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:20px;
+}
+
+.filter-sidebar{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+    height:max-content;
+    position:sticky;
+    top:95px;
+}
+
+.filter-title{
+    font-weight:850;
+    margin-bottom:15px;
+}
+
+.filter-group{
+    padding:14px 0;
+    border-top:1px solid #edf0ec;
+}
+
+.filter-group:first-of-type{
+    border-top:none;
+}
+
+.filter-group h4{
+    font-size:13px;
+    margin-bottom:9px;
+}
+
+.filter-option{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    margin:9px 0;
+    font-size:12px;
+    color:#59625c;
+}
+
+.filter-option input{
+    accent-color:var(--green);
+}
+
+.sort-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+
+.results-count{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.sort-select{
+    border:1px solid var(--border);
+    background:white;
+    padding:9px 12px;
+    border-radius:10px;
+    outline:none;
+}
+
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:14px;
+}
+
+.product-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:10px;
+    min-width:0;
+    transition:.22s;
+    position:relative;
+    overflow:hidden;
+}
+
+.product-card:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--shadow);
+    border-color:#d5dfd1;
+}
+
+.product-image-wrap{
+    height:190px;
+    border-radius:14px;
+    overflow:hidden;
+    background:#f5f7f2;
+    position:relative;
+}
+
+.product-image{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.35s;
+}
+
+.product-card:hover .product-image{
+    transform:scale(1.05);
+}
+
+.discount-tag{
+    position:absolute;
+    left:9px;
+    top:9px;
+    padding:5px 7px;
+    border-radius:7px;
+    background:#fff1e8;
+    color:#d35400;
+    font-size:10px;
+    font-weight:850;
+}
+
+.wishlist-btn{
+    position:absolute;
+    right:9px;
+    top:9px;
+    width:34px;
+    height:34px;
+    border:none;
+    background:rgba(255,255,255,.93);
+    border-radius:50%;
+    font-size:17px;
+    z-index:2;
+}
+
+.wishlist-btn.active{
+    color:#e11d48;
+}
+
+.product-info{
+    padding:12px 3px 3px;
+}
+
+.product-name{
+    font-weight:800;
+    font-size:14px;
+    line-height:1.3;
+    min-height:36px;
+}
+
+.product-quantity{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:4px;
+}
+
+.product-rating{
+    margin-top:8px;
+    font-size:11px;
+    color:#57615a;
+}
+
+.rating-star{
+    color:#eaa900;
+}
+
+.product-delivery{
+    display:inline-block;
+    margin-top:8px;
+    padding:4px 7px;
+    background:#edf8e8;
+    color:var(--green);
+    border-radius:6px;
+    font-size:10px;
+    font-weight:800;
+}
+
+.product-price-row{
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    gap:7px;
+    margin-top:10px;
+}
+
+.current-price{
+    font-size:17px;
+    font-weight:900;
+}
+
+.original-price{
+    color:#9ca3af;
+    text-decoration:line-through;
+    font-size:11px;
+    margin-left:3px;
+}
+
+.add-btn{
+    border:1px solid var(--green);
+    color:var(--green);
+    background:white;
+    min-width:72px;
+    height:34px;
+    border-radius:9px;
+    font-weight:900;
+    font-size:12px;
+    transition:.2s;
+}
+
+.add-btn:hover{
+    background:var(--green);
+    color:white;
+}
+
+.quantity-control{
+    display:flex;
+    align-items:center;
+    border:1px solid #b6cfad;
+    border-radius:9px;
+    overflow:hidden;
+    height:34px;
+}
+
+.quantity-control button{
+    width:27px;
+    height:100%;
+    border:none;
+    background:#edf7e9;
+    color:var(--green);
+    font-weight:900;
+}
+
+.quantity-control span{
+    width:26px;
+    text-align:center;
+    font-size:12px;
+    font-weight:800;
+}
+
+/* =========================================================
+   FRUIT IMAGE QUALITY
+========================================================= */
+
+.real-fruit-image{
+    object-fit:cover;
+    object-position:center;
+}
+
+.fruit-fallback{
+    background:linear-gradient(135deg,#eff8e8,#fffaf0);
+}
+
+/* =========================================================
+   NO RESULTS
+========================================================= */
+
+.no-results{
+    display:none;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:50px 20px;
+    text-align:center;
+}
+
+.no-results.active{
+    display:block;
+}
+
+.no-results-icon{
+    font-size:45px;
+    margin-bottom:10px;
+}
+
+.no-results h3{
+    margin-bottom:5px;
+}
+
+.no-results p{
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* =========================================================
+   PRODUCT DETAIL
+========================================================= */
+
+.detail-modal{
+    width:min(1050px,100%);
+    max-height:92vh;
+    overflow:auto;
+    background:white;
+    border-radius:25px;
+    box-shadow:0 30px 100px rgba(0,0,0,.25);
+    padding:25px;
+}
+
+.detail-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+.detail-image{
+    width:100%;
+    height:480px;
+    border-radius:20px;
+    object-fit:cover;
+    background:#f4f6f1;
+}
+
+.detail-info h2{
+    font-size:34px;
+    letter-spacing:-1px;
+    margin-bottom:8px;
+}
+
+.detail-rating{
+    margin:12px 0;
+}
+
+.detail-price{
+    font-size:32px;
+    font-weight:950;
+    margin-top:20px;
+}
+
+.detail-description{
+    color:#667066;
+    line-height:1.7;
+    font-size:14px;
+    margin:20px 0;
+}
+
+.detail-feature{
+    display:flex;
+    gap:9px;
+    padding:9px 0;
+    color:#536057;
+    font-size:13px;
+}
+
+.detail-actions{
+    display:flex;
+    gap:10px;
+    margin-top:22px;
+}
+
+.buy-btn{
+    flex:1;
+    border:none;
+    background:var(--orange);
+    color:white;
+    border-radius:12px;
+    font-weight:850;
+}
+
+.detail-add{
+    flex:1;
+}
+
+/* =========================================================
+   REVIEWS
+========================================================= */
+
+.review-section{
+    margin-top:30px;
+    border-top:1px solid var(--border);
+    padding-top:25px;
+}
+
+.review-summary{
+    display:flex;
+    gap:25px;
+    align-items:center;
+    padding:15px;
+    background:#fafbf9;
+    border-radius:15px;
+}
+
+.big-rating{
+    font-size:40px;
+    font-weight:900;
+}
+
+.review-card{
+    border-bottom:1px solid #edf0ed;
+    padding:15px 0;
+}
+
+.review-user{
+    font-weight:800;
+    font-size:13px;
+}
+
+.review-date{
+    color:#9ca3af;
+    font-size:11px;
+}
+
+.review-text{
+    margin-top:6px;
+    color:#59625c;
+    font-size:13px;
+}
+
+/* =========================================================
+   CART DRAWER
+========================================================= */
+
+.drawer-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.4);
+    z-index:4000;
+    display:none;
+}
+
+.drawer-overlay.active{
+    display:block;
+}
+
+.cart-drawer{
+    position:fixed;
+    z-index:4100;
+    top:0;
+    right:-500px;
+    width:min(480px,100%);
+    height:100vh;
+    background:white;
+    transition:.3s ease;
+    box-shadow:-15px 0 60px rgba(0,0,0,.18);
+    display:flex;
+    flex-direction:column;
+}
+
+.cart-drawer.active{
+    right:0;
+}
+
+.drawer-head{
+    padding:20px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.drawer-head h2{
+    font-size:22px;
+}
+
+.drawer-close{
+    border:none;
+    background:#f3f4f1;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+}
+
+.cart-items{
+    flex:1;
+    overflow:auto;
+    padding:15px;
+}
+
+.cart-item{
+    display:grid;
+    grid-template-columns:70px 1fr auto;
+    gap:11px;
+    padding:12px 0;
+    border-bottom:1px solid #edf0ed;
+}
+
+.cart-item-image{
+    width:70px;
+    height:70px;
+    border-radius:12px;
+    object-fit:cover;
+}
+
+.cart-item-name{
+    font-weight:800;
+    font-size:13px;
+}
+
+.cart-item-meta{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.cart-item-price{
+    font-weight:900;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.cart-item-controls{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    margin-top:8px;
+}
+
+.mini-btn{
+    border:1px solid var(--border);
+    background:white;
+    width:24px;
+    height:24px;
+    border-radius:6px;
+}
+
+.remove-item{
+    border:none;
+    background:none;
+    color:#dc2626;
+    font-size:11px;
+}
+
+.cart-summary{
+    padding:18px;
+    border-top:1px solid var(--border);
+    background:#fff;
+}
+
+.bill-row{
+    display:flex;
+    justify-content:space-between;
+    margin:9px 0;
+    color:#59625c;
+    font-size:13px;
+}
+
+.bill-row.total{
+    border-top:1px dashed #d9ddd8;
+    padding-top:13px;
+    margin-top:13px;
+    color:var(--text);
+    font-size:17px;
+    font-weight:900;
+}
+
+.checkout-btn{
+    width:100%;
+    border:none;
+    background:var(--green);
+    color:white;
+    padding:14px;
+    border-radius:12px;
+    font-weight:900;
+    margin-top:10px;
+}
+
+/* =========================================================
+   EMPTY CART
+========================================================= */
+
+.empty-state{
+    text-align:center;
+    padding:55px 20px;
+    color:var(--muted);
+}
+
+.empty-state .icon{
+    font-size:50px;
+    margin-bottom:10px;
+}
+
+.empty-state h3{
+    color:var(--text);
+    margin-bottom:5px;
+}
+
+/* =========================================================
+   WISHLIST
+========================================================= */
+
+.wishlist-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+/* =========================================================
+   CHECKOUT
+========================================================= */
+
+.checkout-modal{
+    width:min(900px,100%);
+    max-height:92vh;
+    overflow:auto;
+    background:white;
+    border-radius:25px;
+    padding:28px;
+}
+
+.checkout-steps{
+    display:flex;
+    justify-content:space-between;
+    position:relative;
+    margin:15px 0 30px;
+}
+
+.checkout-steps::before{
+    content:"";
+    position:absolute;
+    left:5%;
+    right:5%;
+    top:16px;
+    height:2px;
+    background:#e4e8e2;
+}
+
+.checkout-step{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:5px;
+    font-size:11px;
+    color:#9ca3af;
+}
+
+.step-circle{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#f1f3ef;
+    display:grid;
+    place-items:center;
+    font-weight:900;
+}
+
+.checkout-step.active{
+    color:var(--green);
+}
+
+.checkout-step.active .step-circle{
+    background:var(--green);
+    color:white;
+}
+
+.checkout-page{
+    display:none;
+}
+
+.checkout-page.active{
+    display:block;
+}
+
+.checkout-page h3{
+    margin-bottom:15px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px;
+}
+
+.form-field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.form-field.full{
+    grid-column:1/-1;
+}
+
+.form-field label{
+    font-size:12px;
+    font-weight:750;
+}
+
+.form-field input,
+.form-field select{
+    height:43px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:0 12px;
+    outline:none;
+}
+
+.payment-option{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    border:1px solid var(--border);
+    padding:15px;
+    border-radius:12px;
+    margin:9px 0;
+}
+
+.payment-option:hover{
+    background:#f8faf7;
+}
+
+.checkout-actions{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:25px;
+}
+
+.back-btn{
+    border:1px solid var(--border);
+    background:white;
+    padding:12px 20px;
+    border-radius:10px;
+    font-weight:750;
+}
+
+/* =========================================================
+   CONFIRMATION
+========================================================= */
+
+.confirmation{
+    text-align:center;
+    padding:25px 5px;
+}
+
+.confirmation-icon{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    background:#dcfce7;
+    color:var(--green);
+    display:grid;
+    place-items:center;
+    font-size:35px;
+    margin:0 auto 15px;
+}
+
+.order-id{
+    margin:15px auto;
+    padding:10px 15px;
+    background:#f6f8f4;
+    border-radius:10px;
+    width:max-content;
+    font-weight:800;
+    font-size:13px;
+}
+
+.timeline{
+    display:flex;
+    justify-content:space-between;
+    margin:30px 0;
+    position:relative;
+}
+
+.timeline::before{
+    content:"";
+    position:absolute;
+    top:14px;
+    left:6%;
+    right:6%;
+    height:2px;
+    background:#dce4d8;
+}
+
+.timeline-point{
+    position:relative;
+    z-index:2;
+    width:25%;
+    text-align:center;
+    font-size:10px;
+    color:#7b847c;
+}
+
+.timeline-dot{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    margin:auto auto 7px;
+    background:#e8ede6;
+    display:grid;
+    place-items:center;
+}
+
+.timeline-point.done{
+    color:var(--green);
+    font-weight:800;
+}
+
+.timeline-point.done .timeline-dot{
+    background:var(--green);
+    color:white;
+}
+
+/* =========================================================
+   ORDERS
+========================================================= */
+
+.orders-list{
+    display:grid;
+    gap:13px;
+}
+
+.order-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:17px;
+}
+
+.order-head{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+}
+
+.order-number{
+    font-weight:850;
+}
+
+.order-status{
+    padding:5px 8px;
+    background:#eaf7df;
+    color:var(--green);
+    border-radius:7px;
+    font-size:10px;
+    font-weight:850;
+}
+
+.order-items-preview{
+    display:flex;
+    gap:7px;
+    margin-top:13px;
+}
+
+.order-items-preview img{
+    width:55px;
+    height:55px;
+    border-radius:9px;
+    object-fit:cover;
+}
+
+.order-footer{
+    display:flex;
+    justify-content:space-between;
+    margin-top:13px;
+    padding-top:12px;
+    border-top:1px solid #edf0ed;
+    font-size:12px;
+}
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
+.account-grid{
+    display:grid;
+    grid-template-columns:230px 1fr;
+    gap:20px;
+}
+
+.account-menu{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:10px;
+    height:max-content;
+}
+
+.account-menu button{
+    width:100%;
+    text-align:left;
+    border:none;
+    background:white;
+    padding:12px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:650;
+}
+
+.account-menu button:hover,
+.account-menu button.active{
+    background:#edf7e9;
+    color:var(--green);
+}
+
+.account-panel{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:22px;
+}
+
+.profile-card{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding-bottom:20px;
+    border-bottom:1px solid var(--border);
+}
+
+.profile-avatar{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    background:var(--lime);
+    display:grid;
+    place-items:center;
+    font-size:25px;
+    font-weight:900;
+    color:var(--green);
+}
+
+/* =========================================================
+   TRUST SECTION
+========================================================= */
+
+.trust-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.trust-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:22px;
+}
+
+.trust-icon{
+    font-size:30px;
+    margin-bottom:12px;
+}
+
+.trust-card h3{
+    font-size:15px;
+    margin-bottom:5px;
+}
+
+.trust-card p{
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer{
+    background:#17351f;
+    color:white;
+    margin-top:50px;
+}
+
+.footer-inner{
+    max-width:1500px;
+    margin:auto;
+    padding:45px 24px;
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+    gap:35px;
+}
+
+.footer-brand p{
+    color:#b8c7bb;
+    font-size:13px;
+    line-height:1.7;
+    max-width:380px;
+    margin-top:10px;
+}
+
+.footer h4{
+    margin-bottom:12px;
+}
+
+.footer a{
+    display:block;
+    color:#b8c7bb;
+    font-size:12px;
+    margin:9px 0;
+}
+
+.footer a:hover{
+    color:white;
+}
+
+.footer-bottom{
+    border-top:1px solid rgba(255,255,255,.12);
+    text-align:center;
+    padding:15px;
+    color:#aebdb1;
+    font-size:11px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast-container{
+    position:fixed;
+    right:20px;
+    bottom:85px;
+    z-index:7000;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.toast{
+    background:#17351f;
+    color:white;
+    padding:12px 16px;
+    border-radius:11px;
+    box-shadow:var(--shadow-lg);
+    font-size:12px;
+    animation:toastIn .25s ease;
+}
+
+@keyframes toastIn{
+    from{
+        opacity:0;
+        transform:translateX(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+/* =========================================================
+   MOBILE NAV
+========================================================= */
+
+.mobile-nav{
+    display:none;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:64px;
+    background:rgba(255,255,255,.97);
+    border-top:1px solid var(--border);
+    z-index:3000;
+    backdrop-filter:blur(15px);
+}
+
+.mobile-nav button{
+    flex:1;
+    border:none;
+    background:transparent;
+    color:#68716b;
+    font-size:10px;
+    font-weight:650;
+}
+
+.mobile-nav button.active{
+    color:var(--green);
+}
+
+.mobile-nav-icon{
+    display:block;
+    font-size:19px;
+    margin-bottom:2px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1150px){
+    .header-main{
+        gap:10px;
+    }
+
+    .location-box{
+        min-width:155px;
+    }
+
+    .product-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .wishlist-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .hero h1{
+        font-size:52px;
+    }
+}
+
+@media(max-width:900px){
+    .header-main{
+        flex-wrap:wrap;
+    }
+
+    .logo{
+        min-width:auto;
+    }
+
+    .location-box{
+        order:3;
+        flex:1;
+    }
+
+    .search-wrap{
+        order:2;
+        flex-basis:100%;
+    }
+
+    .header-actions{
+        margin-left:auto;
+    }
+
+    .hero-inner{
+        min-height:500px;
+        padding:35px;
+    }
+
+    .hero-copy{
+        width:100%;
+    }
+
+    .hero-visual{
+        opacity:.25;
+        width:100%;
+    }
+
+    .product-layout{
+        grid-template-columns:1fr;
+    }
+
+    .filter-sidebar{
+        position:static;
+        display:none;
+    }
+
+    .product-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .promo-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .trust-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .account-grid{
+        grid-template-columns:1fr;
+    }
+
+    .footer-inner{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:650px){
+    body{
+        padding-bottom:65px;
+    }
+
+    .top-strip{
+        font-size:10px;
+    }
+
+    .header-main{
+        padding:9px 13px;
+    }
+
+    .logo{
+        font-size:20px;
+    }
+
+    .logo-mark{
+        width:36px;
+        height:36px;
+    }
+
+    .header-action{
+        min-width:43px;
+        font-size:9px;
+    }
+
+    .header-action-icon{
+        font-size:18px;
+    }
+
+    .location-box{
+        width:100%;
+        padding:4px 2px;
+    }
+
+    .hero{
+        padding:0 13px;
+    }
+
+    .hero-inner{
+        border-radius:20px;
+        padding:28px 22px;
+        min-height:450px;
+    }
+
+    .hero h1{
+        font-size:43px;
+        letter-spacing:-2.5px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    .category-strip,
+    .main{
+        padding-left:13px;
+        padding-right:13px;
+    }
+
+    .section{
+        margin-top:28px;
+    }
+
+    .section-heading h2{
+        font-size:21px;
+    }
+
+    .promo-grid{
+        grid-template-columns:1fr;
+    }
+
+    .product-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:9px;
+    }
+
+    .product-image-wrap{
+        height:155px;
+    }
+
+    .product-card{
+        border-radius:14px;
+        padding:7px;
+    }
+
+    .product-name{
+        font-size:12px;
+    }
+
+    .current-price{
+        font-size:15px;
+    }
+
+    .add-btn{
+        min-width:60px;
+        height:31px;
+        font-size:11px;
+    }
+
+    .wishlist-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .trust-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .footer-inner{
+        grid-template-columns:1fr;
+    }
+
+    .mobile-nav{
+        display:flex;
+    }
+
+    .detail-grid{
+        grid-template-columns:1fr;
+    }
+
+    .detail-image{
+        height:300px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-field.full{
+        grid-column:auto;
+    }
+
+    .state-grid{
+        grid-template-columns:1fr;
+    }
+
+    .checkout-modal,
+    .location-modal,
+    .detail-modal{
+        padding:18px;
+        border-radius:20px;
+    }
+
+    .timeline{
+        gap:2px;
+    }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible{
+    outline:3px solid rgba(22,101,52,.22);
+    outline-offset:2px;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading{
+    animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+    0%,100%{opacity:.6}
+    50%{opacity:1}
+}
+
+/* =========================================================
+   OUT OF STOCK
+========================================================= */
+
+.out-of-stock{
+    position:absolute;
+    inset:0;
+    background:rgba(255,255,255,.65);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:950;
+    color:#991b1b;
+    font-size:14px;
+}
+
+/* =========================================================
+   SECTION PRODUCT BANNERS
+========================================================= */
+
+.section-banner{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.section-banner strong{
+    font-size:15px;
+}
+
+.section-banner span{
+    font-size:12px;
+    color:var(--muted);
+}
+
+/* =========================================================
+   LOCATION STATE BADGE
+========================================================= */
+
+.state-service-badge{
+    margin-top:8px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 9px;
+    border-radius:8px;
+    background:#edf8e8;
+    color:var(--green);
+    font-size:11px;
+    font-weight:800;
+}
+
+/* =========================================================
+   CATEGORIES VISUAL
+========================================================= */
+
+.category-visual-grid{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:12px;
+}
+
+.category-visual{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:13px;
+    text-align:center;
+    transition:.2s;
+}
+
+.category-visual:hover{
+    transform:translateY(-3px);
+    box-shadow:var(--shadow);
+}
+
+.category-visual-image{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    object-fit:cover;
+    margin:auto;
+}
+
+.category-visual-name{
+    font-size:12px;
+    font-weight:800;
+    margin-top:9px;
+}
+
+@media(max-width:900px){
+    .category-visual-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(max-width:500px){
+    .category-visual-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     TOP STRIP
+========================================================= -->
+<div class="top-strip">
+    <strong>ABHIMINUTES</strong> • Fast delivery prototype • Fictional demo marketplace
+</div>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+<header class="header">
+    <div class="header-main">
+
+        <a class="logo" href="#" onclick="goHome();return false;">
+            <div class="logo-mark"></div>
+            <div class="logo-text">
+                Abhi<span>minutes</span>
+            </div>
+        </a>
+
+        <button class="location-box" onclick="openLocationModal()" style="border:none;background:transparent;text-align:left;">
+            <span class="location-label">Deliver to</span>
+            <span class="location-current">
+                <span class="location-pin">⌖</span>
+                <span id="locationText">Select your state</span>
+                <span>⌄</span>
+            </span>
+        </button>
+
+        <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input
+                id="searchInput"
+                class="search-box"
+                type="search"
+                autocomplete="off"
+                placeholder="Search for products, groceries, snacks and more..."
+                oninput="handleSearch(this.value)"
+                onfocus="showSuggestions()"
+            >
+            <button id="clearSearch" class="clear-search" onclick="clearSearch()">×</button>
+
+            <div id="searchSuggestions" class="search-suggestions"></div>
+        </div>
+
+        <div class="header-actions">
+
+            <button class="header-action" onclick="showAccount()">
+                <span class="header-action-icon">♙</span>
+                Account
+            </button>
+
+            <button class="header-action" onclick="showOrders()">
+                <span class="header-action-icon">▣</span>
+                Orders
+            </button>
+
+            <button class="header-action" onclick="showWishlist()">
+                <span class="header-action-icon">♡</span>
+                Wishlist
+            </button>
+
+            <button class="header-action cart-action" onclick="openCart()">
+                <span class="header-action-icon">🛒</span>
+                Cart
+                <span id="cartBadge" class="cart-badge">0</span>
+            </button>
+
+        </div>
+    </div>
+</header>
+
+<!-- =========================================================
+     LOCATION MODAL
+========================================================= -->
+<div id="locationModal" class="modal-backdrop" onclick="closeModalOutside(event,'locationModal')">
+    <div class="location-modal">
+
+        <div class="modal-head">
+            <h2>Choose your state</h2>
+            <button class="close-modal" onclick="closeLocationModal()">×</button>
+        </div>
+
+        <p class="modal-subtitle">
+            Select one of India's 28 states for this Abhiminutes demo.
+            No precise location is requested or stored.
+        </p>
+
+        <input
+            id="stateSearch"
+            class="state-search"
+            placeholder="Search your state..."
+            oninput="filterStates(this.value)"
+        >
+
+        <div id="stateGrid" class="state-grid"></div>
+
+        <div class="state-note">
+            Delivery availability and timings shown on this website are fictional prototype estimates.
+        </div>
+
+    </div>
+</div>
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+<section class="hero" id="home">
+
+    <div class="hero-inner">
+
+        <div class="hero-copy">
+
+            <div class="hero-kicker">
+                ⚡ Fast • Fresh • Simple
+            </div>
+
+            <h1>
+                Everything you need.
+                <span>Delivered fast.</span>
+            </h1>
+
+            <p>
+                Groceries, snacks, kitchen essentials, school project supplies,
+                cold treats and refreshing drinks — all inside one clean
+                quick-commerce experience.
+            </p>
+
+            <div class="hero-buttons">
+                <button class="primary-btn" onclick="scrollToProducts()">
+                    Start Shopping →
+                </button>
+
+                <button class="secondary-btn" onclick="openLocationModal()">
+                    Choose State
+                </button>
+            </div>
+
+            <div id="heroStateBadge" class="state-service-badge">
+                📍 Select a state for delivery
+            </div>
+
+        </div>
+
+        <div class="hero-visual">
+
+            <div class="hero-circle"></div>
+
+            <img
+                class="hero-fruit one"
+                src="https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=700&q=85"
+                alt="Fresh mangoes"
+            >
+
+            <img
+                class="hero-fruit two"
+                src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=700&q=85"
+                alt="Fresh apples"
+            >
+
+        </div>
+
+    </div>
+</section>
+
+<!-- =========================================================
+     CATEGORY STRIP
+========================================================= -->
+<section class="category-strip">
+
+    <div class="category-scroll">
+
+        <button class="category-chip active" onclick="selectCategory('all',this)">
+            All
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('fruits',this)">
+            Vegetables & Fruits
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('kitchen',this)">
+            Kitchen Items
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('school',this)">
+            School Projects
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('cold',this)">
+            Cold Food
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('icecream',this)">
+            Ice Cream
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('cakes',this)">
+            Cakes
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('chocolates',this)">
+            Chocolates
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('drinks',this)">
+            Juice
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('drinks',this)">
+            Soft Drinks
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('drinks',this)">
+            Soda & Sparkling
+        </button>
+
+        <button class="category-chip" onclick="selectCategory('essentials',this)">
+            Daily Essentials
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+<main class="main">
+
+<!-- =========================================================
+     VISUAL FRUIT CATEGORY
+========================================================= -->
+<section class="section">
+
+    <div class="section-heading">
+        <div>
+            <h2>Fresh picks for today</h2>
+            <p>Real product photography instead of emoji placeholders.</p>
+        </div>
+    </div>
+
+    <div class="category-visual-grid">
+
+        <button class="category-visual" onclick="selectCategory('fruits')">
+            <img
+                class="category-visual-image real-fruit-image"
+                src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=400&q=85"
+                alt="Apple"
+            >
+            <div class="category-visual-name">Apples</div>
+        </button>
+
+        <button class="category-visual" onclick="selectCategory('fruits')">
+            <img
+                class="category-visual-image real-fruit-image"
+                src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=400&q=85"
+                alt="Bananas"
+            >
+            <div class="category-visual-name">Bananas</div>
+        </button>
+
+        <button class="category-visual" onclick="selectCategory('fruits')">
+            <img
+                class="category-visual-image real-fruit-image"
+                src="https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&w=400&q=85"
+                alt="Oranges"
+            >
+            <div class="category-visual-name">Oranges</div>
+        </button>
+
+        <button class="category-visual" onclick="selectCategory('fruits')">
+            <img
+                class="category-visual-image real-fruit-image"
+                src="https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=400&q=85"
+                alt="Mango"
+            >
+            <div class="category-visual-name">Mangoes</div>
+        </button>
+
+        <button class="category-visual" onclick="selectCategory('fruits')">
+            <img
+                class="category-visual-image real-fruit-image"
+                src="https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=400&q=85"
+                alt="Grapes"
+            >
+            <div class="category-visual-name">Grapes</div>
+        </button>
+
+        <button class="category-visual" onclick="selectCategory('fruits')">
+            <img
+                class="category-visual-image real-fruit-image"
+                src="https://images.unsplash.com/photo-1563114773-84221bd62daa?auto=format&fit=crop&w=400&q=85"
+                alt="Watermelon"
+            >
+            <div class="category-visual-name">Watermelon</div>
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PROMOTIONS
+========================================================= -->
+<section class="section">
+
+    <div class="section-heading">
+        <div>
+            <h2>Quick deals</h2>
+            <p>Demo offers for the Abhiminutes prototype.</p>
+        </div>
+    </div>
+
+    <div class="promo-grid">
+
+        <div class="promo-card green">
+            <h3>Fresh fruits at fresh prices</h3>
+            <p>Save on selected fruits and vegetables.</p>
+            <button class="primary-btn" onclick="selectCategory('fruits')">
+                Shop Fruits
+            </button>
+            <div class="promo-icon">🍎</div>
+        </div>
+
+        <div class="promo-card yellow">
+            <h3>School project essentials</h3>
+            <p>Chart paper, colors, craft materials and more.</p>
+            <button class="primary-btn" onclick="selectCategory('school')">
+                Shop School
+            </button>
+            <div class="promo-icon">✏️</div>
+        </div>
+
+        <div class="promo-card orange">
+            <h3>Cold treats</h3>
+            <p>Ice cream, cakes, chocolates and chilled treats.</p>
+            <button class="primary-btn" onclick="selectCategory('cold')">
+                Shop Cold
+            </button>
+            <div class="promo-icon">🍦</div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     PRODUCT SECTION
+========================================================= -->
+<section class="section" id="products">
+
+    <div class="section-heading">
+        <div>
+            <h2 id="productsTitle">Everything you need</h2>
+            <p id="productsSubtitle">Browse fictional demo products.</p>
+        </div>
+
+        <button class="view-all" onclick="resetFilters()">
+            Clear filters
+        </button>
+    </div>
+
+    <div class="product-layout">
+
+        <aside class="filter-sidebar">
+
+            <div class="filter-title">
+                Filters
+            </div>
+
+            <div class="filter-group">
+
+                <h4>Category</h4>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="fruits" onchange="applyFilters()">
+                    Fruits & Vegetables
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="kitchen" onchange="applyFilters()">
+                    Kitchen
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="school" onchange="applyFilters()">
+                    School
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="cold" onchange="applyFilters()">
+                    Cold Food
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="drinks" onchange="applyFilters()">
+                    Drinks
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="essentials" onchange="applyFilters()">
+                    Essentials
+                </label>
+
+            </div>
+
+            <div class="filter-group">
+
+                <h4>Price</h4>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="0-50" onchange="applyFilters()">
+                    Under ₹50
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="50-100" onchange="applyFilters()">
+                    ₹50–₹100
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="100-250" onchange="applyFilters()">
+                    ₹100–₹250
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="250-500" onchange="applyFilters()">
+                    ₹250–₹500
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="500+" onchange="applyFilters()">
+                    ₹500+
+                </label>
+
+            </div>
+
+            <div class="filter-group">
+
+                <h4>Rating</h4>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="4" onchange="applyFilters()">
+                    ★ 4+
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="3" onchange="applyFilters()">
+                    ★ 3+
+                </label>
+
+            </div>
+
+            <div class="filter-group">
+
+                <h4>Delivery</h4>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="15" onchange="applyFilters()">
+                    Under 15 min
+                </label>
+
+                <label class="filter-option">
+                    <input type="checkbox" value="30" onchange="applyFilters()">
+                    Under 30 min
+                </label>
+
+            </div>
+
+        </aside>
+
+        <div>
+
+            <div class="sort-row">
+
+                <span id="resultsCount" class="results-count">
+                    0 products
+                </span>
+
+                <select id="sortSelect" class="sort-select" onchange="applyFilters()">
+                    <option value="relevance">Sort: Relevance</option>
+                    <option value="low">Price: Low to High</option>
+                    <option value="high">Price: High to Low</option>
+                    <option value="rating">Rating</option>
+                    <option value="fastest">Fastest Delivery</option>
+                    <option value="popular">Popularity</option>
+                    <option value="discount">Discount</option>
+                </select>
+
+            </div>
+
+            <div id="productGrid" class="product-grid"></div>
+
+            <div id="noResults" class="no-results">
+
+                <div class="no-results-icon">⌕</div>
+
+                <h3>No products found</h3>
+
+                <p>
+                    Try another search or clear the filters.
+                </p>
+
+                <br>
+
+                <button class="primary-btn" onclick="resetFilters()">
+                    Clear Filters
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     TRUST
+========================================================= -->
+<section class="section">
+
+    <div class="section-heading">
+        <div>
+            <h2>Why Abhiminutes?</h2>
+            <p>Designed around a simple quick-commerce journey.</p>
+        </div>
+    </div>
+
+    <div class="trust-grid">
+
+        <div class="trust-card">
+            <div class="trust-icon">⚡</div>
+            <h3>Fast Delivery</h3>
+            <p>Estimated delivery windows are shown clearly on every product.</p>
+        </div>
+
+        <div class="trust-card">
+            <div class="trust-icon">🛍️</div>
+            <h3>Wide Selection</h3>
+            <p>Groceries, school supplies, kitchen items and daily essentials.</p>
+        </div>
+
+        <div class="trust-card">
+            <div class="trust-icon">✓</div>
+            <h3>Quality Products</h3>
+            <p>Product information, ratings and reviews are presented clearly.</p>
+        </div>
+
+        <div class="trust-card">
+            <div class="trust-icon">🔒</div>
+            <h3>Secure Experience</h3>
+            <p>This prototype uses simulated checkout and no real payment processing.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     ORDERS AREA
+========================================================= -->
+<section id="ordersSection" class="section hidden">
+
+    <div class="section-heading">
+        <div>
+            <h2>My Orders</h2>
+            <p>Your demo order history.</p>
+        </div>
+    </div>
+
+    <div id="ordersList" class="orders-list"></div>
+
+</section>
+
+<!-- =========================================================
+     WISHLIST AREA
+========================================================= -->
+<section id="wishlistSection" class="section hidden">
+
+    <div class="section-heading">
+        <div>
+            <h2>Wishlist</h2>
+            <p>Your saved demo products.</p>
+        </div>
+    </div>
+
+    <div id="wishlistGrid" class="wishlist-grid"></div>
+
+</section>
+
+<!-- =========================================================
+     ACCOUNT AREA
+========================================================= -->
+<section id="accountSection" class="section hidden">
+
+    <div class="section-heading">
+        <div>
+            <h2>My Account</h2>
+            <p>Manage your Abhiminutes prototype preferences.</p>
+        </div>
+    </div>
+
+    <div class="account-grid">
+
+        <div class="account-menu">
+
+            <button class="active">
+                👤 Profile
+            </button>
+
+            <button onclick="showOrders()">
+                ▣ Orders
+            </button>
+
+            <button onclick="showWishlist()">
+                ♡ Favorites
+            </button>
+
+            <button onclick="openLocationModal()">
+                ⌖ Saved State
+            </button>
+
+            <button>
+                🔔 Notifications
+            </button>
+
+            <button>
+                ⚙ Preferences
+            </button>
+
+            <button>
+                ❓ Help
+            </button>
+
+            <button onclick="showToast('Sign out is disabled in this prototype.')">
+                ⇥ Sign Out
+            </button>
+
+        </div>
+
+        <div class="account-panel">
+
+            <div class="profile-card">
+
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div>
+                    <h3>Abhiminutes User</h3>
+                    <p style="color:var(--muted);font-size:12px;">
+                        Demo account
+                    </p>
+                </div>
+
+            </div>
+
+            <br>
+
+            <h3>Delivery location</h3>
+
+            <p style="color:var(--muted);font-size:13px;margin-top:7px;">
+                Your selected state:
+                <strong id="accountState">Not selected</strong>
+            </p>
+
+            <br>
+
+            <button class="primary-btn" onclick="openLocationModal()">
+                Change State
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+<footer class="footer">
+
+    <div class="footer-inner">
+
+        <div class="footer-brand">
+
+            <div class="logo">
+                <div class="logo-mark"></div>
+                <div class="logo-text">
+                    Abhi<span>minutes</span>
+                </div>
+            </div>
+
+            <p>
+                Abhiminutes is an original quick-commerce website prototype
+                created to demonstrate a modern fast-delivery shopping journey.
+                All products, prices, ratings, reviews and delivery estimates
+                are fictional demo content.
+            </p>
+
+        </div>
+
+        <div>
+            <h4>Shop</h4>
+            <a href="#" onclick="selectCategory('fruits');return false;">Fruits & Vegetables</a>
+            <a href="#" onclick="selectCategory('kitchen');return false;">Kitchen</a>
+            <a href="#" onclick="selectCategory('school');return false;">School Projects</a>
+            <a href="#" onclick="selectCategory('cold');return false;">Cold Food</a>
+            <a href="#" onclick="selectCategory('drinks');return false;">Drinks</a>
+        </div>
+
+        <div>
+            <h4>Support</h4>
+            <a href="#">Help Center</a>
+            <a href="#">Delivery Information</a>
+            <a href="#">Returns</a>
+            <a href="#">Contact</a>
+            <a href="#">FAQs</a>
+        </div>
+
+        <div>
+            <h4>Legal</h4>
+            <a href="#">Terms</a>
+            <a href="#">Privacy</a>
+            <a href="#">Demo Disclaimer</a>
+            <a href="#">Accessibility</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2026 Abhiminutes • Original prototype • No real transactions
+    </div>
+
+</footer>
+
+<!-- =========================================================
+     CART OVERLAY
+========================================================= -->
+<div id="drawerOverlay" class="drawer-overlay" onclick="closeCart()"></div>
+
+<div id="cartDrawer" class="cart-drawer">
+
+    <div class="drawer-head">
+
+        <h2>Your Cart</h2>
+
+        <button class="drawer-close" onclick="closeCart()">
+            ×
+        </button>
+
+    </div>
+
+    <div id="cartItems" class="cart-items"></div>
+
+    <div class="cart-summary">
+
+        <div class="bill-row">
+            <span>Item total</span>
+            <span id="itemTotal">₹0</span>
+        </div>
+
+        <div class="bill-row">
+            <span>Delivery fee</span>
+            <span id="deliveryFee">₹0</span>
+        </div>
+
+        <div class="bill-row">
+            <span>Discount</span>
+            <span id="discountAmount">-₹0</span>
+        </div>
+
+        <div class="bill-row">
+            <span>Taxes & charges</span>
+            <span id="taxAmount">₹0</span>
+        </div>
+
+        <div class="bill-row total">
+            <span>Grand total</span>
+            <span id="grandTotal">₹0</span>
+        </div>
+
+        <button class="checkout-btn" onclick="startCheckout()">
+            Proceed to Checkout →
+        </button>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     PRODUCT DETAIL MODAL
+========================================================= -->
+<div id="detailModal" class="modal-backdrop" onclick="closeModalOutside(event,'detailModal')">
+
+    <div class="detail-modal">
+
+        <div class="modal-head">
+            <h2>Product Details</h2>
+            <button class="close-modal" onclick="closeDetail()">×</button>
+        </div>
+
+        <div id="detailContent"></div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     CHECKOUT MODAL
+========================================================= -->
+<div id="checkoutModal" class="modal-backdrop">
+
+    <div class="checkout-modal">
+
+        <div class="modal-head">
+            <h2>Checkout</h2>
+            <button class="close-modal" onclick="closeCheckout()">×</button>
+        </div>
+
+        <div class="checkout-steps">
+
+            <div class="checkout-step active" id="stepIndicator1">
+                <div class="step-circle">1</div>
+                Delivery
+            </div>
+
+            <div class="checkout-step" id="stepIndicator2">
+                <div class="step-circle">2</div>
+                Summary
+            </div>
+
+            <div class="checkout-step" id="stepIndicator3">
+                <div class="step-circle">3</div>
+                Payment
+            </div>
+
+            <div class="checkout-step" id="stepIndicator4">
+                <div class="step-circle">4</div>
+                Confirmed
+            </div>
+
+        </div>
+
+        <div id="checkoutPage1" class="checkout-page active">
+
+            <h3>Delivery information</h3>
+
+            <div class="form-grid">
+
+                <div class="form-field">
+                    <label>Name</label>
+                    <input id="checkoutName" placeholder="Demo User">
+                </div>
+
+                <div class="form-field">
+                    <label>Phone</label>
+                    <input id="checkoutPhone" placeholder="Demo phone">
+                </div>
+
+                <div class="form-field full">
+                    <label>Address</label>
+                    <input id="checkoutAddress" placeholder="Demo address only">
+                </div>
+
+                <div class="form-field">
+                    <label>State</label>
+                    <select id="checkoutState"></select>
+                </div>
+
+                <div class="form-field">
+                    <label>PIN Code</label>
+                    <input placeholder="Demo PIN">
+                </div>
+
+            </div>
+
+            <div class="checkout-actions">
+
+                <button class="back-btn" onclick="closeCheckout()">
+                    Cancel
+                </button>
+
+                <button class="primary-btn" onclick="checkoutNext(2)">
+                    Continue →
+                </button>
+
+            </div>
+
+        </div>
+
+        <div id="checkoutPage2" class="checkout-page">
+
+            <h3>Order summary</h3>
+
+            <div id="checkoutSummary"></div>
+
+            <div class="checkout-actions">
+
+                <button class="back-btn" onclick="checkoutNext(1)">
+                    ← Back
+                </button>
+
+                <button class="primary-btn" onclick="checkoutNext(3)">
+                    Continue →
+                </button>
+
+            </div>
+
+        </div>
+
+        <div id="checkoutPage3" class="checkout-page">
+
+            <h3>Payment</h3>
+
+            <p style="color:var(--muted);font-size:13px;margin-bottom:15px;">
+                This is a simulated payment screen. No real payment will be processed.
+            </p>
+
+            <label class="payment-option">
+                <input type="radio" name="payment" checked>
+                <span>💵 Cash on Delivery — Demo</span>
+            </label>
+
+            <label class="payment-option">
+                <input type="radio" name="payment">
+                <span>💳 Card — Simulation Only</span>
+            </label>
+
+            <label class="payment-option">
+                <input type="radio" name="payment">
+                <span>📱 UPI — Simulation Only</span>
+            </label>
+
+            <div class="checkout-actions">
+
+                <button class="back-btn" onclick="checkoutNext(2)">
+                    ← Back
+                </button>
+
+                <button class="primary-btn" onclick="placeOrder()">
+                    Place Demo Order
+                </button>
+
+            </div>
+
+        </div>
+
+        <div id="checkoutPage4" class="checkout-page">
+
+            <div class="confirmation">
+
+                <div class="confirmation-icon">
+                    ✓
+                </div>
+
+                <h2>Order Confirmed!</h2>
+
+                <p style="color:var(--muted);margin-top:7px;">
+                    Your fictional Abhiminutes demo order has been placed.
+                </p>
+
+                <div id="confirmationOrderId" class="order-id">
+                    ABH-000000
+                </div>
+
+                <div class="timeline">
+
+                    <div class="timeline-point done">
+                        <div class="timeline-dot">✓</div>
+                        Order Placed
+                    </div>
+
+                    <div class="timeline-point">
+                        <div class="timeline-dot">2</div>
+                        Preparing
+                    </div>
+
+                    <div class="timeline-point">
+                        <div class="timeline-dot">3</div>
+                        Out for Delivery
+                    </div>
+
+                    <div class="timeline-point">
+                        <div class="timeline-dot">4</div>
+                        Delivered
+                    </div>
+
+                </div>
+
+                <p id="confirmationDelivery" style="font-weight:800;"></p>
+
+                <button class="primary-btn" onclick="finishOrder()">
+                    Continue Shopping
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- =========================================================
+     MOBILE NAVIGATION
+========================================================= -->
+<nav class="mobile-nav">
+
+    <button class="active" onclick="goHome()">
+        <span class="mobile-nav-icon">⌂</span>
+        Home
+    </button>
+
+    <button onclick="scrollToProducts()">
+        <span class="mobile-nav-icon">☰</span>
+        Categories
+    </button>
+
+    <button onclick="showOrders()">
+        <span class="mobile-nav-icon">▣</span>
+        Orders
+    </button>
+
+    <button onclick="openCart()">
+        <span class="mobile-nav-icon">🛒</span>
+        Cart
+    </button>
+
+    <button onclick="showAccount()">
+        <span class="mobile-nav-icon">♙</span>
+        Account
+    </button>
+
+</nav>
+
+<script>
+/* =========================================================
+   ABHIMINUTES APPLICATION DATA
+========================================================= */
+
+const states = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal"
+];
+
+const products = [
+
+    {
+        id:1,
+        name:"Fresh Red Apples",
+        category:"fruits",
+        quantity:"1 kg",
+        price:149,
+        original:179,
+        discount:17,
+        delivery:15,
+        rating:4.8,
+        reviews:284,
+        popularity:98,
+        image:"https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=700&q=85",
+        description:"Fresh red apples selected for everyday snacking and home use.",
+        features:["Fresh produce","1 kg pack","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:2,
+        name:"Premium Bananas",
+        category:"fruits",
+        quantity:"1 dozen",
+        price:59,
+        original:69,
+        discount:14,
+        delivery:12,
+        rating:4.7,
+        reviews:321,
+        popularity:95,
+        image:"https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=700&q=85",
+        description:"Fresh bananas suitable for breakfast, smoothies and snacks.",
+        features:["1 dozen","Fresh produce","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:3,
+        name:"Fresh Oranges",
+        category:"fruits",
+        quantity:"1 kg",
+        price:89,
+        original:110,
+        discount:19,
+        delivery:15,
+        rating:4.6,
+        reviews:217,
+        popularity:91,
+        image:"https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&w=700&q=85",
+        description:"Juicy oranges for fresh eating and homemade juice.",
+        features:["1 kg","Fresh produce","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:4,
+        name:"Alphonso Mangoes",
+        category:"fruits",
+        quantity:"1 kg",
+        price:199,
+        original:249,
+        discount:20,
+        delivery:20,
+        rating:4.9,
+        reviews:402,
+        popularity:100,
+        image:"https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=700&q=85",
+        description:"Sweet mangoes for seasonal snacking and desserts.",
+        features:["1 kg","Seasonal fruit","Estimated 15–20 min delivery"]
+    },
+
+    {
+        id:5,
+        name:"Fresh Grapes",
+        category:"fruits",
+        quantity:"500 g",
+        price:79,
+        original:99,
+        discount:20,
+        delivery:15,
+        rating:4.7,
+        reviews:188,
+        popularity:89,
+        image:"https://images.unsplash.com/photo-1537640538966-79f369143f8f?auto=format&fit=crop&w=700&q=85",
+        description:"Fresh grapes packed for convenient home snacking.",
+        features:["500 g","Fresh produce","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:6,
+        name:"Watermelon",
+        category:"fruits",
+        quantity:"2 kg",
+        price:99,
+        original:129,
+        discount:23,
+        delivery:20,
+        rating:4.5,
+        reviews:154,
+        popularity:85,
+        image:"https://images.unsplash.com/photo-1563114773-84221bd62daa?auto=format&fit=crop&w=700&q=85",
+        description:"Fresh watermelon for chilled summer refreshments.",
+        features:["2 kg","Fresh produce","Estimated 15–20 min delivery"]
+    },
+
+    {
+        id:7,
+        name:"Fresh Potatoes",
+        category:"fruits",
+        quantity:"1 kg",
+        price:39,
+        original:49,
+        discount:20,
+        delivery:12,
+        rating:4.6,
+        reviews:264,
+        popularity:94,
+        image:"https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=700&q=85",
+        description:"Everyday potatoes for curries, fries and home cooking.",
+        features:["1 kg","Daily vegetable","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:8,
+        name:"Fresh Tomatoes",
+        category:"fruits",
+        quantity:"1 kg",
+        price:49,
+        original:65,
+        discount:25,
+        delivery:12,
+        rating:4.5,
+        reviews:245,
+        popularity:96,
+        image:"https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=700&q=85",
+        description:"Fresh red tomatoes for salads and everyday cooking.",
+        features:["1 kg","Fresh vegetable","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:9,
+        name:"Fresh Carrots",
+        category:"fruits",
+        quantity:"500 g",
+        price:45,
+        original:55,
+        discount:18,
+        delivery:15,
+        rating:4.4,
+        reviews:145,
+        popularity:78,
+        image:"https://images.unsplash.com/photo-1445282768818-728615cc910a?auto=format&fit=crop&w=700&q=85",
+        description:"Fresh crunchy carrots for cooking and snacking.",
+        features:["500 g","Fresh vegetable","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:10,
+        name:"Fresh Cucumbers",
+        category:"fruits",
+        quantity:"500 g",
+        price:35,
+        original:45,
+        discount:22,
+        delivery:12,
+        rating:4.4,
+        reviews:122,
+        popularity:75,
+        image:"https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?auto=format&fit=crop&w=700&q=85",
+        description:"Fresh cucumbers for salads and refreshing snacks.",
+        features:["500 g","Fresh vegetable","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:11,
+        name:"Steel Dinner Plates",
+        category:"kitchen",
+        quantity:"Set of 4",
+        price:249,
+        original:299,
+        discount:17,
+        delivery:25,
+        rating:4.7,
+        reviews:96,
+        popularity:80,
+        image:"https://images.unsplash.com/photo-1603199506016-b9a594b593c0?auto=format&fit=crop&w=700&q=85",
+        description:"Reusable steel plates for everyday dining.",
+        features:["Set of 4","Stainless steel","Estimated 20–25 min delivery"]
+    },
+
+    {
+        id:12,
+        name:"Kitchen Storage Containers",
+        category:"kitchen",
+        quantity:"Set of 5",
+        price:399,
+        original:499,
+        discount:20,
+        delivery:25,
+        rating:4.8,
+        reviews:167,
+        popularity:86,
+        image:"https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=85",
+        description:"Stackable storage containers for organized kitchens.",
+        features:["Set of 5","Reusable","Estimated 20–25 min delivery"]
+    },
+
+    {
+        id:13,
+        name:"Reusable Water Bottle",
+        category:"kitchen",
+        quantity:"750 ml",
+        price:179,
+        original:229,
+        discount:22,
+        delivery:20,
+        rating:4.6,
+        reviews:108,
+        popularity:79,
+        image:"https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=700&q=85",
+        description:"Reusable bottle for school, home and everyday travel.",
+        features:["750 ml","Reusable","Estimated 15–20 min delivery"]
+    },
+
+    {
+        id:14,
+        name:"Kitchen Spoon Set",
+        category:"kitchen",
+        quantity:"Set of 6",
+        price:129,
+        original:159,
+        discount:19,
+        delivery:20,
+        rating:4.5,
+        reviews:81,
+        popularity:72,
+        image:"https://images.unsplash.com/photo-1584566112951-4a8e7a1f6a15?auto=format&fit=crop&w=700&q=85",
+        description:"Everyday kitchen spoon set.",
+        features:["Set of 6","Easy to clean","Estimated 15–20 min delivery"]
+    },
+
+    {
+        id:15,
+        name:"Chart Paper Pack",
+        category:"school",
+        quantity:"10 sheets",
+        price:79,
+        original:99,
+        discount:20,
+        delivery:15,
+        rating:4.8,
+        reviews:213,
+        popularity:93,
+        image:"https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=700&q=85",
+        description:"Colorful chart papers for school projects and displays.",
+        features:["10 sheets","Multiple colors","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:16,
+        name:"Colored Paper Pack",
+        category:"school",
+        quantity:"20 sheets",
+        price:69,
+        original:89,
+        discount:22,
+        delivery:15,
+        rating:4.7,
+        reviews:188,
+        popularity:89,
+        image:"https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=700&q=85",
+        description:"Bright colored paper for crafts and school projects.",
+        features:["20 sheets","Multiple colors","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:17,
+        name:"Sketch Pens",
+        category:"school",
+        quantity:"Pack of 24",
+        price:119,
+        original:149,
+        discount:20,
+        delivery:20,
+        rating:4.8,
+        reviews:275,
+        popularity:97,
+        image:"https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=700&q=85",
+        description:"Colorful sketch pens for creative school projects.",
+        features:["24 colors","School supplies","Estimated 15–20 min delivery"]
+    },
+
+    {
+        id:18,
+        name:"Craft Glue",
+        category:"school",
+        quantity:"100 ml",
+        price:45,
+        original:55,
+        discount:18,
+        delivery:15,
+        rating:4.6,
+        reviews:144,
+        popularity:76,
+        image:"https://images.unsplash.com/photo-1456086272160-b28b3f4f6c44?auto=format&fit=crop&w=700&q=85",
+        description:"Craft glue for paper and classroom projects.",
+        features:["100 ml","School supplies","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:19,
+        name:"Premium Crayons",
+        category:"school",
+        quantity:"Pack of 24",
+        price:149,
+        original:189,
+        discount:21,
+        delivery:20,
+        rating:4.9,
+        reviews:321,
+        popularity:99,
+        image:"https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=700&q=85",
+        description:"Bright crayons for drawing, coloring and creative projects.",
+        features:["24 colors","Non-toxic demo listing","Estimated 15–20 min delivery"]
+    },
+
+    {
+        id:20,
+        name:"Chocolate Brownie Box",
+        category:"cold",
+        quantity:"4 pieces",
+        price:199,
+        original:249,
+        discount:20,
+        delivery:30,
+        rating:4.8,
+        reviews:209,
+        popularity:91,
+        image:"https://images.unsplash.com/photo-1606313564200-e75d5e30476b?auto=format&fit=crop&w=700&q=85",
+        description:"Soft chocolate brownies for dessert lovers.",
+        features:["4 pieces","Chilled dessert","Estimated 25–30 min delivery"]
+    },
+
+    {
+        id:21,
+        name:"Cold Coffee",
+        category:"cold",
+        quantity:"300 ml",
+        price:99,
+        original:129,
+        discount:23,
+        delivery:20,
+        rating:4.7,
+        reviews:312,
+        popularity:95,
+        image:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=700&q=85",
+        description:"Chilled creamy coffee drink.",
+        features:["300 ml","Cold beverage","Estimated 15–20 min delivery"]
+    },
+
+    {
+        id:22,
+        name:"Vanilla Ice Cream",
+        category:"icecream",
+        quantity:"500 ml",
+        price:179,
+        original:220,
+        discount:19,
+        delivery:25,
+        rating:4.8,
+        reviews:412,
+        popularity:97,
+        image:"https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=700&q=85",
+        description:"Classic vanilla ice cream for a chilled dessert.",
+        features:["500 ml","Frozen dessert","Estimated 20–25 min delivery"]
+    },
+
+    {
+        id:23,
+        name:"Chocolate Cake",
+        category:"cakes",
+        quantity:"500 g",
+        price:399,
+        original:499,
+        discount:20,
+        delivery:35,
+        rating:4.9,
+        reviews:289,
+        popularity:98,
+        image:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=85",
+        description:"Chocolate cake suitable for celebrations and dessert.",
+        features:["500 g","Freshly prepared demo item","Estimated 25–35 min delivery"]
+    },
+
+    {
+        id:24,
+        name:"Assorted Chocolates",
+        category:"chocolates",
+        quantity:"250 g",
+        price:249,
+        original:299,
+        discount:17,
+        delivery:20,
+        rating:4.7,
+        reviews:224,
+        popularity:88,
+        image:"https://images.unsplash.com/photo-1548907040-4d42fcaa6c5b?auto=format&fit=crop&w=700&q=85",
+        description:"Assorted chocolate treats.",
+        features:["250 g","Chocolate assortment","Estimated 15–20 min delivery"]
+    },
+
+    {
+        id:25,
+        name:"Mango Juice",
+        category:"drinks",
+        quantity:"1 L",
+        price:119,
+        original:149,
+        discount:20,
+        delivery:15,
+        rating:4.6,
+        reviews:198,
+        popularity:87,
+        image:"https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=700&q=85",
+        description:"Refreshing mango fruit beverage.",
+        features:["1 L","Non-alcoholic","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:26,
+        name:"Sparkling Water",
+        category:"drinks",
+        quantity:"750 ml",
+        price:69,
+        original:79,
+        discount:13,
+        delivery:15,
+        rating:4.5,
+        reviews:91,
+        popularity:70,
+        image:"https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=700&q=85",
+        description:"Chilled sparkling water for a refreshing drink.",
+        features:["750 ml","Non-alcoholic","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:27,
+        name:"Lemon Refreshment",
+        category:"drinks",
+        quantity:"500 ml",
+        price:59,
+        original:69,
+        discount:14,
+        delivery:15,
+        rating:4.5,
+        reviews:133,
+        popularity:74,
+        image:"https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=700&q=85",
+        description:"Refreshing lemon-based beverage.",
+        features:["500 ml","Non-alcoholic","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:28,
+        name:"Biscuits Family Pack",
+        category:"essentials",
+        quantity:"800 g",
+        price:109,
+        original:129,
+        discount:16,
+        delivery:15,
+        rating:4.6,
+        reviews:201,
+        popularity:84,
+        image:"https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=700&q=85",
+        description:"Crunchy biscuits for tea time and everyday snacks.",
+        features:["800 g","Pantry essential","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:29,
+        name:"Breakfast Cereal",
+        category:"essentials",
+        quantity:"500 g",
+        price:229,
+        original:269,
+        discount:15,
+        delivery:20,
+        rating:4.7,
+        reviews:157,
+        popularity:82,
+        image:"https://images.unsplash.com/photo-1517093157656-b9eccef91cb1?auto=format&fit=crop&w=700&q=85",
+        description:"Crunchy breakfast cereal for quick meals.",
+        features:["500 g","Pantry essential","Estimated 15–20 min delivery"]
+    },
+
+    {
+        id:30,
+        name:"Instant Noodles",
+        category:"essentials",
+        quantity:"Pack of 5",
+        price:85,
+        original:100,
+        discount:15,
+        delivery:15,
+        rating:4.5,
+        reviews:344,
+        popularity:99,
+        image:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=700&q=85",
+        description:"Quick instant noodles for convenient meals.",
+        features:["Pack of 5","Instant food","Estimated 10–15 min delivery"]
+    },
+
+    {
+        id:31,
+        name:"Kitchen Storage Box",
+        category:"kitchen",
+        quantity:"1 piece",
+        price:159,
+        original:199,
+        discount:20,
+        delivery:25,
+        rating:4.6,
+        reviews:84,
+        popularity:71,
+        image:"https://images.unsplash.com/photo-1600494603989-9650cf6ddd3d?auto=format&fit=crop&w=700&q=85",
+        description:"Compact storage box for everyday kitchen organization.",
+        features:["1 piece","Reusable","Estimated 20–25 min delivery"]
+    },
+
+    {
+        id:32,
+        name:"Drawing Paint Set",
+        category:"school",
+        quantity:"12 colors",
+        price:179,
+        original:219,
+        discount:18,
+        delivery:20,
+        rating:4.8,
+        reviews:191,
+        popularity:90,
+        image:"https://images.unsplash.com/photo-1541961017774-22349e4a1262?auto=format&fit=crop&w=700&q=85",
+        description:"Colorful paints for school art projects.",
+        features:["12 colors","Art supplies","Estimated 15–20 min delivery"]
+    }
+
+];
+
+/* =========================================================
+   APPLICATION STATE
+========================================================= */
+
+let cart = {};
+let wishlist = [];
+let orders = [];
+let selectedState = "";
+let activeCategory = "all";
+let currentProduct = null;
+let checkoutStep = 1;
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    loadSavedData();
+
+    renderStates();
+
+    renderProducts();
+
+    renderCart();
+
+    renderWishlist();
+
+    renderOrders();
+
+    updateLocationUI();
+
+    document.addEventListener("click",function(event){
+
+        const searchWrap = document.querySelector(".search-wrap");
+
+        if(
+            searchWrap &&
+            !searchWrap.contains(event.target)
+        ){
+            document
+                .getElementById("searchSuggestions")
+                .classList.remove("active");
+        }
+
+    });
+
+});
+
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+
+function loadSavedData(){
+
+    try{
+
+        cart = JSON.parse(localStorage.getItem("abhiminutesCart")) || {};
+
+        wishlist = JSON.parse(localStorage.getItem("abhiminutesWishlist")) || [];
+
+        orders = JSON.parse(localStorage.getItem("abhiminutesOrders")) || [];
+
+        selectedState =
+            localStorage.getItem("abhiminutesState") || "";
+
+    }catch(error){
+
+        cart = {};
+        wishlist = [];
+        orders = [];
+        selectedState = "";
+
+    }
+
+}
+
+function saveData(){
+
+    localStorage.setItem(
+        "abhiminutesCart",
+        JSON.stringify(cart)
+    );
+
+    localStorage.setItem(
+        "abhiminutesWishlist",
+        JSON.stringify(wishlist)
+    );
+
+    localStorage.setItem(
+        "abhiminutesOrders",
+        JSON.stringify(orders)
+    );
+
+    if(selectedState){
+
+        localStorage.setItem(
+            "abhiminutesState",
+            selectedState
+        );
+
+    }
+
+}
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+function renderStates(filter=""){
+
+    const grid =
+        document.getElementById("stateGrid");
+
+    if(!grid){
+        return;
+    }
+
+    const filtered =
+        states.filter(
+            state =>
+                state
+                    .toLowerCase()
+                    .includes(filter.toLowerCase())
+        );
+
+    grid.innerHTML =
+        filtered.map(
+            state => `
+                <button
+                    class="state-btn ${selectedState===state ? "selected":""}"
+                    onclick="selectState('${state.replace(/'/g,"\\'")}')"
+                >
+                    ${state}
+                </button>
+            `
+        ).join("");
+
+}
+
+function filterStates(value){
+
+    renderStates(value);
+
+}
+
+function openLocationModal(){
+
+    document
+        .getElementById("locationModal")
+        .classList.add("active");
+
+    renderStates();
+
+}
+
+function closeLocationModal(){
+
+    document
+        .getElementById("locationModal")
+        .classList.remove("active");
+
+}
+
+function selectState(state){
+
+    selectedState = state;
+
+    saveData();
+
+    updateLocationUI();
+
+    closeLocationModal();
+
+    showToast(
+        "Delivery state set to " + state
+    );
+
+}
+
+function updateLocationUI(){
+
+    const text =
+        document.getElementById("locationText");
+
+    const badge =
+        document.getElementById("heroStateBadge");
+
+    const account =
+        document.getElementById("accountState");
+
+    const checkoutState =
+        document.getElementById("checkoutState");
+
+    if(selectedState){
+
+        if(text){
+            text.textContent = selectedState;
+        }
+
+        if(badge){
+            badge.textContent =
+                "📍 Demo delivery selected: " +
+                selectedState;
+        }
+
+        if(account){
+            account.textContent = selectedState;
+        }
+
+    }else{
+
+        if(text){
+            text.textContent =
+                "Select your state";
+        }
+
+        if(badge){
+            badge.textContent =
+                "📍 Select a state for delivery";
+        }
+
+        if(account){
+            account.textContent =
+                "Not selected";
+        }
+
+    }
+
+    if(checkoutState){
+
+        checkoutState.innerHTML =
+            states.map(
+                state =>
+                    `<option ${state===selectedState?"selected":""}>${state}</option>`
+            ).join("");
+
+    }
+
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function handleSearch(value){
+
+    document
+        .getElementById("clearSearch")
+        .style.display =
+            value ? "block" : "none";
+
+    renderProducts();
+
+    showSuggestions(value);
+
+}
+
+function clearSearch(){
+
+    const input =
+        document.getElementById("searchInput");
+
+    input.value = "";
+
+    document
+        .getElementById("clearSearch")
+        .style.display = "none";
+
+    renderProducts();
+
+    input.focus();
+
+}
+
+function showSuggestions(value=""){
+
+    const box =
+        document.getElementById("searchSuggestions");
+
+    if(!box){
+        return;
+    }
+
+    const query =
+        value ||
+        document.getElementById("searchInput").value;
+
+    const suggestions = products
+        .filter(product =>
+            product.name
+                .toLowerCase()
+                .includes(query.toLowerCase())
+        )
+        .slice(0,6);
+
+    if(!query){
+
+        box.innerHTML = `
+            <div class="suggestion">
+                🔥 Popular: Apples
+            </div>
+            <div class="suggestion">
+                🥭 Popular: Mangoes
+            </div>
+            <div class="suggestion">
+                🧃 Popular: Juice
+            </div>
+            <div class="suggestion">
+                ✏️ Popular: School Projects
+            </div>
+        `;
+
+        box.classList.add("active");
+
+        return;
+    }
+
+    if(!suggestions.length){
+
+        box.innerHTML = `
+            <div class="suggestion">
+                No matching products
+            </div>
+        `;
+
+        box.classList.add("active");
+
+        return;
+    }
+
+    box.innerHTML =
+        suggestions.map(
+            product => `
+                <div
+                    class="suggestion"
+                    onclick="openProduct(${product.id})"
+                >
+                    <span>⌕</span>
+                    <span>${product.name}</span>
+                </div>
+            `
+        ).join("");
+
+    box.classList.add("active");
+
+}
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+function selectCategory(category,element){
+
+    activeCategory = category;
+
+    document
+        .querySelectorAll(".category-chip")
+        .forEach(
+            chip => chip.classList.remove("active")
+        );
+
+    if(element){
+        element.classList.add("active");
+    }
+
+    document
+        .getElementById("ordersSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("wishlistSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("accountSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("products")
+        .scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+    renderProducts();
+
+}
+
+/* =========================================================
+   FILTERS
+========================================================= */
+
+function getCheckedValues(){
+
+    return [
+        ...document.querySelectorAll(
+            ".filter-sidebar input:checked"
+        )
+    ].map(
+        input => input.value
+    );
+
+}
+
+function applyFilters(){
+
+    renderProducts();
+
+}
+
+function resetFilters(){
+
+    document
+        .querySelectorAll(".filter-sidebar input")
+        .forEach(
+            input => input.checked = false
+        );
+
+    document
+        .getElementById("sortSelect")
+        .value = "relevance";
+
+    activeCategory = "all";
+
+    document
+        .querySelectorAll(".category-chip")
+        .forEach(
+            chip => chip.classList.remove("active")
+        );
+
+    document
+        .querySelector(".category-chip")
+        ?.classList.add("active");
+
+    renderProducts();
+
+}
+
+function matchesPrice(product,filter){
+
+    if(filter==="0-50"){
+        return product.price < 50;
+    }
+
+    if(filter==="50-100"){
+        return product.price >= 50 &&
+               product.price <= 100;
+    }
+
+    if(filter==="100-250"){
+        return product.price > 100 &&
+               product.price <= 250;
+    }
+
+    if(filter==="250-500"){
+        return product.price > 250 &&
+               product.price <= 500;
+    }
+
+    if(filter==="500+"){
+        return product.price > 500;
+    }
+
+    return true;
+
+}
+
+/* =========================================================
+   PRODUCT RENDER
+========================================================= */
+
+function renderProducts(){
+
+    const grid =
+        document.getElementById("productGrid");
+
+    if(!grid){
+        return;
+    }
+
+    const search =
+        document
+            .getElementById("searchInput")
+            .value
+            .trim()
+            .toLowerCase();
+
+    const checked =
+        getCheckedValues();
+
+    let result =
+        products.filter(product => {
+
+            const searchMatch =
+                !search ||
+                product.name
+                    .toLowerCase()
+                    .includes(search) ||
+                product.category
+                    .toLowerCase()
+                    .includes(search) ||
+                product.quantity
+                    .toLowerCase()
+                    .includes(search);
+
+            const categoryFilters =
+                checked.filter(
+                    item =>
+                        [
+                            "fruits",
+                            "kitchen",
+                            "school",
+                            "cold",
+                            "drinks",
+                            "essentials"
+                        ].includes(item)
+                );
+
+            const categoryMatch =
+                categoryFilters.length===0 ||
+                categoryFilters.includes(product.category);
+
+            const priceFilters =
+                checked.filter(
+                    item =>
+                        [
+                            "0-50",
+                            "50-100",
+                            "100-250",
+                            "250-500",
+                            "500+"
+                        ].includes(item)
+                );
+
+            const priceMatch =
+                priceFilters.length===0 ||
+                priceFilters.some(
+                    filter =>
+                        matchesPrice(product,filter)
+                );
+
+            const ratingFilters =
+                checked.filter(
+                    item =>
+                        item==="3" ||
+                        item==="4"
+                );
+
+            const ratingMatch =
+                ratingFilters.length===0 ||
+                ratingFilters.some(
+                    rating =>
+                        product.rating >= Number(rating)
+                );
+
+            const deliveryFilters =
+                checked.filter(
+                    item =>
+                        item==="15" ||
+                        item==="30"
+                );
+
+            const deliveryMatch =
+                deliveryFilters.length===0 ||
+                deliveryFilters.some(
+                    time =>
+                        product.delivery <= Number(time)
+                );
+
+            const activeMatch =
+                activeCategory==="all" ||
+                product.category===activeCategory;
+
+            return (
+                searchMatch &&
+                categoryMatch &&
+                priceMatch &&
+                ratingMatch &&
+                deliveryMatch &&
+                activeMatch
+            );
+
+        });
+
+    const sort =
+        document.getElementById("sortSelect").value;
+
+    if(sort==="low"){
+        result.sort(
+            (a,b)=>a.price-b.price
+        );
+    }
+
+    if(sort==="high"){
+        result.sort(
+            (a,b)=>b.price-a.price
+        );
+    }
+
+    if(sort==="rating"){
+        result.sort(
+            (a,b)=>b.rating-a.rating
+        );
+    }
+
+    if(sort==="fastest"){
+        result.sort(
+            (a,b)=>a.delivery-b.delivery
+        );
+    }
+
+    if(sort==="popular"){
+        result.sort(
+            (a,b)=>b.popularity-a.popularity
+        );
+    }
+
+    if(sort==="discount"){
+        result.sort(
+            (a,b)=>b.discount-a.discount
+        );
+    }
+
+    document
+        .getElementById("resultsCount")
+        .textContent =
+            `${result.length} products`;
+
+    document
+        .getElementById("noResults")
+        .classList.toggle(
+            "active",
+            result.length===0
+        );
+
+    grid.innerHTML =
+        result
+            .map(
+                product =>
+                    createProductCard(product)
+            )
+            .join("");
+
+}
+
+function createProductCard(product){
+
+    const quantity =
+        cart[product.id] || 0;
+
+    const wished =
+        wishlist.includes(product.id);
+
+    return `
+        <article
+            class="product-card"
+            data-product-id="${product.id}"
+        >
+
+            <div
+                class="product-image-wrap"
+                onclick="openProduct(${product.id})"
+                style="cursor:pointer;"
+            >
+
+                <img
+                    class="product-image real-fruit-image"
+                    src="${product.image}"
+                    alt="${product.name}"
+                    loading="lazy"
+                    onerror="this.src='https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=700&q=80'"
+                >
+
+                <div class="discount-tag">
+                    ${product.discount}% OFF
+                </div>
+
+                ${
+                    product.id===30
+                    ?
+                    `
+                        <div class="out-of-stock">
+                            OUT OF STOCK
+                        </div>
+                    `
+                    :
+                    ""
+                }
+
+                <button
+                    class="wishlist-btn ${wished?"active":""}"
+                    onclick="event.stopPropagation();toggleWishlist(${product.id})"
+                    aria-label="Wishlist"
+                >
+                    ${wished?"♥":"♡"}
+                </button>
+
+            </div>
+
+            <div class="product-info">
+
+                <div
+                    class="product-name"
+                    onclick="openProduct(${product.id})"
+                    style="cursor:pointer;"
+                >
+                    ${product.name}
+                </div>
+
+                <div class="product-quantity">
+                    ${product.quantity}
+                </div>
+
+                <div class="product-rating">
+                    <span class="rating-star">★</span>
+                    ${product.rating}
+                    · ${product.reviews} demo reviews
+                </div>
+
+                <div class="product-delivery">
+                    ⚡ ${deliveryText(product)}
+                </div>
+
+                <div class="product-price-row">
+
+                    <div>
+                        <span class="current-price">
+                            ₹${product.price}
+                        </span>
+
+                        <span class="original-price">
+                            ₹${product.original}
+                        </span>
+                    </div>
+
+                    ${
+                        product.id===30
+                        ?
+                        `
+                            <button
+                                class="add-btn"
+                                onclick="notifyProduct(${product.id})"
+                            >
+                                Notify
+                            </button>
+                        `
+                        :
+                        quantity>0
+                        ?
+                        `
+                            <div class="quantity-control">
+
+                                <button
+                                    onclick="changeCart(${product.id},-1)"
+                                >
+                                    −
+                                </button>
+
+                                <span>
+                                    ${quantity}
+                                </span>
+
+                                <button
+                                    onclick="changeCart(${product.id},1)"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+                        `
+                        :
+                        `
+                            <button
+                                class="add-btn"
+                                onclick="addToCart(${product.id})"
+                            >
+                                ADD
+                            </button>
+                        `
+                    }
+
+                </div>
+
+            </div>
+
+        </article>
+    `;
+
+}
+
+function deliveryText(product){
+
+    if(product.name.includes("Cake")){
+        return "25–35 min";
+    }
+
+    if(product.delivery<=15){
+        return "10–15 min";
+    }
+
+    if(product.delivery<=20){
+        return "15–20 min";
+    }
+
+    if(product.delivery<=25){
+        return "20–25 min";
+    }
+
+    return "25–30 min";
+
+}
+
+/* =========================================================
+   CART
+========================================================= */
+
+function addToCart(id){
+
+    if(!cart[id]){
+        cart[id]=0;
+    }
+
+    cart[id]++;
+
+    saveData();
+
+    renderProducts();
+
+    renderCart();
+
+    showToast("Added to cart");
+
+}
+
+function changeCart(id,amount){
+
+    if(!cart[id]){
+        cart[id]=0;
+    }
+
+    cart[id]+=amount;
+
+    if(cart[id]<=0){
+        delete cart[id];
+    }
+
+    saveData();
+
+    renderProducts();
+
+    renderCart();
+
+}
+
+function removeFromCart(id){
+
+    delete cart[id];
+
+    saveData();
+
+    renderProducts();
+
+    renderCart();
+
+    showToast("Removed from cart");
+
+}
+
+function getCartItems(){
+
+    return products.filter(
+        product => cart[product.id]
+    );
+
+}
+
+function cartCount(){
+
+    return Object.values(cart)
+        .reduce(
+            (total,count) =>
+                total + count,
+            0
+        );
+
+}
+
+function calculateBill(){
+
+    const items =
+        getCartItems();
+
+    const itemTotal =
+        items.reduce(
+            (total,product) =>
+                total +
+                product.price *
+                cart[product.id],
+            0
+        );
+
+    const deliveryFee =
+        itemTotal===0
+        ?
+        0
+        :
+        itemTotal>=299
+        ?
+        0
+        :
+        29;
+
+    const discount =
+        itemTotal>=500
+        ?
+        50
+        :
+        0;
+
+    const taxable =
+        Math.max(
+            0,
+            itemTotal -
+            discount
+        );
+
+    const tax =
+        Math.round(
+            taxable * .05
+        );
+
+    const grand =
+        Math.max(
+            0,
+            taxable +
+            deliveryFee +
+            tax
+        );
+
+    return {
+        itemTotal,
+        deliveryFee,
+        discount,
+        tax,
+        grand
+    };
+
+}
+
+function renderCart(){
+
+    const items =
+        getCartItems();
+
+    const container =
+        document.getElementById("cartItems");
+
+    const badge =
+        document.getElementById("cartBadge");
+
+    badge.textContent =
+        cartCount();
+
+    if(!items.length){
+
+        container.innerHTML = `
+            <div class="empty-state">
+
+                <div class="icon">🛒</div>
+
+                <h3>Your cart is empty</h3>
+
+                <p>
+                    Add products to start your demo order.
+                </p>
+
+            </div>
+        `;
+
+    }else{
+
+        container.innerHTML =
+            items.map(
+                product =>
+                    `
+                        <div class="cart-item">
+
+                            <img
+                                class="cart-item-image"
+                                src="${product.image}"
+                                alt="${product.name}"
+                            >
+
+                            <div>
+
+                                <div class="cart-item-name">
+                                    ${product.name}
+                                </div>
+
+                                <div class="cart-item-meta">
+                                    ${product.quantity}
+                                </div>
+
+                                <div class="cart-item-price">
+                                    ₹${product.price}
+                                </div>
+
+                                <div class="cart-item-controls">
+
+                                    <button
+                                        class="mini-btn"
+                                        onclick="changeCart(${product.id},-1)"
+                                    >
+                                        −
+                                    </button>
+
+                                    <strong>
+                                        ${cart[product.id]}
+                                    </strong>
+
+                                    <button
+                                        class="mini-btn"
+                                        onclick="changeCart(${product.id},1)"
+                                    >
+                                        +
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <button
+                                class="remove-item"
+                                onclick="removeFromCart(${product.id})"
+                            >
+                                Remove
+                            </button>
+
+                        </div>
+                    `
+            ).join("");
+
+    }
+
+    const bill =
+        calculateBill();
+
+    document
+        .getElementById("itemTotal")
+        .textContent =
+            "₹" + bill.itemTotal;
+
+    document
+        .getElementById("deliveryFee")
+        .textContent =
+            "₹" + bill.deliveryFee;
+
+    document
+        .getElementById("discountAmount")
+        .textContent =
+            "-₹" + bill.discount;
+
+    document
+        .getElementById("taxAmount")
+        .textContent =
+            "₹" + bill.tax;
+
+    document
+        .getElementById("grandTotal")
+        .textContent =
+            "₹" + bill.grand;
+
+}
+
+function openCart(){
+
+    document
+        .getElementById("cartDrawer")
+        .classList.add("active");
+
+    document
+        .getElementById("drawerOverlay")
+        .classList.add("active");
+
+    renderCart();
+
+}
+
+function closeCart(){
+
+    document
+        .getElementById("cartDrawer")
+        .classList.remove("active");
+
+    document
+        .getElementById("drawerOverlay")
+        .classList.remove("active");
+
+}
+
+/* =========================================================
+   WISHLIST
+========================================================= */
+
+function toggleWishlist(id){
+
+    if(wishlist.includes(id)){
+
+        wishlist =
+            wishlist.filter(
+                item => item!==id
+            );
+
+        showToast("Removed from wishlist");
+
+    }else{
+
+        wishlist.push(id);
+
+        showToast("Saved to wishlist");
+
+    }
+
+    saveData();
+
+    renderProducts();
+
+    renderWishlist();
+
+}
+
+function renderWishlist(){
+
+    const grid =
+        document.getElementById("wishlistGrid");
+
+    if(!grid){
+        return;
+    }
+
+    const items =
+        products.filter(
+            product =>
+                wishlist.includes(product.id)
+        );
+
+    if(!items.length){
+
+        grid.innerHTML = `
+            <div class="empty-state"
+                 style="grid-column:1/-1;background:white;border-radius:17px;border:1px solid var(--border);">
+                <div class="icon">♡</div>
+                <h3>Your wishlist is empty</h3>
+                <p>Save products here for later.</p>
+            </div>
+        `;
+
+        return;
+
+    }
+
+    grid.innerHTML =
+        items.map(
+            product =>
+                createProductCard(product)
+        ).join("");
+
+}
+
+/* =========================================================
+   PRODUCT DETAIL
+========================================================= */
+
+function openProduct(id){
+
+    const product =
+        products.find(
+            item => item.id===id
+        );
+
+    if(!product){
+        return;
+    }
+
+    currentProduct = product;
+
+    const content =
+        document.getElementById("detailContent");
+
+    content.innerHTML = `
+
+        <div class="detail-grid">
+
+            <div>
+
+                <img
+                    class="detail-image"
+                    src="${product.image}"
+                    alt="${product.name}"
+                >
+
+            </div>
+
+            <div class="detail-info">
+
+                <h2>
+                    ${product.name}
+                </h2>
+
+                <div class="detail-rating">
+                    <span class="rating-star">★</span>
+                    <strong>${product.rating}</strong>
+                    · ${product.reviews} demo reviews
+                </div>
+
+                <div class="product-delivery">
+                    ⚡ ${deliveryText(product)}
+                </div>
+
+                <div class="detail-price">
+                    ₹${product.price}
+                    <span
+                        class="original-price"
+                        style="font-size:15px;"
+                    >
+                        ₹${product.original}
+                    </span>
+                </div>
+
+                <div class="detail-description">
+                    ${product.description}
+                </div>
+
+                <div>
+                    ${product.features.map(
+                        feature =>
+                            `
+                                <div class="detail-feature">
+                                    <span>✓</span>
+                                    ${feature}
+                                </div>
+                            `
+                    ).join("")}
+                </div>
+
+                <div class="detail-actions">
+
+                    <button
+                        class="primary-btn detail-add"
+                        onclick="addToCart(${product.id});closeDetail();openCart();"
+                    >
+                        Add to Cart
+                    </button>
+
+                    <button
+                        class="buy-btn"
+                        onclick="addToCart(${product.id});closeDetail();startCheckout();"
+                    >
+                        Buy Now
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="review-section">
+
+            <h3>
+                Reviews
+            </h3>
+
+            <p
+                style="font-size:11px;color:#9ca3af;margin-top:5px;"
+            >
+                Sample/demo reviews only — not real customer reviews.
+            </p>
+
+            <div class="review-summary">
+
+                <div class="big-rating">
+                    ${product.rating}★
+                </div>
+
+                <div>
+                    <strong>
+                        Sample rating
+                    </strong>
+
+                    <p
+                        style="font-size:12px;color:var(--muted);"
+                    >
+                        ${product.reviews} fictional demo reviews
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="review-card">
+
+                <div class="review-user">
+                    Demo Customer
+                    <span class="rating-star"> ★★★★★</span>
+                </div>
+
+                <div class="review-date">
+                    Demo date
+                </div>
+
+                <div class="review-text">
+                    Fresh-looking product and convenient delivery.
+                    This review is fictional demo content.
+                </div>
+
+            </div>
+
+            <div class="review-card">
+
+                <div class="review-user">
+                    Sample User
+                    <span class="rating-star"> ★★★★☆</span>
+                </div>
+
+                <div class="review-date">
+                    Demo date
+                </div>
+
+                <div class="review-text">
+                    Product information was easy to understand.
+                    This review is fictional demo content.
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+    document
+        .getElementById("detailModal")
+        .classList.add("active");
+
+}
+
+function closeDetail(){
+
+    document
+        .getElementById("detailModal")
+        .classList.remove("active");
+
+}
+
+/* =========================================================
+   CHECKOUT
+========================================================= */
+
+function startCheckout(){
+
+    if(!cartCount()){
+
+        showToast("Your cart is empty.");
+
+        return;
+
+    }
+
+    closeCart();
+
+    checkoutStep = 1;
+
+    showCheckoutPage(1);
+
+    document
+        .getElementById("checkoutModal")
+        .classList.add("active");
+
+    renderCheckoutSummary();
+
+}
+
+function closeCheckout(){
+
+    document
+        .getElementById("checkoutModal")
+        .classList.remove("active");
+
+}
+
+function showCheckoutPage(step){
+
+    checkoutStep = step;
+
+    document
+        .querySelectorAll(".checkout-page")
+        .forEach(
+            page =>
+                page.classList.remove("active")
+        );
+
+    const page =
+        document.getElementById(
+            "checkoutPage"+step
+        );
+
+    if(page){
+        page.classList.add("active");
+    }
+
+    document
+        .querySelectorAll(".checkout-step")
+        .forEach(
+            indicator =>
+                indicator.classList.remove("active")
+        );
+
+    for(let i=1;i<=step;i++){
+
+        document
+            .getElementById(
+                "stepIndicator"+i
+            )
+            ?.classList.add("active");
+
+    }
+
+}
+
+function checkoutNext(step){
+
+    if(step===2){
+
+        const state =
+            document
+                .getElementById("checkoutState")
+                .value;
+
+        if(!state){
+
+            showToast(
+                "Please choose a state."
+            );
+
+            return;
+
+        }
+
+        renderCheckoutSummary();
+
+    }
+
+    showCheckoutPage(step);
+
+}
+
+function renderCheckoutSummary(){
+
+    const container =
+        document.getElementById("checkoutSummary");
+
+    const bill =
+        calculateBill();
+
+    const items =
+        getCartItems();
+
+    container.innerHTML = `
+
+        <div
+            style="
+                border:1px solid var(--border);
+                border-radius:15px;
+                overflow:hidden;
+            "
+        >
+
+            ${items.map(
+                product =>
+                    `
+                        <div
+                            style="
+                                display:flex;
+                                align-items:center;
+                                gap:12px;
+                                padding:12px;
+                                border-bottom:1px solid #edf0ed;
+                            "
+                        >
+
+                            <img
+                                src="${product.image}"
+                                style="
+                                    width:55px;
+                                    height:55px;
+                                    border-radius:9px;
+                                    object-fit:cover;
+                                "
+                                alt="${product.name}"
+                            >
+
+                            <div style="flex:1;">
+
+                                <strong style="font-size:13px;">
+                                    ${product.name}
+                                </strong>
+
+                                <div
+                                    style="
+                                        color:var(--muted);
+                                        font-size:11px;
+                                    "
+                                >
+                                    ${product.quantity}
+                                    ×
+                                    ${cart[product.id]}
+                                </div>
+
+                            </div>
+
+                            <strong>
+                                ₹${product.price * cart[product.id]}
+                            </strong>
+
+                        </div>
+                    `
+            ).join("")}
+
+        </div>
+
+        <div style="margin-top:17px;">
+
+            <div class="bill-row">
+                <span>Item total</span>
+                <span>₹${bill.itemTotal}</span>
+            </div>
+
+            <div class="bill-row">
+                <span>Delivery</span>
+                <span>₹${bill.deliveryFee}</span>
+            </div>
+
+            <div class="bill-row">
+                <span>Discount</span>
+                <span>-₹${bill.discount}</span>
+            </div>
+
+            <div class="bill-row">
+                <span>Taxes</span>
+                <span>₹${bill.tax}</span>
+            </div>
+
+            <div class="bill-row total">
+                <span>Total</span>
+                <span>₹${bill.grand}</span>
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+function placeOrder(){
+
+    if(!cartCount()){
+
+        showToast("Your cart is empty.");
+
+        return;
+
+    }
+
+    const orderId =
+        "ABH-" +
+        Math.floor(
+            100000 +
+            Math.random()*900000
+        );
+
+    const bill =
+        calculateBill();
+
+    const items =
+        getCartItems().map(
+            product => ({
+                id:product.id,
+                quantity:cart[product.id]
+            })
+        );
+
+    const order = {
+        id:orderId,
+        date:new Date().toLocaleDateString("en-IN"),
+        state:
+            document
+                .getElementById("checkoutState")
+                .value,
+        items,
+        total:bill.grand,
+        status:"Order Placed"
+    };
+
+    orders.unshift(order);
+
+    cart = {};
+
+    saveData();
+
+    document
+        .getElementById("confirmationOrderId")
+        .textContent =
+            orderId;
+
+    document
+        .getElementById("confirmationDelivery")
+        .textContent =
+            "Estimated delivery: 10–30 minutes";
+
+    showCheckoutPage(4);
+
+    renderProducts();
+
+    renderCart();
+
+    renderOrders();
+
+}
+
+function finishOrder(){
+
+    closeCheckout();
+
+    goHome();
+
+    showToast(
+        "Demo order added to order history."
+    );
+
+}
+
+/* =========================================================
+   ORDERS
+========================================================= */
+
+function showOrders(){
+
+    hideMainSections();
+
+    document
+        .getElementById("ordersSection")
+        .classList.remove("hidden");
+
+    renderOrders();
+
+    document
+        .getElementById("ordersSection")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+function renderOrders(){
+
+    const list =
+        document.getElementById("ordersList");
+
+    if(!list){
+        return;
+    }
+
+    if(!orders.length){
+
+        list.innerHTML = `
+            <div
+                class="empty-state"
+                style="
+                    background:white;
+                    border:1px solid var(--border);
+                    border-radius:17px;
+                "
+            >
+
+                <div class="icon">▣</div>
+
+                <h3>No demo orders yet</h3>
+
+                <p>
+                    Your confirmed demo orders will appear here.
+                </p>
+
+            </div>
+        `;
+
+        return;
+
+    }
+
+    list.innerHTML =
+        orders.map(
+            order => {
+
+                const orderProducts =
+                    order.items
+                        .map(
+                            item =>
+                                products.find(
+                                    product =>
+                                        product.id===item.id
+                                )
+                        )
+                        .filter(Boolean);
+
+                return `
+                    <div class="order-card">
+
+                        <div class="order-head">
+
+                            <div>
+
+                                <div class="order-number">
+                                    ${order.id}
+                                </div>
+
+                                <div
+                                    style="
+                                        color:var(--muted);
+                                        font-size:11px;
+                                        margin-top:3px;
+                                    "
+                                >
+                                    ${order.date}
+                                    ·
+                                    ${order.state}
+                                </div>
+
+                            </div>
+
+                            <div class="order-status">
+                                ${order.status}
+                            </div>
+
+                        </div>
+
+                        <div class="order-items-preview">
+
+                            ${orderProducts
+                                .slice(0,5)
+                                .map(
+                                    product =>
+                                        `
+                                            <img
+                                                src="${product.image}"
+                                                alt="${product.name}"
+                                            >
+                                        `
+                                ).join("")}
+
+                        </div>
+
+                        <div class="order-footer">
+
+                            <span>
+                                ${order.items.length}
+                                product type(s)
+                            </span>
+
+                            <strong>
+                                ₹${order.total}
+                            </strong>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }
+        ).join("");
+
+}
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
+function hideMainSections(){
+
+    document
+        .getElementById("ordersSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("wishlistSection")
+        .classList.add("hidden");
+
+    document
+        .getElementById("accountSection")
+        .classList.add("hidden");
+
+}
+
+function showAccount(){
+
+    hideMainSections();
+
+    document
+        .getElementById("accountSection")
+        .classList.remove("hidden");
+
+    updateLocationUI();
+
+    document
+        .getElementById("accountSection")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+/* =========================================================
+   WISHLIST PAGE
+========================================================= */
+
+function showWishlist(){
+
+    hideMainSections();
+
+    document
+        .getElementById("wishlistSection")
+        .classList.remove("hidden");
+
+    renderWishlist();
+
+    document
+        .getElementById("wishlistSection")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function goHome(){
+
+    hideMainSections();
+
+    document
+        .getElementById("home")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+function scrollToProducts(){
+
+    hideMainSections();
+
+    document
+        .getElementById("products")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+/* =========================================================
+   NOTIFY ME
+========================================================= */
+
+function notifyProduct(id){
+
+    const product =
+        products.find(
+            item => item.id===id
+        );
+
+    if(!product){
+        return;
+    }
+
+    showToast(
+        "We'll notify you when " +
+        product.name +
+        " is available in this demo."
+    );
+
+}
+
+/* =========================================================
+   MODAL OUTSIDE CLICK
+========================================================= */
+
+function closeModalOutside(event,id){
+
+    if(event.target.id===id){
+
+        document
+            .getElementById(id)
+            .classList.remove("active");
+
+    }
+
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+    const container =
+        document.getElementById("toastContainer");
+
+    const toast =
+        document.createElement("div");
+
+    toast.className = "toast";
+
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    setTimeout(
+        () => {
+            toast.remove();
+        },
+        2600
+    );
+
+}
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key==="Escape"){
+
+            closeCart();
+            closeDetail();
+            closeCheckout();
+            closeLocationModal();
+
+        }
+
+        if(
+            (event.ctrlKey || event.metaKey) &&
+            event.key.toLowerCase()==="k"
+        ){
+
+            event.preventDefault();
+
+            document
+                .getElementById("searchInput")
+                .focus();
+
+        }
+
+    }
+);
+
+/* =========================================================
+   IMAGE FALLBACK
+========================================================= */
+
+document.addEventListener(
+    "error",
+    function(event){
+
+        if(
+            event.target.tagName==="IMG" &&
+            event.target.classList.contains("product-image")
+        ){
+
+            event.target.src =
+                "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=700&q=80";
+
+        }
+
+    },
+    true
+);
+
+/* =========================================================
+   STATE DELIVERY DEMO
+========================================================= */
+
+function getStateDeliveryMessage(){
+
+    if(!selectedState){
+
+        return "Select a state to see your demo delivery area.";
+
+    }
+
+    return (
+        "Demo delivery available in " +
+        selectedState +
+        "."
+    );
+
+}
+
+/* =========================================================
+   DYNAMIC STATE-BASED EXPERIENCE
+========================================================= */
+
+function updateStateExperience(){
+
+    const stateMessage =
+        getStateDeliveryMessage();
+
+    const subtitle =
+        document.getElementById(
+            "productsSubtitle"
+        );
+
+    if(subtitle){
+
+        subtitle.textContent =
+            stateMessage +
+            " Delivery timings are prototype estimates.";
+
+    }
+
+}
+
+/* =========================================================
+   WATCH STATE CHANGES
+========================================================= */
+
+const originalSelectState =
+    selectState;
+
+selectState =
+    function(state){
+
+        originalSelectState(state);
+
+        updateStateExperience();
+
+    };
+
+/* =========================================================
+   INITIAL STATE EXPERIENCE
+========================================================= */
+
+setTimeout(
+    updateStateExperience,
+    100
+);
+
+/* =========================================================
+   DEMO COUPONS
+========================================================= */
+
+const demoCoupons = {
+
+    WELCOME20:{
+        discount:20,
+        minimum:199,
+        description:"₹20 demo discount on orders ₹199+"
+    },
+
+    SAVE50:{
+        discount:50,
+        minimum:499,
+        description:"₹50 demo discount on orders ₹499+"
+    }
+
+};
+
+function showCouponInfo(code){
+
+    const coupon =
+        demoCoupons[code];
+
+    if(!coupon){
+
+        showToast("Invalid demo coupon.");
+
+        return;
+
+    }
+
+    showToast(
+        code +
+        ": " +
+        coupon.description
+    );
+
+}
+
+/* =========================================================
+   DEMO HELP
+========================================================= */
+
+function showDemoHelp(){
+
+    showToast(
+        "This is a front-end prototype. Payments and delivery are simulated."
+    );
+
+}
+
+/* =========================================================
+   MOBILE SEARCH BEHAVIOR
+========================================================= */
+
+function focusSearch(){
+
+    const input =
+        document.getElementById("searchInput");
+
+    if(input){
+
+        input.focus();
+
+        input.scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+
+    }
+
+}
+
+/* =========================================================
+   CATEGORY NAVIGATION
+========================================================= */
+
+function browseCategory(category){
+
+    activeCategory = category;
+
+    renderProducts();
+
+    scrollToProducts();
+
+}
+
+/* =========================================================
+   QUICK CATEGORY MAP
+========================================================= */
+
+const categoryAliases = {
+
+    vegetable:"fruits",
+    vegetables:"fruits",
+    fruit:"fruits",
+    fruits:"fruits",
+
+    kitchen:"kitchen",
+    plate:"kitchen",
+    plates:"kitchen",
+    spoon:"kitchen",
+    spoons:"kitchen",
+
+    school:"school",
+    project:"school",
+    projects:"school",
+    stationery:"school",
+
+    icecream:"icecream",
+    ice:"icecream",
+
+    cake:"cakes",
+    cakes:"cakes",
+
+    chocolate:"chocolates",
+    chocolates:"chocolates",
+
+    juice:"drinks",
+    drink:"drinks",
+    drinks:"drinks",
+    soda:"drinks",
+
+    essential:"essentials",
+    essentials:"essentials"
+
+};
+
+function detectCategoryFromSearch(query){
+
+    const words =
+        query
+            .toLowerCase()
+            .split(/\s+/);
+
+    for(const word of words){
+
+        if(categoryAliases[word]){
+
+            return categoryAliases[word];
+
+        }
+
+    }
+
+    return "all";
+
+}
+
+/* =========================================================
+   SMART SEARCH CATEGORY
+========================================================= */
+
+const originalHandleSearch =
+    handleSearch;
+
+handleSearch =
+    function(value){
+
+        const detected =
+            detectCategoryFromSearch(value);
+
+        if(
+            value &&
+            detected!=="all" &&
+            products.some(
+                product =>
+                    product.category===detected &&
+                    product.name
+                        .toLowerCase()
+                        .includes(
+                            value
+                                .toLowerCase()
+                                .replace(
+                                    detected,
+                                    ""
+                                )
+                                .trim()
+                        )
+            )
+        ){
+
+            /* Search remains product based.
+               Category is not forcibly changed. */
+
+        }
+
+        originalHandleSearch(value);
+
+    };
+
+/* =========================================================
+   ORDER STATUS SIMULATION
+========================================================= */
+
+function simulateOrderProgress(orderId){
+
+    const order =
+        orders.find(
+            item => item.id===orderId
+        );
+
+    if(!order){
+        return;
+    }
+
+    const statuses = [
+        "Order Placed",
+        "Preparing",
+        "Out for Delivery",
+        "Delivered"
+    ];
+
+    let index =
+        statuses.indexOf(order.status);
+
+    if(index<0){
+        index=0;
+    }
+
+    if(index<statuses.length-1){
+
+        order.status =
+            statuses[index+1];
+
+        saveData();
+
+        renderOrders();
+
+    }
+
+}
+
+/* =========================================================
+   DEMO STATUS BUTTON SUPPORT
+========================================================= */
+
+document.addEventListener(
+    "dblclick",
+    function(event){
+
+        const card =
+            event.target.closest(".order-card");
+
+        if(!card){
+            return;
+        }
+
+        const idElement =
+            card.querySelector(".order-number");
+
+        if(!idElement){
+            return;
+        }
+
+        const orderId =
+            idElement.textContent.trim();
+
+        simulateOrderProgress(orderId);
+
+        showToast(
+            "Demo order status advanced."
+        );
+
+    }
+);
+
+/* =========================================================
+   PRODUCT COUNT
+========================================================= */
+
+function getProductCount(){
+
+    return products.length;
+
+}
+
+/* =========================================================
+   CONSOLE INFORMATION
+========================================================= */
+
+console.log(
+    "Abhiminutes loaded:",
+    getProductCount(),
+    "fictional demo products."
+);
+
+console.log(
+    "India state selector:",
+    states.length,
+    "states available."
+);
+
+/* =========================================================
+   END APPLICATION
+========================================================= */
+</script>
+
+<!--
+================================================================
+ABHIMINUTES IMPLEMENTATION NOTES
+================================================================
+
+The page intentionally keeps the existing quick-commerce structure
+while adding only the requested upgrade areas:
+
+1. Real fruit photography replaces emoji-only fruit presentation.
+2. Product cards use real photo URLs.
+3. Fruit category cards use real photographs.
+4. Hero imagery uses real fruit photographs.
+5. A state selector contains all 28 Indian states.
+6. Precise location is not requested.
+7. The selected state is saved locally in the browser.
+8. The selected state appears in the header.
+9. The selected state appears in the account section.
+10. The selected state appears during checkout.
+11. The state search field filters the 28 states.
+12. Delivery remains a fictional prototype.
+13. No alcohol products or alcohol purchasing flow exists.
+14. Checkout remains simulated.
+15. Product prices remain fictional demo prices.
+16. Product reviews remain fictional demo reviews.
+17. Cart state is saved locally.
+18. Wishlist state is saved locally.
+19. Orders are saved locally.
+20. Product search remains functional.
+21. Product filtering remains functional.
+22. Product sorting remains functional.
+23. Product details remain functional.
+24. Cart quantity controls remain functional.
+25. Checkout remains multi-step.
+26. Order confirmation remains available.
+27. Order history remains available.
+28. Responsive mobile navigation remains available.
+29. The Abhiminutes favicon is embedded directly in this HTML.
+30. No separate favicon file is required.
+================================================================
+-->
+</body>
+</html>

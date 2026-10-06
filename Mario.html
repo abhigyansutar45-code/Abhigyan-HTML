@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mushroom Heroes - Arcade Platformer</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL SETTINGS
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #111827;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   GAME HEADER
+   ========================================================= */
+
+.header {
+    width: 100%;
+    min-height: 75px;
+    background: linear-gradient(90deg, #ef4444, #dc2626, #991b1b);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 30px;
+    border-bottom: 4px solid #facc15;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-symbol {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #dc2626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: 900;
+    border: 4px solid #facc15;
+}
+
+.logo-text {
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.score-board {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.score-box {
+    background: rgba(0, 0, 0, 0.35);
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 8px 15px;
+    text-align: center;
+    min-width: 95px;
+}
+
+.score-label {
+    font-size: 11px;
+    color: #fde68a;
+    font-weight: bold;
+}
+
+.score-value {
+    font-size: 18px;
+    font-weight: 900;
+}
+
+/* =========================================================
+   HERO SECTION
+   ========================================================= */
+
+.hero {
+    min-height: 330px;
+    padding: 60px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(59,130,246,.35), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(236,72,153,.30), transparent 30%),
+        linear-gradient(180deg, #172554, #1e3a8a, #2563eb);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 900px;
+    position: relative;
+    z-index: 5;
+}
+
+.hero h1 {
+    font-size: clamp(42px, 8vw, 82px);
+    font-weight: 1000;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow:
+        4px 4px 0 #111827,
+        8px 8px 0 rgba(0,0,0,.25);
+}
+
+.hero p {
+    margin-top: 15px;
+    font-size: 19px;
+    color: #dbeafe;
+}
+
+.play-button {
+    display: inline-block;
+    margin-top: 28px;
+    padding: 15px 35px;
+    background: #facc15;
+    color: #111827;
+    border: 4px solid #92400e;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: 1000;
+    text-decoration: none;
+    box-shadow: 0 8px 0 #78350f;
+    transition: .2s;
+}
+
+.play-button:hover {
+    transform: translateY(4px);
+    box-shadow: 0 4px 0 #78350f;
+}
+
+/* =========================================================
+   DECORATIVE CLOUDS
+   ========================================================= */
+
+.cloud {
+    position: absolute;
+    width: 130px;
+    height: 45px;
+    background: white;
+    border-radius: 50px;
+    opacity: .8;
+}
+
+.cloud::before,
+.cloud::after {
+    content: "";
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+}
+
+.cloud::before {
+    width: 65px;
+    height: 65px;
+    left: 18px;
+    bottom: 0;
+}
+
+.cloud::after {
+    width: 80px;
+    height: 80px;
+    right: 15px;
+    bottom: 0;
+}
+
+.cloud-one {
+    left: 8%;
+    top: 40px;
+    animation: cloudMove 18s linear infinite;
+}
+
+.cloud-two {
+    right: 10%;
+    top: 100px;
+    transform: scale(.7);
+    animation: cloudMoveReverse 25s linear infinite;
+}
+
+@keyframes cloudMove {
+    from {
+        transform: translateX(-50px);
+    }
+
+    to {
+        transform: translateX(120px);
+    }
+}
+
+@keyframes cloudMoveReverse {
+    from {
+        transform: translateX(100px) scale(.7);
+    }
+
+    to {
+        transform: translateX(-120px) scale(.7);
+    }
+}
+
+/* =========================================================
+   GAME AREA
+   ========================================================= */
+
+.game-section {
+    padding: 45px 15px;
+    background: #020617;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.section-title h2 {
+    font-size: 35px;
+    color: #facc15;
+}
+
+.section-title p {
+    margin-top: 8px;
+    color: #94a3b8;
+}
+
+/* =========================================================
+   CSS GAME WORLD
+   ========================================================= */
+
+.game-frame {
+    width: min(1200px, 96vw);
+    height: 600px;
+    margin: auto;
+    border: 8px solid #facc15;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    background:
+        linear-gradient(
+            to bottom,
+            #38bdf8 0%,
+            #60a5fa 50%,
+            #93c5fd 100%
+        );
+    box-shadow:
+        0 0 40px rgba(59,130,246,.35),
+        inset 0 0 30px rgba(0,0,0,.25);
+}
+
+/* =========================================================
+   SUN
+   ========================================================= */
+
+.sun {
+    position: absolute;
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    background: #fde047;
+    right: 80px;
+    top: 50px;
+    box-shadow: 0 0 50px rgba(250,204,21,.8);
+}
+
+/* =========================================================
+   MOUNTAINS
+   ========================================================= */
+
+.mountain {
+    position: absolute;
+    bottom: 100px;
+    width: 0;
+    height: 0;
+    border-left: 130px solid transparent;
+    border-right: 130px solid transparent;
+    border-bottom: 220px solid #166534;
+}
+
+.mountain::after {
+    content: "";
+    position: absolute;
+    left: -65px;
+    top: 70px;
+    width: 0;
+    height: 0;
+    border-left: 65px solid transparent;
+    border-right: 65px solid transparent;
+    border-bottom: 100px solid #86efac;
+}
+
+.mountain-one {
+    left: 50px;
+}
+
+.mountain-two {
+    left: 300px;
+    transform: scale(.75);
+}
+
+.mountain-three {
+    right: 80px;
+    transform: scale(.85);
+}
+
+/* =========================================================
+   GAME GROUND
+   ========================================================= */
+
+.ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: #65a30d;
+    border-top: 12px solid #22c55e;
+}
+
+.ground::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    width: 100%;
+    height: 12px;
+    background: repeating-linear-gradient(
+        90deg,
+        #4d7c0f 0 30px,
+        #84cc16 30px 60px
+    );
+}
+
+/* =========================================================
+   PLATFORMS
+   ========================================================= */
+
+.platform {
+    position: absolute;
+    height: 28px;
+    background: #92400e;
+    border: 4px solid #451a03;
+    border-radius: 5px;
+    box-shadow: inset 0 7px 0 rgba(255,255,255,.12);
+}
+
+.platform::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -12px;
+    width: 100%;
+    height: 12px;
+    background: #16a34a;
+    border-radius: 5px 5px 0 0;
+}
+
+.platform-one {
+    width: 180px;
+    left: 100px;
+    bottom: 230px;
+}
+
+.platform-two {
+    width: 210px;
+    left: 390px;
+    bottom: 330px;
+}
+
+.platform-three {
+    width: 180px;
+    right: 170px;
+    bottom: 250px;
+}
+
+.platform-four {
+    width: 140px;
+    right: 420px;
+    bottom: 420px;
+}
+
+/* =========================================================
+   QUESTION BLOCKS
+   ========================================================= */
+
+.question {
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    background: #f59e0b;
+    border: 5px solid #92400e;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 28px;
+    font-weight: 1000;
+    box-shadow: inset 0 0 0 3px #fcd34d;
+}
+
+.question-one {
+    left: 310px;
+    bottom: 350px;
+}
+
+.question-two {
+    left: 610px;
+    bottom: 390px;
+}
+
+.question-three {
+    right: 290px;
+    bottom: 315px;
+}
+
+/* =========================================================
+   PIPE
+   ========================================================= */
+
+.pipe {
+    position: absolute;
+    width: 80px;
+    height: 120px;
+    background: linear-gradient(90deg, #15803d, #22c55e, #15803d);
+    bottom: 100px;
+    right: 90px;
+    border: 5px solid #14532d;
+    border-radius: 5px 5px 0 0;
+}
+
+.pipe::before {
+    content: "";
+    position: absolute;
+    width: 105px;
+    height: 35px;
+    left: -18px;
+    top: -25px;
+    background: linear-gradient(90deg, #166534, #4ade80, #166534);
+    border: 5px solid #14532d;
+    border-radius: 8px;
+}
+
+/* =========================================================
+   PLAYER CHARACTER
+   ========================================================= */
+
+.player {
+    position: absolute;
+    width: 52px;
+    height: 70px;
+    left: 130px;
+    bottom: 128px;
+    z-index: 20;
+    animation: playerBounce .7s ease-in-out infinite alternate;
+}
+
+.player-head {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    top: 0;
+    left: 5px;
+    background: #f59e0b;
+    border-radius: 50%;
+    border: 4px solid #7c2d12;
+}
+
+.player-hat {
+    position: absolute;
+    width: 50px;
+    height: 17px;
+    left: 1px;
+    top: -5px;
+    background: #7c3aed;
+    border-radius: 18px 18px 5px 5px;
+    border: 4px solid #4c1d95;
+}
+
+.player-hat::after {
+    content: "H";
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    left: 18px;
+    top: 1px;
+}
+
+.player-body {
+    position: absolute;
+    width: 44px;
+    height: 35px;
+    left: 4px;
+    bottom: 0;
+    background: #7c3aed;
+    border-radius: 12px 12px 6px 6px;
+    border: 4px solid #4c1d95;
+}
+
+.player-eye-one,
+.player-eye-two {
+    position: absolute;
+    width: 6px;
+    height: 10px;
+    background: #111827;
+    border-radius: 50%;
+    top: 19px;
+}
+
+.player-eye-one {
+    left: 15px;
+}
+
+.player-eye-two {
+    right: 15px;
+}
+
+@keyframes playerBounce {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-8px);
+    }
+}
+
+/* =========================================================
+   COINS
+   ========================================================= */
+
+.coin {
+    position: absolute;
+    width: 30px;
+    height: 42px;
+    border-radius: 50%;
+    background: #facc15;
+    border: 4px solid #a16207;
+    z-index: 15;
+    animation: coinSpin 1s linear infinite;
+}
+
+.coin::after {
+    content: "$";
+    position: absolute;
+    color: #92400e;
+    font-size: 17px;
+    font-weight: 1000;
+    left: 7px;
+    top: 7px;
+}
+
+.coin-one {
+    left: 190px;
+    bottom: 275px;
+}
+
+.coin-two {
+    left: 250px;
+    bottom: 275px;
+}
+
+.coin-three {
+    left: 450px;
+    bottom: 375px;
+}
+
+.coin-four {
+    left: 510px;
+    bottom: 375px;
+}
+
+.coin-five {
+    right: 230px;
+    bottom: 295px;
+}
+
+@keyframes coinSpin {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    50% {
+        transform: rotateY(180deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+/* =========================================================
+   ENEMIES
+   ========================================================= */
+
+.enemy {
+    position: absolute;
+    width: 48px;
+    height: 42px;
+    background: #92400e;
+    border: 4px solid #451a03;
+    border-radius: 50% 50% 35% 35%;
+    z-index: 18;
+}
+
+.enemy::before,
+.enemy::after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 9px;
+    background: #111827;
+    border-radius: 50%;
+    top: 13px;
+}
+
+.enemy::before {
+    left: 10px;
+}
+
+.enemy::after {
+    right: 10px;
+}
+
+.enemy-one {
+    left: 350px;
+    bottom: 128px;
+    animation: enemyMoveOne 4s linear infinite alternate;
+}
+
+.enemy-two {
+    left: 680px;
+    bottom: 128px;
+    animation: enemyMoveTwo 5s linear infinite alternate;
+}
+
+.enemy-three {
+    right: 270px;
+    bottom: 278px;
+    animation: enemyMoveThree 3s linear infinite alternate;
+}
+
+@keyframes enemyMoveOne {
+    from {
+        transform: translateX(-20px);
+    }
+
+    to {
+        transform: translateX(100px);
+    }
+}
+
+@keyframes enemyMoveTwo {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(150px);
+    }
+}
+
+@keyframes enemyMoveThree {
+    from {
+        transform: translateX(-30px);
+    }
+
+    to {
+        transform: translateX(50px);
+    }
+}
+
+/* =========================================================
+   FLYING ENEMY
+   ========================================================= */
+
+.flying-enemy {
+    position: absolute;
+    width: 65px;
+    height: 35px;
+    background: #111827;
+    border: 5px solid #020617;
+    border-radius: 50px;
+    top: 160px;
+    left: 50%;
+    z-index: 17;
+    animation: bulletMove 5s linear infinite;
+}
+
+.flying-enemy::before,
+.flying-enemy::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    top: 6px;
+}
+
+.flying-enemy::before {
+    left: 10px;
+}
+
+.flying-enemy::after {
+    right: 10px;
+}
+
+@keyframes bulletMove {
+    from {
+        transform: translateX(-500px);
+    }
+
+    to {
+        transform: translateX(500px);
+    }
+}
+
+/* =========================================================
+   POWER UPS
+   ========================================================= */
+
+.power-up {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    z-index: 19;
+    border: 4px solid #451a03;
+}
+
+.mushroom {
+    background:
+        radial-gradient(circle at 12px 12px, white 0 7px, transparent 8px),
+        radial-gradient(circle at 32px 12px, white 0 7px, transparent 8px),
+        #ef4444;
+    bottom: 350px;
+    left: 665px;
+}
+
+.flower {
+    background:
+        radial-gradient(circle at center, #facc15 0 8px, transparent 9px),
+        #f97316;
+    bottom: 300px;
+    left: 750px;
+}
+
+.star {
+    background: #fde047;
+    bottom: 440px;
+    right: 370px;
+    clip-path: polygon(
+        50% 0%,
+        61% 35%,
+        98% 35%,
+        68% 57%,
+        79% 100%,
+        50% 73%,
+        21% 100%,
+        32% 57%,
+        2% 35%,
+        39% 35%
+    );
+    animation: starGlow .6s infinite alternate;
+}
+
+.ice {
+    background: #67e8f9;
+    bottom: 200px;
+    left: 500px;
+}
+
+@keyframes starGlow {
+    from {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    to {
+        transform: scale(1.15);
+        filter: brightness(1.5);
+    }
+}
+
+/* =========================================================
+   FLAG
+   ========================================================= */
+
+.flagpole {
+    position: absolute;
+    width: 9px;
+    height: 300px;
+    background: #e5e7eb;
+    right: 35px;
+    bottom: 100px;
+    border: 2px solid #475569;
+}
+
+.flag {
+    position: absolute;
+    top: 20px;
+    left: 8px;
+    width: 100px;
+    height: 65px;
+    background: #22c55e;
+    clip-path: polygon(0 0, 100% 25%, 0 50%);
+    border: 3px solid #166534;
+}
+
+/* =========================================================
+   GAME INFO
+   ========================================================= */
+
+.game-info {
+    max-width: 1200px;
+    margin: 25px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.info-card {
+    padding: 18px;
+    border-radius: 14px;
+    background: #1e293b;
+    border: 2px solid #334155;
+    text-align: center;
+}
+
+.info-card h3 {
+    color: #facc15;
+    margin-bottom: 8px;
+}
+
+.info-card p {
+    color: #cbd5e1;
+}
+
+/* =========================================================
+   CHARACTER SECTION
+   ========================================================= */
+
+.characters {
+    padding: 60px 20px;
+    background: #0f172a;
+}
+
+.character-grid {
+    max-width: 1200px;
+    margin: 30px auto 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+}
+
+.character-card {
+    background: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 18px;
+    padding: 25px 15px;
+    text-align: center;
+    transition: .3s;
+}
+
+.character-card:hover {
+    transform: translateY(-10px);
+    border-color: #facc15;
+    box-shadow: 0 15px 30px rgba(0,0,0,.3);
+}
+
+.character-icon {
+    width: 90px;
+    height: 90px;
+    margin: auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 45px;
+    background: #334155;
+    border: 4px solid #facc15;
+}
+
+.character-card h3 {
+    margin-top: 15px;
+}
+
+.character-card p {
+    margin-top: 8px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* =========================================================
+   POWER-UP SECTION
+   ========================================================= */
+
+.power-section {
+    padding: 60px 20px;
+    background: #020617;
+}
+
+.power-grid {
+    max-width: 1200px;
+    margin: 30px auto 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+}
+
+.power-card {
+    padding: 22px;
+    border-radius: 16px;
+    background: #172033;
+    border: 2px solid #334155;
+    text-align: center;
+}
+
+.power-icon {
+    font-size: 45px;
+    margin-bottom: 12px;
+}
+
+.power-card h3 {
+    color: #facc15;
+    margin-bottom: 8px;
+}
+
+.power-card p {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* =========================================================
+   ENEMY SECTION
+   ========================================================= */
+
+.enemy-section {
+    padding: 60px 20px;
+    background: #111827;
+}
+
+.enemy-grid {
+    max-width: 1200px;
+    margin: 30px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.enemy-card {
+    padding: 25px;
+    background: #1f2937;
+    border-radius: 18px;
+    border: 2px solid #374151;
+    text-align: center;
+}
+
+.enemy-icon {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+.enemy-card h3 {
+    color: #fb7185;
+}
+
+.enemy-card p {
+    color: #9ca3af;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* =========================================================
+   WORLDS
+   ========================================================= */
+
+.world-section {
+    padding: 60px 20px;
+    background:
+        linear-gradient(
+            135deg,
+            #172554,
+            #312e81,
+            #4c1d95
+        );
+}
+
+.world-grid {
+    max-width: 1200px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.world-card {
+    min-height: 220px;
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(15,23,42,.8);
+    border: 3px solid #6366f1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: .3s;
+}
+
+.world-card:hover {
+    transform: scale(1.04);
+    border-color: #facc15;
+}
+
+.world-number {
+    color: #facc15;
+    font-weight: 900;
+    font-size: 14px;
+}
+
+.world-card h3 {
+    margin-top: 8px;
+    font-size: 25px;
+}
+
+.world-card p {
+    margin-top: 8px;
+    color: #cbd5e1;
+}
+
+/* =========================================================
+   CONTROLS
+   ========================================================= */
+
+.controls-section {
+    padding: 60px 20px;
+    background: #020617;
+}
+
+.controls {
+    max-width: 800px;
+    margin: 30px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.control {
+    padding: 20px;
+    background: #1e293b;
+    border: 2px solid #475569;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.key {
+    display: inline-flex;
+    min-width: 55px;
+    height: 55px;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    color: #111827;
+    border-radius: 10px;
+    border-bottom: 5px solid #64748b;
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.control p {
+    color: #94a3b8;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+    padding: 35px 20px;
+    text-align: center;
+    background: #020617;
+    border-top: 2px solid #1e293b;
+}
+
+.footer h2 {
+    color: #facc15;
+}
+
+.footer p {
+    margin-top: 10px;
+    color: #64748b;
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .character-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .power-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .world-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .enemy-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .game-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+
+    .header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    .game-frame {
+        height: 500px;
+    }
+
+    .character-grid,
+    .power-grid,
+    .world-grid,
+    .enemy-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .game-info {
+        grid-template-columns: 1fr;
+    }
+
+    .controls {
+        grid-template-columns: 1fr;
+    }
+
+    .mountain-two,
+    .mountain-three {
+        display: none;
+    }
+
+    .platform-four {
+        display: none;
+    }
+
+    .question-three {
+        display: none;
+    }
+
+    .score-board {
+        width: 100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header class="header">
+
+    <div class="logo">
+
+        <div class="logo-symbol">
+            ★
+        </div>
+
+        <div class="logo-text">
+            MUSHROOM HEROES
+        </div>
+
+    </div>
+
+    <div class="score-board">
+
+        <div class="score-box">
+            <div class="score-label">SCORE</div>
+            <div class="score-value">000250</div>
+        </div>
+
+        <div class="score-box">
+            <div class="score-label">COINS</div>
+            <div class="score-value">× 05</div>
+        </div>
+
+        <div class="score-box">
+            <div class="score-label">LIVES</div>
+            <div class="score-value">♥ 03</div>
+        </div>
+
+        <div class="score-box">
+            <div class="score-label">WORLD</div>
+            <div class="score-value">1-1</div>
+        </div>
+
+    </div>
+
+</header>
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<section class="hero">
+
+    <div class="cloud cloud-one"></div>
+    <div class="cloud cloud-two"></div>
+
+    <div class="hero-content">
+
+        <h1>Arcade Adventure</h1>
+
+        <p>
+            Jump across platforms, collect coins, discover power-ups
+            and reach the flag!
+        </p>
+
+        <a href="#game" class="play-button">
+            PLAY ADVENTURE
+        </a>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     GAME
+     ========================================================= -->
+
+<section class="game-section" id="game">
+
+    <div class="section-title">
+
+        <h2>WORLD 1-1</h2>
+
+        <p>
+            Welcome to the Mushroom Kingdom-inspired arcade world.
+        </p>
+
+    </div>
+
+    <div class="game-frame">
+
+        <div class="sun"></div>
+
+        <div class="mountain mountain-one"></div>
+        <div class="mountain mountain-two"></div>
+        <div class="mountain mountain-three"></div>
+
+        <!-- Player -->
+
+        <div class="player">
+
+            <div class="player-head"></div>
+
+            <div class="player-hat"></div>
+
+            <div class="player-eye-one"></div>
+            <div class="player-eye-two"></div>
+
+            <div class="player-body"></div>
+
+        </div>
+
+        <!-- Platforms -->
+
+        <div class="platform platform-one"></div>
+        <div class="platform platform-two"></div>
+        <div class="platform platform-three"></div>
+        <div class="platform platform-four"></div>
+
+        <!-- Question Blocks -->
+
+        <div class="question question-one">
+            ?
+        </div>
+
+        <div class="question question-two">
+            ?
+        </div>
+
+        <div class="question question-three">
+            ?
+        </div>
+
+        <!-- Coins -->
+
+        <div class="coin coin-one"></div>
+        <div class="coin coin-two"></div>
+        <div class="coin coin-three"></div>
+        <div class="coin coin-four"></div>
+        <div class="coin coin-five"></div>
+
+        <!-- Enemies -->
+
+        <div class="enemy enemy-one"></div>
+        <div class="enemy enemy-two"></div>
+        <div class="enemy enemy-three"></div>
+
+        <!-- Flying enemy -->
+
+        <div class="flying-enemy"></div>
+
+        <!-- Power Ups -->
+
+        <div class="power-up mushroom"></div>
+        <div class="power-up flower"></div>
+        <div class="power-up star"></div>
+        <div class="power-up ice"></div>
+
+        <!-- Pipe -->
+
+        <div class="pipe"></div>
+
+        <!-- Flag -->
+
+        <div class="flagpole">
+
+            <div class="flag"></div>
+
+        </div>
+
+        <!-- Ground -->
+
+        <div class="ground"></div>
+
+    </div>
+
+    <!-- Game Information -->
+
+    <div class="game-info">
+
+        <div class="info-card">
+            <h3>★ SCORE</h3>
+            <p>Collect coins and defeat enemies to increase your score.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>● COINS</h3>
+            <p>Coins are scattered throughout the adventure.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>♥ LIVES</h3>
+            <p>Start the arcade adventure with three lives.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>⚑ GOAL</h3>
+            <p>Reach the flag at the end of the level.</p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     CHARACTERS
+     ========================================================= -->
+
+<section class="characters">
+
+    <div class="section-title">
+
+        <h2>HEROES</h2>
+
+        <p>
+            Meet the characters of the Mushroom Heroes universe.
+        </p>
+
+    </div>
+
+    <div class="character-grid">
+
+        <div class="character-card">
+
+            <div class="character-icon">
+                🧑‍🔧
+            </div>
+
+            <h3>Hero</h3>
+
+            <p>
+                A brave plumber who travels through dangerous worlds.
+            </p>
+
+        </div>
+
+        <div class="character-card">
+
+            <div class="character-icon">
+                🧑‍🔧
+            </div>
+
+            <h3>Green Hero</h3>
+
+            <p>
+                The hero's brother and trusted sidekick.
+            </p>
+
+        </div>
+
+        <div class="character-card">
+
+            <div class="character-icon">
+                👑
+            </div>
+
+            <h3>Princess</h3>
+
+            <p>
+                The ruler of the magical kingdom.
+            </p>
+
+        </div>
+
+        <div class="character-card">
+
+            <div class="character-icon">
+                🐲
+            </div>
+
+            <h3>Dragon King</h3>
+
+            <p>
+                The powerful ruler of the enemy kingdom.
+            </p>
+
+        </div>
+
+        <div class="character-card">
+
+            <div class="character-icon">
+                🦖
+            </div>
+
+            <h3>Dino Friend</h3>
+
+            <p>
+                A friendly dinosaur companion who helps the hero.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     POWER UPS
+     ========================================================= -->
+
+<section class="power-section">
+
+    <div class="section-title">
+
+        <h2>POWER-UPS & ITEMS</h2>
+
+        <p>
+            Discover special items hidden throughout the levels.
+        </p>
+
+    </div>
+
+    <div class="power-grid">
+
+        <div class="power-card">
+
+            <div class="power-icon">
+                🍄
+            </div>
+
+            <h3>Super Mushroom</h3>
+
+            <p>
+                Makes the hero stronger and larger.
+            </p>
+
+        </div>
+
+        <div class="power-card">
+
+            <div class="power-icon">
+                🌸
+            </div>
+
+            <h3>Fire Flower</h3>
+
+            <p>
+                Gives the hero a powerful fire ability.
+            </p>
+
+        </div>
+
+        <div class="power-card">
+
+            <div class="power-icon">
+                ⭐
+            </div>
+
+            <h3>Star Power</h3>
+
+            <p>
+                Provides temporary protection from enemies.
+            </p>
+
+        </div>
+
+        <div class="power-card">
+
+            <div class="power-icon">
+                ❄️
+            </div>
+
+            <h3>Ice Power</h3>
+
+            <p>
+                Gives the hero an icy ability.
+            </p>
+
+        </div>
+
+        <div class="power-card">
+
+            <div class="power-icon">
+                🪙
+            </div>
+
+            <h3>Coin</h3>
+
+            <p>
+                Collect coins to increase your arcade score.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     ENEMIES
+     ========================================================= -->
+
+<section class="enemy-section">
+
+    <div class="section-title">
+
+        <h2>ENEMIES</h2>
+
+        <p>
+            Watch out for dangerous creatures and obstacles.
+        </p>
+
+    </div>
+
+    <div class="enemy-grid">
+
+        <div class="enemy-card">
+
+            <div class="enemy-icon">
+                🍄
+            </div>
+
+            <h3>Walking Mushroom</h3>
+
+            <p>
+                A small enemy that patrols the ground.
+            </p>
+
+        </div>
+
+        <div class="enemy-card">
+
+            <div class="enemy-icon">
+                🐢
+            </div>
+
+            <h3>Shell Trooper</h3>
+
+            <p>
+                A turtle-like enemy carrying a strong shell.
+            </p>
+
+        </div>
+
+        <div class="enemy-card">
+
+            <div class="enemy-icon">
+                🌱
+            </div>
+
+            <h3>Snap Plant</h3>
+
+            <p>
+                A dangerous plant that hides inside pipes.
+            </p>
+
+        </div>
+
+        <div class="enemy-card">
+
+            <div class="enemy-icon">
+                ⚫
+            </div>
+
+            <h3>Bullet Enemy</h3>
+
+            <p>
+                A fast flying obstacle that crosses the level.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     WORLDS
+     ========================================================= -->
+
+<section class="world-section">
+
+    <div class="section-title">
+
+        <h2>ARCADE WORLDS</h2>
+
+        <p>
+            Four worlds are waiting for the player.
+        </p>
+
+    </div>
+
+    <div class="world-grid">
+
+        <div class="world-card">
+
+            <span class="world-number">
+                WORLD 01
+            </span>
+
+            <h3>Green Plains</h3>
+
+            <p>
+                Grasslands filled with coins, platforms and enemies.
+            </p>
+
+        </div>
+
+        <div class="world-card">
+
+            <span class="world-number">
+                WORLD 02
+            </span>
+
+            <h3>Ocean Zone</h3>
+
+            <p>
+                A mysterious world filled with water and ice.
+            </p>
+
+        </div>
+
+        <div class="world-card">
+
+            <span class="world-number">
+                WORLD 03
+            </span>
+
+            <h3>Sky Kingdom</h3>
+
+            <p>
+                Floating platforms and dangerous flying enemies.
+            </p>
+
+        </div>
+
+        <div class="world-card">
+
+            <span class="world-number">
+                WORLD 04
+            </span>
+
+            <h3>Dragon Castle</h3>
+
+            <p>
+                The final fortress controlled by the Dragon King.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     CONTROLS
+     ========================================================= -->
+
+<section class="controls-section">
+
+    <div class="section-title">
+
+        <h2>ARCADE CONTROLS</h2>
+
+        <p>
+            Classic platform-game controls.
+        </p>
+
+    </div>
+
+    <div class="controls">
+
+        <div class="control">
+
+            <div class="key">
+                ←
+            </div>
+
+            <p>
+                Move Left
+            </p>
+
+        </div>
+
+        <div class="control">
+
+            <div class="key">
+                →
+            </div>
+
+            <p>
+                Move Right
+            </p>
+
+        </div>
+
+        <div class="control">
+
+            <div class="key">
+                ↑
+            </div>
+
+            <p>
+                Jump
+            </p>
+
+        </div>
+
+        <div class="control">
+
+            <div class="key">
+                SPACE
+            </div>
+
+            <p>
+                Special Action
+            </p>
+
+        </div>
+
+        <div class="control">
+
+            <div class="key">
+                P
+            </div>
+
+            <p>
+                Pause
+            </p>
+
+        </div>
+
+        <div class="control">
+
+            <div class="key">
+                R
+            </div>
+
+            <p>
+                Restart
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer class="footer">
+
+    <h2>MUSHROOM HEROES</h2>
+
+    <p>
+        A CSS-powered arcade platformer concept made in one HTML file.
+    </p>
+
+    <p>
+        Built for learning, creativity and arcade competitions.
+    </p>
+
+</footer>
+
+</body>
+</html>

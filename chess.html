@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ultimate HTML Chess</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh;
+        background:
+            radial-gradient(circle at top, #263b55 0%, #10151c 45%, #070a0e 100%);
+        color: white;
+        font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 25px;
+    }
+
+    .game {
+        width: min(1200px, 100%);
+        background: rgba(20, 26, 35, 0.96);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 25px;
+        padding: 25px;
+        box-shadow: 0 25px 80px rgba(0,0,0,0.55);
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    header h1 {
+        font-size: clamp(30px, 5vw, 52px);
+        letter-spacing: 2px;
+        background: linear-gradient(90deg, #ffd700, #ffffff, #72b7ff);
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    header p {
+        color: #aeb8c5;
+        margin-top: 8px;
+    }
+
+    .layout {
+        display: grid;
+        grid-template-columns: 260px minmax(400px, 650px) 260px;
+        gap: 25px;
+        justify-content: center;
+        align-items: start;
+    }
+
+    .panel {
+        background: rgba(255,255,255,0.055);
+        border: 1px solid rgba(255,255,255,0.09);
+        border-radius: 18px;
+        padding: 18px;
+    }
+
+    .panel h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .difficulty {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .difficulty button {
+        width: 100%;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: #1b2430;
+        color: white;
+        padding: 15px;
+        border-radius: 12px;
+        cursor: pointer;
+        text-align: left;
+        transition: 0.2s;
+    }
+
+    .difficulty button:hover {
+        transform: translateY(-2px);
+        background: #273445;
+    }
+
+    .difficulty button.active {
+        border-color: #ffd700;
+        background: linear-gradient(135deg, #3b3420, #242b35);
+        box-shadow: 0 0 20px rgba(255,215,0,0.12);
+    }
+
+    .difficulty strong {
+        display: block;
+        font-size: 16px;
+    }
+
+    .difficulty small {
+        color: #aeb8c5;
+        display: block;
+        margin-top: 5px;
+        line-height: 1.35;
+    }
+
+    .board-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .status {
+        width: 100%;
+        background: #10161e;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 15px;
+        text-align: center;
+        color: #dce5ef;
+    }
+
+    .board {
+        width: min(650px, 90vw);
+        aspect-ratio: 1;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        border: 7px solid #161b22;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow:
+            0 20px 45px rgba(0,0,0,0.5),
+            0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .square {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .light {
+        background: #e7d5b0;
+    }
+
+    .dark {
+        background: #8b5e3c;
+    }
+
+    .piece {
+        font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", serif;
+        font-size: clamp(32px, 6vw, 62px);
+        line-height: 1;
+        z-index: 2;
+        transition: transform 0.12s;
+    }
+
+    .square:hover .piece {
+        transform: scale(1.08);
+    }
+
+    .selected {
+        box-shadow: inset 0 0 0 5px #ffe65c;
+    }
+
+    .legal::after {
+        content: "";
+        width: 22%;
+        height: 22%;
+        border-radius: 50%;
+        background: rgba(20,20,20,0.45);
+        position: absolute;
+    }
+
+    .capture {
+        box-shadow: inset 0 0 0 5px rgba(255,75,75,0.7);
+    }
+
+    .last-move {
+        background-image: linear-gradient(
+            rgba(255, 230, 80, 0.25),
+            rgba(255, 230, 80, 0.25)
+        );
+    }
+
+    .coordinates {
+        position: absolute;
+        font-size: 10px;
+        font-weight: bold;
+        opacity: 0.7;
+    }
+
+    .rank {
+        top: 3px;
+        left: 4px;
+    }
+
+    .file {
+        bottom: 3px;
+        right: 4px;
+    }
+
+    .light .coordinates {
+        color: #75482c;
+    }
+
+    .dark .coordinates {
+        color: #f2d6a8;
+    }
+
+    .info-box {
+        margin-top: 15px;
+        padding: 13px;
+        border-radius: 12px;
+        background: #111820;
+        color: #b9c4d1;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .control {
+        width: 100%;
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        margin-top: 10px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        color: white;
+        background: #273445;
+        transition: 0.2s;
+    }
+
+    .control:hover {
+        background: #34465c;
+        transform: translateY(-1px);
+    }
+
+    .new-game {
+        background: linear-gradient(135deg, #d59c00, #f1c42d);
+        color: #17130a;
+    }
+
+    .new-game:hover {
+        background: linear-gradient(135deg, #e4aa00, #ffd84e);
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .stat {
+        background: #111820;
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+    }
+
+    .stat span {
+        display: block;
+        font-size: 22px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    .moves {
+        max-height: 250px;
+        overflow-y: auto;
+        background: #0d131a;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .move-row {
+        display: grid;
+        grid-template-columns: 35px 1fr 1fr;
+        padding: 7px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .move-row:last-child {
+        border-bottom: none;
+    }
+
+    .thinking {
+        color: #ffd84a;
+    }
+
+    .result {
+        font-size: 19px;
+        font-weight: bold;
+        text-align: center;
+        padding: 12px;
+        margin-top: 12px;
+        border-radius: 12px;
+        background: rgba(255,215,0,0.08);
+        display: none;
+    }
+
+    @media(max-width: 1050px) {
+        .layout {
+            grid-template-columns: 220px minmax(400px, 650px);
+        }
+
+        .right-panel {
+            grid-column: 1 / -1;
+        }
+    }
+
+    @media(max-width: 720px) {
+        body {
+            padding: 10px;
+        }
+
+        .game {
+            padding: 12px;
+        }
+
+        .layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .panel {
+            width: min(650px, 95vw);
+        }
+
+        .board {
+            width: 95vw;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <header>
+        <h1>♔ ULTIMATE CHESS ♚</h1>
+        <p>Choose your opponent and challenge the computer.</p>
+    </header>
+
+    <div class="layout">
+
+        <!-- LEFT PANEL -->
+        <div class="panel">
+
+            <h2>🤖 Choose Opponent</h2>
+
+            <div class="difficulty">
+
+                <button class="difficulty-btn active" data-level="rookie">
+                    <strong>🟢 Rookie</strong>
+                    <small>
+                        Very easy opponent.<br>
+                        AI makes many mistakes.
+                    </small>
+                </button>
+
+                <button class="difficulty-btn" data-level="intermediate">
+                    <strong>🟡 Intermediate</strong>
+                    <small>
+                        Stronger opponent.<br>
+                        AI thinks several moves ahead.
+                    </small>
+                </button>
+
+                <button class="difficulty-btn" data-level="grandmaster">
+                    <strong>🔴 Grandmaster</strong>
+                    <small>
+                        Extremely difficult.<br>
+                        AI plays aggressively.
+                    </small>
+                </button>
+
+            </div>
+
+            <div class="info-box">
+                <b>Your side:</b> White ♔<br>
+                <b>Computer:</b> Black ♚<br><br>
+
+                Rookie is designed to be beginner-friendly,
+                Intermediate is challenging, and Grandmaster
+                is designed to be very difficult.
+            </div>
+
+            <button class="control new-game" onclick="newGame()">
+                🔄 New Game
+            </button>
+
+            <button class="control" onclick="undoMove()">
+                ↩ Undo Move
+            </button>
+
+        </div>
+
+
+        <!-- CHESS BOARD -->
+        <div class="board-area">
+
+            <div class="status" id="status">
+                Your turn — White
+            </div>
+
+            <div class="board" id="board"></div>
+
+            <div class="result" id="result"></div>
+
+        </div>
+
+
+        <!-- RIGHT PANEL -->
+        <div class="panel right-panel">
+
+            <h2>📊 Game Statistics</h2>
+
+            <div class="stats">
+
+                <div class="stat">
+                    Level
+                    <span id="levelText">Rookie</span>
+                </div>
+
+                <div class="stat">
+                    Turn
+                    <span id="turnText">White</span>
+                </div>
+
+            </div>
+
+            <h2 style="margin-top:20px;">📜 Moves</h2>
+
+            <div class="moves" id="moves">
+                No moves yet.
+            </div>
+
+            <div class="info-box">
+                <b>How to play</b><br><br>
+                1. Click one of your white pieces.<br>
+                2. Green dots show legal moves.<br>
+                3. Click the destination square.<br>
+                4. The computer automatically responds.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   CHESS ENGINE
+   ============================================================ */
+
+const pieces = {
+
+    wK: "♔",
+    wQ: "♕",
+    wR: "♖",
+    wB: "♗",
+    wN: "♘",
+    wP: "♙",
+
+    bK: "♚",
+    bQ: "♛",
+    bR: "♜",
+    bB: "♝",
+    bN: "♞",
+    bP: "♟"
+
+};
+
+const pieceValues = {
+    P: 100,
+    N: 320,
+    B: 330,
+    R: 500,
+    Q: 900,
+    K: 20000
+};
+
+
+/* Board representation */
+
+let board = [];
+
+let selected = null;
+
+let legalMoves = [];
+
+let turn = "w";
+
+let difficulty = "rookie";
+
+let gameOver = false;
+
+let history = [];
+
+let moveHistory = [];
+
+let lastMove = null;
+
+let aiThinking = false;
+
+
+/* Starting position */
+
+function createStartingBoard() {
+
+    return [
+
+        ["bR","bN","bB","bQ","bK","bB","bN","bR"],
+
+        ["bP","bP","bP","bP","bP","bP","bP","bP"],
+
+        [null,null,null,null,null,null,null,null],
+
+        [null,null,null,null,null,null,null,null],
+
+        [null,null,null,null,null,null,null,null],
+
+        [null,null,null,null,null,null,null,null],
+
+        ["wP","wP","wP","wP","wP","wP","wP","wP"],
+
+        ["wR","wN","wB","wQ","wK","wB","wN","wR"]
+
+    ];
+
+}
+
+
+/* ============================================================
+   DRAW BOARD
+   ============================================================ */
+
+function drawBoard() {
+
+    const boardElement = document.getElementById("board");
+
+    boardElement.innerHTML = "";
+
+    for(let r = 0; r < 8; r++) {
+
+        for(let c = 0; c < 8; c++) {
+
+            const square = document.createElement("div");
+
+            square.className =
+                "square " +
+                ((r+c)%2 === 0 ? "light" : "dark");
+
+            square.dataset.row = r;
+            square.dataset.col = c;
+
+            if(lastMove &&
+               ((lastMove.from[0] === r && lastMove.from[1] === c) ||
+                (lastMove.to[0] === r && lastMove.to[1] === c))) {
+
+                square.classList.add("last-move");
+
+            }
+
+            if(selected &&
+               selected[0] === r &&
+               selected[1] === c) {
+
+                square.classList.add("selected");
+
+            }
+
+            const move = legalMoves.find(
+                m => m[0] === r && m[1] === c
+            );
+
+            if(move) {
+
+                if(board[r][c]) {
+                    square.classList.add("capture");
+                } else {
+                    square.classList.add("legal");
+                }
+
+            }
+
+            if(board[r][c]) {
+
+                const piece = document.createElement("div");
+
+                piece.className = "piece";
+
+                piece.textContent = pieces[board[r][c]];
+
+                square.appendChild(piece);
+
+            }
+
+            /* Coordinates */
+
+            if(c === 0) {
+
+                const rank = document.createElement("span");
+
+                rank.className = "coordinates rank";
+
+                rank.textContent = 8-r;
+
+                square.appendChild(rank);
+
+            }
+
+            if(r === 7) {
+
+                const file = document.createElement("span");
+
+                file.className = "coordinates file";
+
+                file.textContent = String.fromCharCode(97+c);
+
+                square.appendChild(file);
+
+            }
+
+            square.addEventListener("click", () => {
+
+                handleSquareClick(r,c);
+
+            });
+
+            boardElement.appendChild(square);
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   SQUARE CLICK
+   ============================================================ */
+
+function handleSquareClick(r,c) {
+
+    if(gameOver || aiThinking || turn !== "w") {
+        return;
+    }
+
+    const piece = board[r][c];
+
+    /* Select white piece */
+
+    if(!selected) {
+
+        if(piece && piece[0] === "w") {
+
+            selected = [r,c];
+
+            legalMoves = generateLegalMoves(
+                board,
+                r,
+                c
+            );
+
+            drawBoard();
+
+        }
+
+        return;
+    }
+
+
+    /* Click same piece again */
+
+    if(selected[0] === r && selected[1] === c) {
+
+        selected = null;
+
+        legalMoves = [];
+
+        drawBoard();
+
+        return;
+
+    }
+
+
+    /* Move selected piece */
+
+    const valid = legalMoves.some(
+        m => m[0] === r && m[1] === c
+    );
+
+    if(valid) {
+
+        makeMove(
+            selected[0],
+            selected[1],
+            r,
+            c
+        );
+
+        selected = null;
+
+        legalMoves = [];
+
+        turn = "b";
+
+        updateStatus();
+
+        drawBoard();
+
+        if(!checkGameEnd()) {
+
+            aiThinking = true;
+
+            updateStatus();
+
+            setTimeout(() => {
+
+                aiMove();
+
+            }, difficulty === "rookie" ? 350 : 700);
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   MOVE GENERATION
+   ============================================================ */
+
+function generatePseudoMoves(state,r,c) {
+
+    const piece = state[r][c];
+
+    if(!piece) return [];
+
+    const color = piece[0];
+
+    const type = piece[1];
+
+    const moves = [];
+
+
+    function add(nr,nc) {
+
+        if(nr < 0 || nr > 7 || nc < 0 || nc > 7) {
+            return false;
+        }
+
+        if(!state[nr][nc]) {
+
+            moves.push([nr,nc]);
+
+            return true;
+
+        }
+
+        if(state[nr][nc][0] !== color &&
+           state[nr][nc][1] !== "K") {
+
+            moves.push([nr,nc]);
+
+        }
+
+        return false;
+
+    }
+
+
+    /* Pawn */
+
+    if(type === "P") {
+
+        const direction = color === "w" ? -1 : 1;
+
+        const start = color === "w" ? 6 : 1;
+
+        const nr = r + direction;
+
+        if(nr >= 0 && nr <= 7 && !state[nr][c]) {
+
+            moves.push([nr,c]);
+
+            if(r === start &&
+               !state[r+direction*2][c]) {
+
+                moves.push([
+                    r+direction*2,
+                    c
+                ]);
+
+            }
+
+        }
+
+        for(const dc of [-1,1]) {
+
+            const nc = c + dc;
+
+            if(nr >= 0 && nr <= 7 &&
+               nc >= 0 && nc <= 7 &&
+               state[nr][nc] &&
+               state[nr][nc][0] !== color &&
+               state[nr][nc][1] !== "K") {
+
+                moves.push([nr,nc]);
+
+            }
+
+        }
+
+    }
+
+
+    /* Knight */
+
+    if(type === "N") {
+
+        const offsets = [
+
+            [-2,-1],[-2,1],
+            [-1,-2],[-1,2],
+            [1,-2],[1,2],
+            [2,-1],[2,1]
+
+        ];
+
+        for(const [dr,dc] of offsets) {
+
+            add(r+dr,c+dc);
+
+        }
+
+    }
+
+
+    /* Bishop */
+
+    if(type === "B" || type === "Q") {
+
+        const directions = [
+
+            [-1,-1],
+            [-1,1],
+            [1,-1],
+            [1,1]
+
+        ];
+
+        for(const [dr,dc] of directions) {
+
+            let nr = r + dr;
+            let nc = c + dc;
+
+            while(nr >= 0 && nr < 8 &&
+                  nc >= 0 && nc < 8) {
+
+                if(!add(nr,nc)) break;
+
+                nr += dr;
+                nc += dc;
+
+            }
+
+        }
+
+    }
+
+
+    /* Rook */
+
+    if(type === "R" || type === "Q") {
+
+        const directions = [
+
+            [-1,0],
+            [1,0],
+            [0,-1],
+            [0,1]
+
+        ];
+
+        for(const [dr,dc] of directions) {
+
+            let nr = r + dr;
+            let nc = c + dc;
+
+            while(nr >= 0 && nr < 8 &&
+                  nc >= 0 && nc < 8) {
+
+                if(!add(nr,nc)) break;
+
+                nr += dr;
+                nc += dc;
+
+            }
+
+        }
+
+    }
+
+
+    /* King */
+
+    if(type === "K") {
+
+        for(let dr=-1;dr<=1;dr++) {
+
+            for(let dc=-1;dc<=1;dc++) {
+
+                if(dr !== 0 || dc !== 0) {
+
+                    add(r+dr,c+dc);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    return moves;
+
+}
+
+
+/* ============================================================
+   KING CHECK
+   ============================================================ */
+
+function findKing(state,color) {
+
+    for(let r=0;r<8;r++) {
+
+        for(let c=0;c<8;c++) {
+
+            if(state[r][c] === color+"K") {
+
+                return [r,c];
+
+            }
+
+        }
+
+    }
+
+    return null;
+
+}
+
+
+function isSquareAttacked(state,r,c,byColor) {
+
+    for(let rr=0;rr<8;rr++) {
+
+        for(let cc=0;cc<8;cc++) {
+
+            const piece = state[rr][cc];
+
+            if(piece && piece[0] === byColor) {
+
+                const moves = generatePseudoMoves(
+                    state,
+                    rr,
+                    cc
+                );
+
+                if(moves.some(
+                    m => m[0] === r && m[1] === c
+                )) {
+
+                    return true;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    return false;
+
+}
+
+
+function isInCheck(state,color) {
+
+    const king = findKing(state,color);
+
+    if(!king) return true;
+
+    const enemy = color === "w" ? "b" : "w";
+
+    return isSquareAttacked(
+        state,
+        king[0],
+        king[1],
+        enemy
+    );
+
+}
+
+
+/* ============================================================
+   LEGAL MOVES
+   ============================================================ */
+
+function cloneBoard(state) {
+
+    return state.map(row => row.slice());
+
+}
+
+
+function simulateMove(state,fr,fc,tr,tc) {
+
+    const copy = cloneBoard(state);
+
+    copy[tr][tc] = copy[fr][fc];
+
+    copy[fr][fc] = null;
+
+    /* Automatic pawn promotion */
+
+    const piece = copy[tr][tc];
+
+    if(piece &&
+       piece[1] === "P" &&
+       (tr === 0 || tr === 7)) {
+
+        copy[tr][tc] = piece[0] + "Q";
+
+    }
+
+    return copy;
+
+}
+
+
+function generateLegalMoves(state,r,c) {
+
+    const piece = state[r][c];
+
+    if(!piece) return [];
+
+    const color = piece[0];
+
+    const pseudo = generatePseudoMoves(
+        state,
+        r,
+        c
+    );
+
+    const legal = [];
+
+    for(const move of pseudo) {
+
+        const next = simulateMove(
+            state,
+            r,
+            c,
+            move[0],
+            move[1]
+        );
+
+        if(!isInCheck(next,color)) {
+
+            legal.push(move);
+
+        }
+
+    }
+
+    return legal;
+
+}
+
+
+function getAllLegalMoves(state,color) {
+
+    const moves = [];
+
+    for(let r=0;r<8;r++) {
+
+        for(let c=0;c<8;c++) {
+
+            if(state[r][c] &&
+               state[r][c][0] === color) {
+
+                const destinations =
+                    generateLegalMoves(
+                        state,
+                        r,
+                        c
+                    );
+
+                for(const dest of destinations) {
+
+                    moves.push({
+
+                        from:[r,c],
+
+                        to:[dest[0],dest[1]]
+
+                    });
+
+                }
+
+            }
+
+        }
+
+    }
+
+    return moves;
+
+}
+
+
+/* ============================================================
+   MAKE MOVE
+   ============================================================ */
+
+function makeMove(fr,fc,tr,tc) {
+
+    history.push({
+
+        board: cloneBoard(board),
+
+        turn: turn,
+
+        moveHistory: [...moveHistory],
+
+        lastMove: lastMove
+
+    });
+
+    const movingPiece = board[fr][fc];
+
+    const captured = board[tr][tc];
+
+    board = simulateMove(
+        board,
+        fr,
+        fc,
+        tr,
+        tc
+    );
+
+    lastMove = {
+
+        from:[fr,fc],
+
+        to:[tr,tc]
+
+    };
+
+    addMoveNotation(
+        movingPiece,
+        fr,fc,
+        tr,tc,
+        captured
+    );
+
+}
+
+
+/* ============================================================
+   MOVE NOTATION
+   ============================================================ */
+
+function squareName(r,c) {
+
+    return String.fromCharCode(97+c) + (8-r);
+
+}
+
+
+function addMoveNotation(piece,fr,fc,tr,tc,captured) {
+
+    let notation =
+        piece[1] === "P"
+        ? ""
+        : piece[1];
+
+    if(captured) {
+
+        if(piece[1] === "P") {
+
+            notation +=
+                String.fromCharCode(97+fc);
+
+        }
+
+        notation += "x";
+
+    }
+
+    notation += squareName(tr,tc);
+
+    moveHistory.push({
+
+        white: turn === "w" ? notation : null,
+
+        black: turn === "b" ? notation : null
+
+    });
+
+    renderMoves();
+
+}
+
+
+function renderMoves() {
+
+    const container =
+        document.getElementById("moves");
+
+    if(moveHistory.length === 0) {
+
+        container.textContent = "No moves yet.";
+
+        return;
+
+    }
+
+    container.innerHTML = "";
+
+    moveHistory.forEach((move,index) => {
+
+        const row =
+            document.createElement("div");
+
+        row.className = "move-row";
+
+        row.innerHTML = `
+
+            <span>${index+1}.</span>
+
+            <span>${move.white || ""}</span>
+
+            <span>${move.black || ""}</span>
+
+        `;
+
+        container.appendChild(row);
+
+    });
+
+    container.scrollTop =
+        container.scrollHeight;
+
+}
+
+
+/* ============================================================
+   AI EVALUATION
+   ============================================================ */
+
+function evaluateBoard(state) {
+
+    let score = 0;
+
+    for(let r=0;r<8;r++) {
+
+        for(let c=0;c<8;c++) {
+
+            const piece = state[r][c];
+
+            if(!piece) continue;
+
+            const value =
+                pieceValues[piece[1]];
+
+            if(piece[0] === "b") {
+
+                score += value;
+
+            } else {
+
+                score -= value;
+
+            }
+
+            /* Center control */
+
+            if((r === 3 || r === 4) &&
+               (c === 3 || c === 4)) {
+
+                score +=
+                    piece[0] === "b" ? 18 : -18;
+
+            }
+
+        }
+
+    }
+
+    return score;
+
+}
+
+
+/* ============================================================
+   MINIMAX
+   ============================================================ */
+
+function minimax(state,depth,alpha,beta,maximizing) {
+
+    if(depth === 0) {
+
+        return evaluateBoard(state);
+
+    }
+
+    const color =
+        maximizing ? "b" : "w";
+
+    const moves =
+        getAllLegalMoves(state,color);
+
+    if(moves.length === 0) {
+
+        if(isInCheck(state,color)) {
+
+            return maximizing ? -999999 : 999999;
+
+        }
+
+        return 0;
+
+    }
+
+
+    if(maximizing) {
+
+        let best = -Infinity;
+
+        for(const move of moves) {
+
+            const next =
+                simulateMove(
+                    state,
+                    move.from[0],
+                    move.from[1],
+                    move.to[0],
+                    move.to[1]
+                );
+
+            const score =
+                minimax(
+                    next,
+                    depth-1,
+                    alpha,
+                    beta,
+                    false
+                );
+
+            best = Math.max(best,score);
+
+            alpha = Math.max(alpha,best);
+
+            if(beta <= alpha) break;
+
+        }
+
+        return best;
+
+    } else {
+
+        let best = Infinity;
+
+        for(const move of moves) {
+
+            const next =
+                simulateMove(
+                    state,
+                    move.from[0],
+                    move.from[1],
+                    move.to[0],
+                    move.to[1]
+                );
+
+            const score =
+                minimax(
+                    next,
+                    depth-1,
+                    alpha,
+                    beta,
+                    true
+                );
+
+            best = Math.min(best,score);
+
+            beta = Math.min(beta,best);
+
+            if(beta <= alpha) break;
+
+        }
+
+        return best;
+
+    }
+
+}
+
+
+/* ============================================================
+   AI MOVE
+   ============================================================ */
+
+function aiMove() {
+
+    if(gameOver) return;
+
+    const moves =
+        getAllLegalMoves(board,"b");
+
+    if(moves.length === 0) {
+
+        aiThinking = false;
+
+        checkGameEnd();
+
+        return;
+
+    }
+
+    let chosenMove;
+
+
+    /* ------------------------------
+       ROOKIE
+       ------------------------------ */
+
+    if(difficulty === "rookie") {
+
+        /*
+           Rookie randomly chooses many moves.
+           Occasionally it finds a decent move.
+        */
+
+        if(Math.random() < 0.20) {
+
+            chosenMove =
+                findBestMove(moves,1);
+
+        } else {
+
+            chosenMove =
+                moves[
+                    Math.floor(
+                        Math.random()*moves.length
+                    )
+                ];
+
+        }
+
+    }
+
+
+    /* ------------------------------
+       INTERMEDIATE
+       ------------------------------ */
+
+    else if(difficulty === "intermediate") {
+
+        chosenMove =
+            findBestMove(moves,2);
+
+    }
+
+
+    /* ------------------------------
+       GRANDMASTER
+       ------------------------------ */
+
+    else {
+
+        chosenMove =
+            findBestMove(moves,3);
+
+    }
+
+
+    makeMove(
+
+        chosenMove.from[0],
+        chosenMove.from[1],
+
+        chosenMove.to[0],
+        chosenMove.to[1]
+
+    );
+
+    turn = "w";
+
+    aiThinking = false;
+
+    updateStatus();
+
+    drawBoard();
+
+    checkGameEnd();
+
+}
+
+
+/* ============================================================
+   FIND BEST MOVE
+   ============================================================ */
+
+function findBestMove(moves,depth) {
+
+    let bestScore = -Infinity;
+
+    let bestMoves = [];
+
+    for(const move of moves) {
+
+        const next =
+            simulateMove(
+                board,
+                move.from[0],
+                move.from[1],
+                move.to[0],
+                move.to[1]
+            );
+
+        let score;
+
+        if(depth === 1) {
+
+            score = evaluateBoard(next);
+
+        } else {
+
+            score =
+                minimax(
+                    next,
+                    depth-1,
+                    -Infinity,
+                    Infinity,
+                    false
+                );
+
+        }
+
+        /*
+           Small randomness keeps the AI from
+           always behaving identically.
+        */
+
+        score += Math.random()*3;
+
+        if(score > bestScore) {
+
+            bestScore = score;
+
+            bestMoves = [move];
+
+        } else if(
+            Math.abs(score-bestScore) < 5
+        ) {
+
+            bestMoves.push(move);
+
+        }
+
+    }
+
+    return bestMoves[
+        Math.floor(
+            Math.random()*bestMoves.length
+        )
+    ];
+
+}
+
+
+/* ============================================================
+   GAME END
+   ============================================================ */
+
+function checkGameEnd() {
+
+    const moves =
+        getAllLegalMoves(board,turn);
+
+    if(moves.length === 0) {
+
+        gameOver = true;
+
+        const result =
+            document.getElementById("result");
+
+        result.style.display = "block";
+
+        if(isInCheck(board,turn)) {
+
+            if(turn === "w") {
+
+                result.textContent =
+                    "♚ Checkmate — Computer wins!";
+
+            } else {
+
+                result.textContent =
+                    "🏆 CHECKMATE — You win!";
+
+            }
+
+        } else {
+
+            result.textContent =
+                "🤝 Draw — Stalemate";
+
+        }
+
+        updateStatus();
+
+        return true;
+
+    }
+
+    /* Simple 50-move-like draw protection */
+
+    if(moveHistory.length >= 150) {
+
+        gameOver = true;
+
+        const result =
+            document.getElementById("result");
+
+        result.style.display = "block";
+
+        result.textContent =
+            "🤝 Draw — Game limit reached.";
+
+        return true;
+
+    }
+
+    return false;
+
+}
+
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+
+function updateStatus() {
+
+    const status =
+        document.getElementById("status");
+
+    const turnText =
+        document.getElementById("turnText");
+
+    if(gameOver) {
+
+        status.textContent = "Game Over";
+
+        return;
+
+    }
+
+    if(aiThinking) {
+
+        status.innerHTML =
+            `<span class="thinking">
+                🤖 Computer is thinking...
+             </span>`;
+
+    } else {
+
+        status.textContent =
+            turn === "w"
+            ? "Your turn — White ♔"
+            : "Computer turn — Black ♚";
+
+    }
+
+    turnText.textContent =
+        turn === "w" ? "White" : "Black";
+
+}
+
+
+/* ============================================================
+   NEW GAME
+   ============================================================ */
+
+function newGame() {
+
+    board = createStartingBoard();
+
+    selected = null;
+
+    legalMoves = [];
+
+    turn = "w";
+
+    gameOver = false;
+
+    aiThinking = false;
+
+    history = [];
+
+    moveHistory = [];
+
+    lastMove = null;
+
+    document.getElementById("result")
+        .style.display = "none";
+
+    updateStatus();
+
+    renderMoves();
+
+    drawBoard();
+
+}
+
+
+/* ============================================================
+   UNDO
+   ============================================================ */
+
+function undoMove() {
+
+    if(history.length === 0 ||
+       gameOver ||
+       aiThinking) {
+
+        return;
+
+    }
+
+    /*
+       Undo the player's move and the computer's
+       previous move together.
+    */
+
+    let previous = history.pop();
+
+    board = previous.board;
+
+    turn = previous.turn;
+
+    moveHistory = previous.moveHistory;
+
+    lastMove = previous.lastMove;
+
+    selected = null;
+
+    legalMoves = [];
+
+    renderMoves();
+
+    updateStatus();
+
+    drawBoard();
+
+}
+
+
+/* ============================================================
+   DIFFICULTY BUTTONS
+   ============================================================ */
+
+document.querySelectorAll(".difficulty-btn")
+.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        if(aiThinking) return;
+
+        document
+            .querySelectorAll(".difficulty-btn")
+            .forEach(b =>
+                b.classList.remove("active")
+            );
+
+        button.classList.add("active");
+
+        difficulty =
+            button.dataset.level;
+
+        document.getElementById("levelText")
+            .textContent =
+            difficulty.charAt(0).toUpperCase() +
+            difficulty.slice(1);
+
+        newGame();
+
+    });
+
+});
+
+
+/* ============================================================
+   START
+   ============================================================ */
+
+newGame();
+
+</script>
+
+</body>
+</html>
