@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Accessibility Hub — Inclusive Analytics Dashboard</title>
+<meta name="description" content="A demo dashboard built with semantic HTML first and WAI-ARIA only where needed.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231d4ed8'/%3E%3Ccircle cx='16' cy='8' r='3' fill='%23fff'/%3E%3Cpath d='M7 12h18M16 12v8M16 20l-5 7M16 20l5 7' stroke='%23fff' stroke-width='2.6' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#0e1320;--pn:#161d2e;--bd:#2c3650;--tx:#eef2fa;--mu:#b4bdd0;--ac:#7db4ff;--ab:#0b1b36;--fo:#ffd166;--ok:#4cc38a;--bad:#ff7a7a;--wn:#f2c14e}
+[data-theme=light]{--bg:#f4f6fb;--pn:#fff;--bd:#c9d0e0;--tx:#101828;--mu:#475467;--ac:#1d4ed8;--ab:#fff;--fo:#9a3412;--ok:#0a7a4b;--bad:#b42318;--wn:#8a5a00}
+.cb{--ok:#56b4e9;--bad:#e69f00;--wn:#cc79a7}
+[data-theme=light].cb{--ok:#0072b2;--bad:#b45309;--wn:#6a3d9a}
+.hc{--bg:#000;--pn:#000;--bd:#fff;--tx:#fff;--mu:#fff;--ac:#ffff00;--ab:#000;--fo:#00ffff}
+.hc .card,.hc .pn,.hc button,.hc input,.hc select{border-width:2px}
+.lt{font-size:125%}
+.sp body{line-height:1.9;letter-spacing:.04em;word-spacing:.12em}
+.fi :focus-visible{outline-width:6px!important}
+.rm *,.rm *::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,"Segoe UI",Roboto,sans-serif}
+:focus-visible{outline:3px solid var(--fo);outline-offset:2px}
+a{color:var(--ac)}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:8px;top:-60px;background:var(--ac);color:var(--ab);padding:10px 16px;border-radius:6px;z-index:100;font-weight:700}
+.skip:focus{top:8px}
+button,select,input:not([type=checkbox]){font:inherit;color:var(--tx);background:var(--pn);border:1px solid var(--bd);border-radius:8px;padding:8px 12px;min-height:44px}
+button{cursor:pointer;min-width:44px}
+button:hover{border-color:var(--ac)}
+button[aria-pressed=true],button[aria-current=true],.pri{background:var(--ac);color:var(--ab);border-color:var(--ac);font-weight:600}
+input[type=checkbox]{width:22px;height:22px;accent-color:var(--ac);vertical-align:middle;margin-right:8px}
+.hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 20px;background:var(--pn);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:20}
+.brand{font-weight:700;font-size:1.15rem;margin-right:auto}
+.brand small{display:block;font-weight:400;font-size:.75rem;color:var(--mu)}
+.hd form{display:flex;gap:6px}
+#mb,#xb{display:none}
+#app{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 140px)}
+#app.col{grid-template-columns:72px 1fr}
+#sb{background:var(--pn);border-right:1px solid var(--bd);padding:14px 10px;display:flex;flex-direction:column;gap:10px}
+#sb ul{list-style:none;padding:0;display:grid;gap:4px}
+#sb a{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:8px;color:var(--tx);text-decoration:none;min-height:44px}
+#sb a:hover{background:var(--bg)}
+#sb a[aria-current=page]{background:var(--ac);color:var(--ab);font-weight:700}
+.col .lb{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.col #sb button .lb{display:inline}
+main{padding:22px clamp(14px,3vw,36px);display:grid;gap:26px;min-width:0}
+h1{font-size:1.9rem}h2{font-size:1.35rem;margin-bottom:10px}h3{font-size:1.05rem}
+.mu{color:var(--mu)}
+.note{border:1px dashed var(--bd);padding:8px 12px;border-radius:8px;color:var(--mu);font-size:.9rem}
+.bc ol{display:flex;gap:8px;list-style:none;padding:0;flex-wrap:wrap;color:var(--mu);font-size:.9rem}
+.bc li+li::before{content:"›";margin-right:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card,.pn{background:var(--pn);border:1px solid var(--bd);border-radius:12px;padding:16px;min-width:0}
+.val{font-size:2rem;font-weight:700}
+.up{color:var(--ok)}.dn{color:var(--bad)}
+.grp{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}
+figure{margin:0}figcaption{color:var(--mu);font-size:.9rem;margin-top:6px}
+svg text{fill:var(--mu);font-size:10px}
+details{margin-top:8px}summary{cursor:pointer;min-height:32px}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+caption{text-align:left;padding:6px 0;color:var(--mu)}
+th,td{padding:8px 10px;border-bottom:1px solid var(--bd);text-align:left}
+th button{border:0;background:none;padding:4px 6px;font-weight:700}
+.tw{overflow-x:auto}
+.bg{display:inline-flex;gap:6px;align-items:center;border:1px solid currentColor;border-radius:99px;padding:1px 10px;font-size:.85rem}
+.s-Active,.s-Completed{color:var(--ok)}.s-Failed,.s-Inactive{color:var(--bad)}.s-Pending{color:var(--wn)}
+.cb .s-Failed .ic,.cb .s-Inactive .ic{font-weight:900}
+.bars{list-style:none;padding:0;display:grid;gap:8px}
+.bars li{display:grid;grid-template-columns:90px 1fr 40px;gap:8px;align-items:center}
+.bars i{display:block;height:16px;border-radius:4px;background:var(--ac)}
+.bars li:nth-child(2) i{background:repeating-linear-gradient(45deg,var(--ac) 0 4px,transparent 4px 7px)}
+.bars li:nth-child(3) i{background:repeating-linear-gradient(90deg,var(--ac) 0 4px,transparent 4px 8px)}
+.bars li:nth-child(4) i{background:radial-gradient(var(--ac) 40%,transparent 45%) 0 0/8px 8px}
+.leg{list-style:none;padding:0;display:grid;gap:4px;font-size:.9rem}
+[role=tablist]{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--bd)}
+[role=tab]{border-radius:8px 8px 0 0;border-bottom:0}
+[role=tab][aria-selected=true]{background:var(--ac);color:var(--ab);font-weight:700}
+[role=tabpanel]{padding:16px 0}
+.field{display:grid;gap:4px;margin-bottom:12px}
+.field input,.field select{width:100%}
+.err{color:var(--bad);font-weight:600}
+.err::before{content:"Error: "}
+[aria-invalid=true]{border:2px solid var(--bad)!important}
+#es{border:2px solid var(--bad);border-radius:8px;padding:12px;margin-bottom:14px}
+fieldset{border:1px solid var(--bd);border-radius:8px;padding:12px 14px;margin-bottom:12px}
+legend{padding:0 6px;font-weight:600}
+.opt{display:block;padding:6px 0}
+.acc button{width:100%;text-align:left;display:flex;justify-content:space-between}
+.acc div{padding:10px 4px 14px}
+.feed{list-style:none;padding:0;display:grid;gap:8px}
+.feed li{border-left:3px solid var(--ac);padding-left:10px}
+.empty{text-align:center;padding:24px;color:var(--mu)}
+#toasts{position:fixed;right:16px;bottom:16px;display:grid;gap:8px;z-index:60;max-width:min(360px,90vw)}
+.toast{background:var(--pn);border:2px solid var(--ac);padding:12px 16px;border-radius:8px;box-shadow:0 8px 24px #0006}
+.toast.e{border-color:var(--bad)}
+dialog{background:var(--pn);color:var(--tx);border:2px solid var(--ac);border-radius:12px;padding:22px;max-width:min(520px,92vw)}
+dialog::backdrop{background:#000a}
+dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px}
+kbd{background:var(--bg);border:1px solid var(--bd);border-radius:4px;padding:1px 6px}
+.um{position:relative}
+#umenu{position:absolute;right:0;top:50px;background:var(--pn);border:1px solid var(--bd);border-radius:8px;padding:6px;min-width:190px;list-style:none;z-index:30;display:grid}
+#umenu a,#umenu button{display:block;width:100%;text-align:left;border:0;padding:10px 12px;color:var(--tx);text-decoration:none;min-height:44px}
+footer{padding:18px 24px;border-top:1px solid var(--bd);color:var(--mu);font-size:.9rem}
+@media(max-width:800px){
+ #app,#app.col{grid-template-columns:1fr}
+ #mb,#xb{display:inline-block}
+ #cb{display:none}
+ #sb{position:fixed;inset:0 25% 0 0;z-index:50;transform:translateX(-100%);visibility:hidden;transition:transform .25s,visibility .25s;max-width:300px}
+ #sb.open{transform:none;visibility:visible}
+ .col .lb{position:static;width:auto;height:auto;clip:auto}
+ .bars li{grid-template-columns:70px 1fr 36px}
+}
+@media print{.hd,#sb,.skip,#toasts,.noprint,footer button{display:none!important}#app{display:block}body{background:#fff;color:#000}.card,.pn{border:1px solid #000;break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to main content</a>
+<div id="ann" class="vh" role="status" aria-live="polite" aria-atomic="true"></div>
+<header class="hd">
+ <button id="mb" aria-expanded="false" aria-controls="sb"><span aria-hidden="true">☰</span> <span>Menu</span></button>
+ <p class="brand">Accessibility Hub<small>Inclusive Analytics Dashboard</small></p>
+ <form role="search" id="gs" aria-label="Dashboard search">
+  <label for="gq" class="vh">Search dashboard</label>
+  <input id="gq" type="search" placeholder="Search users, projects, reports…" autocomplete="off">
+  <button type="submit">Search</button><button type="button" id="gc">Clear</button>
+ </form>
+ <button id="nb" aria-label="Notifications, 3 unread (demo)"><span aria-hidden="true">🔔 3</span></button>
+ <button id="tb" aria-pressed="true">Dark mode</button>
+ <button id="kb">Keyboard shortcuts</button>
+ <div class="um"><button id="ub" aria-expanded="false" aria-controls="umenu"><span aria-hidden="true">👤</span> Alex Morgan</button>
+  <ul id="umenu" hidden><li><a href="#settings">Profile</a></li><li><a href="#settings">Settings</a></li><li><a href="#a11y">Accessibility</a></li><li><a href="#help">Help</a></li><li><button type="button" id="so">Sign out</button></li></ul></div>
+</header>
+<div id="app">
+ <aside id="sb" aria-label="Sidebar">
+  <button id="xb">Close navigation</button>
+  <nav aria-label="Main navigation"><ul>
+   <li><a href="#dash" aria-current="page"><span aria-hidden="true">▦</span><span class="lb">Dashboard</span></a></li>
+   <li><a href="#analytics"><span aria-hidden="true">📈</span><span class="lb">Analytics</span></a></li>
+   <li><a href="#reports"><span aria-hidden="true">🗂</span><span class="lb">Reports</span></a></li>
+   <li><a href="#users"><span aria-hidden="true">👥</span><span class="lb">Users</span></a></li>
+   <li><a href="#settings"><span aria-hidden="true">⚙</span><span class="lb">Settings</span></a></li>
+   <li><a href="#help"><span aria-hidden="true">❓</span><span class="lb">Help</span></a></li>
+  </ul></nav>
+  <button id="cb" aria-expanded="true"><span aria-hidden="true">⇤</span> <span class="lb">Collapse navigation</span></button>
+ </aside>
+ <main id="main-content" tabindex="-1">
+  <nav class="bc" aria-label="Breadcrumb"><ol><li><a href="#dash">Home</a></li><li><a href="#reports">Reports</a></li><li aria-current="page">Monthly Report</li></ol></nav>
+  <section id="dash" aria-labelledby="h-dash">
+   <h1 id="h-dash">Welcome back, Alex</h1>
+   <p class="note">All numbers, names and metrics on this page are fictional demo data.</p>
+   <h2 class="vh">Key metrics</h2>
+   <div class="grid" id="stats" style="margin-top:14px"></div>
+  </section>
+  <section id="analytics" aria-labelledby="h-an">
+   <h2 id="h-an">Analytics</h2>
+   <div class="grp" role="group" aria-label="Time range" id="rg"></div>
+   <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+    <article class="card"><h3>Users over time</h3><div id="c1"></div></article>
+    <article class="card"><h3>Projects by team</h3><div id="c2"></div></article>
+    <article class="card"><h3>Task status</h3><div id="c3"></div></article>
+   </div>
+  </section>
+  <section id="reports" aria-labelledby="h-rp">
+   <h2 id="h-rp">Reports &amp; activity</h2>
+   <div class="pn">
+    <div role="tablist" aria-label="Dashboard views" id="tl">
+     <button role="tab" id="t-ov" data-k="ov" aria-controls="p-ov">Overview</button>
+     <button role="tab" id="t-ac" data-k="ac" aria-controls="p-ac">Activity</button>
+     <button role="tab" id="t-pf" data-k="pf" aria-controls="p-pf">Performance</button>
+     <button role="tab" id="t-rp" data-k="rp" aria-controls="p-rp">Reports</button>
+    </div>
+    <div role="tabpanel" id="p-ov" aria-labelledby="t-ov"><h3>Overview</h3><p>Users grew steadily this period, projects are mostly on track, and task completion is 84%. Use the tabs to see activity, performance and reports. Arrow keys, Home and End move between tabs.</p></div>
+    <div role="tabpanel" id="p-ac" aria-labelledby="t-ac" hidden><h3>Recent activity</h3><div class="grp" role="group" aria-label="Filter activity" id="af"></div><ul class="feed" id="feed"></ul></div>
+    <div role="tabpanel" id="p-pf" aria-labelledby="t-pf" hidden><h3>Accessibility metrics</h3><p class="note">Demo / simulated metrics. They are not the result of a real audit and are not a WCAG conformance claim.</p>
+     <table><caption>Simulated accessibility metrics</caption><thead><tr><th scope="col">Metric</th><th scope="col">Score</th></tr></thead><tbody><tr><th scope="row">Keyboard navigation</th><td>96%</td></tr><tr><th scope="row">Screen reader compatibility</th><td>94%</td></tr><tr><th scope="row">Color contrast</th><td>98%</td></tr><tr><th scope="row">Form accessibility</th><td>100%</td></tr><tr><th scope="row">Overall</th><td>97%</td></tr></tbody></table></div>
+    <div role="tabpanel" id="p-rp" aria-labelledby="t-rp" hidden><h3>Generate a report</h3>
+     <div class="field" style="max-width:320px"><label for="rt">Report type</label><select id="rt"><option>Sales report</option><option>User report</option><option>Performance report</option><option>Accessibility report</option></select></div>
+     <button class="pri" id="gen">Generate report</button> <button id="rty" hidden>Retry</button>
+     <p id="rs" role="status" class="mu" style="margin:10px 0"></p>
+     <ul class="feed" id="rl"></ul><p class="empty" id="re">No reports found. Try creating a new report.</p></div>
+   </div>
+  </section>
+  <section id="users" aria-labelledby="h-us">
+   <h2 id="h-us">Users</h2>
+   <div class="field" style="max-width:340px"><label for="uq">Search users</label><input id="uq" type="search" autocomplete="off"></div>
+   <p id="ustat" role="status" tabindex="-1" class="mu"></p>
+   <div class="tw"><table><caption>Users (fictional demo data)</caption><thead><tr>
+    <th scope="col" aria-sort="ascending"><button data-s="n">Name <span aria-hidden="true"></span></button></th>
+    <th scope="col" aria-sort="none"><button data-s="e">Email <span aria-hidden="true"></span></button></th>
+    <th scope="col" aria-sort="none"><button data-s="s">Status <span aria-hidden="true"></span></button></th>
+    <th scope="col" aria-sort="none"><button data-s="r">Role <span aria-hidden="true"></span></button></th>
+    <th scope="col" aria-sort="none"><button data-s="d">Last active <span aria-hidden="true"></span></button></th>
+    <th scope="col">Actions</th></tr></thead><tbody id="ub2"></tbody></table></div>
+   <nav aria-label="Users pagination" style="margin-top:12px"><div class="grp" id="pg"></div></nav>
+  </section>
+  <section id="settings" aria-labelledby="h-st">
+   <h2 id="h-st">Profile settings</h2>
+   <form id="pf" novalidate class="pn">
+    <div id="es" tabindex="-1" hidden><h3>Please correct the following errors:</h3><ul id="el"></ul></div>
+    <p class="mu" style="margin-bottom:10px">Fields marked with * are required.</p>
+    <div class="field"><label for="f-n">Name *</label><input id="f-n" required aria-required="true" aria-describedby="f-n-e" autocomplete="name" value="Alex Morgan"><p class="err" id="f-n-e" hidden></p></div>
+    <div class="field"><label for="f-e">Email address *</label><input id="f-e" type="email" required aria-required="true" aria-describedby="f-e-h f-e-e" autocomplete="email" value="alex.morgan@example.com"><small class="mu" id="f-e-h">Example: name@example.com</small><p class="err" id="f-e-e" hidden></p></div>
+    <div class="field"><label for="f-p">Phone *</label><input id="f-p" type="tel" required aria-required="true" aria-describedby="f-p-e" autocomplete="tel"><p class="err" id="f-p-e" hidden></p></div>
+    <div class="field"><label for="f-r">Role</label><select id="f-r"><option>Administrator</option><option>Editor</option><option>Viewer</option></select></div>
+    <div class="field"><label for="f-l">Language</label><select id="f-l"><option>English</option><option>Español</option><option>Français</option></select></div>
+    <div class="field"><label for="f-w">New password *</label><input id="f-w" type="password" required aria-required="true" aria-describedby="f-w-h f-w-e" autocomplete="new-password"><small class="mu" id="f-w-h">At least 8 characters.</small><p class="err" id="f-w-e" hidden></p><label class="opt"><input type="checkbox" id="sp"> Show password</label></div>
+    <fieldset><legend>Notification preferences</legend><label class="opt"><input type="checkbox" checked> Email notifications</label><label class="opt"><input type="checkbox"> Weekly summary</label></fieldset>
+    <button class="pri" type="submit">Save profile</button>
+   </form>
+  </section>
+  <section id="a11y" aria-labelledby="h-ax">
+   <h2 id="h-ax">Accessibility settings</h2>
+   <fieldset class="pn" id="aset"><legend>Display preferences (saved on this device)</legend>
+    <label class="opt"><input type="checkbox" id="o-dk"> Dark mode</label>
+    <label class="opt"><input type="checkbox" id="o-hc"> High contrast</label>
+    <label class="opt"><input type="checkbox" id="o-rm"> Reduced motion</label>
+    <label class="opt"><input type="checkbox" id="o-lt"> Large text</label>
+    <label class="opt"><input type="checkbox" id="o-sp"> Increase spacing</label>
+    <label class="opt"><input type="checkbox" id="o-fi"> Stronger focus indicators</label>
+    <label class="opt"><input type="checkbox" id="o-cb"> Color-blind friendly mode</label>
+   </fieldset>
+  </section>
+  <section id="help" aria-labelledby="h-hp">
+   <h2 id="h-hp">Help &amp; accessibility</h2>
+   <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+    <article class="card"><h3>FAQ</h3><div class="acc" id="acc"></div></article>
+    <article class="card"><h3>Accessibility check</h3><p class="note">A basic educational checker. It is not a replacement for professional accessibility testing, and it does not certify WCAG compliance.</p><button id="chk" style="margin:10px 0">Run basic check</button><ul id="cr" class="leg"></ul></article>
+    <article class="card"><h3>Four principles (WCAG)</h3><dl><dt>Perceivable</dt><dd>Information can be presented in ways users can perceive.</dd><dt>Operable</dt><dd>Users can operate the interface with different input methods.</dd><dt>Understandable</dt><dd>Information and controls are understandable.</dd><dt>Robust</dt><dd>Content works with different assistive technologies.</dd></dl></article>
+    <article class="card"><h3>Accessibility statement</h3><p>This demo supports keyboard use, screen readers through semantic HTML and selective ARIA, reduced motion, high contrast, large text and accessible forms. It has not been formally audited, so it may contain issues. Known limitations: charts are SVG/CSS with text alternatives rather than interactive; demo data only. Send feedback to accessibility@example.com (fictional address).</p></article>
+   </div>
+  </section>
+ </main>
+</div>
+<footer><p>Accessibility Hub — demo project with fictional data. <time datetime="2026-10-03">October 3, 2026</time></p></footer>
+<div id="toasts" role="status" aria-live="polite"></div>
+<dialog id="kd" aria-labelledby="kt"><h2 id="kt">Keyboard shortcuts</h2>
+ <dl><dt><kbd>/</kbd></dt><dd>Focus search</dd><dt><kbd>?</kbd></dt><dd>Open this dialog</dd><dt><kbd>G</kbd> then <kbd>D</kbd></dt><dd>Dashboard</dd><dt><kbd>G</kbd> then <kbd>A</kbd></dt><dd>Analytics</dd><dt><kbd>G</kbd> then <kbd>R</kbd></dt><dd>Reports</dd><dt><kbd>G</kbd> then <kbd>S</kbd></dt><dd>Settings</dd><dt><kbd>Esc</kbd></dt><dd>Close dialog, menu or drawer</dd></dl>
+ <p class="mu" style="margin:10px 0">Shortcuts are ignored while you type in a field.</p><button class="pri" id="kc">Close</button></dialog>
+<script>
+"use strict";
+const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* ===== StorageManager / AppState ===== */
+const KEY='a11yhub';
+const P={theme:'dark',hc:0,rm:0,lt:0,sp:0,fi:0,cb:0,sb:0,tab:'ov',range:'Monthly',sk:'n',sd:'asc'};
+try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&typeof x=='object')for(const k in P)if(k in x&&typeof x[k]==typeof P[k])P[k]=x[k]}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}};
+/* ===== Announcement + Toast managers (live regions used sparingly) ===== */
+const announce=m=>{const a=$('#ann');a.textContent='';setTimeout(()=>a.textContent=m,80)};
+function toast(m,err){const t=document.createElement('div');t.className='toast'+(err?' e':'');t.textContent=m;$('#toasts').append(t);setTimeout(()=>t.remove(),6000)}
+/* ===== AccessibilityManager / ThemeManager ===== */
+const FL=['hc','rm','lt','sp','fi','cb'],FN={hc:'High contrast',rm:'Reduced motion',lt:'Large text',sp:'Increased spacing',fi:'Stronger focus indicators',cb:'Color-blind friendly mode'};
+function apply(){const r=document.documentElement;r.dataset.theme=P.theme;FL.forEach(k=>{r.classList.toggle(k,!!P[k]);$('#o-'+k).checked=!!P[k]});
+ $('#o-dk').checked=P.theme=='dark';$('#tb').setAttribute('aria-pressed',P.theme=='dark');
+ $('#app').classList.toggle('col',!!P.sb);$('#cb').setAttribute('aria-expanded',!P.sb)}
+$('#aset').addEventListener('change',e=>{const k=e.target.id.slice(2);if(k=='dk')P.theme=e.target.checked?'dark':'light';else P[k]=e.target.checked?1:0;apply();save();announce((k=='dk'?'Dark mode':FN[k])+(e.target.checked?' on':' off'))});
+$('#tb').onclick=()=>{P.theme=P.theme=='dark'?'light':'dark';apply();save()};
+$('#cb').onclick=()=>{P.sb=P.sb?0:1;apply();save()};
+/* ===== FocusManager + NavigationManager (drawer, nav, skip) ===== */
+const mq=matchMedia('(max-width:800px)'),sb=$('#sb'),mb=$('#mb');
+function drawer(o,f){sb.classList.toggle('open',o);mb.setAttribute('aria-expanded',o);$('#main-content').inert=$('footer').inert=o;if(f)(o?$('a',sb):mb).focus()}
+mb.onclick=()=>drawer(true,1);$('#xb').onclick=()=>drawer(false,1);
+mq.addEventListener('change',()=>drawer(false));
+$('#sb nav').addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;e.preventDefault();goto(a.getAttribute('href'));if(mq.matches)drawer(false)});
+function goto(id){const t=$(id);if(!t)return;$$('#sb nav a').forEach(a=>a.getAttribute('href')==id?a.setAttribute('aria-current','page'):a.removeAttribute('aria-current'));
+ t.scrollIntoView({behavior:P.rm?'auto':'smooth'});const h=$('h1,h2',t);if(h){h.tabIndex=-1;h.focus({preventScroll:true})}}
+/* ===== Dropdown (disclosure pattern) ===== */
+const ub=$('#ub'),um=$('#umenu');
+function menu(o,f){um.hidden=!o;ub.setAttribute('aria-expanded',o);if(f&&!o)ub.focus()}
+ub.onclick=()=>menu(um.hidden);
+um.addEventListener('click',e=>{const a=e.target.closest('a');if(a){e.preventDefault();menu(false);goto(a.getAttribute('href'))}else if(e.target.id=='so'){menu(false,1);toast('Signed out (demo only).')}});
+document.addEventListener('click',e=>{if(!um.hidden&&!e.target.closest('.um'))menu(false)});
+$('.um').addEventListener('focusout',e=>{if(!um.hidden&&!e.currentTarget.contains(e.relatedTarget))menu(false)});
+/* ===== ModalManager (native <dialog>: focus trap, inert background, Esc) ===== */
+const kd=$('#kd');let opener=null;
+function openK(){opener=document.activeElement;kd.showModal()}
+kd.addEventListener('close',()=>{if(opener)opener.focus()});
+$('#kb').onclick=openK;$('#kc').onclick=()=>kd.close();
+$('#nb').onclick=()=>toast('You have 3 unread notifications (demo).');
+/* ===== KeyboardManager ===== */
+let gT=0;
+document.addEventListener('keydown',e=>{
+ if(e.key=='Escape'){if(!um.hidden)menu(false,1);else if(sb.classList.contains('open'))drawer(false,1);return}
+ if(e.ctrlKey||e.metaKey||e.altKey||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)||kd.open)return;
+ if(e.key=='/'){e.preventDefault();$('#gq').focus()}else if(e.key=='?')openK();
+ else if(e.key.toLowerCase()=='g'){gT=Date.now()}
+ else if(Date.now()-gT<1200){const m={d:'#dash',a:'#analytics',r:'#reports',s:'#settings'}[e.key.toLowerCase()];if(m){gT=0;goto(m)}}});
+/* ===== TabManager (APG tabs, automatic activation) ===== */
+const tabs=$$('[role=tab]');
+function selTab(t,f){tabs.forEach(x=>{const on=x==t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;$('#'+x.getAttribute('aria-controls')).hidden=!on});P.tab=t.dataset.k;save();if(f)t.focus()}
+$('#tl').addEventListener('click',e=>{const t=e.target.closest('[role=tab]');if(t)selTab(t)});
+$('#tl').addEventListener('keydown',e=>{const i=tabs.indexOf(document.activeElement);if(i<0)return;let n=-1;
+ if(e.key=='ArrowRight')n=(i+1)%tabs.length;else if(e.key=='ArrowLeft')n=(i+tabs.length-1)%tabs.length;else if(e.key=='Home')n=0;else if(e.key=='End')n=tabs.length-1;
+ if(n>=0){e.preventDefault();selTab(tabs[n],1)}});
+/* ===== Stats (live values update visually only; not announced) ===== */
+const ST=[['Total users','12,840','Increase of 8.4%','up','▲'],['Active projects','348','Increase of 2.1%','up','▲'],['Task completion','84%','Decrease of 1.2%','dn','▼'],['Revenue','$84,240','Increase of 5.6%','up','▲']];
+$('#stats').innerHTML=ST.map(s=>'<article class="card"><h3>'+s[0]+'</h3><p class="val">'+s[1]+'</p><p class="'+s[3]+'"><span aria-hidden="true">'+s[4]+'</span> '+s[2]+'</p><p class="mu">Compared with previous period</p></article>').join('')+
+ '<article class="card"><h3>Active now</h3><p class="val" id="live">312</p><p>Server status: <strong id="srv">Operational</strong></p><p class="mu">Updates every few seconds (not announced to screen readers).</p></article>';
+setInterval(()=>{const l=$('#live');l.textContent=Math.max(200,+l.textContent+Math.round(Math.random()*20-10));
+ if(Math.random()<.08){const s=$('#srv'),d=s.textContent=='Operational';s.textContent=d?'Degraded':'Operational';announce('Server status changed to '+s.textContent+'.')}},4000);
+/* ===== ChartManager (SVG/CSS + text alternatives) ===== */
+const RG={Daily:[['Mon',410],['Tue',440],['Wed',520],['Thu',480],['Fri',560],['Sat',300],['Sun',270]],Weekly:[['Week 1',2800],['Week 2',3100],['Week 3',2950],['Week 4',3400],['Week 5',3650],['Week 6',3900]],Monthly:[['Jan',4200],['Feb',4850],['Mar',5420],['Apr',6100],['May',6900],['Jun',7600]],Yearly:[['2021',21000],['2022',34000],['2023',52000],['2024',71000],['2025',96000],['2026',128000]]};
+const TM=[['Engineering',41],['Design',24],['Support',18],['Marketing',12]],TS=[['Completed',52],['In progress',28],['Blocked',8],['Not started',12]];
+const tbl=(cap,h,rows)=>'<details><summary>View data table</summary><div class="tw"><table><caption>'+cap+'</caption><thead><tr><th scope="col">'+h[0]+'</th><th scope="col">'+h[1]+'</th></tr></thead><tbody>'+rows.map(r=>'<tr><th scope="row">'+r[0]+'</th><td>'+r[1].toLocaleString('en-US')+(h[2]||'')+'</td></tr>').join('')+'</tbody></table></div></details>';
+function charts(){const d=RG[P.range],mx=Math.max(...d.map(x=>x[1])),mn=Math.min(...d.map(x=>x[1])),sx=i=>34+i*(340/(d.length-1)),sy=v=>140-(v-mn)/(mx-mn||1)*110,pk=d.find(x=>x[1]==mx);
+ const desc='Line chart of users, '+P.range.toLowerCase()+'. Starts at '+d[0][1].toLocaleString('en-US')+' in '+d[0][0]+', ends at '+d[d.length-1][1].toLocaleString('en-US')+' in '+d[d.length-1][0]+', peak '+mx.toLocaleString('en-US')+' in '+pk[0]+'.';
+ $('#c1').innerHTML='<figure><svg viewBox="0 0 400 170" role="img" aria-labelledby="l-t l-d"><title id="l-t">Users over time</title><desc id="l-d">'+desc+'</desc><polyline fill="none" stroke="var(--ac)" stroke-width="3" points="'+d.map((x,i)=>sx(i)+','+sy(x[1])).join(' ')+'"/>'+d.map((x,i)=>'<rect x="'+(sx(i)-4)+'" y="'+(sy(x[1])-4)+'" width="8" height="8" fill="var(--ac)" transform="rotate(45 '+sx(i)+' '+sy(x[1])+')"/><text x="'+sx(i)+'" y="160" text-anchor="middle">'+x[0]+'</text>').join('')+'<text x="4" y="'+(sy(mx)+3)+'">'+mx.toLocaleString('en-US')+'</text><text x="4" y="'+(sy(mn)+3)+'">'+mn.toLocaleString('en-US')+'</text></svg><figcaption>'+desc+'</figcaption></figure>'+tbl('Users by period (demo data)',['Period','Users'],d);
+ $('#c2').innerHTML='<figure><ul class="bars" aria-label="Bar chart: projects by team">'+TM.map(t=>'<li><span>'+t[0]+'</span><i aria-hidden="true" style="width:'+t[1]*2+'%"></i><b>'+t[1]+'</b></li>').join('')+'</ul><figcaption>Engineering has the most active projects (41). Bars use different patterns as well as length.</figcaption></figure>'+tbl('Active projects by team (demo data)',['Team','Projects'],TM);
+ let o=0;$('#c3').innerHTML='<figure><svg viewBox="0 0 42 42" width="150" height="150" aria-hidden="true">'+TS.map((t,i)=>{const s='<circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--'+['ok','ac','bad','mu'][i]+')" stroke-width="7" stroke-dasharray="'+t[1]+' '+(100-t[1])+'" stroke-dashoffset="'+(25-o)+'"/>';o+=t[1];return s}).join('')+'</svg><ul class="leg">'+TS.map((t,i)=>'<li><strong>'+['◆','●','▲','■'][i]+' '+t[0]+':</strong> '+t[1]+'%</li>').join('')+'</ul><figcaption>Doughnut chart: 52% of tasks are completed. The legend lists every value.</figcaption></figure>'}
+$('#rg').innerHTML=Object.keys(RG).map(k=>'<button aria-pressed="false" data-r="'+k+'">'+k+'</button>').join('');
+$('#rg').addEventListener('click',e=>{const k=e.target.dataset.r;if(!k)return;P.range=k;save();rangeUI();charts();announce('Showing '+k.toLowerCase()+' data.')});
+const rangeUI=()=>$$('#rg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.r==P.range));
+/* ===== Activity feed + filters ===== */
+const AC=[['Reports','Report generated',5],['Users','Profile updated',12],['Projects','New project created',21],['System','Backup completed',45],['Users','New user invited',90],['Reports','Quarterly report viewed',130]];let af='All';
+$('#af').innerHTML=['All','Users','Reports','Projects','System'].map(k=>'<button data-f="'+k+'" aria-pressed="'+(k=='All')+'">'+k+'</button>').join('');
+function feed(){const r=AC.filter(a=>af=='All'||a[0]==af);$('#feed').innerHTML=r.length?r.map(a=>'<li><strong>'+a[1]+'</strong> <span class="mu">('+a[0]+')</span><br><time datetime="'+new Date(Date.now()-a[2]*6e4).toISOString()+'">'+(a[2]<60?a[2]+' minutes ago':Math.round(a[2]/60)+' hours ago')+'</time></li>').join(''):'<li class="empty">No activity found for this filter.</li>'}
+$('#af').addEventListener('click',e=>{const f=e.target.dataset.f;if(!f)return;af=f;$$('#af button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f==f));feed();announce($('#feed').children.length+' activities shown for '+f+'.')});
+/* ===== Report generator with loading / error / retry states ===== */
+let fails=0;
+function gen(){const rs=$('#rs'),b=$('#gen');b.disabled=true;$('#rty').hidden=true;rs.textContent='Loading report… please wait.';
+ setTimeout(()=>{b.disabled=false;if(++fails%3==2){rs.textContent='Unable to generate the report. Please try again.';$('#rty').hidden=false;$('#rty').focus();return}
+  const n=$('#rt').value;rs.textContent=n+' generated successfully.';$('#re').hidden=true;const li=document.createElement('li');li.innerHTML='<strong>'+esc(n)+'</strong> — <time datetime="'+new Date().toISOString()+'">'+new Date().toLocaleTimeString()+'</time> · <span class="bg s-Completed"><span aria-hidden="true" class="ic">✔</span> Completed</span>';$('#rl').prepend(li);toast('Report generated successfully.')},900)}
+$('#gen').onclick=gen;$('#rty').onclick=gen;
+/* ===== TableManager: sort, filter, paginate ===== */
+const U=[['Alex Morgan','alex.morgan@example.com','Active','Admin','2026-10-03T09:12'],['Jordan Lee','jordan.lee@example.com','Pending','Editor','2026-10-02T17:40'],['Taylor Smith','taylor.smith@example.com','Active','Viewer','2026-10-03T08:05'],['Sam Wilson','sam.wilson@example.com','Inactive','Editor','2026-09-21T11:30'],['Morgan Patel','morgan.patel@example.com','Active','Admin','2026-10-01T14:22'],['Casey Kim','casey.kim@example.com','Failed','Viewer','2026-09-28T10:02'],['Riley Chen','riley.chen@example.com','Active','Editor','2026-10-03T07:45'],['Jamie Rivera','jamie.rivera@example.com','Pending','Viewer','2026-10-02T09:10'],['Drew Nguyen','drew.nguyen@example.com','Active','Editor','2026-10-02T20:15'],['Avery Brooks','avery.brooks@example.com','Inactive','Viewer','2026-09-15T16:00'],['Quinn Foster','quinn.foster@example.com','Active','Viewer','2026-10-03T06:30'],['Reese Turner','reese.turner@example.com','Completed','Editor','2026-10-01T12:00']];
+const IC={Active:'●',Pending:'◐',Inactive:'○',Failed:'✖',Completed:'✔'},SI={n:0,e:1,s:2,r:3,d:4};let pq='',pgn=1;const PS=5;
+function rows(){const q=pq.toLowerCase();let r=U.filter(u=>!q||(u[0]+' '+u[1]+' '+u[2]+' '+u[3]).toLowerCase().includes(q));const i=SI[P.sk]||0;r.sort((a,b)=>a[i]<b[i]?-1:a[i]>b[i]?1:0);if(P.sd=='desc')r.reverse();return r}
+function tbody(){const r=rows(),pages=Math.max(1,Math.ceil(r.length/PS));pgn=Math.min(pgn,pages);
+ $('#ub2').innerHTML=r.length?r.slice((pgn-1)*PS,pgn*PS).map(u=>'<tr><th scope="row">'+u[0]+'</th><td>'+u[1]+'</td><td><span class="bg s-'+u[2]+'"><span aria-hidden="true" class="ic">'+IC[u[2]]+'</span> '+u[2]+'</span></td><td>'+u[3]+'</td><td><time datetime="'+u[4]+'">'+new Date(u[4]).toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short'})+'</time></td><td><button data-del="'+esc(u[1])+'" aria-label="Delete user '+u[0]+'"><span aria-hidden="true">🗑</span> Delete</button></td></tr>').join(''):'<tr><td colspan="6" class="empty">No users found. Try changing your search.</td></tr>';
+ $('#ustat').textContent=r.length+' user'+(r.length==1?'':'s')+' found';
+ let p='<button data-p="'+(pgn-1)+'"'+(pgn<2?' disabled':'')+'>Previous</button>';for(let i=1;i<=pages;i++)p+='<button data-p="'+i+'" aria-label="Go to page '+i+'"'+(i==pgn?' aria-current="page"':'')+'>'+i+'</button>';p+='<button data-p="'+(pgn+1)+'"'+(pgn>=pages?' disabled':'')+'>Next</button>';$('#pg').innerHTML=p;
+ $$('thead th[aria-sort]').forEach(th=>{const k=$('button',th).dataset.s,on=k==P.sk;th.setAttribute('aria-sort',on?(P.sd=='asc'?'ascending':'descending'):'none');$('span',th).textContent=on?(P.sd=='asc'?'▲':'▼'):''})}
+$('thead').addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(!b)return;P.sd=P.sk==b.dataset.s&&P.sd=='asc'?'desc':'asc';P.sk=b.dataset.s;save();tbody();$('thead [data-s="'+P.sk+'"]').focus();announce('Sorted by '+b.firstChild.textContent.trim()+', '+(P.sd=='asc'?'ascending':'descending')+'.')});
+$('#pg').addEventListener('click',e=>{const p=e.target.dataset.p;if(!p)return;pgn=+p;tbody();const c=$('#pg [aria-current]');(c||$('#pg button')).focus()});
+$('#ub2').addEventListener('click',e=>{const m=e.target.closest('[data-del]');if(!m)return;const i=U.findIndex(u=>u[1]==m.dataset.del);if(i>-1)U.splice(i,1);tbody();$('#ustat').focus();toast('User deleted (demo only).')});
+let dt;$('#uq').addEventListener('input',e=>{clearTimeout(dt);dt=setTimeout(()=>{pq=e.target.value;pgn=1;tbody()},200)});
+/* ===== Global search ===== */
+const IDX=[...U.map(u=>[u[0]+' — '+u[1],'Users','#users']),['Atlas redesign','Projects','#analytics'],['Beacon API','Projects','#analytics'],['Compass mobile app','Projects','#analytics'],['Monthly sales report','Reports','#reports'],['Accessibility audit report','Reports','#reports'],...AC.map(a=>[a[1],'Activity','#reports'])];
+$('#gs').addEventListener('submit',e=>{e.preventDefault();const q=$('#gq').value.trim().toLowerCase();if(!q)return;const r=IDX.filter(x=>x[0].toLowerCase().includes(q)||x[1].toLowerCase().includes(q));
+ let s=$('#sr');if(!s){s=document.createElement('section');s.id='sr';s.setAttribute('aria-labelledby','sr-h');$('#main-content').prepend(s)}
+ s.innerHTML='<h2 id="sr-h" tabindex="-1">Search results</h2><p role="status">'+r.length+' result'+(r.length==1?'':'s')+' for “'+esc(q)+'”</p>'+(r.length?'<ul>'+r.map(x=>'<li><a href="'+x[2]+'" data-go>'+esc(x[0])+'</a> <span class="mu">('+x[1]+')</span></li>').join('')+'</ul>':'<p class="empty">No results found.</p>');$('#sr-h').focus()});
+document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(a){e.preventDefault();goto(a.getAttribute('href'))}});
+$('#gc').onclick=()=>{$('#gq').value='';const s=$('#sr');if(s)s.remove();$('#gq').focus()};
+/* ===== FormManager ===== */
+$('#sp').onchange=e=>{$('#f-w').type=e.target.checked?'text':'password'};
+$('#pf').addEventListener('submit',e=>{e.preventDefault();const er=[];
+ const chk=(id,ok,msg)=>{const el=$('#'+id),m=$('#'+id+'-e');if(ok){el.removeAttribute('aria-invalid');m.hidden=true;m.textContent=''}else{el.setAttribute('aria-invalid','true');m.textContent=msg;m.hidden=false;er.push([id,msg])}};
+ chk('f-n',$('#f-n').value.trim(),'Please enter your name.');
+ chk('f-e',/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('#f-e').value),'Please enter a valid email address.');
+ chk('f-p',/^[\d\s+()-]{7,}$/.test($('#f-p').value),'Please enter a phone number with at least 7 digits.');
+ chk('f-w',$('#f-w').value.length>=8,'Password must be at least 8 characters.');
+ const es=$('#es');if(er.length){$('#el').innerHTML=er.map(x=>'<li><a href="#'+x[0]+'" data-fld="'+x[0]+'">'+x[1]+'</a></li>').join('');es.hidden=false;es.focus()}else{es.hidden=true;toast('Profile updated successfully.')}});
+$('#el').addEventListener('click',e=>{const f=e.target.dataset.fld;if(f){e.preventDefault();$('#'+f).focus()}});
+/* ===== Accordion ===== */
+const FAQ=[['What is WAI-ARIA?','A set of attributes that adds meaning and state for assistive technology when native HTML is not enough. Native elements come first.'],['How does keyboard navigation work?','Use Tab and Shift+Tab to move, Enter or Space to activate, arrow keys inside tabs, and Escape to close menus and dialogs.'],['What is reduced motion?','A setting that removes non-essential animation and movement. It follows your system preference and can also be switched on here.'],['How does high contrast work?','It switches to a black-and-white palette with strong borders so text and controls are easier to see.'],['How can I use the dashboard with a screen reader?','Use landmarks and headings to move around, read charts through their text descriptions and data tables, and listen for short status messages.']];
+$('#acc').innerHTML=FAQ.map((f,i)=>'<h4><button aria-expanded="false" aria-controls="ap'+i+'" id="ab'+i+'"><span>'+f[0]+'</span><span aria-hidden="true">+</span></button></h4><div id="ap'+i+'" role="region" aria-labelledby="ab'+i+'" hidden>'+f[1]+'</div>').join('');
+$('#acc').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const o=b.getAttribute('aria-expanded')!='true';b.setAttribute('aria-expanded',o);$('#'+b.getAttribute('aria-controls')).hidden=!o;b.lastChild.textContent=o?'−':'+'});
+/* ===== AccessibilityChecker (basic, educational) ===== */
+$('#chk').onclick=()=>{const R=[],ok=(c,t)=>R.push([!!c,t]);
+ ok(document.documentElement.lang,'Document language is set');ok(document.title.trim(),'Document has a title');
+ ['header','nav','main','footer','aside'].forEach(t=>ok($(t),'<'+t+'> landmark present'));ok($('.skip'),'Skip link present');
+ const nb=$$('button').filter(b=>!(b.textContent.trim()||b.getAttribute('aria-label')));ok(!nb.length,'Buttons have accessible names ('+nb.length+' without)');
+ const ni=$$('input,select,textarea').filter(i=>!(i.labels&&i.labels.length)&&!i.getAttribute('aria-label'));ok(!ni.length,'Form controls have labels ('+ni.length+' without)');
+ ok(!$$('img:not([alt])').length,'Images have alt attributes');
+ let l=0,sk=0;$$('h1,h2,h3,h4').forEach(h=>{const n=+h.tagName[1];if(l&&n>l+1)sk++;l=n});ok(!sk&&$$('h1').length==1,'One h1 and no skipped heading levels');
+ ok(!$$('[tabindex]').some(e=>+e.getAttribute('tabindex')>0),'No positive tabindex values');
+ $('#cr').innerHTML=R.map(r=>'<li>'+(r[0]?'✔ Pass':'✖ Fail')+' — '+esc(r[1])+'</li>').join('');announce('Check finished: '+R.filter(r=>r[0]).length+' of '+R.length+' checks passed.')};
+/* ===== Init ===== */
+apply();rangeUI();charts();feed();tbody();selTab($('#t-'+P.tab)||tabs[0]);
+</script>
+</body>
+</html>
