@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShopNest</title>
+<style>
+:root{--navy:#131921;--navy2:#232f3e;--sun:#febd69;--buy:#ffd814;--buy-h:#f7ca00;--bg:#eaeded;--ink:#0f1111;--mute:#565959;--star:#de7921;--line:#d5d9d9}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{display:flex;gap:16px;align-items:center;padding:10px 20px;background:var(--navy);position:sticky;top:0;z-index:5}
+.logo{color:#fff;font-size:1.5rem;font-weight:700;text-decoration:none}.logo span{color:var(--sun)}
+.search{flex:1}.search input{width:100%;padding:11px 14px;border:0;border-radius:6px;font-size:1rem}
+.cart-btn{background:none;border:0;color:#fff;font-size:1rem;cursor:pointer;padding:8px}
+.cart-btn b{background:var(--sun);color:var(--navy);border-radius:10px;padding:1px 8px;margin-left:4px}
+nav{display:flex;gap:8px;overflow-x:auto;padding:8px 20px;background:var(--navy2)}
+nav button{background:none;border:1px solid transparent;color:#fff;padding:6px 12px;border-radius:16px;cursor:pointer;white-space:nowrap;font-size:.95rem}
+nav button:hover{border-color:#fff}nav button.on{background:var(--sun);color:var(--navy)}
+main{max-width:1200px;margin:0 auto;padding:16px 20px 40px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;color:var(--mute)}
+.toolbar select{padding:6px;border-radius:6px;border:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{background:#fff;border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:6px;cursor:pointer;border:1px solid var(--line)}
+.card:hover{border-color:var(--star)}
+.card img,.ph,.modal-box img{width:100%;aspect-ratio:1;object-fit:contain;border-radius:6px}
+.ph{display:grid;place-items:center;font-size:4rem;background:#f3f6f6}
+.card h3{margin:0;font-size:.98rem;font-weight:500;line-height:1.3;flex:1}
+.brand{margin:0;color:var(--mute);font-size:.85rem}
+.stars{margin:0;color:var(--star)}.stars span{color:var(--mute);font-size:.85rem}
+.price{margin:0;font-size:1.3rem;font-weight:600}
+.btn{background:var(--buy);border:0;border-radius:20px;padding:9px 14px;font-size:.95rem;cursor:pointer}
+.btn:hover{background:var(--buy-h)}
+.overlay,.modal{position:fixed;inset:0;background:rgba(15,17,17,.55);display:none;z-index:10}
+.overlay.open{display:block}
+.modal.open{display:grid;place-items:center;z-index:12}
+.modal-box{background:#fff;border-radius:10px;max-width:760px;width:calc(100% - 32px);padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px;position:relative}
+.modal-box h2{margin:4px 0}
+.modal-box .x{position:absolute;top:8px;right:12px;border:0;background:none;font-size:1.2rem;cursor:pointer}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(400px,100%);background:#fff;z-index:11;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.drawer-head,.drawer-foot{padding:16px;display:flex;justify-content:space-between;align-items:center}
+.drawer-head h2{margin:0}.drawer-head button{border:0;background:none;font-size:1.2rem;cursor:pointer}
+#cartItems{flex:1;overflow:auto;padding:0 16px}
+.line{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.line img,.line .ph{width:72px;height:72px;font-size:2rem;flex:none}
+.line h4{margin:0 0 4px;font-size:.92rem;font-weight:500}.line p{margin:0}
+.qty{display:flex;align-items:center;gap:8px;margin-top:6px}
+.qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer}
+.qty .link{width:auto;border:0;border-radius:0;color:#007185;margin-left:6px}
+.drawer-foot{flex-direction:column;align-items:stretch;gap:12px;border-top:1px solid var(--line)}
+.total{display:flex;justify-content:space-between;font-size:1.15rem}
+.empty{color:var(--mute);padding:20px 0}
+#toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:8px;opacity:0;pointer-events:none;transition:.2s;z-index:20}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+:focus-visible{outline:3px solid #007185;outline-offset:2px}
+@media(max-width:640px){.modal-box{grid-template-columns:1fr;max-height:90vh;overflow:auto}header{flex-wrap:wrap}.search{order:3;flex-basis:100%}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="#">Shop<span>Nest</span></a>
+  <div class="search"><input id="q" type="search" placeholder="Search products or brands" aria-label="Search products"></div>
+  <button id="cartBtn" class="cart-btn">🛒 Cart <b id="cartCount">0</b></button>
+</header>
+<nav id="chips" aria-label="Categories"></nav>
+<main>
+  <div class="toolbar">
+    <span id="resultInfo"></span>
+    <label>Sort by
+      <select id="sort">
+        <option value="featured">Featured</option>
+        <option value="low">Price: low to high</option>
+        <option value="high">Price: high to low</option>
+        <option value="rating">Average rating</option>
+      </select>
+    </label>
+  </div>
+  <section id="grid" class="grid"></section>
+</main>
+ 
+<div id="overlay" class="overlay"></div>
+<aside id="drawer" class="drawer" aria-label="Shopping cart">
+  <div class="drawer-head"><h2>Your cart</h2><button id="closeCart" aria-label="Close cart">✕</button></div>
+  <div id="cartItems"></div>
+  <div class="drawer-foot">
+    <div class="total"><span>Subtotal</span><b id="subtotal">$0.00</b></div>
+    <button id="checkout" class="btn">Check out</button>
+  </div>
+</aside>
+<div id="modal" class="modal"><div class="modal-box" id="modalBox"></div></div>
+<div id="toast" role="status"></div>
+ 
+<script>
+// Edit this list to change the store. Prices and ratings are approximate: update them to match the real listings.
+// To show a real photo, add  image: "images/airpods.jpg"  (or a full URL) to a product. Without it, the emoji is shown.
+const PRODUCTS = [
+  { id: 1, title: "Apple AirPods Pro (2nd generation)", brand: "Apple", category: "Electronics", price: 249.00, rating: 4.7, emoji: "🎧", desc: "Wireless earbuds with active noise cancellation, Transparency mode and a MagSafe charging case." },
+  { id: 2, title: "Sony WH-1000XM5 Wireless Noise Cancelling Headphones", brand: "Sony", category: "Electronics", price: 399.99, rating: 4.6, emoji: "🎧", desc: "Over-ear headphones with strong noise cancelling and up to 30 hours of battery life." },
+  { id: 3, title: "Kindle Paperwhite (16 GB)", brand: "Amazon", category: "Electronics", price: 159.99, rating: 4.7, emoji: "📖", desc: "E-reader with a glare-free 6.8-inch display, adjustable warm light and a waterproof body." },
+  { id: 4, title: "Echo Dot (5th Gen) Smart Speaker with Alexa", brand: "Amazon", category: "Electronics", price: 49.99, rating: 4.6, emoji: "🔊", desc: "Compact smart speaker with clear sound, voice control and smart home support." },
+  { id: 5, title: "Logitech MX Master 3S Wireless Mouse", brand: "Logitech", category: "Electronics", price: 99.99, rating: 4.7, emoji: "🖱️", desc: "Ergonomic mouse with quiet clicks, a precision scroll wheel and a high-DPI sensor." },
+  { id: 6, title: "Samsung T7 Portable SSD, 1 TB", brand: "Samsung", category: "Electronics", price: 99.99, rating: 4.7, emoji: "💾", desc: "Pocket-sized USB 3.2 solid state drive for fast file transfers and backups." },
+  { id: 7, title: "Atomic Habits by James Clear", brand: "Avery", category: "Books", price: 27.00, rating: 4.8, emoji: "📘", desc: "A practical guide to building good habits and breaking bad ones with small daily changes." },
+  { id: 8, title: "Deep Work by Cal Newport", brand: "Grand Central", category: "Books", price: 18.00, rating: 4.5, emoji: "📕", desc: "Rules for focused success in a distracted world." },
+  { id: 9, title: "Python Crash Course, 3rd Edition", brand: "No Starch Press", category: "Books", price: 39.99, rating: 4.7, emoji: "🐍", desc: "A hands-on introduction to Python programming, with projects from games to data visualization." },
+  { id: 10, title: "Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow", brand: "O'Reilly", category: "Books", price: 89.99, rating: 4.7, emoji: "🤖", desc: "Concepts, tools and techniques for building intelligent systems, by Aurélien Géron." },
+  { id: 11, title: "Instant Pot Duo 7-in-1 Electric Pressure Cooker, 6 Qt", brand: "Instant Pot", category: "Home & Kitchen", price: 99.95, rating: 4.7, emoji: "🍲", desc: "Pressure cooker, slow cooker, rice cooker, steamer, sauté pan, yogurt maker and warmer in one." },
+  { id: 12, title: "Lodge 10.25 Inch Cast Iron Skillet", brand: "Lodge", category: "Home & Kitchen", price: 19.90, rating: 4.7, emoji: "🍳", desc: "Pre-seasoned skillet that works on the stove, in the oven or over a campfire." },
+  { id: 13, title: "Hydro Flask 32 oz Wide Mouth Water Bottle", brand: "Hydro Flask", category: "Home & Kitchen", price: 44.95, rating: 4.8, emoji: "🧴", desc: "Insulated stainless steel bottle that keeps drinks cold for hours." },
+  { id: 14, title: "Levi's 501 Original Fit Jeans", brand: "Levi's", category: "Fashion", price: 69.50, rating: 4.5, emoji: "👖", desc: "The classic straight-leg jean with a button fly." },
+  { id: 15, title: "Nike Revolution 7 Men's Road Running Shoes", brand: "Nike", category: "Fashion", price: 70.00, rating: 4.5, emoji: "👟", desc: "Lightweight, cushioned everyday running shoes." },
+  { id: 16, title: "Champion Powerblend Fleece Pullover Hoodie", brand: "Champion", category: "Fashion", price: 39.99, rating: 4.5, emoji: "🧥", desc: "Soft fleece hoodie with a front pocket and a drawstring hood." },
+  { id: 17, title: "Fitbit Charge 6 Fitness Tracker", brand: "Fitbit", category: "Sports & Fitness", price: 159.95, rating: 4.3, emoji: "⌚", desc: "Tracks heart rate, sleep, workouts and built-in GPS routes." },
+  { id: 18, title: "Manduka PRO Yoga Mat", brand: "Manduka", category: "Sports & Fitness", price: 140.00, rating: 4.7, emoji: "🧘", desc: "Dense, long-lasting mat with a lifetime guarantee and a non-slip surface." }
+];
+ 
+const money = n => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
+const $ = s => document.querySelector(s);
+const CATEGORIES = ["All", ...new Set(PRODUCTS.map(p => p.category))];
+const state = { cat: "All", q: "", sort: "featured", cart: loadCart() };
+ 
+function loadCart() { try { return JSON.parse(localStorage.getItem("shopnest-cart")) || {}; } catch { return {}; } }
+function saveCart() { try { localStorage.setItem("shopnest-cart", JSON.stringify(state.cart)); } catch {} }
+const byId = id => PRODUCTS.find(p => p.id === id);
+const stars = r => "★".repeat(Math.round(r)) + "☆".repeat(5 - Math.round(r));
+const pic = p => p.image ? `<img src="${p.image}" alt="${p.title}">` : `<div class="ph" role="img" aria-label="${p.title}">${p.emoji}</div>`;
+ 
+function visible() {
+  const q = state.q.trim().toLowerCase();
+  const list = PRODUCTS.filter(p =>
+    (state.cat === "All" || p.category === state.cat) &&
+    (!q || `${p.title} ${p.brand} ${p.category}`.toLowerCase().includes(q)));
+  if (state.sort === "low") list.sort((a, b) => a.price - b.price);
+  if (state.sort === "high") list.sort((a, b) => b.price - a.price);
+  if (state.sort === "rating") list.sort((a, b) => b.rating - a.rating);
+  return list;
+}
+ 
+function renderChips() {
+  $("#chips").innerHTML = CATEGORIES.map(c =>
+    `<button class="${c === state.cat ? "on" : ""}" data-cat="${c}">${c}</button>`).join("");
+}
+ 
+function renderGrid() {
+  const list = visible();
+  $("#resultInfo").textContent = `${list.length} result${list.length === 1 ? "" : "s"}`;
+  $("#grid").innerHTML = list.length ? list.map(p => `
+    <article class="card" data-id="${p.id}">
+      ${pic(p)}
+      <p class="brand">${p.brand}</p>
+      <h3>${p.title}</h3>
+      <p class="stars" aria-label="${p.rating} out of 5">${stars(p.rating)} <span>${p.rating}</span></p>
+      <p class="price">${money(p.price)}</p>
+      <button class="btn" data-add="${p.id}">Add to cart</button>
+    </article>`).join("") : `<p class="empty">No products match your search. Try another word or category.</p>`;
+}
+ 
+function cartLines() {
+  return Object.entries(state.cart).map(([id, qty]) => ({ p: byId(+id), qty })).filter(l => l.p);
+}
+ 
+function renderCart() {
+  const lines = cartLines();
+  $("#cartCount").textContent = lines.reduce((n, l) => n + l.qty, 0);
+  $("#subtotal").textContent = money(lines.reduce((s, l) => s + l.p.price * l.qty, 0));
+  $("#cartItems").innerHTML = lines.length ? lines.map(({ p, qty }) => `
+    <div class="line">${pic(p)}
+      <div><h4>${p.title}</h4><p>${money(p.price)}</p>
+        <div class="qty">
+          <button data-dec="${p.id}" aria-label="Decrease quantity">−</button><span>${qty}</span>
+          <button data-inc="${p.id}" aria-label="Increase quantity">+</button>
+          <button class="link" data-del="${p.id}">Remove</button>
+        </div>
+      </div>
+    </div>`).join("") : `<p class="empty">Your cart is empty. Add something from the store.</p>`;
+}
+ 
+function change(id, d) {
+  const n = (state.cart[id] || 0) + d;
+  if (n <= 0) delete state.cart[id]; else state.cart[id] = n;
+  saveCart(); renderCart();
+}
+ 
+function openModal(id) {
+  const p = byId(id);
+  $("#modalBox").innerHTML = `<button class="x" data-close aria-label="Close">✕</button>${pic(p)}
+    <div><p class="brand">${p.brand}</p><h2>${p.title}</h2>
+      <p class="stars">${stars(p.rating)} <span>${p.rating}</span></p>
+      <p class="price">${money(p.price)}</p><p>${p.desc}</p>
+      <button class="btn" data-add="${p.id}">Add to cart</button></div>`;
+  $("#modal").classList.add("open");
+}
+ 
+let timer;
+function toast(msg) {
+  const el = $("#toast"); el.textContent = msg; el.classList.add("show");
+  clearTimeout(timer); timer = setTimeout(() => el.classList.remove("show"), 2200);
+}
+const setDrawer = open => { $("#drawer").classList.toggle("open", open); $("#overlay").classList.toggle("open", open); };
+const closeModal = () => $("#modal").classList.remove("open");
+ 
+document.addEventListener("click", e => {
+  const t = e.target, d = t.dataset || {};
+  if (d.add) { change(+d.add, 1); return toast("Added to cart"); }
+  if (d.inc) return change(+d.inc, 1);
+  if (d.dec) return change(+d.dec, -1);
+  if (d.del) return change(+d.del, -state.cart[d.del]);
+  if (d.cat) { state.cat = d.cat; renderChips(); return renderGrid(); }
+  if (t.closest("#cartBtn")) return setDrawer(true);
+  if (t.id === "closeCart" || t.id === "overlay") return setDrawer(false);
+  if (t.id === "modal" || d.close !== undefined) return closeModal();
+  const card = t.closest(".card");
+  if (card) openModal(+card.dataset.id);
+});
+ 
+$("#checkout").onclick = () => {
+  if (!cartLines().length) return toast("Your cart is empty");
+  state.cart = {}; saveCart(); renderCart(); setDrawer(false);
+  toast("Order placed. This is a demo, so no payment was taken.");
+};
+$("#q").addEventListener("input", e => { state.q = e.target.value; renderGrid(); });
+$("#sort").addEventListener("change", e => { state.sort = e.target.value; renderGrid(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal(); setDrawer(false); } });
+ 
+renderChips(); renderGrid(); renderCart();
+</script>
+</body>
+</html>
+ 
