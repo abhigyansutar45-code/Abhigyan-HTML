@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Racer | CSS Car Game</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #050816;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+.game {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(#07142e, #122a45 60%, #07100e);
+}
+
+/* Stars */
+.stars {
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(#46eaff 1px, transparent 1px);
+    background-size: 80px 80px, 130px 130px;
+    animation: stars 8s linear infinite;
+}
+
+@keyframes stars {
+    from { background-position: 0 0, 20px 20px; }
+    to { background-position: 0 400px, 20px 500px; }
+}
+
+/* Neon city */
+.city {
+    position: absolute;
+    bottom: 40%;
+    width: 100%;
+    height: 160px;
+    display: flex;
+    align-items: end;
+    justify-content: space-around;
+}
+
+.building {
+    width: 8%;
+    height: 80px;
+    background: #111d3b;
+    border: 2px solid #1b76b5;
+    box-shadow: 0 0 15px #008cff;
+}
+
+.building:nth-child(2n) { height: 130px; }
+.building:nth-child(3n) { height: 100px; }
+
+/* Road */
+.road {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(80vw, 700px);
+    height: 65%;
+    background: #202431;
+    border-left: 8px solid #00eaff;
+    border-right: 8px solid #ff2bd6;
+    box-shadow: 0 0 35px #008cff;
+    overflow: hidden;
+}
+
+.lanes {
+    position: absolute;
+    left: 33.33%;
+    width: 33.33%;
+    height: 200%;
+    top: -100%;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 55px,
+        #e8faff 55px,
+        #e8faff 95px,
+        transparent 95px,
+        transparent 150px
+    );
+    animation: roadMove .45s linear infinite;
+}
+
+@keyframes roadMove {
+    from { transform: translateY(0); }
+    to { transform: translateY(150px); }
+}
+
+/* Car */
+.car {
+    position: absolute;
+    width: 76px;
+    height: 130px;
+    bottom: 7%;
+    left: calc(50% - 38px);
+    animation: drive 1.2s ease-in-out infinite alternate;
+    z-index: 5;
+}
+
+@keyframes drive {
+    from { transform: translateX(-10px) rotate(-2deg); }
+    to { transform: translateX(10px) rotate(2deg); }
+}
+
+.car-body {
+    position: absolute;
+    width: 70px;
+    height: 105px;
+    left: 3px;
+    bottom: 0;
+    background: linear-gradient(90deg, #8b001f, #ff164c, #8b001f);
+    border: 2px solid #ff91ad;
+    border-radius: 24px 24px 12px 12px;
+    box-shadow: 0 0 25px #ff174f;
+}
+
+.windshield {
+    position: absolute;
+    width: 48px;
+    height: 30px;
+    top: 18px;
+    left: 11px;
+    background: linear-gradient(135deg, #73f7ff, #173d70);
+    border: 2px solid #b9ffff;
+    border-radius: 15px 15px 5px 5px;
+}
+
+.hood {
+    position: absolute;
+    width: 35px;
+    height: 25px;
+    top: 58px;
+    left: 17px;
+    border-radius: 8px;
+    background: #ff6b87;
+}
+
+.light {
+    position: absolute;
+    bottom: 8px;
+    width: 14px;
+    height: 8px;
+    background: #fff;
+    box-shadow: 0 0 15px #fff;
+    border-radius: 3px;
+}
+
+.light.left { left: 7px; }
+.light.right { right: 7px; }
+
+/* Wheels */
+.wheel {
+    position: absolute;
+    width: 12px;
+    height: 27px;
+    background: #03040a;
+    border: 2px solid #687386;
+    border-radius: 4px;
+    z-index: -1;
+}
+
+.wheel.one { left: -3px; top: 25px; }
+.wheel.two { right: -3px; top: 25px; }
+.wheel.three { left: -3px; bottom: 20px; }
+.wheel.four { right: -3px; bottom: 20px; }
+
+/* Traffic */
+.traffic {
+    position: absolute;
+    width: 58px;
+    height: 95px;
+    top: -120px;
+    left: 25%;
+    animation: trafficMove 3s linear infinite;
+}
+
+.traffic .car-body {
+    width: 58px;
+    height: 90px;
+    left: 0;
+    background: linear-gradient(90deg, #006cbb, #17c8ff, #006cbb);
+    border-color: #82eaff;
+    box-shadow: 0 0 20px #00aaff;
+}
+
+.traffic .windshield {
+    width: 40px;
+    height: 25px;
+    left: 7px;
+}
+
+.traffic .hood { display: none; }
+.traffic .light { background: #ff3333; }
+
+@keyframes trafficMove {
+    from { transform: translateY(0); }
+    to { transform: translateY(120vh); }
+}
+
+/* HUD */
+.hud {
+    position: absolute;
+    top: 22px;
+    left: 22px;
+    z-index: 10;
+    padding: 18px;
+    border: 1px solid #00eaff;
+    border-radius: 12px;
+    background: #061323d9;
+    box-shadow: 0 0 20px #007caa55;
+}
+
+.hud h1 {
+    color: #00eaff;
+    font-size: 22px;
+    letter-spacing: 3px;
+}
+
+.hud p {
+    margin-top: 10px;
+    color: #c9faff;
+    font-size: 13px;
+}
+
+.title {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    text-align: right;
+    color: #00eaff;
+    text-shadow: 0 0 15px #00eaff;
+}
+
+.title h2 {
+    font-size: clamp(20px, 4vw, 38px);
+    letter-spacing: 4px;
+}
+
+.title p {
+    color: #ff46dc;
+    margin-top: 8px;
+    letter-spacing: 2px;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    color: #b9d6e9;
+    z-index: 10;
+}
+
+@media (max-width: 600px) {
+    .road { width: 95vw; }
+    .hud { top: 10px; left: 10px; padding: 10px; }
+    .hud h1 { font-size: 16px; }
+    .title { top: 115px; right: 10px; }
+    .traffic { left: 20%; }
+}
+</style>
+</head>
+
+<body>
+<div class="game">
+
+    <div class="stars"></div>
+
+    <div class="city">
+        <div class="building"></div>
+        <div class="building"></div>
+        <div class="building"></div>
+        <div class="building"></div>
+        <div class="building"></div>
+        <div class="building"></div>
+        <div class="building"></div>
+    </div>
+
+    <div class="hud">
+        <h1>NEON RACER</h1>
+        <p>MODE: ARCADE</p>
+        <p>ENGINE: TURBO</p>
+        <p>STATUS: RACING</p>
+    </div>
+
+    <div class="title">
+        <h2>TURBO X</h2>
+        <p>CSS RACING EXPERIENCE</p>
+    </div>
+
+    <div class="road">
+        <div class="lanes"></div>
+
+        <div class="traffic">
+            <div class="car-body">
+                <div class="windshield"></div>
+                <div class="light left"></div>
+                <div class="light right"></div>
+            </div>
+        </div>
+
+        <div class="car">
+            <div class="wheel one"></div>
+            <div class="wheel two"></div>
+            <div class="wheel three"></div>
+            <div class="wheel four"></div>
+
+            <div class="car-body">
+                <div class="windshield"></div>
+                <div class="hood"></div>
+                <div class="light left"></div>
+                <div class="light right"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom">
+        PURE HTML + CSS ANIMATION · NO JAVASCRIPT
+    </div>
+
+</div>
+</body>
+</html>
