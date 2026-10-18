@@ -1,0 +1,4167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7b1735">
+<title>Subhmangal Matrimony | Admin Dashboard</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+<style>
+/* ==========================================================
+   SUBHMANGAL MATRIMONY — SINGLE-FILE ADMIN DASHBOARD
+   HTML + CSS + Vanilla JavaScript
+   All information is fictional demonstration data.
+   ========================================================== */
+
+:root {
+  --maroon: #781b38;
+  --maroon-dark: #511025;
+  --saffron: #e99735;
+  --gold: #d6ad5c;
+  --green: #21865a;
+  --red: #cf4555;
+  --blue: #4777cf;
+  --page: #f7f5f1;
+  --surface: #ffffff;
+  --surface-soft: #fbf8f4;
+  --text: #302b30;
+  --muted: #8b858a;
+  --border: #eee6e1;
+  --shadow: 0 9px 28px rgba(83, 36, 49, .07);
+  --sidebar-width: 258px;
+}
+
+body.dark {
+  --page: #17151b;
+  --surface: #211e27;
+  --surface-soft: #2b2530;
+  --text: #f2edf1;
+  --muted: #aaa0ad;
+  --border: #3b3340;
+  --shadow: 0 9px 28px rgba(0, 0, 0, .22);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--page);
+  color: var(--text);
+  font-family: "DM Sans", Arial, sans-serif;
+  font-size: 14px;
+  transition: background .25s, color .25s;
+}
+
+button, input, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #e9973580;
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 11px;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+/* ---------------- APP LAYOUT ---------------- */
+
+.app {
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-width);
+  padding: 22px 16px 16px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 15% 0%, #a33a51 0, transparent 36%),
+    linear-gradient(160deg, #7b1939 0%, #5b112b 58%, #35101f 100%);
+  box-shadow: 8px 0 28px rgba(60, 12, 31, .15),
+              inset -1px 0 0 rgba(255,255,255,.1);
+  transition: transform .3s ease;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 0 7px 22px;
+  border-bottom: 1px solid #ffffff20;
+}
+
+.brand-logo {
+  display: grid;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #e7c77e;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 5px 15px #21061155;
+}
+
+.brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand-fallback {
+  display: none;
+  color: var(--maroon);
+  font-family: "Playfair Display", serif;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.brand-name {
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  line-height: 1.15;
+}
+
+.brand-subtitle {
+  margin-top: 5px;
+  color: #f4d5d5;
+  font-size: 9px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.sidebar-label {
+  padding: 24px 12px 10px;
+  color: #e5b9c4;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.nav-list {
+  display: grid;
+  gap: 5px;
+}
+
+.nav-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 13px;
+  padding: 12px 13px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  color: #f6e6eb;
+  background: transparent;
+  text-align: left;
+  transition: transform .22s, background .22s, box-shadow .22s;
+}
+
+.nav-button i {
+  width: 18px;
+  color: #e6bf88;
+  text-align: center;
+}
+
+.nav-button:hover {
+  transform: translateX(4px);
+  background: #ffffff12;
+}
+
+.nav-button.active {
+  color: #fff;
+  border-color: #ffffff20;
+  background: linear-gradient(120deg, #b64b57, #91304b);
+  box-shadow: 0 6px 14px #260b1b55,
+              inset 0 1px 0 #ffffff22;
+}
+
+.nav-button.active i {
+  color: #ffd989;
+}
+
+.nav-count {
+  margin-left: auto;
+  padding: 3px 7px;
+  border-radius: 20px;
+  color: #fff;
+  background: #ffffff24;
+  font-size: 10px;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 15px 5px 0;
+}
+
+.demo-sidebar-card {
+  padding: 14px;
+  border: 1px solid #ffffff24;
+  border-radius: 13px;
+  background: #ffffff0c;
+}
+
+.demo-sidebar-card i {
+  margin-bottom: 9px;
+  color: #f5ce7b;
+  font-size: 19px;
+}
+
+.demo-sidebar-card strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.demo-sidebar-card p {
+  color: #e6cbd4;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.sidebar-footer {
+  padding-top: 14px;
+  color: #d6aeba;
+  font-size: 10px;
+  text-align: center;
+}
+
+.main-area {
+  min-height: 100vh;
+  margin-left: var(--sidebar-width);
+}
+
+/* ---------------- HEADER ---------------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 78px;
+  gap: 16px;
+  padding: 15px 30px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.mobile-menu {
+  display: none !important;
+}
+
+.page-heading {
+  font-family: "Playfair Display", serif;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.page-subtitle {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.global-search {
+  display: flex;
+  align-items: center;
+  width: min(290px, 26vw);
+  gap: 9px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.global-search i {
+  color: var(--muted);
+}
+
+.global-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  background: transparent;
+  font-size: 12px;
+}
+
+.icon-button {
+  position: relative;
+  display: grid;
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  color: var(--text);
+  background: var(--surface);
+  transition: .2s;
+}
+
+.icon-button:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+  color: var(--maroon);
+}
+
+.notification-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--surface);
+  border-radius: 50%;
+  background: var(--saffron);
+}
+
+.profile-menu-wrap {
+  position: relative;
+}
+
+.admin-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0 4px 5px;
+  border: 0;
+  color: var(--text);
+  background: transparent;
+  text-align: left;
+}
+
+.admin-avatar {
+  display: grid;
+  width: 37px;
+  height: 37px;
+  place-items: center;
+  border: 2px solid #f2dfb6;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, #d6a25a, #8b2844);
+  font-weight: 700;
+}
+
+.admin-name {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-role {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 13px);
+  right: 0;
+  z-index: 50;
+  width: 190px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.dropdown button {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  padding: 11px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--text);
+  background: transparent;
+  text-align: left;
+}
+
+.dropdown button:hover {
+  background: var(--surface-soft);
+}
+
+/* ---------------- PAGE CONTENT ---------------- */
+
+.content {
+  width: 100%;
+  max-width: 1700px;
+  margin: 0 auto;
+  padding: 27px 30px 35px;
+}
+
+.page-section {
+  display: none;
+  animation: fade-in .28s ease;
+}
+
+.page-section.active {
+  display: block;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.section-title {
+  font-family: "Playfair Display", serif;
+  font-size: 25px;
+}
+
+.section-description {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.demo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid #e9c88e;
+  border-radius: 8px;
+  color: #916221;
+  background: #fff7e7;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+body.dark .demo-badge {
+  color: #f1d295;
+  border-color: #65502d;
+  background: #3b3020;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--text);
+  background: var(--surface);
+  font-size: 11px;
+  font-weight: 700;
+  transition: .2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px #0000000b;
+}
+
+.btn-primary {
+  border-color: var(--maroon);
+  color: #fff;
+  background: linear-gradient(120deg, #8b2444, #65152f);
+  box-shadow: 0 5px 14px #781b3820;
+}
+
+.btn-primary:hover {
+  background: #9b2c4c;
+}
+
+.btn-danger {
+  border-color: #f0c3c8;
+  color: #b72b41;
+  background: #fff3f4;
+}
+
+.btn-sm {
+  padding: 7px 10px;
+  font-size: 10px;
+}
+
+/* ---------------- FILTERS ---------------- */
+
+.filters {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding: 17px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.filter-field {
+  display: grid;
+  min-width: 130px;
+  flex: 1;
+  gap: 7px;
+}
+
+.filter-field label,
+.form-field label {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.filter-field input,
+.filter-field select,
+.form-field input,
+.form-field select {
+  width: 100%;
+  min-height: 38px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: 0;
+  color: var(--text);
+  background: var(--surface-soft);
+  font-size: 11px;
+}
+
+.filter-field input:focus,
+.filter-field select:focus,
+.form-field input:focus,
+.form-field select:focus {
+  border-color: var(--gold);
+}
+
+/* ---------------- CARDS ---------------- */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 17px;
+  margin-bottom: 23px;
+}
+
+.stat-card {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: transform .25s, box-shadow .25s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px #63223a12;
+}
+
+.stat-card::after {
+  position: absolute;
+  top: -25px;
+  right: -25px;
+  width: 95px;
+  height: 95px;
+  border-radius: 50%;
+  background: var(--tint, #fff3e4);
+  content: "";
+  opacity: .65;
+}
+
+.stat-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.stat-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 12px;
+  color: var(--accent, var(--maroon));
+  background: var(--tint, #fff3e4);
+  font-size: 18px;
+}
+
+.stat-label {
+  margin-top: 17px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.stat-value {
+  margin-top: 7px;
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 700;
+  letter-spacing: -.8px;
+  overflow-wrap: anywhere;
+}
+
+.stat-foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 10px;
+}
+
+.trend-up {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.trend-down {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.mini-bars {
+  display: flex;
+  align-items: end;
+  height: 25px;
+  gap: 4px;
+  margin-top: 14px;
+}
+
+.mini-bars span {
+  flex: 1;
+  height: var(--h);
+  min-width: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--accent, var(--maroon));
+  opacity: .75;
+  transform-origin: bottom;
+  transition: height .25s;
+}
+
+.mini-bars span:last-child {
+  opacity: 1;
+}
+
+/* ---------------- PANELS & CHARTS ---------------- */
+
+.grid-two {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.panel-card {
+  min-width: 0;
+  padding: 21px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.panel-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.panel-subtitle {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 270px;
+}
+
+.chart-container.country-chart {
+  height: 270px;
+}
+
+.chart-container canvas {
+  max-width: 100%;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 13px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.quick-insight {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 19px;
+  padding: 13px;
+  border: 1px solid #e9ddc9;
+  border-radius: 10px;
+  background: #fff9ee;
+}
+
+body.dark .quick-insight {
+  border-color: #51402c;
+  background: #2c261e;
+}
+
+.quick-insight i {
+  color: var(--saffron);
+  font-size: 17px;
+}
+
+.quick-insight strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 11px;
+}
+
+.quick-insight p {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+/* ---------------- TABLES ---------------- */
+
+.table-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.table-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 19px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-card-header h3 {
+  font-size: 14px;
+}
+
+.table-card-header p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+th {
+  padding: 13px 16px;
+  color: var(--muted);
+  background: var(--surface-soft);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+th button {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-transform: inherit;
+}
+
+td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:hover {
+  background: var(--surface-soft);
+}
+
+.member-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.member-avatar {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  overflow: hidden;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--maroon);
+  background: #f8e8e6;
+  font-weight: 700;
+}
+
+.member-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.member-name {
+  font-weight: 700;
+}
+
+.member-meta {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.text-link {
+  padding: 0;
+  border: 0;
+  color: var(--maroon);
+  background: transparent;
+  font-weight: 700;
+}
+
+body.dark .text-link {
+  color: #edb5c6;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.badge::before {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
+.badge.active,
+.badge.completed,
+.badge.paid {
+  color: #21865a;
+  background: #e5f6ec;
+}
+
+.badge.pending,
+.badge.pending-verification {
+  color: #a87520;
+  background: #fff2d8;
+}
+
+.badge.inactive,
+.badge.failed,
+.badge.rejected {
+  color: #bc3849;
+  background: #ffeaed;
+}
+
+.badge.premium,
+.badge.gold {
+  color: #966a17;
+  background: #fff1cc;
+}
+
+.badge.basic,
+.badge.standard {
+  color: #5372a3;
+  background: #eaf0fb;
+}
+
+body.dark .badge.active,
+body.dark .badge.completed,
+body.dark .badge.paid { background: #203c2e; color: #83d9a8; }
+body.dark .badge.pending,
+body.dark .badge.pending-verification { background: #43351e; color: #f1cb76; }
+body.dark .badge.inactive,
+body.dark .badge.failed,
+body.dark .badge.rejected { background: #45252d; color: #ff9ba9; }
+body.dark .badge.premium,
+body.dark .badge.gold { background: #42361e; color: #efd18a; }
+body.dark .badge.basic,
+body.dark .badge.standard { background: #263347; color: #b0caff; }
+
+.action-button {
+  display: inline-grid;
+  width: 29px;
+  height: 29px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--muted);
+  background: var(--surface);
+}
+
+.action-button:hover {
+  color: var(--maroon);
+  border-color: var(--gold);
+}
+
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 13px 17px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.pagination {
+  display: flex;
+  gap: 5px;
+}
+
+.pagination button {
+  min-width: 29px;
+  height: 29px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.pagination button.active {
+  border-color: var(--maroon);
+  color: #fff;
+  background: var(--maroon);
+}
+
+.empty-state {
+  padding: 35px 20px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty-state i {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 25px;
+}
+
+/* ---------------- RECENT MEMBERS ---------------- */
+
+.recent-member-list {
+  display: grid;
+  gap: 0;
+}
+
+.recent-member {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.recent-member:last-child {
+  border-bottom: 0;
+}
+
+.recent-member-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.recent-member-info strong {
+  display: block;
+  overflow: hidden;
+  font-size: 11px;
+  text-overflow: ellipsis;
+}
+
+.recent-member-info span {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.recent-member-side {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+}
+
+/* ---------------- PROFILE CARDS ---------------- */
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+}
+
+.profile-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: transform .22s, box-shadow .22s;
+}
+
+.profile-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 32px #63223a12;
+}
+
+.profile-card-top {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 18px;
+  background: linear-gradient(120deg, var(--surface-soft), var(--surface));
+}
+
+.profile-photo {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  overflow: hidden;
+  border: 3px solid #f1dfb9;
+  border-radius: 50%;
+  background: #f4e9e2;
+}
+
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-heading {
+  min-width: 0;
+}
+
+.profile-heading h3 {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.profile-heading p {
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.profile-card-body {
+  padding: 15px 18px 18px;
+}
+
+.profile-line {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+}
+
+.profile-line span:first-child {
+  color: var(--muted);
+}
+
+.profile-line span:last-child {
+  font-weight: 600;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.completion-label {
+  display: flex;
+  justify-content: space-between;
+  margin: 13px 0 7px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.completion-bar {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--border);
+}
+
+.completion-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--maroon), var(--saffron));
+}
+
+.profile-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* ---------------- COUNTRY DIRECTORY ---------------- */
+
+.country-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.country-card {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: transform .2s;
+}
+
+.country-card:hover {
+  transform: translateY(-3px);
+}
+
+.country-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.country-flag {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--surface-soft);
+  font-size: 27px;
+}
+
+.country-card h3 {
+  font-size: 12px;
+}
+
+.country-card .calling-code {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.country-stat {
+  margin: 19px 0 13px;
+  padding: 13px;
+  border-radius: 9px;
+  background: var(--surface-soft);
+}
+
+.country-stat strong {
+  display: block;
+  font-size: 23px;
+}
+
+.country-stat span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.phone-sample {
+  padding-top: 11px;
+  border-top: 1px solid var(--border);
+}
+
+.phone-sample label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.phone-sample strong {
+  font-size: 11px;
+  letter-spacing: .2px;
+}
+
+/* ---------------- REPORTS & SETTINGS ---------------- */
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+  margin-bottom: 22px;
+}
+
+.report-card {
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.report-card i {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  margin-bottom: 16px;
+  border-radius: 11px;
+  color: var(--maroon);
+  background: #f8e7eb;
+  font-size: 17px;
+}
+
+.report-card h3 {
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.report-card p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(240px, 1fr);
+  gap: 20px;
+}
+
+.settings-group {
+  display: grid;
+  gap: 15px;
+}
+
+.form-field {
+  display: grid;
+  gap: 7px;
+}
+
+.settings-note {
+  padding: 15px;
+  border-radius: 10px;
+  color: var(--muted);
+  background: var(--surface-soft);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.setting-row:last-child {
+  border-bottom: 0;
+}
+
+.setting-row strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.setting-row p {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.switch {
+  position: relative;
+  width: 42px;
+  height: 23px;
+  flex: 0 0 42px;
+}
+
+.switch input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.switch span {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: #c9c3ca;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.switch span::before {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: white;
+  content: "";
+  transition: .2s;
+}
+
+.switch input:checked + span {
+  background: var(--maroon);
+}
+
+.switch input:checked + span::before {
+  transform: translateX(19px);
+}
+
+/* ---------------- MODALS ---------------- */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: #160810a8;
+  backdrop-filter: blur(5px);
+}
+
+.modal-backdrop.open {
+  display: flex;
+  animation: fade-in .18s ease;
+}
+
+.modal {
+  width: min(100%, 850px);
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 25px 90px #00000035;
+}
+
+.modal.small-modal {
+  width: min(100%, 430px);
+}
+
+.modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 19px 22px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.modal-header h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 20px;
+}
+
+.modal-body {
+  padding: 22px;
+}
+
+.modal-close {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--text);
+  background: var(--surface);
+}
+
+.modal-close:hover {
+  color: var(--red);
+}
+
+.profile-modal-hero {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+  padding: 17px;
+  border-radius: 13px;
+  background: var(--surface-soft);
+}
+
+.profile-modal-photo {
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
+  border: 3px solid #e9d4a6;
+  border-radius: 50%;
+  background: #f6e5e0;
+}
+
+.profile-modal-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-modal-hero h3 {
+  margin-bottom: 6px;
+  font-family: "Playfair Display", serif;
+  font-size: 21px;
+}
+
+.profile-modal-hero p {
+  margin-bottom: 9px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.detail-item {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.detail-item label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.detail-item p {
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.about-box {
+  margin-top: 16px;
+  padding: 15px;
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.about-box h4 {
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.about-box p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.confirm-icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  margin: 0 auto 17px;
+  border-radius: 50%;
+  color: #b72b41;
+  background: #ffeaed;
+  font-size: 23px;
+}
+
+.confirm-text {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+/* ---------------- TOAST ---------------- */
+
+.toast-region {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 200;
+  display: grid;
+  gap: 9px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(360px, calc(100vw - 40px));
+  padding: 13px 16px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  animation: fade-in .2s ease;
+  font-size: 11px;
+}
+
+.toast i {
+  color: var(--green);
+  font-size: 15px;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media (max-width: 1250px) {
+  :root { --sidebar-width: 235px; }
+
+  .content { padding-right: 22px; padding-left: 22px; }
+  .topbar { padding-right: 22px; padding-left: 22px; }
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .profile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .country-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 960px) {
+  :root { --sidebar-width: 250px; }
+
+  .sidebar {
+    transform: translateX(-105%);
+    box-shadow: 12px 0 40px #00000022;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main-area { margin-left: 0; }
+  .mobile-menu { display: grid !important; }
+  .grid-two { grid-template-columns: minmax(0, 1fr); }
+  .settings-layout { grid-template-columns: minmax(0, 1fr); }
+  .report-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 650px) {
+  .topbar {
+    min-height: 68px;
+    padding: 12px 14px;
+    gap: 9px;
+  }
+
+  .header-left,
+  .header-right { gap: 9px; }
+
+  .page-heading { font-size: 19px; }
+  .page-subtitle { font-size: 10px; }
+
+  .global-search {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 14px;
+    right: 14px;
+    z-index: 10;
+    width: auto;
+    display: none;
+    box-shadow: var(--shadow);
+  }
+
+  .global-search.show { display: flex; }
+
+  .admin-info { display: none; }
+
+  .content { padding: 22px 14px 28px; }
+
+  .section-title { font-size: 22px; }
+  .stats-grid { gap: 11px; }
+  .stat-card { padding: 14px; }
+  .stat-icon { width: 35px; height: 35px; font-size: 15px; }
+  .stat-label { font-size: 10px; }
+  .stat-value { font-size: 22px; }
+  .stat-foot { font-size: 9px; }
+  .panel-card { padding: 15px; }
+  .chart-container { height: 235px; }
+
+  .profile-grid,
+  .country-grid,
+  .report-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .filters { padding: 13px; gap: 10px; }
+  .filter-field { min-width: calc(50% - 8px); }
+
+  .detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .modal-body { padding: 15px; }
+  .profile-modal-hero h3 { font-size: 18px; }
+}
+
+@media (max-width: 380px) {
+  .stats-grid { grid-template-columns: minmax(0, 1fr); }
+  .filter-field { min-width: 100%; }
+  .detail-grid { grid-template-columns: minmax(0, 1fr); }
+  .page-heading { font-size: 17px; }
+  .brand-name { font-size: 16px; }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .sidebar, .topbar, .filters, .btn, .action-button,
+  .pagination, .toast-region, .modal-backdrop {
+    display: none !important;
+  }
+  .main-area { margin: 0; }
+  .content { padding: 0; }
+  .page-section { display: none !important; }
+  .page-section.active { display: block !important; }
+  .panel-card, .table-card, .stat-card {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="brand">
+      <div class="brand-logo">
+        <img src="logo.png" alt="Subhmangal Matrimony logo"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <span class="brand-fallback">S</span>
+      </div>
+      <div>
+        <div class="brand-name">Subhmangal</div>
+        <div class="brand-subtitle">Matrimony Admin</div>
+      </div>
+    </div>
+
+    <div class="sidebar-label">Workspace</div>
+
+    <nav class="nav-list" id="navigation">
+      <button class="nav-button active" data-section="dashboard">
+        <i class="fa-solid fa-chart-pie"></i> Dashboard
+      </button>
+      <button class="nav-button" data-section="members">
+        <i class="fa-solid fa-users"></i> Member Profiles
+        <span class="nav-count" id="memberNavCount">12</span>
+      </button>
+      <button class="nav-button" data-section="payments">
+        <i class="fa-solid fa-wallet"></i> Payments
+        <span class="nav-count">3</span>
+      </button>
+      <button class="nav-button" data-section="active">
+        <i class="fa-solid fa-user-check"></i> Active Members
+      </button>
+      <button class="nav-button" data-section="foreign">
+        <i class="fa-solid fa-earth-americas"></i> Foreign Accounts
+      </button>
+      <button class="nav-button" data-section="countries">
+        <i class="fa-solid fa-globe"></i> Countries & Phone Numbers
+      </button>
+      <button class="nav-button" data-section="reports">
+        <i class="fa-solid fa-file-chart-column"></i> Reports
+      </button>
+      <button class="nav-button" data-section="settings">
+        <i class="fa-solid fa-gear"></i> Settings
+      </button>
+      <button class="nav-button" id="sidebarLogout">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="demo-sidebar-card">
+        <i class="fa-solid fa-shield-heart"></i>
+        <strong>Demo Environment</strong>
+        <p>This dashboard uses fictional profiles and sample payment records. No real accounts or payments are connected.</p>
+      </div>
+      <div class="sidebar-footer">Subhmangal Matrimony © 2026</div>
+    </div>
+  </aside>
+
+  <!-- MAIN APPLICATION -->
+  <main class="main-area">
+    <header class="topbar">
+      <div class="header-left">
+        <button class="icon-button mobile-menu" id="mobileMenu"
+                aria-label="Open navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div>
+          <h1 class="page-heading" id="pageHeading">Dashboard</h1>
+          <p class="page-subtitle">Welcome back, Administrator</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <label class="global-search" id="globalSearchWrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" id="globalSearch"
+                 placeholder="Search members, email, phone..."
+                 aria-label="Search members">
+        </label>
+
+        <button class="icon-button" id="searchToggle" aria-label="Toggle search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <button class="icon-button" id="notificationButton"
+                aria-label="Show notifications" title="Demo notifications">
+          <i class="fa-regular fa-bell"></i>
+          <span class="notification-dot"></span>
+        </button>
+
+        <button class="icon-button" id="themeToggle"
+                aria-label="Toggle light or dark mode" title="Toggle theme">
+          <i class="fa-regular fa-moon"></i>
+        </button>
+
+        <div class="profile-menu-wrap">
+          <button class="admin-button" id="adminMenuButton"
+                  aria-expanded="false" aria-haspopup="true">
+            <span class="admin-avatar">SA</span>
+            <span class="admin-info">
+              <span class="admin-name">Super Admin</span>
+              <span class="admin-role">Administrator</span>
+            </span>
+            <i class="fa-solid fa-chevron-down small muted"></i>
+          </button>
+
+          <div class="dropdown hidden" id="adminDropdown">
+            <button data-action="settings">
+              <i class="fa-regular fa-user"></i> Admin settings
+            </button>
+            <button data-action="notifications">
+              <i class="fa-regular fa-bell"></i> Notifications
+            </button>
+            <button data-action="logout">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ================= DASHBOARD ================= -->
+      <section class="page-section active" id="section-dashboard">
+        <div class="section-top">
+          <div>
+            <h2 class="section-title">Overview</h2>
+            <p class="section-description">
+              Your matrimonial platform at a glance. All figures below are demonstration values.
+            </p>
+          </div>
+          <span class="demo-badge"><i class="fa-solid fa-flask"></i> DEMO DATA</span>
+        </div>
+
+        <div class="filters" aria-label="Dashboard filters">
+          <div class="filter-field">
+            <label for="dashStartDate">From date</label>
+            <input type="date" id="dashStartDate">
+          </div>
+          <div class="filter-field">
+            <label for="dashEndDate">To date</label>
+            <input type="date" id="dashEndDate">
+          </div>
+          <div class="filter-field">
+            <label for="dashCountry">Country</label>
+            <select id="dashCountry">
+              <option value="">All countries</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="dashStatus">Profile status</label>
+            <select id="dashStatus">
+              <option value="">All statuses</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="pending verification">Pending verification</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="dashPlan">Membership plan</label>
+            <select id="dashPlan">
+              <option value="">All plans</option>
+              <option>Basic</option>
+              <option>Standard</option>
+              <option>Premium</option>
+              <option>Gold</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="applyDashFilters">
+            <i class="fa-solid fa-filter"></i> Apply
+          </button>
+          <button class="btn" id="resetDashFilters">Reset</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card" style="--accent:#c7832e;--tint:#fff0d9">
+            <div class="stat-top">
+              <div class="stat-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+              <span class="eyebrow">Payments</span>
+            </div>
+            <div class="stat-label">Total Payments Pending</div>
+            <div class="stat-value" id="statPending">₹ 24,500</div>
+            <div class="stat-foot">
+              <span class="trend-down"><i class="fa-solid fa-arrow-up"></i> 8.2%</span>
+              <span class="muted">vs. last month</span>
+            </div>
+            <div class="mini-bars" aria-hidden="true">
+              <span style="--h:40%"></span><span style="--h:70%"></span>
+              <span style="--h:50%"></span><span style="--h:90%"></span>
+              <span style="--h:62%"></span><span style="--h:82%"></span>
+              <span style="--h:55%"></span>
+            </div>
+          </article>
+
+          <article class="stat-card" style="--accent:#21865a;--tint:#e2f5e9">
+            <div class="stat-top">
+              <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+              <span class="eyebrow">Payments</span>
+            </div>
+            <div class="stat-label">Completed Online Payments</div>
+            <div class="stat-value" id="statCompleted">₹ 1,84,750</div>
+            <div class="stat-foot">
+              <span class="trend-up"><i class="fa-solid fa-arrow-up"></i> 12.6%</span>
+              <span class="muted">vs. last month</span>
+            </div>
+            <div class="mini-bars" aria-hidden="true">
+              <span style="--h:30%"></span><span style="--h:50%"></span>
+              <span style="--h:60%"></span><span style="--h:45%"></span>
+              <span style="--h:78%"></span><span style="--h:85%"></span>
+              <span style="--h:100%"></span>
+            </div>
+          </article>
+
+          <article class="stat-card" style="--accent:#4777cf;--tint:#e7efff">
+            <div class="stat-top">
+              <div class="stat-icon"><i class="fa-solid fa-user-group"></i></div>
+              <span class="eyebrow">Members</span>
+            </div>
+            <div class="stat-label">Number of Active Members</div>
+            <div class="stat-value" id="statActive">9</div>
+            <div class="stat-foot">
+              <span class="trend-up"><i class="fa-solid fa-arrow-up"></i> 6.4%</span>
+              <span class="muted">vs. last month</span>
+            </div>
+            <div class="mini-bars" aria-hidden="true">
+              <span style="--h:35%"></span><span style="--h:43%"></span>
+              <span style="--h:58%"></span><span style="--h:48%"></span>
+              <span style="--h:75%"></span><span style="--h:80%"></span>
+              <span style="--h:100%"></span>
+            </div>
+          </article>
+
+          <article class="stat-card" style="--accent:#a14d9b;--tint:#f6e6f5">
+            <div class="stat-top">
+              <div class="stat-icon"><i class="fa-solid fa-earth-americas"></i></div>
+              <span class="eyebrow">International</span>
+            </div>
+            <div class="stat-label">Active Foreign Accounts</div>
+            <div class="stat-value" id="statForeign">8</div>
+            <div class="stat-foot">
+              <span class="trend-up"><i class="fa-solid fa-arrow-up"></i> 10.1%</span>
+              <span class="muted">vs. last month</span>
+            </div>
+            <div class="mini-bars" aria-hidden="true">
+              <span style="--h:20%"></span><span style="--h:40%"></span>
+              <span style="--h:36%"></span><span style="--h:65%"></span>
+              <span style="--h:55%"></span><span style="--h:78%"></span>
+              <span style="--h:100%"></span>
+            </div>
+          </article>
+        </div>
+
+        <div class="grid-two">
+          <article class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title">Monthly Payment Overview</h3>
+                <p class="panel-subtitle">Completed vs. pending amounts · INR · demo values</p>
+              </div>
+              <span class="badge active">2026</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="paymentChart" aria-label="Monthly completed and pending payment chart"></canvas>
+            </div>
+            <div class="legend">
+              <span class="legend-item"><span class="legend-dot" style="background:#781b38"></span> Completed</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#e8b55d"></span> Pending</span>
+            </div>
+          </article>
+
+          <article class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title">Active Members by Country</h3>
+                <p class="panel-subtitle">Distribution of active demo profiles</p>
+              </div>
+              <i class="fa-solid fa-earth-asia muted"></i>
+            </div>
+            <div class="chart-container country-chart">
+              <canvas id="countryChart" aria-label="Active members by country chart"></canvas>
+            </div>
+            <div class="quick-insight">
+              <i class="fa-solid fa-lightbulb"></i>
+              <div>
+                <strong>International reach</strong>
+                <p id="countryInsight">Demonstration profiles represent multiple countries and regions.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="grid-two">
+          <article class="table-card">
+            <div class="table-card-header">
+              <div>
+                <h3>Recent Payments</h3>
+                <p>Latest sample payment records</p>
+              </div>
+              <button class="btn btn-sm" data-goto="payments">View all <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="table-scroll">
+              <table id="recentPaymentsTable">
+                <thead>
+                  <tr>
+                    <th>Member</th><th>Payment ID</th><th>Date</th>
+                    <th>Method</th><th>Amount</th><th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recentPaymentsBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title">Recently Joined Members</h3>
+                <p class="panel-subtitle">Newest fictional registrations</p>
+              </div>
+              <button class="btn btn-sm" data-goto="members">View all</button>
+            </div>
+            <div class="recent-member-list" id="recentMembersList"></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ================= MEMBER PROFILES ================= -->
+      <section class="page-section" id="section-members">
+        <div class="section-top">
+          <div>
+            <h2 class="section-title">Member Profiles</h2>
+            <p class="section-description">Explore and inspect fictional member records. Select a profile for full details.</p>
+          </div>
+          <div style="display:flex;gap:9px;flex-wrap:wrap">
+            <span class="demo-badge"><i class="fa-solid fa-flask"></i> DEMO DATA</span>
+            <button class="btn" id="exportMembersBtn"><i class="fa-solid fa-download"></i> Export CSV</button>
+          </div>
+        </div>
+
+        <div class="filters">
+          <div class="filter-field">
+            <label for="memberSearch">Search member</label>
+            <input type="search" id="memberSearch" placeholder="Name, username, email, phone...">
+          </div>
+          <div class="filter-field">
+            <label for="memberCountryFilter">Country</label>
+            <select id="memberCountryFilter"><option value="">All countries</option></select>
+          </div>
+          <div class="filter-field">
+            <label for="memberStatusFilter">Status</label>
+            <select id="memberStatusFilter">
+              <option value="">All statuses</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="pending verification">Pending verification</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="memberPlanFilter">Plan</label>
+            <select id="memberPlanFilter">
+              <option value="">All plans</option>
+              <option>Basic</option><option>Standard</option>
+              <option>Premium</option><option>Gold</option>
+            </select>
+          </div>
+          <button class="btn" id="resetMemberFilters"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+        </div>
+
+        <div class="section-top" style="align-items:center;margin-bottom:15px">
+          <p class="muted small" id="memberResultCount">Showing profiles</p>
+          <span class="muted small">Tip: click any profile card to inspect its details.</span>
+        </div>
+
+        <div class="profile-grid" id="profileGrid"></div>
+      </section>
+
+      <!-- ================= PAYMENTS ================= -->
+      <section class="page-section" id="section-payments">
+        <div class="section-top">
+          <div>
+            <h2 class="section-title">Payments</h2>
+            <p class="section-description">Review the sample transaction ledger and payment status.</p>
+          </div>
+          <span class="demo-badge"><i class="fa-solid fa-flask"></i> DEMO DATA</span>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card" style="--accent:#21865a;--tint:#e2f5e9">
+            <div class="stat-icon"><i class="fa-solid fa-check-double"></i></div>
+            <div class="stat-label">Completed Transactions</div>
+            <div class="stat-value" id="paymentCompletedCount">0</div>
+            <div class="stat-foot muted">Sample records</div>
+          </article>
+          <article class="stat-card" style="--accent:#c7832e;--tint:#fff0d9">
+            <div class="stat-icon"><i class="fa-solid fa-clock"></i></div>
+            <div class="stat-label">Pending Transactions</div>
+            <div class="stat-value" id="paymentPendingCount">0</div>
+            <div class="stat-foot muted">Awaiting completion</div>
+          </article>
+          <article class="stat-card" style="--accent:#4777cf;--tint:#e7efff">
+            <div class="stat-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+            <div class="stat-label">Completed Amount</div>
+            <div class="stat-value" id="paymentTotalAmount">₹0</div>
+            <div class="stat-foot muted">Sample total</div>
+          </article>
+          <article class="stat-card" style="--accent:#b84758;--tint:#ffeaed">
+            <div class="stat-icon"><i class="fa-solid fa-ban"></i></div>
+            <div class="stat-label">Failed Transactions</div>
+            <div class="stat-value" id="paymentFailedCount">0</div>
+            <div class="stat-foot muted">Demo entries</div>
+          </article>
+        </div>
+
+        <div class="filters">
+          <div class="filter-field">
+            <label for="paymentSearch">Search payments</label>
+            <input type="search" id="paymentSearch" placeholder="Member or payment ID...">
+          </div>
+          <div class="filter-field">
+            <label for="paymentStatusFilter">Payment status</label>
+            <select id="paymentStatusFilter">
+              <option value="">All statuses</option>
+              <option>Completed</option><option>Pending</option><option>Failed</option>
+            </select>
+          </div>
+          <div class="filter-field">
+            <label for="paymentMethodFilter">Payment method</label>
+            <select id="paymentMethodFilter">
+              <option value="">All methods</option>
+              <option>UPI</option><option>Card</option><option>Net Banking</option>
+              <option>PayPal</option><option>Bank Transfer</option>
+            </select>
+          </div>
+          <button class="btn" id="resetPaymentFilters">Reset</button>
+          <button class="btn" id="exportPaymentsBtn"><i class="fa-solid fa-download"></i> Export CSV</button>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <div><h3>Transaction Ledger</h3><p>Sort a column by clicking its heading.</p></div>
+            <span class="muted small" id="paymentResultCount"></span>
+          </div>
+          <div class="table-scroll">
+            <table id="paymentsTable">
+              <thead>
+                <tr>
+                  <th><button data-sort="id">Payment ID ↕</button></th>
+                  <th><button data-sort="memberName">Member ↕</button></th>
+                  <th><button data-sort="date">Date ↕</button></th>
+                  <th><button data-sort="method">Method ↕</button></th>
+                  <th><button data-sort="amount">Amount ↕</button></th>
+                  <th><button data-sort="status">Status ↕</button></th>
+                </tr>
+              </thead>
+              <tbody id="paymentsBody"></tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            <span>Fictional transaction records only</span>
+            <div class="pagination" id="paymentsPagination"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= ACTIVE MEMBERS ================= -->
+      <section class="page-section" id="section-active">
+        <div class="section-top">
+          <div>
+            <h2 class="section-title">Active Members</h2>
+            <p class="section-description">Members whose sample accounts are currently marked active.</p>
+          </div>
+          <span class="demo-badge"><i class="fa-solid fa-flask"></i> DEMO DATA</span>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card" style="--accent:#21865a;--tint:#e2f5e9">
+            <div class="stat-icon"><i class="fa-solid fa-user-check"></i></div>
+            <div class="stat-label">Active Profiles</div>
+            <div class="stat-value" id="activePageCount">0</div>
+          </article>
+          <article class="stat-card" style="--accent:#4777cf;--tint:#e7efff">
+            <div class="stat-icon"><i class="fa-solid fa-crown"></i></div>
+            <div class="stat-label">Premium & Gold</div>
+            <div class="stat-value" id="activePremiumCount">0</div>
+          </article>
+          <article class="stat-card" style="--accent:#c7832e;--tint:#fff0d9">
+            <div class="stat-icon"><i class="fa-solid fa-globe"></i></div>
+            <div class="stat-label">Countries Represented</div>
+            <div class="stat-value" id="activeCountryCount">0</div>
+          </article>
+          <article class="stat-card" style="--accent:#a14d9b;--tint:#f6e6f5">
+            <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="stat-label">Average Completion</div>
+            <div class="stat-value" id="activeCompletion">0%</div>
+          </article>
+        </div>
+
+        <div class="filters">
+          <div class="filter-field">
+            <label for="activeSearch">Search active members</label>
+            <input type="search" id="activeSearch" placeholder="Name, email, country...">
+          </div>
+          <div class="filter-field">
+            <label for="activePlanFilter">Membership plan</label>
+            <select id="activePlanFilter">
+              <option value="">All plans</option>
+              <option>Basic</option><option>Standard</option>
+              <option>Premium</option><option>Gold</option>
+            </select>
+          </div>
+          <button class="btn" id="resetActiveFilters">Reset</button>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <div><h3>Active Member Directory</h3><p>Click a member name for the complete profile.</p></div>
+            <span class="muted small" id="activeResultCount"></span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Member</th><th>Country</th><th>Plan</th>
+                  <th>Completion</th><th>Joined</th><th>Status</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="activeBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FOREIGN ACCOUNTS ================= -->
+      <section class="page-section" id="section-foreign">
+        <div class="section-top">
+          <div>
+            <h2 class="section-title">Foreign Accounts</h2>
+            <p class="section-description">International demo profiles whose country is not India.</p>
+          </div>
+          <span class="demo-badge"><i class="fa-solid fa-flask"></i> DEMO DATA</span>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card" style="--accent:#a14d9b;--tint:#f6e6f5">
+            <div class="stat-icon"><i class="fa-solid fa-earth-americas"></i></div>
+            <div class="stat-label">International Profiles</div>
+            <div class="stat-value" id="foreignTotal">0</div>
+          </article>
+          <article class="stat-card" style="--accent:#21865a;--tint:#e2f5e9">
+            <div class="stat-icon"><i class="fa-solid fa-user-check"></i></div>
+            <div class="stat-label">Active International</div>
+            <div class="stat-value" id="foreignActive">0</div>
+          </article>
+          <article class="stat-card" style="--accent:#4777cf;--tint:#e7efff">
+            <div class="stat-icon"><i class="fa-solid fa-flag"></i></div>
+            <div class="stat-label">Countries</div>
+            <div class="stat-value" id="foreignCountries">0</div>
+          </article>
+          <article class="stat-card" style="--accent:#c7832e;--tint:#fff0d9">
+            <div class="stat-icon"><i class="fa-solid fa-crown"></i></div>
+            <div class="stat-label">Premium/Gold Plans</div>
+            <div class="stat-value" id="foreignPremium">0</div>
+          </article>
+        </div>
+
+        <div class="filters">
+          <div class="filter-field">
+            <label for="foreignSearch">Search international members</label>
+            <input type="search" id="foreignSearch" placeholder="Name, username, country...">
+          </div>
+          <div class="filter-field">
+            <label for="foreignCountryFilter">Country</label>
+            <select id="foreignCountryFilter"><option value="">All countries</option></select>
+          </div>
+          <div class="filter-field">
+            <label for="foreignStatusFilter">Status</label>
+            <select id="foreignStatusFilter">
+              <option value="">All statuses</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="pending verification">Pending verification</option>
+            </select>
+          </div>
+          <button class="btn" id="resetForeignFilters">Reset</button>
+        </div>
+
+        <div class="profile-grid" id="foreignGrid"></div>
+      </section>
+
+      <!-- ================= COUNTRIES ================= -->
+      <section class="page-section" id="section-countries">
+        <div class="section-top">
+          <div>
+            <h2 class="section-title">Countries & Phone Numbers</h2>
+            <p class="section-description">Calling codes, active demo profiles and sample contact formats.</p>
+          </div>
+          <span class="demo-badge"><i class="fa-solid fa-flask"></i> DEMO DATA</span>
+        </div>
+
+        <div class="filters">
+          <div class="filter-field">
+            <label for="countrySearch">Search country</label>
+            <input type="search" id="countrySearch" placeholder="Country name or calling code...">
+          </div>
+          <button class="btn" id="resetCountrySearch">Reset</button>
+        </div>
+
+        <div class="country-grid" id="countryGrid"></div>
+      </section>
+
+      <!-- ================= REPORTS ================= -->
+      <section class="page-section" id="section-reports">
+        <div class="section-top">
+          <div>
+            <h2 class="section-title">Reports & Analytics</h2>
+            <p class="section-description">Quick reports generated from this page's in-memory demonstration data.</p>
+          </div>
+          <span class="demo-badge"><i class="fa-solid fa-flask"></i> DEMO DATA</span>
+        </div>
+
+        <div class="report-grid">
+          <article class="report-card">
+            <i class="fa-solid fa-users"></i>
+            <h3>Member Directory Report</h3>
+            <p>Review the sample member records, their account status, countries and membership plans.</p>
+            <button class="btn btn-primary" style="margin-top:15px" data-report="members">
+              <i class="fa-solid fa-download"></i> Export CSV
+            </button>
+          </article>
+          <article class="report-card">
+            <i class="fa-solid fa-wallet"></i>
+            <h3>Payment Ledger Report</h3>
+            <p>Export fictional transaction IDs, methods, amounts, dates and payment statuses.</p>
+            <button class="btn btn-primary" style="margin-top:15px" data-report="payments">
+              <i class="fa-solid fa-download"></i> Export CSV
+            </button>
+          </article>
+          <article class="report-card">
+            <i class="fa-solid fa-globe"></i>
+            <h3>Country Distribution</h3>
+            <p>Export the calling-code directory and active-profile counts for each represented country.</p>
+            <button class="btn btn-primary" style="margin-top:15px" data-report="countries">
+              <i class="fa-solid fa-download"></i> Export CSV
+            </button>
+          </article>
+        </div>
+
+        <div class="grid-two">
+          <article class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title">Account Status Distribution</h3>
+                <p class="panel-subtitle">All fictional profiles</p>
+              </div>
+            </div>
+            <div class="chart-container"><canvas id="statusChart"></canvas></div>
+          </article>
+          <article class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title">Membership Plans</h3>
+                <p class="panel-subtitle">Plan counts in sample records</p>
+              </div>
+            </div>
+            <div class="chart-container"><canvas id="planChart"></canvas></div>
+          </article>
+        </div>
+
+        <div class="panel-card">
+          <h3 class="panel-title">Report notes</h3>
+          <p class="section-description">
+            Reports are created locally in your browser from the included fictional data.
+            They do not represent actual business performance, financial records, or real users.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================= SETTINGS ================= -->
+      <section class="page-section" id="section-settings">
+        <div class="section-top">
+          <div>
+            <h2 class="section-title">Settings</h2>
+            <p class="section-description">Customize this demo dashboard's appearance and interface preferences.</p>
+          </div>
+          <span class="demo-badge"><i class="fa-solid fa-flask"></i> DEMO DATA</span>
+        </div>
+
+        <div class="settings-layout">
+          <article class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title">Dashboard Preferences</h3>
+                <p class="panel-subtitle">Local interface settings</p>
+              </div>
+              <i class="fa-solid fa-sliders muted"></i>
+            </div>
+
+            <div class="settings-group">
+              <div class="form-field">
+                <label for="adminDisplayName">Administrator display name</label>
+                <input id="adminDisplayName" value="Super Admin" maxlength="50">
+              </div>
+
+              <div class="form-field">
+                <label for="brandDisplayName">Brand display name</label>
+                <input id="brandDisplayName" value="Subhmangal Matrimony" maxlength="70">
+              </div>
+
+              <div class="form-field">
+                <label for="defaultCurrency">Display currency</label>
+                <select id="defaultCurrency">
+                  <option value="INR">INR — Indian Rupee (₹)</option>
+                  <option value="USD">USD — US Dollar ($)</option>
+                </select>
+              </div>
+
+              <button class="btn btn-primary" id="saveSettingsBtn">
+                <i class="fa-solid fa-floppy-disk"></i> Save demo preferences
+              </button>
+            </div>
+          </article>
+
+          <article class="panel-card">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title">Interface & Privacy</h3>
+                <p class="panel-subtitle">Presentation options</p>
+              </div>
+              <i class="fa-solid fa-shield-halved muted"></i>
+            </div>
+
+            <div class="setting-row">
+              <div>
+                <strong>Dark mode</strong>
+                <p>Switch the dashboard color scheme.</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="darkModeSwitch">
+                <span></span>
+              </label>
+            </div>
+
+            <div class="setting-row">
+              <div>
+                <strong>Demo data notice</strong>
+                <p>Fictional profile and payment information is displayed.</p>
+              </div>
+              <span class="badge active">Enabled</span>
+            </div>
+
+            <div class="setting-row">
+              <div>
+                <strong>External integrations</strong>
+                <p>No live database, payment gateway or account service is connected.</p>
+              </div>
+              <span class="badge inactive">Disabled</span>
+            </div>
+
+            <div class="settings-note" style="margin-top:18px">
+              <i class="fa-solid fa-circle-info"></i>
+              Preferences are for the current demo interface. This standalone page does not implement authentication or server-side persistence.
+            </div>
+          </article>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- PROFILE DETAILS MODAL -->
+<div class="modal-backdrop" id="profileModalBackdrop"
+     role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="profileModalTitle">Member Profile</h2>
+      <button class="modal-close" data-close="profileModalBackdrop" aria-label="Close profile details">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body" id="profileModalBody"></div>
+  </div>
+</div>
+
+<!-- LOGOUT CONFIRMATION MODAL -->
+<div class="modal-backdrop" id="logoutModalBackdrop"
+     role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle">
+  <div class="modal small-modal">
+    <div class="modal-header">
+      <h2 id="logoutModalTitle">Confirm Logout</h2>
+      <button class="modal-close" data-close="logoutModalBackdrop" aria-label="Close logout confirmation">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="confirm-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+      <p class="confirm-text">
+        Are you sure you want to leave the Subhmangal Matrimony demo dashboard?
+        No real account session will be ended.
+      </p>
+      <div class="confirm-actions">
+        <button class="btn" data-close="logoutModalBackdrop">Cancel</button>
+        <button class="btn btn-danger" id="confirmLogout">Confirm demo logout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION MODAL -->
+<div class="modal-backdrop" id="notificationModalBackdrop"
+     role="dialog" aria-modal="true" aria-labelledby="notificationModalTitle">
+  <div class="modal small-modal">
+    <div class="modal-header">
+      <h2 id="notificationModalTitle">Notifications</h2>
+      <button class="modal-close" data-close="notificationModalBackdrop" aria-label="Close notifications">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="recent-member">
+        <div class="stat-icon"><i class="fa-solid fa-wallet"></i></div>
+        <div class="recent-member-info">
+          <strong>Sample payments available</strong>
+          <span>Review the demo payment ledger.</span>
+        </div>
+      </div>
+      <div class="recent-member">
+        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="recent-member-info">
+          <strong>12 fictional member profiles</strong>
+          <span>Open Member Profiles to inspect records.</span>
+        </div>
+      </div>
+      <p class="section-description">These are interface demonstration notifications, not live alerts.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast-region" id="toastRegion" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* ==========================================================
+   SUBHMANGAL MATRIMONY
+   All profiles, contact information and payment records below
+   are fictional demonstration data. No backend is connected.
+   ========================================================== */
+
+/* ---------------- UTILITIES ---------------- */
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+}[char]));
+
+const titleCase = value => String(value || "")
+  .replace(/\b\w/g, char => char.toUpperCase());
+
+const money = value => new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+  maximumFractionDigits: 0
+}).format(value);
+
+const initials = name => String(name || "?")
+  .split(/\s+/)
+  .filter(Boolean)
+  .slice(0, 2)
+  .map(part => part[0].toUpperCase())
+  .join("");
+
+function showToast(message, icon = "fa-circle-check") {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerHTML = `<i class="fa-solid ${icon}"></i><span>${escapeHTML(message)}</span>`;
+  $("#toastRegion").appendChild(toast);
+  setTimeout(() => toast.remove(), 3500);
+}
+
+function localDateString(date) {
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatDate(value) {
+  if (!value) return "—";
+  const date = new Date(value + "T12:00:00");
+  if (Number.isNaN(date.getTime())) return "—";
+  return date.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+}
+
+function calculateAge(dob) {
+  const birth = new Date(dob + "T00:00:00");
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDifference = today.getMonth() - birth.getMonth();
+  if (monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
+}
+
+function statusClass(status) {
+  const normalized = String(status || "").toLowerCase();
+  if (normalized === "active" || normalized === "completed" || normalized === "paid") {
+    return "active";
+  }
+  if (normalized === "pending" || normalized === "pending verification") {
+    return "pending";
+  }
+  if (normalized === "inactive" || normalized === "failed" || normalized === "rejected") {
+    return "inactive";
+  }
+  return "basic";
+}
+
+function badgeHTML(status) {
+  return `<span class="badge ${statusClass(status)}">${escapeHTML(status)}</span>`;
+}
+
+function profilePhotoURL(profile) {
+  /* RandomUser portraits are used as optional, non-identifying visual placeholders.
+     The records and all profile details remain fictional. An initials fallback is
+     shown if the remote portrait service is unavailable. */
+  return profile.photo;
+}
+
+function avatarHTML(profile, className = "member-avatar") {
+  return `<div class="${className}">
+    <img src="${escapeHTML(profilePhotoURL(profile))}"
+         alt="Fictional portrait placeholder for ${escapeHTML(profile.name)}"
+         loading="lazy"
+         onerror="this.style.display='none';this.parentElement.textContent='${escapeHTML(initials(profile.name))}'">
+  </div>`;
+}
+
+/* ---------------- FICTIONAL MEMBERS ---------------- */
+
+const members = [
+  {
+    id: 1, username: "rahul_sharma21", name: "Rahul Sharma",
+    gender: "Male", email: "rahul21@gmail.com",
+    phone: "+91 98765-43210", country: "India", flag: "🇮🇳",
+    dob: "1997-04-18", birthplace: "Jaipur, Rajasthan, India",
+    city: "Mumbai", motherTongue: "Hindi",
+    mother: "Sunita Sharma", father: "Rajesh Sharma",
+    siblings: "Yes — one younger sister",
+    smoking: "No", alcohol: "Occasionally",
+    marital: "Never married", education: "B.Tech, Computer Science",
+    employment: "Employed", job: "Software Engineer",
+    company: "Horizon Digital Labs (fictional)",
+    workLocation: "Mumbai, India",
+    monthlySalary: 125000, plan: "Premium",
+    status: "active", completion: 96,
+    joined: "2026-10-15",
+    about: "A friendly software engineer who enjoys reading, exploring new places, family gatherings and learning new technologies. Values honesty, kindness and a balanced lifestyle.",
+    photo: "https://randomuser.me/api/portraits/men/32.jpg"
+  },
+  {
+    id: 2, username: "rohini_patel34", name: "Rohini Patel",
+    gender: "Female", email: "rohini34@gmail.com",
+    phone: "+91 91234-56780", country: "India", flag: "🇮🇳",
+    dob: "1999-08-07", birthplace: "Ahmedabad, Gujarat, India",
+    city: "Ahmedabad", motherTongue: "Gujarati",
+    mother: "Kavita Patel", father: "Mahesh Patel",
+    siblings: "Yes — one elder brother",
+    smoking: "No", alcohol: "No",
+    marital: "Never married", education: "M.Com, Finance",
+    employment: "Employed", job: "Financial Analyst",
+    company: "Amber Ledger Services (fictional)",
+    workLocation: "Ahmedabad, India",
+    monthlySalary: 78000, plan: "Gold",
+    status: "active", completion: 100,
+    joined: "2026-10-14",
+    about: "An optimistic finance professional who loves music, cooking, weekend travel and spending time with family. Hopes to build a respectful, supportive partnership.",
+    photo: "https://randomuser.me/api/portraits/women/44.jpg"
+  },
+  {
+    id: 3, username: "aisha_khan29", name: "Aisha Khan",
+    gender: "Female", email: "aisha29@gmail.com",
+    phone: "+971 50 123 4567", country: "United Arab Emirates",
+    flag: "🇦🇪", dob: "1996-11-22",
+    birthplace: "Lucknow, Uttar Pradesh, India",
+    city: "Dubai", motherTongue: "Urdu",
+    mother: "Farah Khan", father: "Imran Khan",
+    siblings: "Yes — two younger siblings",
+    smoking: "No", alcohol: "No",
+    marital: "Never married", education: "MBA, Marketing",
+    employment: "Employed", job: "Marketing Manager",
+    company: "Crescent Media Group (fictional)",
+    workLocation: "Dubai, UAE",
+    monthlySalary: 14500, plan: "Premium",
+    status: "active", completion: 92,
+    joined: "2026-10-13",
+    about: "A creative marketing professional based in Dubai. Enjoys museums, travel, photography and trying new cuisines while staying connected with family traditions.",
+    photo: "https://randomuser.me/api/portraits/women/68.jpg"
+  },
+  {
+    id: 4, username: "priya_iyer27", name: "Priya Iyer",
+    gender: "Female", email: "priya27@gmail.com",
+    phone: "+65 8123 4567", country: "Singapore",
+    flag: "🇸🇬", dob: "1998-02-13",
+    birthplace: "Chennai, Tamil Nadu, India",
+    city: "Singapore", motherTongue: "Tamil",
+    mother: "Lakshmi Iyer", father: "Suresh Iyer",
+    siblings: "No",
+    smoking: "No", alcohol: "Occasionally",
+    marital: "Never married", education: "M.Sc, Data Analytics",
+    employment: "Employed", job: "Data Analyst",
+    company: "Meridian Insights (fictional)",
+    workLocation: "Singapore",
+    monthlySalary: 6500, plan: "Standard",
+    status: "active", completion: 88,
+    joined: "2026-10-12",
+    about: "A data analyst who appreciates classical music, nature walks, books and thoughtful conversations. Values mutual respect and a curious outlook on life.",
+    photo: "https://randomuser.me/api/portraits/women/21.jpg"
+  },
+  {
+    id: 5, username: "arjun_mehta30", name: "Arjun Mehta",
+    gender: "Male", email: "arjun30@gmail.com",
+    phone: "+1 314-634-3144", country: "United States",
+    flag: "🇺🇸", dob: "1995-06-29",
+    birthplace: "Pune, Maharashtra, India",
+    city: "Austin", motherTongue: "Hindi",
+    mother: "Nisha Mehta", father: "Vijay Mehta",
+    siblings: "Yes — one younger brother",
+    smoking: "No", alcohol: "Occasionally",
+    marital: "Never married", education: "M.S., Computer Engineering",
+    employment: "Employed", job: "Cloud Engineer",
+    company: "Blue Orbit Systems (fictional)",
+    workLocation: "Austin, Texas, USA",
+    monthlySalary: 10500, plan: "Gold",
+    status: "active", completion: 97,
+    joined: "2026-10-11",
+    about: "A cloud engineer who enjoys hiking, board games, travel and volunteering at community events. Looks forward to a partnership built on friendship and trust.",
+    photo: "https://randomuser.me/api/portraits/men/46.jpg"
+  },
+  {
+    id: 6, username: "ananya_roy26", name: "Ananya Roy",
+    gender: "Female", email: "ananya26@gmail.com",
+    phone: "+44 7700 900123", country: "United Kingdom",
+    flag: "🇬🇧", dob: "1999-01-09",
+    birthplace: "Kolkata, West Bengal, India",
+    city: "London", motherTongue: "Bengali",
+    mother: "Madhuri Roy", father: "Amit Roy",
+    siblings: "Yes — one elder sister",
+    smoking: "No", alcohol: "No",
+    marital: "Never married", education: "M.A., Architecture",
+    employment: "Employed", job: "Architect",
+    company: "Northbridge Design Studio (fictional)",
+    workLocation: "London, UK",
+    monthlySalary: 4200, plan: "Basic",
+    status: "pending verification", completion: 74,
+    joined: "2026-10-10",
+    about: "An architect who enjoys urban design, art galleries, sketching and quiet weekends. Believes a strong relationship is built through communication and understanding.",
+    photo: "https://randomuser.me/api/portraits/women/65.jpg"
+  },
+  {
+    id: 7, username: "neha_desai31", name: "Neha Desai",
+    gender: "Female", email: "neha31@gmail.com",
+    phone: "+1 416-555-0187", country: "Canada",
+    flag: "🇨🇦", dob: "1994-09-14",
+    birthplace: "Surat, Gujarat, India",
+    city: "Toronto", motherTongue: "Gujarati",
+    mother: "Poonam Desai", father: "Dilip Desai",
+    siblings: "Yes — one younger sister",
+    smoking: "No", alcohol: "Occasionally",
+    marital: "Never married", education: "B.Sc., Nursing",
+    employment: "Employed", job: "Registered Nurse",
+    company: "Maple Health Centre (fictional)",
+    workLocation: "Toronto, Canada",
+    monthlySalary: 6200, plan: "Standard",
+    status: "active", completion: 90,
+    joined: "2026-10-09",
+    about: "A healthcare professional who enjoys cooking, outdoor activities, volunteering and spending time with loved ones. Values compassion, reliability and family.",
+    photo: "https://randomuser.me/api/portraits/women/33.jpg"
+  },
+  {
+    id: 8, username: "vikram_rao28", name: "Vikram Rao",
+    gender: "Male", email: "vikram28@gmail.com",
+    phone: "+61 412 345 678", country: "Australia",
+    flag: "🇦🇺", dob: "1997-12-05",
+    birthplace: "Hyderabad, Telangana, India",
+    city: "Melbourne", motherTongue: "Telugu",
+    mother: "Padma Rao", father: "Krishna Rao",
+    siblings: "Yes — one elder brother",
+    smoking: "No", alcohol: "Occasionally",
+    marital: "Never married", education: "B.Eng., Civil Engineering",
+    employment: "Employed", job: "Civil Engineer",
+    company: "Southern Cross Projects (fictional)",
+    workLocation: "Melbourne, Australia",
+    monthlySalary: 7800, plan: "Premium",
+    status: "inactive", completion: 83,
+    joined: "2026-10-08",
+    about: "A civil engineer with an interest in cycling, cricket, road trips and architecture. Enjoys practical problem-solving and spending relaxed time with friends and family.",
+    photo: "https://randomuser.me/api/portraits/men/52.jpg"
+  },
+  {
+    id: 9, username: "kavya_nair25", name: "Kavya Nair",
+    gender: "Female", email: "kavya25@gmail.com",
+    phone: "+49 1512 3456789", country: "Germany",
+    flag: "🇩🇪", dob: "2000-05-21",
+    birthplace: "Kochi, Kerala, India",
+    city: "Berlin", motherTongue: "Malayalam",
+    mother: "Geetha Nair", father: "Ramesh Nair",
+    siblings: "No",
+    smoking: "No", alcohol: "No",
+    marital: "Never married", education: "M.Sc., Environmental Science",
+    employment: "Employed", job: "Research Associate",
+    company: "Greenfield Research Institute (fictional)",
+    workLocation: "Berlin, Germany",
+    monthlySalary: 3900, plan: "Gold",
+    status: "active", completion: 95,
+    joined: "2026-10-07",
+    about: "An environmental researcher who loves forests, museums, travel and sustainable living. Hopes to meet someone who values kindness and curiosity.",
+    photo: "https://randomuser.me/api/portraits/women/47.jpg"
+  },
+  {
+    id: 10, username: "rohan_kapoor32", name: "Rohan Kapoor",
+    gender: "Male", email: "rohan32@gmail.com",
+    phone: "+27 82 123 4567", country: "South Africa",
+    flag: "🇿🇦", dob: "1993-03-11",
+    birthplace: "New Delhi, India",
+    city: "Cape Town", motherTongue: "Hindi",
+    mother: "Rekha Kapoor", father: "Anil Kapoor",
+    siblings: "Yes — one younger sister",
+    smoking: "No", alcohol: "Occasionally",
+    marital: "Never married", education: "BBA, Business Management",
+    employment: "Business", job: "Business Owner",
+    company: "Kapoor Creative Trading (fictional)",
+    workLocation: "Cape Town, South Africa",
+    monthlySalary: 5600, plan: "Standard",
+    status: "active", completion: 86,
+    joined: "2026-10-06",
+    about: "A small-business owner who enjoys photography, sports, coastal walks and discovering local culture. Values transparency, shared goals and family bonds.",
+    photo: "https://randomuser.me/api/portraits/men/75.jpg"
+  },
+  {
+    id: 11, username: "meera_joshi29", name: "Meera Joshi",
+    gender: "Female", email: "meera29@gmail.com",
+    phone: "+64 21 123 4567", country: "New Zealand",
+    flag: "🇳🇿", dob: "1996-07-02",
+    birthplace: "Udaipur, Rajasthan, India",
+    city: "Auckland", motherTongue: "Hindi",
+    mother: "Asha Joshi", father: "Mohan Joshi",
+    siblings: "Yes — one elder brother",
+    smoking: "No", alcohol: "No",
+    marital: "Never married", education: "M.Ed., Education",
+    employment: "Employed", job: "Education Consultant",
+    company: "Harbour Learning Collective (fictional)",
+    workLocation: "Auckland, New Zealand",
+    monthlySalary: 5400, plan: "Basic",
+    status: "inactive", completion: 79,
+    joined: "2026-10-05",
+    about: "An education consultant who enjoys gardening, reading, hiking and helping young learners. Values empathy, stability and a warm family environment.",
+    photo: "https://randomuser.me/api/portraits/women/12.jpg"
+  },
+  {
+    id: 12, username: "siddharth_verma33", name: "Siddharth Verma",
+    gender: "Male", email: "siddharth33@gmail.com",
+    phone: "+33 6 12 34 56 78", country: "France",
+    flag: "🇫🇷", dob: "1992-10-26",
+    birthplace: "Bhopal, Madhya Pradesh, India",
+    city: "Paris", motherTongue: "Hindi",
+    mother: "Seema Verma", father: "Prakash Verma",
+    siblings: "No",
+    smoking: "No", alcohol: "Occasionally",
+    marital: "Never married", education: "M.Sc., Hospitality Management",
+    employment: "Self-employed", job: "Hospitality Consultant",
+    company: "Verma Guest Experience Studio (fictional)",
+    workLocation: "Paris, France",
+    monthlySalary: 4800, plan: "Premium",
+    status: "pending verification", completion: 68,
+    joined: "2026-10-04",
+    about: "A hospitality consultant who enjoys food culture, photography, language learning and discovering historic cities. Looks for an understanding and supportive partner.",
+    photo: "https://randomuser.me/api/portraits/men/22.jpg"
+  }
+];
+
+/* Correctly calculate ages using each member's date of birth. */
+members.forEach(member => {
+  member.age = calculateAge(member.dob);
+  member.yearlySalary = member.monthlySalary * 12;
+});
+
+/* ---------------- COUNTRY DIRECTORY ---------------- */
+
+const countries = [
+  { name: "United States", code: "+1", phone: "+1 314-634-3144", flag: "🇺🇸" },
+  { name: "India", code: "+91", phone: "+91 98765-43210", flag: "🇮🇳" },
+  { name: "United Kingdom", code: "+44", phone: "+44 7700 900123", flag: "🇬🇧" },
+  { name: "Canada", code: "+1", phone: "+1 416-555-0187", flag: "🇨🇦" },
+  { name: "Australia", code: "+61", phone: "+61 412 345 678", flag: "🇦🇺" },
+  { name: "United Arab Emirates", code: "+971", phone: "+971 50 123 4567", flag: "🇦🇪" },
+  { name: "Singapore", code: "+65", phone: "+65 8123 4567", flag: "🇸🇬" },
+  { name: "Germany", code: "+49", phone: "+49 1512 3456789", flag: "🇩🇪" },
+  { name: "France", code: "+33", phone: "+33 6 12 34 56 78", flag: "🇫🇷" },
+  { name: "South Africa", code: "+27", phone: "+27 82 123 4567", flag: "🇿🇦" },
+  { name: "New Zealand", code: "+64", phone: "+64 21 123 4567", flag: "🇳🇿" }
+];
+
+/* ---------------- FICTIONAL PAYMENT RECORDS ---------------- */
+
+const payments = [
+  { id: "SM-260101", memberId: 1, memberName: "Rahul Sharma", date: "2026-10-15", method: "UPI", amount: 4999, status: "Completed" },
+  { id: "SM-260102", memberId: 2, memberName: "Rohini Patel", date: "2026-10-14", method: "Card", amount: 7999, status: "Completed" },
+  { id: "SM-260103", memberId: 3, memberName: "Aisha Khan", date: "2026-10-13", method: "PayPal", amount: 6499, status: "Completed" },
+  { id: "SM-260104", memberId: 4, memberName: "Priya Iyer", date: "2026-10-12", method: "Card", amount: 2499, status: "Pending" },
+  { id: "SM-260105", memberId: 5, memberName: "Arjun Mehta", date: "2026-10-11", method: "Net Banking", amount: 8999, status: "Completed" },
+  { id: "SM-260106", memberId: 6, memberName: "Ananya Roy", date: "2026-10-10", method: "Card", amount: 999, status: "Pending" },
+  { id: "SM-260107", memberId: 7, memberName: "Neha Desai", date: "2026-10-09", method: "UPI", amount: 2499, status: "Completed" },
+  { id: "SM-260108", memberId: 8, memberName: "Vikram Rao", date: "2026-10-08", method: "Bank Transfer", amount: 4999, status: "Failed" },
+  { id: "SM-260109", memberId: 9, memberName: "Kavya Nair", date: "2026-10-07", method: "Card", amount: 7999, status: "Completed" },
+  { id: "SM-260110", memberId: 10, memberName: "Rohan Kapoor", date: "2026-10-06", method: "UPI", amount: 2499, status: "Completed" },
+  { id: "SM-260111", memberId: 11, memberName: "Meera Joshi", date: "2026-10-05", method: "Net Banking", amount: 999, status: "Pending" },
+  { id: "SM-260112", memberId: 12, memberName: "Siddharth Verma", date: "2026-10-04", method: "PayPal", amount: 4999, status: "Completed" }
+];
+
+const memberById = id => members.find(member => member.id === id);
+const foreignMembers = () => members.filter(member => member.country !== "India");
+const activeMembers = () => members.filter(member => member.status === "active");
+
+/* ---------------- NAVIGATION ---------------- */
+
+const sectionNames = {
+  dashboard: "Dashboard",
+  members: "Member Profiles",
+  payments: "Payments",
+  active: "Active Members",
+  foreign: "Foreign Accounts",
+  countries: "Countries & Phone Numbers",
+  reports: "Reports",
+  settings: "Settings"
+};
+
+function navigateTo(section) {
+  if (!sectionNames[section]) return;
+
+  $$(".page-section").forEach(el => {
+    el.classList.toggle("active", el.id === `section-${section}`);
+  });
+
+  $$(".nav-button[data-section]").forEach(button => {
+    button.classList.toggle("active", button.dataset.section === section);
+  });
+
+  $("#pageHeading").textContent = sectionNames[section];
+  $("#sidebar").classList.remove("open");
+  $("#adminDropdown").classList.add("hidden");
+  $("#adminMenuButton").setAttribute("aria-expanded", "false");
+
+  if (section === "dashboard" || section === "reports") {
+    setTimeout(() => {
+      Object.values(charts).forEach(chart => {
+        if (chart && typeof chart.resize === "function") chart.resize();
+      });
+    }, 50);
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$("#navigation").addEventListener("click", event => {
+  const button = event.target.closest("[data-section]");
+  if (button) navigateTo(button.dataset.section);
+});
+
+$$("[data-goto]").forEach(button => {
+  button.addEventListener("click", () => navigateTo(button.dataset.goto));
+});
+
+$("#sidebarLogout").addEventListener("click", openLogoutModal);
+$("#mobileMenu").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
+
+document.addEventListener("click", event => {
+  if (window.innerWidth <= 960 &&
+      !$("#sidebar").contains(event.target) &&
+      !$("#mobileMenu").contains(event.target)) {
+    $("#sidebar").classList.remove("open");
+  }
+});
+
+/* ---------------- ADMIN MENU & NOTIFICATIONS ---------------- */
+
+$("#adminMenuButton").addEventListener("click", () => {
+  const dropdown = $("#adminDropdown");
+  const opening = dropdown.classList.contains("hidden");
+  dropdown.classList.toggle("hidden", !opening);
+  $("#adminMenuButton").setAttribute("aria-expanded", String(opening));
+});
+
+$("#adminDropdown").addEventListener("click", event => {
+  const button = event.target.closest("[data-action]");
+  if (!button) return;
+
+  const action = button.dataset.action;
+  $("#adminDropdown").classList.add("hidden");
+
+  if (action === "settings") navigateTo("settings");
+  if (action === "notifications") openModal("notificationModalBackdrop");
+  if (action === "logout") openLogoutModal();
+});
+
+document.addEventListener("click", event => {
+  if (!$("#adminMenuButton").contains(event.target) &&
+      !$("#adminDropdown").contains(event.target)) {
+    $("#adminDropdown").classList.add("hidden");
+    $("#adminMenuButton").setAttribute("aria-expanded", "false");
+  }
+});
+
+$("#notificationButton").addEventListener("click", () => {
+  openModal("notificationModalBackdrop");
+});
+
+/* ---------------- MODALS ---------------- */
+
+function openModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.add("open");
+  document.body.style.overflow = "hidden";
+
+  const closeButton = $(".modal-close", modal);
+  if (closeButton) setTimeout(() => closeButton.focus(), 30);
+}
+
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.remove("open");
+
+  if (!$(".modal-backdrop.open")) {
+    document.body.style.overflow = "";
+  }
+}
+
+$$("[data-close]").forEach(button => {
+  button.addEventListener("click", () => closeModal(button.dataset.close));
+});
+
+$$(".modal-backdrop").forEach(backdrop => {
+  backdrop.addEventListener("click", event => {
+    if (event.target === backdrop) closeModal(backdrop.id);
+  });
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    $$(".modal-backdrop.open").forEach(modal => closeModal(modal.id));
+    $("#sidebar").classList.remove("open");
+    $("#adminDropdown").classList.add("hidden");
+  }
+});
+
+function openLogoutModal() {
+  openModal("logoutModalBackdrop");
+}
+
+$("#confirmLogout").addEventListener("click", () => {
+  closeModal("logoutModalBackdrop");
+  showToast("Demo logout confirmed. No real account session was changed.", "fa-right-from-bracket");
+  navigateTo("dashboard");
+});
+
+/* ---------------- THEME ---------------- */
+
+function setDarkMode(enabled) {
+  document.body.classList.toggle("dark", enabled);
+  $("#darkModeSwitch").checked = enabled;
+  $("#themeToggle").innerHTML = enabled
+    ? '<i class="fa-regular fa-sun"></i>'
+    : '<i class="fa-regular fa-moon"></i>';
+  $("#themeToggle").title = enabled ? "Switch to light mode" : "Switch to dark mode";
+
+  Object.values(charts).forEach(chart => {
+    if (chart) {
+      chart.options.plugins.legend.labels.color = enabled ? "#ddd3df" : "#8b858a";
+      chart.options.scales && Object.values(chart.options.scales).forEach(scale => {
+        if (scale.ticks) scale.ticks.color = enabled ? "#bcb1c1" : "#8b858a";
+        if (scale.grid) scale.grid.color = enabled ? "#403744" : "#eee6e1";
+      });
+      chart.update("none");
+    }
+  });
+}
+
+$("#themeToggle").addEventListener("click", () => {
+  setDarkMode(!document.body.classList.contains("dark"));
+});
+
+$("#darkModeSwitch").addEventListener("change", event => {
+  setDarkMode(event.target.checked);
+});
+
+/* ---------------- COUNTRY SELECTS ---------------- */
+
+function fillCountrySelect(select, includeAll = true) {
+  if (!select) return;
+
+  const currentValue = select.value;
+  const firstOption = includeAll ? '<option value="">All countries</option>' : "";
+  select.innerHTML = firstOption + countries.map(country =>
+    `<option value="${escapeHTML(country.name)}">${escapeHTML(country.name)}</option>`
+  ).join("");
+
+  if ([...select.options].some(option => option.value === currentValue)) {
+    select.value = currentValue;
+  }
+}
+
+["dashCountry", "memberCountryFilter", "foreignCountryFilter"].forEach(id => {
+  fillCountrySelect(document.getElementById(id));
+});
+
+/* ---------------- PROFILE MODAL ---------------- */
+
+function openProfile(memberId) {
+  const member = memberById(Number(memberId));
+  if (!member) return;
+
+  $("#profileModalTitle").textContent = `${member.name} — Member Profile`;
+
+  const details = [
+    ["Username", member.username],
+    ["Full name", member.name],
+    ["Gender", member.gender],
+    ["Email address", member.email],
+    ["Phone number", member.phone],
+    ["Date of birth", formatDate(member.dob)],
+    ["Calculated age", `${member.age} years`],
+    ["Birthplace", member.birthplace],
+    ["Current city", member.city],
+    ["Country", `${member.flag} ${member.country}`],
+    ["Mother tongue", member.motherTongue],
+    ["Mother's name", member.mother],
+    ["Father's name", member.father],
+    ["Sibling status", member.siblings],
+    ["Smoking status", member.smoking],
+    ["Alcohol consumption", member.alcohol],
+    ["Marital status", member.marital],
+    ["Education", member.education],
+    ["Employment status", member.employment],
+    ["Job title", member.job],
+    ["Company / workplace", member.company],
+    ["Work location", member.workLocation],
+    ["Monthly salary", money(member.monthlySalary)],
+    ["Yearly salary", money(member.yearlySalary)],
+    ["Membership plan", member.plan],
+    ["Account status", titleCase(member.status)],
+    ["Profile completion", `${member.completion}%`],
+    ["Joined date", formatDate(member.joined)]
+  ];
+
+  $("#profileModalBody").innerHTML = `
+    <div class="profile-modal-hero">
+      <div class="profile-modal-photo">
+        <img src="${escapeHTML(profilePhotoURL(member))}"
+             alt="Fictional portrait placeholder for ${escapeHTML(member.name)}"
+             onerror="this.style.display='none';this.parentElement.textContent='${escapeHTML(initials(member.name))}'">
+      </div>
+      <div>
+        <h3>${escapeHTML(member.name)}, ${member.age}</h3>
+        <p>@${escapeHTML(member.username)} · ${escapeHTML(member.city)}, ${escapeHTML(member.country)}</p>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          ${badgeHTML(member.status)}
+          <span class="badge ${member.plan.toLowerCase()}">${escapeHTML(member.plan)} plan</span>
+          <span class="badge basic">${member.completion}% complete</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      ${details.map(([label, value]) => `
+        <div class="detail-item">
+          <label>${escapeHTML(label)}</label>
+          <p>${escapeHTML(value)}</p>
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="about-box">
+      <h4>About Me</h4>
+      <p>${escapeHTML(member.about)}</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn" data-close="profileModalBackdrop">Close</button>
+    </div>
+  `;
+
+  $$('[data-close="profileModalBackdrop"]', $("#profileModalBody")).forEach(button => {
+    button.addEventListener("click", () => closeModal("profileModalBackdrop"));
+  });
+
+  openModal("profileModalBackdrop");
+}
+
+document.addEventListener("click", event => {
+  const trigger = event.target.closest("[data-profile-id]");
+  if (trigger) openProfile(trigger.dataset.profileId);
+});
+
+/* ---------------- PROFILE CARD RENDERING ---------------- */
+
+function profileCardHTML(member) {
+  return `
+    <article class="profile-card">
+      <div class="profile-card-top" role="button" tabindex="0"
+           data-profile-id="${member.id}"
+           aria-label="View ${escapeHTML(member.name)} profile">
+        <div class="profile-photo">
+          <img src="${escapeHTML(profilePhotoURL(member))}"
+               alt="Fictional portrait placeholder for ${escapeHTML(member.name)}"
+               loading="lazy"
+               onerror="this.style.display='none';this.parentElement.textContent='${escapeHTML(initials(member.name))}'">
+        </div>
+        <div class="profile-heading">
+          <h3>${escapeHTML(member.name)}, ${member.age}</h3>
+          <p>@${escapeHTML(member.username)}</p>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            ${badgeHTML(member.status)}
+            <span class="badge ${member.plan.toLowerCase()}">${escapeHTML(member.plan)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-card-body">
+        <div class="profile-line"><span>Gender</span><span>${escapeHTML(member.gender)}</span></div>
+        <div class="profile-line"><span>Location</span><span>${escapeHTML(member.city)}, ${escapeHTML(member.country)}</span></div>
+        <div class="profile-line"><span>Education</span><span>${escapeHTML(member.education)}</span></div>
+        <div class="profile-line"><span>Profession</span><span>${escapeHTML(member.job)}</span></div>
+        <div class="profile-line"><span>Mother tongue</span><span>${escapeHTML(member.motherTongue)}</span></div>
+
+        <div class="completion-label">
+          <span>Profile completion</span>
+          <strong>${member.completion}%</strong>
+        </div>
+        <div class="completion-bar"><span style="width:${member.completion}%"></span></div>
+
+        <div class="profile-card-footer">
+          <span class="muted small">Joined ${formatDate(member.joined)}</span>
+          <button class="btn btn-sm btn-primary" data-profile-id="${member.id}">
+            View profile <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function matchesMemberSearch(member, query) {
+  const searchable = [
+    member.name, member.username, member.email, member.country,
+    member.phone, member.city, member.plan, member.status
+  ].join(" ").toLowerCase();
+
+  return searchable.includes(query.trim().toLowerCase());
+}
+
+function renderProfiles() {
+  const query = $("#memberSearch").value.trim().toLowerCase();
+  const country = $("#memberCountryFilter").value;
+  const status = $("#memberStatusFilter").value;
+  const plan = $("#memberPlanFilter").value;
+
+  const filtered = members.filter(member =>
+    (!query || matchesMemberSearch(member, query)) &&
+    (!country || member.country === country) &&
+    (!status || member.status === status) &&
+    (!plan || member.plan === plan)
+  );
+
+  $("#profileGrid").innerHTML = filtered.length
+    ? filtered.map(profileCardHTML).join("")
+    : '<div class="empty-state"><i class="fa-solid fa-user-slash"></i>No profiles match your filters.</div>';
+
+  $("#memberResultCount").textContent = `Showing ${filtered.length} of ${members.length} fictional profiles`;
+}
+
+["memberSearch", "memberCountryFilter", "memberStatusFilter", "memberPlanFilter"]
+  .forEach(id => document.getElementById(id).addEventListener("input", renderProfiles));
+
+$("#resetMemberFilters").addEventListener("click", () => {
+  $("#memberSearch").value = "";
+  $("#memberCountryFilter").value = "";
+  $("#memberStatusFilter").value = "";
+  $("#memberPlanFilter").value = "";
+  renderProfiles();
+});
+
+/* Support keyboard activation of profile-card headers. */
+document.addEventListener("keydown", event => {
+  if ((event.key === "Enter" || event.key === " ") &&
+      event.target.matches(".profile-card-top[data-profile-id]")) {
+    event.preventDefault();
+    openProfile(event.target.dataset.profileId);
+  }
+});
+
+/* ---------------- DASHBOARD FILTERS ---------------- */
+
+function dashboardFilteredMembers() {
+  const country = $("#dashCountry").value;
+  const status = $("#dashStatus").value;
+  const plan = $("#dashPlan").value;
+
+  return members.filter(member =>
+    (!country || member.country === country) &&
+    (!status || member.status === status) &&
+    (!plan || member.plan === plan)
+  );
+}
+
+function dashboardFilteredPayments() {
+  const start = $("#dashStartDate").value;
+  const end = $("#dashEndDate").value;
+  const country = $("#dashCountry").value;
+  const status = $("#dashStatus").value;
+  const plan = $("#dashPlan").value;
+
+  const allowedIds = new Set(members.filter(member =>
+    (!country || member.country === country) &&
+    (!status || member.status === status) &&
+    (!plan || member.plan === plan)
+  ).map(member => member.id));
+
+  return payments.filter(payment =>
+    (!start || payment.date >= start) &&
+    (!end || payment.date <= end) &&
+    allowedIds.has(payment.memberId)
+  );
+}
+
+function renderDashboardStats() {
+  const filteredMembers = dashboardFilteredMembers();
+  const filteredPayments = dashboardFilteredPayments();
+
+  const completedAmount = filteredPayments
+    .filter(payment => payment.status === "Completed")
+    .reduce((sum, payment) => sum + payment.amount, 0);
+
+  const pendingAmount = filteredPayments
+    .filter(payment => payment.status === "Pending")
+    .reduce((sum, payment) => sum + payment.amount, 0);
+
+  $("#statPending").textContent = money(pendingAmount);
+  $("#statCompleted").textContent = money(completedAmount);
+  $("#statActive").textContent = filteredMembers.filter(member => member.status === "active").length;
+  $("#statForeign").textContent = filteredMembers.filter(member =>
+    member.country !== "India" && member.status === "active"
+  ).length;
+
+  renderRecentPayments(filteredPayments);
+  renderRecentMembers(filteredMembers);
+  renderCountryInsight(filteredMembers);
+}
+
+$("#applyDashFilters").addEventListener("click", renderDashboardStats);
+
+$("#resetDashFilters").addEventListener("click", () => {
+  $("#dashStartDate").value = "";
+  $("#dashEndDate").value = "";
+  $("#dashCountry").value = "";
+  $("#dashStatus").value = "";
+  $("#dashPlan").value = "";
+  renderDashboardStats();
+});
+
+/* ---------------- RECENT PAYMENTS ---------------- */
+
+function renderRecentPayments(list) {
+  const sorted = [...list].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+
+  $("#recentPaymentsBody").innerHTML = sorted.length ? sorted.map(payment => `
+    <tr>
+      <td><strong>${escapeHTML(payment.id)}</strong></td>
+      <td>
+        <button class="text-link" data-profile-id="${payment.memberId}">
+          ${escapeHTML(payment.memberName)}
+        </button>
+      </td>
+      <td>${formatDate(payment.date)}</td>
+      <td>${escapeHTML(payment.method)}</td>
+      <td><strong>${money(payment.amount)}</strong></td>
+      <td>${badgeHTML(payment.status)}</td>
+    </tr>
+  `).join("") : `
+    <tr><td colspan="6"><div class="empty-state">No payments match these filters.</div></td></tr>
+  `;
+}
+
+/* ---------------- RECENT MEMBERS ---------------- */
+
+function renderRecentMembers(list = members) {
+  const sorted = [...list].sort((a, b) => b.joined.localeCompare(a.joined)).slice(0, 5);
+
+  $("#recentMembersList").innerHTML = sorted.length ? sorted.map(member => `
+    <div class="recent-member">
+      ${avatarHTML(member)}
+      <div class="recent-member-info">
+        <strong><button class="text-link" data-profile-id="${member.id}">${escapeHTML(member.name)}</button></strong>
+        <span>${member.age} years · ${escapeHTML(member.city)}, ${escapeHTML(member.country)}</span>
+        <span>${escapeHTML(member.plan)} membership</span>
+      </div>
+      <div class="recent-member-side">${badgeHTML(member.status)}</div>
+    </div>
+  `).join("") : '<div class="empty-state">No matching members.</div>';
+}
+
+function renderCountryInsight(list) {
+  const active = list.filter(member => member.status === "active");
+  const countriesCount = new Set(active.map(member => member.country)).size;
+  $("#countryInsight").textContent =
+    `${active.length} active fictional profiles across ${countriesCount} countries in the current filter.`;
+}
+
+/* ---------------- PAYMENTS PAGE ---------------- */
+
+let paymentSort = { key: "date", direction: "desc" };
+let paymentPage = 1;
+const paymentPageSize = 8;
+
+function filteredPaymentsForPage() {
+  const query = $("#paymentSearch").value.trim().toLowerCase();
+  const status = $("#paymentStatusFilter").value;
+  const method = $("#paymentMethodFilter").value;
+
+  return payments.filter(payment => {
+    const member = memberById(payment.memberId);
+    const searchText = [
+      payment.id, payment.memberName, payment.method,
+      payment.status, member ? member.email : ""
+    ].join(" ").toLowerCase();
+
+    return (!query || searchText.includes(query)) &&
+      (!status || payment.status === status) &&
+      (!method || payment.method === method);
+  });
+}
+
+function sortPayments(list) {
+  const { key, direction } = paymentSort;
+  return [...list].sort((a, b) => {
+    let left = a[key];
+    let right = b[key];
+
+    if (key === "memberName" || key === "method" || key === "status" || key === "id") {
+      left = String(left).toLowerCase();
+      right = String(right).toLowerCase();
+    }
+
+    if (left < right) return direction === "asc" ? -1 : 1;
+    if (left > right) return direction === "asc" ? 1 : -1;
+    return 0;
+  });
+}
+
+function renderPaymentSummary() {
+  const completed = payments.filter(payment => payment.status === "Completed");
+  const pending = payments.filter(payment => payment.status === "Pending");
+  const failed = payments.filter(payment => payment.status === "Failed");
+
+  $("#paymentCompletedCount").textContent = completed.length;
+  $("#paymentPendingCount").textContent = pending.length;
+  $("#paymentFailedCount").textContent = failed.length;
+  $("#paymentTotalAmount").textContent = money(completed.reduce((sum, p) => sum + p.amount, 0));
+}
+
+function renderPayments() {
+  const filtered = sortPayments(filteredPaymentsForPage());
+  const totalPages = Math.max(1, Math.ceil(filtered.length / paymentPageSize));
+
+  paymentPage = Math.min(paymentPage, totalPages);
+  const start = (paymentPage - 1) * paymentPageSize;
+  const pageItems = filtered.slice(start, start + paymentPageSize);
+
+  $("#paymentsBody").innerHTML = pageItems.length ? pageItems.map(payment => `
+    <tr>
+      <td><strong>${escapeHTML(payment.id)}</strong></td>
+      <td>
+        <button class="text-link" data-profile-id="${payment.memberId}">
+          ${escapeHTML(payment.memberName)}
+        </button>
+      </td>
+      <td>${formatDate(payment.date)}</td>
+      <td>${escapeHTML(payment.method)}</td>
+      <td><strong>${money(payment.amount)}</strong></td>
+      <td>${badgeHTML(payment.status)}</td>
+    </tr>
+  `).join("") : '<tr><td colspan="6"><div class="empty-state">No matching payments found.</div></td></tr>';
+
+  $("#paymentResultCount").textContent = `${filtered.length} records`;
+  $("#paymentsPagination").innerHTML = Array.from({ length: totalPages }, (_, index) => `
+    <button class="${paymentPage === index + 1 ? "active" : ""}"
+            data-page="${index + 1}" aria-label="Page ${index + 1}">
+      ${index + 1}
+    </button>
+  `).join("");
+}
+
+$("#paymentsPagination").addEventListener("click", event => {
+  const button = event.target.closest("[data-page]");
+  if (!button) return;
+  paymentPage = Number(button.dataset.page);
+  renderPayments();
+});
+
+$$("[data-sort]").forEach(button => {
+  button.addEventListener("click", () => {
+    const key = button.dataset.sort;
+    paymentSort = {
+      key,
+      direction: paymentSort.key === key && paymentSort.direction === "asc" ? "desc" : "asc"
+    };
+    renderPayments();
+  });
+});
+
+["paymentSearch", "paymentStatusFilter", "paymentMethodFilter"].forEach(id => {
+  document.getElementById(id).addEventListener("input", () => {
+    paymentPage = 1;
+    renderPayments();
+  });
+});
+
+$("#resetPaymentFilters").addEventListener("click", () => {
+  $("#paymentSearch").value = "";
+  $("#paymentStatusFilter").value = "";
+  $("#paymentMethodFilter").value = "";
+  paymentPage = 1;
+  renderPayments();
+});
+
+/* ---------------- ACTIVE MEMBERS ---------------- */
+
+function renderActivePage() {
+  const active = activeMembers();
+
+  $("#activePageCount").textContent = active.length;
+  $("#activePremiumCount").textContent = active.filter(member =>
+    ["Premium", "Gold"].includes(member.plan)
+  ).length;
+  $("#activeCountryCount").textContent = new Set(active.map(member => member.country)).size;
+  $("#activeCompletion").textContent = Math.round(
+    active.reduce((sum, member) => sum + member.completion, 0) / Math.max(active.length, 1)
+  ) + "%";
+
+  const query = $("#activeSearch").value.trim().toLowerCase();
+  const plan = $("#activePlanFilter").value;
+
+  const filtered = active.filter(member =>
+    (!query || matchesMemberSearch(member, query)) &&
+    (!plan || member.plan === plan)
+  );
+
+  $("#activeResultCount").textContent = `${filtered.length} active profiles`;
+
+  $("#activeBody").innerHTML = filtered.length ? filtered.map(member => `
+    <tr>
+      <td>
+        <div class="member-cell">
+          ${avatarHTML(member)}
+          <div>
+            <button class="text-link member-name" data-profile-id="${member.id}">${escapeHTML(member.name)}</button>
+            <div class="member-meta">${escapeHTML(member.email)}</div>
+          </div>
+        </div>
+      </td>
+      <td>${member.flag} ${escapeHTML(member.country)}</td>
+      <td><span class="badge ${member.plan.toLowerCase()}">${escapeHTML(member.plan)}</span></td>
+      <td>
+        <div style="min-width:80px">
+          <span>${member.completion}%</span>
+          <div class="completion-bar" style="margin-top:6px"><span style="width:${member.completion}%"></span></div>
+        </div>
+      </td>
+      <td>${formatDate(member.joined)}</td>
+      <td>${badgeHTML(member.status)}</td>
+      <td><button class="action-button" data-profile-id="${member.id}" aria-label="View member"><i class="fa-regular fa-eye"></i></button></td>
+    </tr>
+  `).join("") : '<tr><td colspan="7"><div class="empty-state">No active members match these filters.</div></td></tr>';
+}
+
+["activeSearch", "activePlanFilter"].forEach(id => {
+  document.getElementById(id).addEventListener("input", renderActivePage);
+});
+
+$("#resetActiveFilters").addEventListener("click", () => {
+  $("#activeSearch").value = "";
+  $("#activePlanFilter").value = "";
+  renderActivePage();
+});
+
+/* ---------------- FOREIGN ACCOUNTS ---------------- */
+
+function renderForeignPage() {
+  const allForeign = foreignMembers();
+  const query = $("#foreignSearch").value.trim().toLowerCase();
+  const country = $("#foreignCountryFilter").value;
+  const status = $("#foreignStatusFilter").value;
+
+  $("#foreignTotal").textContent = allForeign.length;
+  $("#foreignActive").textContent = allForeign.filter(member => member.status === "active").length;
+  $("#foreignCountries").textContent = new Set(allForeign.map(member => member.country)).size;
+  $("#foreignPremium").textContent = allForeign.filter(member =>
+    ["Premium", "Gold"].includes(member.plan)
+  ).length;
+
+  const filtered = allForeign.filter(member =>
+    (!query || matchesMemberSearch(member, query)) &&
+    (!country || member.country === country) &&
+    (!status || member.status === status)
+  );
+
+  $("#foreignGrid").innerHTML = filtered.length
+    ? filtered.map(profileCardHTML).join("")
+    : '<div class="empty-state"><i class="fa-solid fa-earth-americas"></i>No international profiles match your filters.</div>';
+}
+
+["foreignSearch", "foreignCountryFilter", "foreignStatusFilter"].forEach(id => {
+  document.getElementById(id).addEventListener("input", renderForeignPage);
+});
+
+$("#resetForeignFilters").addEventListener("click", () => {
+  $("#foreignSearch").value = "";
+  $("#foreignCountryFilter").value = "";
+  $("#foreignStatusFilter").value = "";
+  renderForeignPage();
+});
+
+/* ---------------- COUNTRY DIRECTORY ---------------- */
+
+function renderCountries() {
+  const query = $("#countrySearch").value.trim().toLowerCase();
+
+  const filtered = countries.filter(country =>
+    `${country.name} ${country.code} ${country.phone}`.toLowerCase().includes(query)
+  );
+
+  $("#countryGrid").innerHTML = filtered.length ? filtered.map(country => {
+    const countryMembers = members.filter(member => member.country === country.name);
+    const activeCount = countryMembers.filter(member => member.status === "active").length;
+
+    return `
+      <article class="country-card">
+        <div class="country-card-top">
+          <div class="country-flag" aria-hidden="true">${country.flag}</div>
+          <div>
+            <h3>${escapeHTML(country.name)}</h3>
+            <p class="calling-code">Calling code: ${escapeHTML(country.code)}</p>
+          </div>
+        </div>
+
+        <div class="country-stat">
+          <strong>${activeCount}</strong>
+          <span>Active profiles · ${countryMembers.length} total demo profiles</span>
+        </div>
+
+        <div class="phone-sample">
+          <label>Sample fictional contact number</label>
+          <strong>${escapeHTML(country.phone)}</strong>
+        </div>
+
+        <button class="btn btn-sm" style="width:100%;margin-top:13px"
+                data-country-members="${escapeHTML(country.name)}">
+          View country members <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </article>
+    `;
+  }).join("") : '<div class="empty-state">No countries match your search.</div>';
+}
+
+$("#countrySearch").addEventListener("input", renderCountries);
+
+$("#resetCountrySearch").addEventListener("click", () => {
+  $("#countrySearch").value = "";
+  renderCountries();
+});
+
+document.addEventListener("click", event => {
+  const button = event.target.closest("[data-country-members]");
+  if (!button) return;
+
+  const country = button.dataset.countryMembers;
+  navigateTo("members");
+  $("#memberCountryFilter").value = country;
+  renderProfiles();
+});
+
+/* ---------------- CHARTS ---------------- */
+
+const charts = {};
+
+function chartTextColor() {
+  return document.body.classList.contains("dark") ? "#cfc4d2" : "#8b858a";
+}
+
+function chartGridColor() {
+  return document.body.classList.contains("dark") ? "#403744" : "#eee6e1";
+}
+
+function commonChartOptions() {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 650 },
+    plugins: {
+      legend: {
+        labels: {
+          color: chartTextColor(),
+          usePointStyle: true,
+          boxWidth: 8,
+          padding: 18,
+          font: { family: "DM Sans", size: 10 }
+        }
+      },
+      tooltip: {
+        backgroundColor: "#3b1728",
+        titleFont: { family: "DM Sans" },
+        bodyFont: { family: "DM Sans" },
+        padding: 11,
+        cornerRadius: 8
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: chartTextColor(), font: { size: 10 } },
+        grid: { color: chartGridColor() }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: { color: chartTextColor(), font: { size: 10 } },
+        grid: { color: chartGridColor() }
+      }
+    }
+  };
+}
+
+function makeCharts() {
+  if (typeof Chart === "undefined") {
+    showToast("Chart.js could not load. Check your internet connection.", "fa-triangle-exclamation");
+    return;
+  }
+
+  const paymentContext = $("#paymentChart");
+  if (paymentContext) {
+    charts.payment = new Chart(paymentContext, {
+      type: "line",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [
+          {
+            label: "Completed",
+            data: [42000, 52000, 47000, 65000, 73000, 68000, 89000, 82000, 97000, 112000, 125000, 138000],
+            borderColor: "#781b38",
+            backgroundColor: "rgba(120,27,56,.09)",
+            fill: true,
+            tension: .38,
+            borderWidth: 2.5,
+            pointRadius: 3,
+            pointBackgroundColor: "#781b38"
+          },
+          {
+            label: "Pending",
+            data: [12000, 16000, 14000, 21000, 18000, 24000, 22000, 28000, 26000, 24500, 21000, 19000],
+            borderColor: "#e8b55d",
+            backgroundColor: "rgba(232,181,93,.08)",
+            fill: true,
+            tension: .38,
+            borderWidth: 2,
+            pointRadius: 3,
+            pointBackgroundColor: "#e8b55d"
+          }
+        ]
+      },
+      options: {
+        ...commonChartOptions(),
+        interaction: { intersect: false, mode: "index" },
+        scales: {
+          ...commonChartOptions().scales,
+          y: {
+            ...commonChartOptions().scales.y,
+            ticks: {
+              color: chartTextColor(),
+              callback: value => "₹" + Number(value).toLocaleString("en-IN"),
+              font: { size: 9 }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  const countryContext = $("#countryChart");
+  if (countryContext) {
+    const labels = ["India", "USA", "UAE", "Singapore", "UK", "Canada", "Other"];
+    charts.country = new Chart(countryContext, {
+      type: "doughnut",
+      data: {
+        labels,
+        datasets: [{
+          data: [4, 1, 1, 1, 1, 1, 3],
+          backgroundColor: [
+            "#781b38", "#e99735", "#21865a",
+            "#4777cf", "#b76a9c", "#d6ad5c", "#a49aaf"
+          ],
+          borderColor: document.body.classList.contains("dark") ? "#211e27" : "#ffffff",
+          borderWidth: 3,
+          hoverOffset: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: "68%",
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: {
+              color: chartTextColor(),
+              usePointStyle: true,
+              boxWidth: 7,
+              padding: 13,
+              font: { family: "DM Sans", size: 9 }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  const statusContext = $("#statusChart");
+  if (statusContext) {
+    const activeCount = members.filter(m => m.status === "active").length;
+    const inactiveCount = members.filter(m => m.status === "inactive").length;
+    const pendingCount = members.filter(m => m.status === "pending verification").length;
+
+    charts.status = new Chart(statusContext, {
+      type: "doughnut",
+      data: {
+        labels: ["Active", "Inactive", "Pending verification"],
+        datasets: [{
+          data: [activeCount, inactiveCount, pendingCount],
+          backgroundColor: ["#21865a", "#cf4555", "#e99735"],
+          borderColor: document.body.classList.contains("dark") ? "#211e27" : "#ffffff",
+          borderWidth: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: "65%",
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: {
+              color: chartTextColor(),
+              usePointStyle: true,
+              boxWidth: 8,
+              padding: 17,
+              font: { family: "DM Sans", size: 10 }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  const planContext = $("#planChart");
+  if (planContext) {
+    const planNames = ["Basic", "Standard", "Premium", "Gold"];
+    charts.plan = new Chart(planContext, {
+      type: "bar",
+      data: {
+        labels: planNames,
+        datasets: [{
+          label: "Profiles",
+          data: planNames.map(plan => members.filter(member => member.plan === plan).length),
+          backgroundColor: ["#91a9d9", "#7197d4", "#a14d76", "#d6ad5c"],
+          borderRadius: 7,
+          maxBarThickness: 48
+        }]
+      },
+      options: {
+        ...commonChartOptions(),
+        plugins: { legend: { display: false } },
+        scales: {
+          x: commonChartOptions().scales.x,
+          y: {
+            ...commonChartOptions().scales.y,
+            ticks: { precision: 0, color: chartTextColor() }
+          }
+        }
+      }
+    });
+  }
+}
+
+/* ---------------- GLOBAL SEARCH ---------------- */
+
+$("#globalSearch").addEventListener("input", event => {
+  const query = event.target.value.trim();
+  if (!query) return;
+
+  navigateTo("members");
+  $("#memberSearch").value = query;
+  renderProfiles();
+});
+
+$("#searchToggle").addEventListener("click", () => {
+  const search = $("#globalSearchWrap");
+  search.classList.toggle("show");
+  if (search.classList.contains("show")) $("#globalSearch").focus();
+});
+
+$("#globalSearch").addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    navigateTo("members");
+    $("#memberSearch").value = event.target.value;
+    renderProfiles();
+  }
+});
+
+/* ---------------- CSV EXPORT ---------------- */
+
+function csvCell(value) {
+  let text = String(value ?? "");
+  /* Prevent CSV formula execution when opening exports in spreadsheet apps. */
+  if (/^[\s]*[=+\-@]/.test(text)) text = "'" + text;
+  return '"' + text.replace(/"/g, '""') + '"';
+}
+
+function downloadCSV(filename, headers, rows) {
+  const content = [headers, ...rows]
+    .map(row => row.map(csvCell).join(","))
+    .join("\r\n");
+
+  const blob = new Blob(["\uFEFF" + content], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+  showToast(`${filename} exported successfully.`);
+}
+
+function exportMembers() {
+  const headers = [
+    "Username", "Full Name", "Gender", "Email", "Phone",
+    "Date of Birth", "Age", "Birthplace", "City", "Country",
+    "Mother Tongue", "Mother", "Father", "Siblings",
+    "Smoking", "Alcohol", "Marital Status", "Education",
+    "Employment Status", "Job Title", "Company", "Work Location",
+    "Monthly Salary", "Yearly Salary", "Plan", "Account Status",
+    "Profile Completion", "About Me", "Joined"
+  ];
+
+  const rows = members.map(m => [
+    m.username, m.name, m.gender, m.email, m.phone, m.dob, m.age,
+    m.birthplace, m.city, m.country, m.motherTongue, m.mother, m.father,
+    m.siblings, m.smoking, m.alcohol, m.marital, m.education,
+    m.employment, m.job, m.company, m.workLocation,
+    m.monthlySalary, m.yearlySalary, m.plan, m.status,
+    m.completion + "%", m.about, m.joined
+  ]);
+
+  downloadCSV("subhmangal-demo-members.csv", headers, rows);
+}
+
+function exportPayments() {
+  const headers = ["Payment ID", "Member", "Date", "Method", "Amount INR", "Status"];
+  const rows = payments.map(p => [
+    p.id, p.memberName, p.date, p.method, p.amount, p.status
+  ]);
+  downloadCSV("subhmangal-demo-payments.csv", headers, rows);
+}
+
+function exportCountries() {
+  const headers = ["Country", "Flag", "Calling Code", "Active Profiles", "Total Profiles", "Sample Phone"];
+  const rows = countries.map(c => {
+    const countryMembers = members.filter(m => m.country === c.name);
+    return [
+      c.name, c.flag, c.code,
+      countryMembers.filter(m => m.status === "active").length,
+      countryMembers.length, c.phone
+    ];
+  });
+  downloadCSV("subhmangal-demo-countries.csv", headers, rows);
+}
+
+$("#exportMembersBtn").addEventListener("click", exportMembers);
+$("#exportPaymentsBtn").addEventListener("click", exportPayments);
+
+document.addEventListener("click", event => {
+  const button = event.target.closest("[data-report]");
+  if (!button) return;
+
+  if (button.dataset.report === "members") exportMembers();
+  if (button.dataset.report === "payments") exportPayments();
+  if (button.dataset.report === "countries") exportCountries();
+});
+
+/* ---------------- SETTINGS ---------------- */
+
+$("#saveSettingsBtn").addEventListener("click", () => {
+  const adminName = $("#adminDisplayName").value.trim() || "Super Admin";
+  const brandName = $("#brandDisplayName").value.trim() || "Subhmangal Matrimony";
+
+  $(".admin-name").textContent = adminName;
+  $(".brand-name").textContent = brandName;
+
+  const currency = $("#defaultCurrency").value;
+  showToast(`Demo preferences updated. Display currency: ${currency}.`);
+});
+
+/* ---------------- INITIALIZATION ---------------- */
+
+function initializeDashboard() {
+  /* Set date filters to the current month by default. */
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  $("#dashStartDate").value = localDateString(firstDay);
+  $("#dashEndDate").value = localDateString(now);
+
+  $("#memberNavCount").textContent = members.length;
+
+  renderProfiles();
+  renderDashboardStats();
+  renderPaymentSummary();
+  renderPayments();
+  renderActivePage();
+  renderForeignPage();
+  renderCountries();
+
+  makeCharts();
+
+  $("#darkModeSwitch").checked = document.body.classList.contains("dark");
+}
+
+initializeDashboard();
+</script>
+</body>
+</html>

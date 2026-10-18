@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subhmangal Matrimony</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<style>
+/* ===== CSS ===== */
+:root{--crimson:#D62839;--gold:#F4B400;--leaf:#4C9A2A;--orange:#F26B21;--char:#2B2B2B;--bg:#FFF8F3;--card:#fff;--tx:#2B2B2B;--mut:#6b6b6b;--bd:#f0e2d6}
+html[data-t=dark]{--bg:#1b1718;--card:#262122;--tx:#f3ebe6;--mut:#b5aaa4;--bd:#3a3233;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+h1{font-size:22px;margin:0 0 14px;color:var(--crimson)}
+h2{font-size:15px;margin:0 0 8px}
+.mut{color:var(--mut)}
+/* sidebar + 3D keys */
+aside{position:fixed;inset:0 auto 0 0;width:260px;background:linear-gradient(#2B2B2B,#171717);display:flex;flex-direction:column;z-index:30;overflow:auto;transition:transform .25s}
+.logo{background:#fff;border-radius:14px;margin:16px;padding:8px;text-align:center}
+.logo img{max-width:100%;max-height:80px}
+.lt{font-size:18px;color:var(--tx)}.lt i{color:var(--orange);font-style:normal}.logo .lt{color:var(--char)}
+nav,.out{perspective:700px;display:flex;flex-direction:column;gap:14px;padding:6px 18px 18px}
+.out{margin-top:auto}
+.k{display:flex;align-items:center;gap:10px;width:100%;border:0;border-radius:14px;padding:13px 14px;font:700 14px system-ui,sans-serif;color:var(--t,#fff);text-shadow:0 1px 1px rgba(0,0,0,.3);text-align:left;cursor:pointer;background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 55%),var(--b);box-shadow:0 6px 0 var(--d),0 12px 20px rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.4);transition:transform .15s,box-shadow .15s}
+.k svg,.ib svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.k:hover{transform:translateY(-2px) rotateX(8deg)}
+.k:active,.k.on{transform:translateY(4px);box-shadow:0 2px 0 var(--d),0 4px 8px rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.4)}
+.k:focus-visible{outline-color:#fff}
+/* header + layout */
+.wrap{margin-left:260px}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:10px 20px;background:var(--card);border-bottom:1px solid var(--bd)}
+header img{height:38px;max-width:150px}
+#q{flex:1;min-width:0;max-width:420px}
+#bell{margin-left:auto}
+.ib{position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--bd);border-radius:50%;background:var(--card);color:var(--tx);cursor:pointer}
+#mb{display:none}
+.bge{position:absolute;top:-4px;right:-4px;background:var(--crimson);color:#fff;border-radius:99px;font-size:10px;padding:1px 5px}
+.chip{display:flex;align-items:center;gap:8px;padding:3px 12px 3px 3px;border:1px solid var(--bd);border-radius:99px;font-weight:600}
+main{padding:22px}
+/* cards, kpis, grid */
+.g{display:grid;gap:16px;margin-bottom:16px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+.kpi{border-top:4px solid var(--k);box-shadow:0 4px 0 var(--k),0 12px 22px rgba(0,0,0,.14);transition:transform .2s}
+.kpi:hover{transform:perspective(600px) rotateX(6deg) rotateY(-4deg) translateY(-3px)}
+.kpi span{display:block;color:var(--mut);font-size:12px}.kpi b{font-size:24px}
+/* controls */
+input[type=search],select{padding:8px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+#q{border-radius:99px}
+.fl{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:14px}
+.fl label{display:grid;gap:3px;font-size:12px;color:var(--mut)}
+.bt,.pn{padding:8px 14px;border:0;border-radius:10px;background:var(--crimson);color:#fff;font-weight:700;cursor:pointer;box-shadow:0 3px 0 #8f1623}
+.bt:active{transform:translateY(2px);box-shadow:0 1px 0 #8f1623}
+.bt:disabled{opacity:.4;cursor:default}
+.pn{background:var(--card);color:var(--tx);box-shadow:0 0 0 1px var(--bd);padding:6px 11px}.pn.cur{background:var(--gold);color:#2B2B2B}
+.pg{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px}
+/* pills, badges, avatars */
+.pill{display:inline-block;min-width:28px;text-align:center;padding:0 8px;border-radius:99px;font:700 11px/19px ui-monospace,Consolas,monospace;color:#fff;background:hsl(var(--h),55%,38%)}
+.b{padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600}
+.g1{background:#dff3d6;color:#2a6a12}.r1{background:#fde0e3;color:#a3121f}.n1{background:#e6e6e6;color:#444}
+.av,.ini{border-radius:50%;object-fit:cover;vertical-align:middle}
+.ini{display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+.s1{width:72px;height:72px;font-size:24px}.s2{width:100px;height:100px;font-size:32px}.s3{width:28px;height:28px;font-size:11px}
+.pc{text-align:center;cursor:pointer;transition:transform .2s,box-shadow .2s;display:grid;gap:4px;justify-items:center}
+.pc:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(214,40,57,.2)}
+.pc h2{margin:6px 0 0}
+/* tables */
+.tw{overflow:auto;max-height:70vh;background:var(--card);border:1px solid var(--bd);border-radius:14px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}
+thead th{position:sticky;top:0;background:var(--card);z-index:1}
+th button{all:unset;cursor:pointer;font-weight:700}th button:focus-visible{outline:2px solid var(--crimson)}
+tbody tr:hover{background:rgba(244,180,0,.12)}
+/* charts */
+.dn{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.dn ul{list-style:none;margin:0;padding:0}
+.dn li i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.vb{display:flex;align-items:flex-end;gap:10px;height:180px}
+.vb div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;text-align:center;font-size:11px}
+.vb small{font-size:10px;color:var(--mut)}
+.vb i{display:block;border-radius:8px 8px 0 0;background:linear-gradient(var(--orange),var(--crimson))}
+.hb{display:grid;grid-template-columns:130px 1fr 24px;align-items:center;gap:8px;margin:7px 0;font-size:12px}
+.hb em{display:block;height:12px;border-radius:6px;background:linear-gradient(90deg,var(--leaf),#8bc34a)}
+/* lists, modal, toast */
+.ls{list-style:none;margin:6px 0 0;padding:0}
+.ls li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px dashed var(--bd)}
+details{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 14px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:700;display:flex;gap:10px;align-items:center}
+.md{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+.mc{position:relative;background:var(--card);border-radius:18px;max-width:720px;width:100%;max-height:90vh;overflow:auto;padding:22px}
+.x{position:absolute;top:10px;right:12px;width:34px;height:34px;border:0;border-radius:50%;background:var(--crimson);color:#fff;font-size:20px;cursor:pointer}
+.ms{margin:16px 0 6px;padding-bottom:4px;border-bottom:2px solid var(--gold);color:var(--crimson)}
+dl{display:grid;grid-template-columns:150px 1fr;gap:4px 14px;margin:0}dt{color:var(--mut)}dd{margin:0;font-weight:600}
+.ts{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--char);color:#fff;padding:10px 18px;border-radius:99px;z-index:60}
+@media(max-width:900px){aside{transform:translateX(-100%)}aside.open{transform:none}.wrap{margin-left:0}#mb{display:inline-flex}dl{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<!-- ===== HTML ===== -->
+<aside id="side" aria-label="Sidebar">
+  <div class="logo"><img src="logo.png" alt="Subhmangal Matrimony" onerror="this.outerHTML='<b class=lt><i>Subhmangal</i> Matrimony</b>'"></div>
+  <nav id="nav" aria-label="Main navigation"></nav>
+  <div class="out"><button class="k" id="lg" style="--b:#6b6b6b;--d:#333"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></svg>Logout</button></div>
+</aside>
+<div class="wrap">
+  <header>
+    <button class="ib" id="mb" aria-label="Open menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    <img src="logo.png" alt="Subhmangal Matrimony" onerror="this.outerHTML='<b class=lt><i>Subhmangal</i> Matrimony</b>'">
+    <input id="q" type="search" placeholder="Search name, email, username, country" aria-label="Search profiles">
+    <button class="ib" id="bell" aria-label="Notifications"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17v-6a6 6 0 0112 0v6l2 2H4zM10 21h4"/></svg><span class="bge" id="bn"></span></button>
+    <span class="chip"><span class="ini s3" style="background:var(--crimson)">A</span>Admin</span>
+    <button class="ib" id="th" aria-label="Toggle light or dark theme"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14A8 8 0 1110 4a7 7 0 0010 10z"/></svg></button>
+  </header>
+  <main id="main">
+    <section id="dashboard" aria-label="Dashboard"><h1>Dashboard</h1><div id="d-out"></div></section>
+    <section id="profiles" aria-label="Profiles" hidden><h1>Profiles</h1><div class="fl" id="p-f"></div><p class="mut" id="p-n"></p><div class="g" id="p-out" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))"></div></section>
+    <section id="dataset" aria-label="Dataset" hidden><h1>Dataset</h1><div class="fl"><input id="ds-q" type="search" placeholder="Search dataset" aria-label="Search dataset"><button class="bt" id="csv">Export CSV</button></div><div id="ds-out"></div></section>
+    <section id="payments" aria-label="Payments" hidden><h1>Payments</h1><div class="g" id="pay-s" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))"></div><div class="fl" id="pay-f"></div><div id="pay-out"></div></section>
+    <section id="active" aria-label="Active Members" hidden><h1>Active Members</h1><div id="a-out"></div></section>
+    <section id="foreign" aria-label="Foreign Accounts" hidden><h1>Foreign Accounts</h1><div class="g" id="f-out" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr))"></div></section>
+    <section id="directory" aria-label="Country Directory" hidden><h1>Country Directory</h1><div id="c-out"></div></section>
+    <section id="settings" aria-label="Settings" hidden><h1>Settings</h1><div class="c" style="max-width:420px"><h2>Appearance</h2><p><button class="bt" id="th2">Toggle light / dark theme</button></p><h2>Account</h2><p><button class="bt" id="lo2" style="background:#555;box-shadow:0 3px 0 #222">Logout (demo)</button></p></div></section>
+  </main>
+</div>
+<div class="md" id="md" role="dialog" aria-modal="true" aria-label="Profile details" hidden><div class="mc"><button class="x" id="cl" aria-label="Close">&times;</button><div id="mb2"></div></div></div>
+<div class="ts" id="ts" role="status" hidden></div>
+<script>
+/* ===== DATA ===== */
+// Countries: code|name|currency|work cities|salary factor|phone template (dial code is the first token)
+const C = {};
+`IN|India|Rs|Mumbai,Bengaluru,Delhi,Hyderabad,Pune,Chennai,Kolkata,Ahmedabad|1|+91 9#### #####
+US|USA|$|Austin,Chicago|.075|+1 3##-6##-####
+GB|UK|GBP|London,Manchester|.05|+44 79## ######
+CA|Canada|CAD|Toronto,Vancouver|.07|+1 416-###-####
+AU|Australia|AUD|Sydney,Melbourne|.075|+61 4## ### ###
+AE|UAE|AED|Dubai,Abu Dhabi|.15|+971 50 ### ####
+SG|Singapore|SGD|Singapore|.08|+65 8### ####
+DE|Germany|EUR|Berlin,Munich|.05|+49 15## #######
+NZ|New Zealand|NZD|Auckland|.07|+64 21 ### ####
+SA|Saudi Arabia|SAR|Riyadh,Jeddah|.16|+966 5# ### ####
+QA|Qatar|QAR|Doha|.18|+974 5### ####
+MY|Malaysia|MYR|Kuala Lumpur|.08|+60 12-### ####
+ZA|South Africa|ZAR|Cape Town|.25|+27 82 ### ####`.split('\n').forEach(l => {
+  const [k, n, cur, ci, f, t] = l.split('|');
+  C[k] = { n, cur, ci: ci.split(','), f: +f, t, d: t.split(' ')[0] };
+});
+// Cultures: key|mother tongue|birthplaces|father first names|mother first names (no birthplaces = born in country of residence)
+const CU = {};
+`O|Odia|Bhubaneswar, Odisha;Cuttack, Odisha;Puri, Odisha|Bijay,Prasant,Sanjay|Sulata,Manjulata,Namita
+H|Hindi|Lucknow, Uttar Pradesh;Jaipur, Rajasthan;Patna, Bihar|Rakesh,Mahesh,Suresh|Sunita,Kavita,Rekha
+B|Bengali|Kolkata, West Bengal;Siliguri, West Bengal|Subrata,Tapan,Dipak|Mamata,Shikha,Rupa
+T|Tamil|Chennai, Tamil Nadu;Madurai, Tamil Nadu;Coimbatore, Tamil Nadu|Raman,Murugan,Sundar|Valli,Kamala,Revathi
+G|Gujarati|Ahmedabad, Gujarat;Surat, Gujarat|Kirit,Dinesh,Jayesh|Hansa,Bhavna,Nila
+M|Marathi|Pune, Maharashtra;Nagpur, Maharashtra|Vinayak,Prakash,Mohan|Sunanda,Asha,Vaishali
+P|Punjabi|Ludhiana, Punjab;Amritsar, Punjab|Balwinder,Jaswant,Manjit|Harjit,Paramjit,Surinder
+K|Malayalam|Kochi, Kerala;Thrissur, Kerala|Gopalan,Sasi,Rajan|Lalitha,Omana,Sarala
+N|English||John,David,Michael|Susan,Linda,Karen
+D|German||Hans,Klaus,Jurgen|Petra,Ursula,Monika
+A|Arabic||Khalid,Saeed,Yusuf|Amina,Layla,Huda
+Y|Malay||Hassan,Ismail,Rahim|Aminah,Zainab,Salmah`.split('\n').forEach(l => {
+  const [k, t, p, f, m] = l.split('|');
+  CU[k] = { t, p: p ? p.split(';') : 0, f: f.split(','), m: m.split(',') };
+});
+// Jobs: title|employer|base monthly salary in Rs
+const JB = `Software Engineer|Nova Tech|100000
+Data Analyst|Bluepeak Analytics|70000
+Doctor|City Care Hospital|130000
+School Teacher|Sunrise School|50000
+Accountant|Apex Finance|60000
+Civil Engineer|Metro Builders|75000
+Marketing Manager|Orion Brands|90000
+Staff Nurse|Lifeline Clinic|55000
+Architect|Studio Lotus|85000
+Bank Officer|Unity Bank|65000`.split('\n').map(l => l.split('|'));
+// Seed: first last gender(M/F) culture country (first 30 domestic, last 30 foreign)
+const SEED = `Rohini Das F O IN
+Bijay Mohanty M O IN
+Sasmita Nayak F O IN
+Prasant Sahu M O IN
+Smita Panda F O IN
+Rahul Sharma M H IN
+Priya Verma F H IN
+Amit Singh M H IN
+Neha Gupta F H IN
+Vikas Yadav M H IN
+Sourav Banerjee M B IN
+Anindita Ghosh F B IN
+Debashish Roy M B IN
+Mitali Sen F B IN
+Karthik Raman M T IN
+Lakshmi Iyer F T IN
+Arun Pillai M T IN
+Meena Subramanian F T IN
+Jignesh Patel M G IN
+Hetal Shah F G IN
+Kunal Mehta M G IN
+Aditya Kulkarni M M IN
+Sneha Joshi F M IN
+Pooja Deshmukh F M IN
+Harpreet Singh M P IN
+Simran Kaur F P IN
+Gurpreet Gill M P IN
+Anjali Menon F K IN
+Arjun Nair M K IN
+Divya Thomas F K IN
+Rajesh Patel M G US
+Emily Johnson F N US
+Ananya Iyer F T US
+Oliver Smith M N GB
+Tanvi Shah F G GB
+Ethan Brown M N CA
+Simran Dhillon F P CA
+Liam Wilson M N AU
+Mia Taylor F N AU
+Rohan Nair M K AU
+Omar Hassan M A AE
+Fatima Ali F A AE
+Vivek Sharma M H AE
+Arjun Menon M K SG
+Priya Nair F K SG
+Anna Schmidt F D DE
+Lukas Muller M D DE
+Sophie Clark F N NZ
+Noah Walker M N NZ
+Khalid Rahman M A SA
+Noura Saeed F A SA
+Hamad Karim M A QA
+Mariam Yousef F A QA
+Ahmad Ismail M Y MY
+Aisyah Rahman F Y MY
+Siti Hassan F Y MY
+James Peters M N ZA
+Kavita Naidoo F T ZA
+Sanjay Das M O US
+Deepa Mishra F O GB`.split('\n');
+const MODES = ['UPI', 'Credit Card', 'Debit Card', 'Net Banking', 'PayPal'];
+const PL = [['Silver', 2999], ['Gold', 5999], ['Platinum', 9999]];
+let seed = 7;
+const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+const ageOf = d => { const [y, m, dd] = d.split('-').map(Number), t = new Date(); let a = t.getFullYear() - y; if (t < new Date(t.getFullYear(), m - 1, dd)) a--; return a; };
+const used = new Set();
+// The one and only data array: every number on the page is calculated from it
+const members = SEED.map((s, i) => {
+  const [fn, ln, g, k, cc] = s.split(' '), r = C[cc], c = CU[k], p2 = n => String(n).padStart(2, '0');
+  let n = 10 + (i * 13) % 90;
+  while (used.has(fn + n)) n = 10 + (n - 9) % 90;
+  used.add(fn + n);
+  const dob = (1989 + (i * 7) % 16) + '-' + p2(1 + (i * 5) % 12) + '-' + p2(1 + (i * 11) % 28);
+  const emp = i % 7 != 3, [jt, jc, jb] = JB[(i * 3) % 10], city = r.ci[i % r.ci.length];
+  const mon = emp ? Math.round(jb * r.f * (1 + (i % 4) / 10) / 100) * 100 : 0;
+  const sib = i % 4 == 2 ? 0 : 1 + i % 3, pl = PL[(i * 2 + 1) % 3];
+  return {
+    id: 'SM' + String(i + 1).padStart(4, '0'), fullName: fn + ' ' + ln, gender: g == 'F' ? 'Female' : 'Male',
+    username: fn.toLowerCase() + '_' + ln.toLowerCase() + n, email: fn.toLowerCase() + n + '@gmail.com',
+    dob, birthPlace: c.p ? c.p[i % c.p.length] : r.ci[(i + 1) % r.ci.length] + ', ' + r.n,
+    motherTongue: c.t, motherName: c.m[(i + 1) % 3] + ' ' + ln, fatherName: c.f[i % 3] + ' ' + ln,
+    hasSiblings: sib ? 'Yes' : 'No', siblingsCount: sib,
+    smoking: i % 9 == 4 ? 'Yes' : 'No', alcohol: i % 6 == 5 ? 'Yes' : 'No',
+    employment: emp ? 'Employed' : 'Jobless', jobTitle: emp ? jt : '-', workplace: emp ? jc + ', ' + city : '-',
+    monthlySalary: mon, yearlySalary: mon * 12, salaryCurrency: r.cur,
+    residenceCountry: r.n, cc, residenceCity: city, accountType: cc == 'IN' ? 'Domestic' : 'Foreign',
+    phone: r.t.replace(/#/g, () => Math.floor(rnd() * 10)),
+    accountStatus: i % 4 == 1 ? 'Inactive' : 'Active', membershipPlan: pl[0],
+    paymentStatus: i % 5 < 3 ? 'Paid' : 'Pending', paymentMode: MODES[(2 * (i % 5) + ((i / 5) | 0)) % 5], paymentAmount: pl[1],
+    photo: 'photos/SM' + String(i + 1).padStart(4, '0') + '.jpg', age: ageOf(dob)
+  };
+});
+const M = members, CC = [...new Set(M.map(m => m.cc))];
+ 
+/* ===== JS ===== */
+const $ = id => document.getElementById(id);
+const sum = a => a.reduce((x, m) => x + m.paymentAmount, 0);
+const rs = n => 'Rs ' + n.toLocaleString('en-IN');
+const hue = cc => (cc.charCodeAt(0) * 37 + cc.charCodeAt(1) * 91) % 360;
+const pill = cc => `<span class="pill" style="--h:${hue(cc)}" title="${C[cc].n}">${cc}</span>`;
+const bdg = v => `<span class="b ${v == 'Active' || v == 'Paid' ? 'g1' : v == 'Pending' ? 'r1' : 'n1'}">${v}</span>`;
+const sal = (m, k) => m[k] ? m.salaryCurrency + ' ' + m[k].toLocaleString(m.cc == 'IN' ? 'en-IN' : 'en-US') : 'No income';
+const inits = n => n.split(' ').map(w => w[0]).join('');
+const ph = (m, s) => `<img class="av s${s}" src="${m.photo}" alt="${m.fullName}" data-i="${inits(m.fullName)}" data-h="${hue(m.cc)}" onerror="fb(this)">`;
+// Photo fallback: coloured circle with initials (no broken-image icons)
+function fb(e) {
+  const s = document.createElement('span');
+  s.className = 'ini ' + e.className.replace('av', '').trim();
+  s.textContent = e.dataset.i; s.title = e.alt;
+  s.style.background = 'hsl(' + e.dataset.h + ',55%,38%)';
+  e.replaceWith(s);
+}
+const tbl = (h, r) => `<div class="tw"><table><thead><tr>${h.map(x => `<th scope="col">${x}</th>`).join('')}</tr></thead><tbody>${r.map(x => `<tr>${x.map(c => `<td>${c}</td>`).join('')}</tr>`).join('') || '<tr><td>No records match.</td></tr>'}</tbody></table></div>`;
+const rm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const cu = () => document.querySelectorAll('.cu').forEach(e => {
+  const n = +e.dataset.n, t0 = performance.now();
+  const f = t => { const p = rm ? 1 : Math.min((t - t0) / 800, 1); e.textContent = (e.dataset.p || '') + Math.round(n * p).toLocaleString('en-IN'); if (p < 1) requestAnimationFrame(f); };
+  requestAnimationFrame(f);
+});
+const donut = (p, txt) => {
+  const t = p.reduce((a, x) => a + x.v, 0) || 1, L = 251.33; let o = 0;
+  return `<div class="dn"><svg viewBox="0 0 100 100" width="130" role="img" aria-label="${txt}"><g transform="rotate(-90 50 50)" fill="none" stroke-width="14">${p.map(x => { const l = x.v / t * L, s = `<circle cx="50" cy="50" r="40" style="stroke:${x.c}" stroke-dasharray="${l} ${L - l}" stroke-dashoffset="${-o}"/>`; o += l; return s; }).join('')}</g><text x="50" y="54" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">${txt}</text></svg><ul>${p.map(x => `<li><i style="background:${x.c}"></i>${x.l}</li>`).join('')}</ul></div>`;
+};
+// filters: build selects, keep chosen values in state object st, call fn on change
+const mk = (el, defs, st, fn) => {
+  el.innerHTML = defs.map(([k, l, o]) => `<label>${l}<select data-k="${k}"><option value="">All</option>${o.map(x => `<option>${x}</option>`).join('')}</select></label>`).join('');
+  el.onchange = e => { st[e.target.dataset.k] = e.target.value; fn(); };
+};
+const filt = st => M.filter(m => Object.keys(st).every(k => !st[k] || m[k] == st[k]));
+const R = {};
+ 
+R.dashboard = () => {
+  const A = M.filter(m => m.accountStatus == 'Active'), P = M.filter(m => m.paymentStatus == 'Paid'), W = M.filter(m => m.paymentStatus == 'Pending');
+  const FA = A.filter(m => m.accountType == 'Foreign'), fc = CC.filter(c => c != 'IN'), jb = M.filter(m => m.employment == 'Employed').length;
+  const pd = sum(P), pn = sum(W), pc = Math.round(pd / ((pd + pn) || 1) * 100);
+  const K = [['Total Members', M.length, '', 'crimson'], ['Active Members', A.length, '', 'leaf'], ['Active Foreign Accounts', FA.length, '', 'gold'], ['Total Payment Done (Online)', pd, 'Rs ', 'leaf'], ['Total Payment Pending', pn, 'Rs ', 'orange'], ['Countries Represented', CC.length, '', 'char']];
+  const md = MODES.map(o => [o, sum(P.filter(m => m.paymentMode == o))]), mx = Math.max(...md.map(x => x[1]), 1);
+  const fa = fc.map(c => [c, FA.filter(m => m.cc == c).length]).sort((a, b) => b[1] - a[1]), fm = Math.max(...fa.map(x => x[1]), 1);
+  const g3 = 'style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))"';
+  $('d-out').innerHTML = `<div class="g" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">${K.map(([l, n, p, c]) => `<div class="c kpi" style="--k:var(--${c})"><span>${l}</span><b class="cu" data-n="${n}" data-p="${p}">0</b></div>`).join('')}</div>
+<div class="g" ${g3}>
+<div class="c"><h2>Paid vs Pending amount</h2>${donut([{ v: pd, c: 'var(--leaf)', l: 'Paid ' + rs(pd) }, { v: pn, c: 'var(--crimson)', l: 'Pending ' + rs(pn) }], pc + '% paid')}</div>
+<div class="c"><h2>Payments by online mode (paid)</h2><div class="vb">${md.map(([o, v]) => `<div><small>${rs(v)}</small><i style="height:${v / mx * 120}px"></i>${o}</div>`).join('')}</div></div>
+<div class="c"><h2>Active foreign accounts by country</h2>${fa.map(([c, n]) => `<div class="hb"><span>${pill(c)} ${C[c].n}</span><em style="width:${n / fm * 100}%"></em><b>${n}</b></div>`).join('')}</div>
+<div class="c"><h2>Employed vs Jobless</h2>${donut([{ v: jb, c: 'var(--gold)', l: 'Employed: ' + jb }, { v: M.length - jb, c: 'var(--orange)', l: 'Jobless: ' + (M.length - jb) }], M.length + ' total')}</div>
+</div>
+<div class="g" style="grid-template-columns:repeat(auto-fit,minmax(420px,1fr))">
+<div><h2>Foreign Accounts by Country</h2>${tbl(['Country', 'Dial code', 'Active', 'Total', 'Sample phone'], fc.map(c => [pill(c) + ' ' + C[c].n, C[c].d, FA.filter(m => m.cc == c).length, M.filter(m => m.cc == c).length, M.find(m => m.cc == c).phone]))}</div>
+<div><h2>Recent Payments</h2>${tbl(['Member', 'Plan', 'Amount', 'Mode', 'Status'], M.slice(-8).reverse().map(m => [m.fullName, m.membershipPlan, rs(m.paymentAmount), m.paymentMode, bdg(m.paymentStatus)]))}</div>
+</div>`;
+  cu();
+};
+ 
+const PF = {};
+R.profiles = () => {
+  const q = $('q').value.toLowerCase().trim();
+  const L = filt(PF).filter(m => !q || [m.fullName, m.email, m.username, m.residenceCountry, m.cc].join(' ').toLowerCase().includes(q));
+  $('p-n').textContent = L.length + ' of ' + M.length + ' profiles';
+  $('p-out').innerHTML = L.map(m => `<article class="c pc" tabindex="0" role="button" data-id="${m.id}" aria-label="Open profile of ${m.fullName}">${ph(m, 1)}<h2>${m.fullName}</h2><div>${m.age} yrs, ${m.residenceCity}</div><div>${pill(m.cc)}</div><div>${m.employment == 'Employed' ? m.jobTitle : 'Jobless'}</div>${bdg(m.accountStatus)}</article>`).join('') || '<p>No profiles match.</p>';
+};
+ 
+const DS = { k: 'id', d: 1, p: 0 };
+const COLS = [['ID', 'id'], ['Name', 'fullName'], ['Gender', 'gender'], ['Age', 'age'], ['Username', 'username'], ['Email', 'email'], ['DOB', 'dob'], ['Birthplace', 'birthPlace'], ['Mother tongue', 'motherTongue'], ['Mother', 'motherName'], ['Father', 'fatherName'],
+  ['Siblings', 'siblingsCount', m => m.siblingsCount ? 'Yes (' + m.siblingsCount + ')' : 'No'], ['Smoking', 'smoking'], ['Alcohol', 'alcohol'], ['Employment', 'employment'], ['Job title', 'jobTitle'], ['Workplace', 'workplace'],
+  ['Monthly salary', 'monthlySalary', m => sal(m, 'monthlySalary')], ['Yearly salary', 'yearlySalary', m => sal(m, 'yearlySalary')], ['Currency', 'salaryCurrency'],
+  ['Country', 'residenceCountry', m => pill(m.cc) + ' ' + m.residenceCountry], ['Account', 'accountType'], ['Phone', 'phone'], ['Status', 'accountStatus', m => bdg(m.accountStatus)],
+  ['Plan', 'membershipPlan'], ['Payment', 'paymentStatus', m => bdg(m.paymentStatus)], ['Mode', 'paymentMode'], ['Amount', 'paymentAmount', m => rs(m.paymentAmount)]];
+R.dataset = () => {
+  const q = $('ds-q').value.toLowerCase().trim();
+  const L = M.filter(m => !q || Object.values(m).join(' ').toLowerCase().includes(q)).sort((a, b) => (a[DS.k] > b[DS.k] ? 1 : a[DS.k] < b[DS.k] ? -1 : 0) * DS.d);
+  const n = Math.max(1, Math.ceil(L.length / 10));
+  DS.p = Math.min(DS.p, n - 1);
+  $('ds-out').innerHTML = `<div class="tw"><table><thead><tr>${COLS.map(([l, k]) => `<th scope="col" aria-sort="${DS.k == k ? (DS.d > 0 ? 'ascending' : 'descending') : 'none'}"><button data-k="${k}">${l}${DS.k == k ? (DS.d > 0 ? ' &#9650;' : ' &#9660;') : ''}</button></th>`).join('')}</tr></thead><tbody>${L.slice(DS.p * 10, DS.p * 10 + 10).map(m => `<tr>${COLS.map(([l, k, f]) => `<td>${f ? f(m) : m[k]}</td>`).join('')}</tr>`).join('') || '<tr><td>No records match.</td></tr>'}</tbody></table></div>
+<div class="pg"><button class="bt" data-p="${DS.p - 1}" ${DS.p ? '' : 'disabled'}>Prev</button>${Array.from({ length: n }, (_, i) => `<button class="pn${i == DS.p ? ' cur' : ''}" data-p="${i}" aria-label="Page ${i + 1}">${i + 1}</button>`).join('')}<button class="bt" data-p="${DS.p + 1}" ${DS.p < n - 1 ? '' : 'disabled'}>Next</button><span class="mut">${L.length} records, 10 per page</span></div>`;
+};
+ 
+const PY = {};
+R.payments = () => {
+  const P = M.filter(m => m.paymentStatus == 'Paid'), W = M.filter(m => m.paymentStatus == 'Pending');
+  $('pay-s').innerHTML = [['Total Paid (Online)', rs(sum(P))], ['Total Pending', rs(sum(W))], ['Paid payments', P.length], ['Pending payments', W.length]].map(([l, v]) => `<div class="c kpi" style="--k:var(--gold)"><span>${l}</span><b>${v}</b></div>`).join('');
+  $('pay-out').innerHTML = tbl(['ID', 'Member', 'Country', 'Plan', 'Amount', 'Mode', 'Status'], filt(PY).map(m => [m.id, m.fullName, pill(m.cc), m.membershipPlan, rs(m.paymentAmount), m.paymentMode, bdg(m.paymentStatus)]));
+};
+ 
+R.active = () => {
+  const L = M.filter(m => m.accountStatus == 'Active');
+  $('a-out').innerHTML = `<p class="mut">${L.length} active members</p>` + tbl(['Member', 'ID', 'Age', 'Country', 'Occupation', 'Plan', 'Phone'], L.map(m => [ph(m, 3) + ' ' + m.fullName, m.id, m.age, pill(m.cc) + ' ' + m.residenceCountry, m.jobTitle == '-' ? 'Jobless' : m.jobTitle, m.membershipPlan, m.phone]));
+};
+ 
+R.foreign = () => {
+  $('f-out').innerHTML = CC.filter(c => c != 'IN').map(c => {
+    const L = M.filter(m => m.cc == c);
+    return `<div class="c"><h2>${pill(c)} ${C[c].n} <span class="mut">(${L.length} account${L.length > 1 ? 's' : ''})</span></h2><ul class="ls">${L.map(m => `<li><span>${m.fullName} ${bdg(m.accountStatus)}</span><span>${m.phone}</span></li>`).join('')}</ul></div>`;
+  }).join('');
+};
+ 
+R.directory = () => {
+  $('c-out').innerHTML = CC.map(c => {
+    const L = M.filter(m => m.cc == c);
+    return `<details><summary>${pill(c)} ${C[c].n} <span>${C[c].d}</span><span class="mut">${L.length} members</span></summary><ul class="ls">${L.map(m => `<li><span>${m.fullName}</span><span>${m.phone}</span></li>`).join('')}</ul></details>`;
+  }).join('');
+};
+R.settings = () => {};
+ 
+// Profile modal
+const sc = (t, r) => `<h2 class="ms">${t}</h2><dl>${r.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>`;
+const openM = id => {
+  const m = M.find(x => x.id == id);
+  $('mb2').innerHTML = `<div style="display:flex;gap:16px;align-items:center">${ph(m, 2)}<div><h1 style="margin:0 0 6px">${m.fullName}</h1>${bdg(m.accountStatus)} ${pill(m.cc)} <span class="mut">${m.id}</span></div></div>`
+    + sc('Personal', [['Full name', m.fullName], ['Username', m.username], ['Email', m.email], ['Date of birth', m.dob + ' (age ' + m.age + ')'], ['Birthplace', m.birthPlace], ['Mother tongue', m.motherTongue]])
+    + sc('Family', [["Mother's name", m.motherName], ["Father's name", m.fatherName], ['Siblings', m.hasSiblings], ['Number of siblings', m.hasSiblings == 'Yes' ? m.siblingsCount : '-']])
+    + sc('Lifestyle', [['Smoking', m.smoking], ['Alcohol', m.alcohol]])
+    + sc('Career', [['Employment', m.employment], ['Role', m.jobTitle], ['Workplace', m.workplace], ['Monthly salary', sal(m, 'monthlySalary')], ['Yearly salary', sal(m, 'yearlySalary')]])
+    + sc('Contact', [['Phone', m.phone], ['Country', m.residenceCountry + ', ' + m.residenceCity]])
+    + sc('Account', [['Account type', m.accountType], ['Status', m.accountStatus], ['Plan', m.membershipPlan], ['Payment status', m.paymentStatus], ['Payment mode', m.paymentMode], ['Amount', rs(m.paymentAmount)]]);
+  $('md').hidden = false; $('cl').focus();
+};
+ 
+// Router (hash based, no reloads)
+const V = [['dashboard', 'Dashboard', '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>', '#D62839', '#8f1623'],
+  ['profiles', 'Profiles', '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>', '#F4B400', '#9a7000', '#2B2B2B'],
+  ['dataset', 'Dataset', '<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 2 4 3 8 3s8-1 8-3V6M4 12c0 2 4 3 8 3s8-1 8-3"/>', '#4C9A2A', '#2c5e15'],
+  ['payments', 'Payments', '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>', '#F26B21', '#9c3f0c'],
+  ['active', 'Active Members', '<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>', '#D62839', '#8f1623'],
+  ['foreign', 'Foreign Accounts', '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>', '#F4B400', '#9a7000', '#2B2B2B'],
+  ['directory', 'Country Directory', '<path d="M5 4h14v16H5zM9 8h6M9 12h6M9 16h4"/>', '#4C9A2A', '#2c5e15'],
+  ['settings', 'Settings', '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>', '#F26B21', '#9c3f0c']];
+$('nav').innerHTML = V.map(([id, l, ic, b, d, t]) => `<button class="k" data-v="${id}" style="--b:${b};--d:${d};--t:${t || '#fff'}"><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg>${l}</button>`).join('');
+function show() {
+  const h = location.hash.slice(1), v = V.some(x => x[0] == h) ? h : 'dashboard';
+  V.forEach(x => { $(x[0]).hidden = x[0] != v; });
+  document.querySelectorAll('.k[data-v]').forEach(b => {
+    const on = b.dataset.v == v;
+    b.classList.toggle('on', on);
+    if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  R[v](); $('side').classList.remove('open'); scrollTo(0, 0);
+}
+const toast = t => { const e = $('ts'); e.textContent = t; e.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => e.hidden = true, 2200); };
+const theme = () => { const d = document.documentElement; d.dataset.t = d.dataset.t == 'dark' ? 'light' : 'dark'; };
+ 
+// Init
+mk($('p-f'), [['gender', 'Gender', ['Male', 'Female']], ['residenceCountry', 'Country', CC.map(c => C[c].n)], ['employment', 'Employment', ['Employed', 'Jobless']], ['smoking', 'Smoking', ['Yes', 'No']], ['alcohol', 'Alcohol', ['Yes', 'No']], ['accountStatus', 'Status', ['Active', 'Inactive']], ['paymentStatus', 'Payment', ['Paid', 'Pending']]], PF, () => R.profiles());
+mk($('pay-f'), [['paymentStatus', 'Status', ['Paid', 'Pending']], ['paymentMode', 'Mode', MODES]], PY, () => R.payments());
+const pend = M.filter(m => m.paymentStatus == 'Pending').length;
+$('bn').textContent = pend;
+$('bell').onclick = () => toast(pend + ' payments are pending');
+$('nav').onclick = e => { const b = e.target.closest('button'); if (b) { location.hash = b.dataset.v; $('side').classList.remove('open'); } };
+$('mb').onclick = () => $('side').classList.toggle('open');
+$('main').onclick = () => $('side').classList.remove('open');
+$('th').onclick = $('th2').onclick = theme;
+$('lg').onclick = $('lo2').onclick = () => toast('Logout is visual only in this demo');
+$('q').oninput = () => { if (location.hash != '#profiles') location.hash = 'profiles'; else R.profiles(); };
+$('p-out').onclick = e => { const a = e.target.closest('[data-id]'); if (a) openM(a.dataset.id); };
+$('p-out').onkeydown = e => { const a = e.target.closest('[data-id]'); if (a && e.key == 'Enter') openM(a.dataset.id); };
+$('ds-q').oninput = () => { DS.p = 0; R.dataset(); };
+$('ds-out').onclick = e => {
+  const b = e.target.closest('button'); if (!b || b.disabled) return;
+  if (b.dataset.k) { DS.d = DS.k == b.dataset.k ? -DS.d : 1; DS.k = b.dataset.k; DS.p = 0; } else DS.p = +b.dataset.p;
+  R.dataset();
+};
+$('csv').onclick = () => {
+  const k = Object.keys(M[0]), q = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const t = [k.join(',')].concat(M.map(m => k.map(c => q(m[c])).join(','))).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff' + t], { type: 'text/csv;charset=utf-8' }));
+  a.download = 'subhmangal_members.csv'; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+$('cl').onclick = () => { $('md').hidden = true; };
+$('md').onclick = e => { if (e.target == $('md')) $('md').hidden = true; };
+document.onkeydown = e => { if (e.key == 'Escape') $('md').hidden = true; };
+window.onhashchange = show;
+show();
+</script>
+</body>
+</html>

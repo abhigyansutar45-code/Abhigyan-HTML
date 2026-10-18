@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subhmangal Matrimony – Admin Dashboard (Demo Data)</title>
+<!-- Favicon: put your icon-only logo next to this file as favicon.png -->
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Mulish:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ===== Theme tokens (edit colours here) ===== */
+:root{--saf:#F28C28;--mar:#7A1F3D;--gold:#C9A227;--grn:#2E7D4F;--red:#C0392B;
+--bg:#FFFFFF;--bg2:#FFF6EA;--card:#FFFFFF;--tx:#2B1A1F;--mut:#7B6A70;--bd:#F0E2D2;--sh:0 6px 18px rgba(122,31,61,.10)}
+[data-theme=dark]{--bg:#181016;--bg2:#21151d;--card:#2a1b24;--tx:#F6ECE6;--mut:#BBA8B0;--bd:#43303b;--sh:0 6px 18px rgba(0,0,0,.45)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Mulish,system-ui,sans-serif;background:var(--bg2);color:var(--tx);transition:background .3s}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;margin:0;color:var(--mar)}
+[data-theme=dark] h1,[data-theme=dark] h2,[data-theme=dark] h3{color:var(--gold)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+ 
+/* ===== 3D sidebar ===== */
+.side{position:fixed;inset:0 auto 0 0;width:260px;padding:18px 16px;background:linear-gradient(165deg,#8E2848,#4F0F24);
+box-shadow:8px 0 24px rgba(0,0,0,.3);z-index:30;overflow-y:auto;perspective:900px;transition:transform .3s}
+.side .brand{color:#fff;text-align:center;font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:18px}
+.nav{display:flex;flex-direction:column;gap:14px}
+.nav button{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:0;border-radius:14px;color:#fff;font-weight:700;text-align:left;
+background:linear-gradient(#A93659,#7A1F3D);box-shadow:0 6px 0 #3E0B1C,0 12px 16px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.28);
+transform-style:preserve-3d;transition:transform .2s,box-shadow .2s}
+.nav button i{width:22px;text-align:center;color:var(--gold)}
+.nav button:hover{transform:translate(5px,-3px) rotateX(8deg);box-shadow:0 9px 0 #3E0B1C,0 16px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+.nav button.active{background:linear-gradient(#FFB458,#F28C28);color:#3B0D1C;transform:translateY(5px);box-shadow:0 1px 0 #A85A0A,0 4px 8px rgba(0,0,0,.3),inset 0 2px 4px rgba(255,255,255,.4)}
+.nav button.active i{color:#3B0D1C}
+.nav .logout{margin-top:10px;background:linear-gradient(#444,#222);box-shadow:0 6px 0 #000,0 12px 16px rgba(0,0,0,.35)}
+ 
+/* ===== Header ===== */
+.main{margin-left:260px}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;padding:10px 22px;background:var(--bg);border-bottom:3px solid var(--saf);box-shadow:var(--sh)}
+.logo{display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-weight:700;color:var(--mar);white-space:nowrap}
+[data-theme=dark] .logo{color:var(--gold)}
+.logo img{height:42px;width:auto}
+.search{flex:1;max-width:460px;position:relative}
+.search input{width:100%;padding:10px 14px 10px 38px;border-radius:30px;border:1px solid var(--bd);background:var(--bg2);color:var(--tx)}
+.search i{position:absolute;left:14px;top:12px;color:var(--mut)}
+.hdr-r{margin-left:auto;display:flex;align-items:center;gap:10px}
+.ib{position:relative;width:40px;height:40px;border-radius:50%;border:1px solid var(--bd);background:var(--bg2);color:var(--mar)}
+[data-theme=dark] .ib{color:var(--gold)}
+.ib .dot{position:absolute;top:5px;right:6px;background:var(--red);color:#fff;border-radius:10px;font-size:.62rem;padding:0 5px}
+.menu{position:relative}
+.menu .pop{display:none;position:absolute;right:0;top:48px;min-width:190px;background:var(--card);border:1px solid var(--bd);border-radius:12px;box-shadow:var(--sh);padding:6px}
+.menu.open .pop{display:block}
+.pop button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--tx);padding:9px 12px;border-radius:8px}
+.pop button:hover{background:var(--bg2)}
+.burger{display:none}
+.demo{background:var(--gold);color:#3B2A00;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:20px}
+ 
+/* ===== Content ===== */
+section.page{display:none;padding:22px}
+section.page.show{display:block;animation:in .35s}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+.title{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));margin:16px 0}
+.g21{grid-template-columns:2fr 1fr}
+@media(max-width:1100px){.g21{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;box-shadow:var(--sh);transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px)}
+.kpi{display:flex;flex-direction:column;gap:6px;border-top:4px solid var(--c)}
+.kpi .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:#fff;background:var(--c);font-size:1.2rem}
+.kpi .v{font-size:1.6rem;font-weight:800}
+.kpi small{color:var(--mut)}
+.up{color:var(--grn);font-weight:700}.dn{color:var(--red);font-weight:700}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.filters label{display:flex;flex-direction:column;font-size:.75rem;color:var(--mut);gap:3px}
+select,input[type=date],.filters input{padding:8px 10px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx)}
+.btn{border:0;border-radius:10px;padding:9px 16px;font-weight:700;color:#fff;background:linear-gradient(var(--saf),#D9730D)}
+.btn.sec{background:var(--bg2);color:var(--mar);border:1px solid var(--bd)}
+.btn.red{background:var(--red)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{padding:10px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}
+th{color:var(--mar);cursor:pointer;user-select:none}
+[data-theme=dark] th{color:var(--gold)}
+tbody tr:hover{background:var(--bg2)}
+.badge{padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700;color:#fff;display:inline-block}
+.b-completed,.b-active{background:var(--grn)}.b-pending{background:var(--saf)}.b-failed,.b-inactive{background:var(--red)}
+.b-gold{background:var(--gold);color:#3B2A00}.b-platinum{background:#6C5B7B}.b-silver{background:#8A939B}.b-free{background:#B9A9A0}
+.person{display:flex;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd)}
+.person img,.pcard img{border-radius:50%;object-fit:cover;border:3px solid var(--gold)}
+.person img{width:48px;height:48px}
+.pcard{cursor:pointer;text-align:center}
+.pcard img{width:84px;height:84px}
+.pcard h3{font-size:1.05rem;margin-top:8px}
+.bar{height:7px;background:var(--bd);border-radius:6px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--saf),var(--gold))}
+.flag{width:34px;height:23px;object-fit:cover;border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.cc{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.cc ul{margin:6px 0 0;padding-left:18px;color:var(--mut);font-size:.88rem}
+canvas{max-height:300px}
+ 
+/* ===== Modal ===== */
+.ov{position:fixed;inset:0;background:rgba(30,8,16,.6);display:none;place-items:center;z-index:50;padding:14px}
+.ov.show{display:grid}
+.modal{background:var(--card);border-radius:18px;max-width:760px;width:100%;max-height:90vh;overflow:auto;padding:22px;border-top:6px solid var(--saf)}
+.mh{display:flex;gap:16px;align-items:center;margin-bottom:12px}
+.mh img{width:96px;height:96px;border-radius:50%;border:4px solid var(--gold)}
+dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 18px;margin:0}
+dl div{border-bottom:1px dashed var(--bd);padding:5px 0}
+dt{font-size:.72rem;color:var(--mut)}dd{margin:0;font-weight:700}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--mar);color:#fff;padding:12px 18px;border-radius:12px;display:none;z-index:60}
+@media(max-width:900px){
+.side{transform:translateX(-100%)}.side.open{transform:none}
+.main{margin-left:0}.burger{display:inline-block}.logo span{display:none}
+}
+</style>
+</head>
+<body>
+ 
+<!-- ===== Sidebar navigation ===== -->
+<aside class="side" id="side" aria-label="Main navigation">
+  <div class="brand"><i class="fa-solid fa-ring"></i> Admin Panel</div>
+  <nav class="nav" id="nav">
+    <button data-sec="dashboard" class="active"><i class="fa-solid fa-gauge-high"></i>Dashboard</button>
+    <button data-sec="members"><i class="fa-solid fa-address-card"></i>Member Profiles</button>
+    <button data-sec="payments"><i class="fa-solid fa-indian-rupee-sign"></i>Payments</button>
+    <button data-sec="active"><i class="fa-solid fa-user-check"></i>Active Members</button>
+    <button data-sec="foreign"><i class="fa-solid fa-earth-asia"></i>Foreign Accounts</button>
+    <button data-sec="countries"><i class="fa-solid fa-phone-volume"></i>Countries &amp; Phone Numbers</button>
+    <button data-sec="reports"><i class="fa-solid fa-chart-pie"></i>Reports</button>
+    <button data-sec="settings"><i class="fa-solid fa-gear"></i>Settings</button>
+    <button class="logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i>Logout</button>
+  </nav>
+</aside>
+ 
+<div class="main">
+<!-- ===== Top header ===== -->
+<header>
+  <button class="ib burger" id="burger" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+  <div class="logo">
+    <!-- Main logo: place your supplied logo as logo.png -->
+    <img src="logo.png" alt="Subhmangal Matrimony logo" onerror="this.style.display='none'">
+    <span>Subhmangal Matrimony</span>
+  </div>
+  <div class="search"><i class="fa-solid fa-magnifying-glass"></i>
+    <input id="gsearch" type="search" placeholder="Search name, username, email, country, phone" aria-label="Search members">
+  </div>
+  <div class="hdr-r">
+    <span class="demo">Demo Data</span>
+    <button class="ib" id="notifBtn" aria-label="Notifications"><i class="fa-regular fa-bell"></i><span class="dot">3</span></button>
+    <button class="ib" id="themeBtn" aria-label="Toggle light or dark mode"><i class="fa-solid fa-moon"></i></button>
+    <div class="menu" id="pm">
+      <button class="ib" id="pmBtn" aria-label="Administrator menu" aria-haspopup="true"><i class="fa-solid fa-user-tie"></i></button>
+      <div class="pop"><button data-sec="settings">Administrator · Settings</button><button id="pmLogout">Logout</button></div>
+    </div>
+  </div>
+</header>
+ 
+<!-- ===== Dashboard ===== -->
+<section class="page show" id="dashboard">
+  <div class="title"><h1>Dashboard</h1><span class="demo">Demo Data – no real payments or people</span></div>
+  <div class="grid g4" id="kpis"></div>
+ 
+  <div class="card" style="margin-top:16px">
+    <div class="filters">
+      <label>From<input type="date" id="fFrom"></label>
+      <label>To<input type="date" id="fTo"></label>
+      <label>Country<select id="fCountry"></select></label>
+      <label>Profile status<select id="fStatus"><option value="">All</option><option value="active">Active</option><option value="inactive">Inactive</option><option value="pending">Pending verification</option></select></label>
+      <label>Membership plan<select id="fPlan"><option value="">All</option><option>Free</option><option>Silver</option><option>Gold</option><option>Platinum</option></select></label>
+      <button class="btn sec" id="fReset">Reset</button>
+    </div>
+  </div>
+ 
+  <div class="grid g2">
+    <div class="card"><h3>Monthly payments (₹ lakh)</h3><canvas id="payChart" aria-label="Monthly payments chart" role="img"></canvas></div>
+    <div class="card"><h3>Active members by country</h3><canvas id="cChart" aria-label="Country-wise active members chart" role="img"></canvas></div>
+  </div>
+  <div class="grid g2 g21">
+    <div class="card"><h3>Recent payments</h3><div class="tw" id="recentPay"></div></div>
+    <div class="card"><h3>Recently joined members</h3><div id="joined"></div></div>
+  </div>
+</section>
+ 
+<!-- ===== Member Profiles ===== -->
+<section class="page" id="members">
+  <div class="title"><h1>Member Profiles</h1>
+    <div class="filters">
+      <label>Status<select id="mStatus"><option value="">All</option><option value="active">Active</option><option value="inactive">Inactive</option><option value="pending">Pending verification</option></select></label>
+      <label>Sort by<select id="mSort"><option value="name">Name</option><option value="age">Age</option><option value="pct">Profile completion</option></select></label>
+    </div></div>
+  <div class="grid g4" id="mGrid"></div>
+</section>
+ 
+<section class="page" id="payments"><div class="title"><h1>Payments</h1><span class="demo">Demo Data</span></div><div class="card tw" id="allPay"></div></section>
+<section class="page" id="active"><div class="title"><h1>Active Members</h1></div><div class="card tw" id="actT"></div></section>
+<section class="page" id="foreign"><div class="title"><h1>Foreign Accounts</h1></div><div class="card tw" id="forT"></div></section>
+<section class="page" id="countries"><div class="title"><h1>Countries &amp; Phone Numbers</h1><span class="demo">Fictional numbers</span></div><div class="grid g4" id="cGrid"></div></section>
+ 
+<section class="page" id="reports">
+  <div class="title"><h1>Reports</h1></div>
+  <div class="grid g4">
+    <div class="card"><h3>Members export</h3><p>Download the demo member list as CSV.</p><button class="btn" id="csvBtn"><i class="fa-solid fa-download"></i> Download CSV</button></div>
+    <div class="card"><h3>Payments summary</h3><p>Monthly completed vs pending totals.</p><button class="btn sec demoBtn">Generate (demo)</button></div>
+    <div class="card"><h3>Country report</h3><p>Active profiles by country.</p><button class="btn sec demoBtn">Generate (demo)</button></div>
+  </div>
+</section>
+ 
+<section class="page" id="settings">
+  <div class="title"><h1>Settings</h1></div>
+  <div class="card"><label><input type="checkbox" id="darkChk"> Dark mode</label>
+    <p style="color:var(--mut)">This dashboard uses fictional demo data only. It is not connected to any database, payment gateway or user account.</p></div>
+</section>
+</div>
+ 
+<!-- ===== Modals ===== -->
+<div class="ov" id="profileOv" role="dialog" aria-modal="true" aria-label="Member profile"><div class="modal" id="profileBox"></div></div>
+<div class="ov" id="logoutOv" role="dialog" aria-modal="true" aria-label="Confirm logout"><div class="modal" style="max-width:400px;text-align:center">
+  <h2>Log out?</h2><p>You will be signed out of the demo admin panel.</p>
+  <button class="btn red" id="yesOut">Yes, log out</button> <button class="btn sec" id="noOut">Stay</button></div></div>
+<div class="toast" id="toast" role="status"></div>
+ 
+<script>
+/* ===== Demo data (all fictional) ===== */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+// Country info: flag code, calling code, currency
+const C={India:['in','+91','INR'],'United Arab Emirates':['ae','+971','AED'],Singapore:['sg','+65','SGD'],'United States':['us','+1','USD'],
+'United Kingdom':['gb','+44','GBP'],Canada:['ca','+1','CAD'],Australia:['au','+61','AUD'],Germany:['de','+49','EUR'],
+'South Africa':['za','+27','ZAR'],'New Zealand':['nz','+64','NZD'],France:['fr','+33','EUR']};
+// Member rows: user|name|gender|country|dob|birthplace|city|tongue|mother|father|siblings|smoke|alcohol|marital|education|employment|job|company|workplace|monthly|plan|status|completion|phone|joined|about
+const rows=[
+'rahul21|Rahul Sharma|Male|India|1994-03-12|Jaipur|Pune|Hindi|Sunita Sharma|Ramesh Sharma|Yes: 1 younger sister|No|No|Never married|B.Tech, Computer Science|Employed|Software Engineer|TechNova Solutions|Pune|145000|Gold|active|92|+91 98765-43210|2026-10-02|Easy-going engineer who loves cricket, road trips and family dinners.',
+'rohini34|Rohini Patel|Female|India|1996-07-25|Ahmedabad|Mumbai|Gujarati|Hansa Patel|Kiran Patel|Yes: 1 elder brother|No|No|Never married|MBA, Finance|Employed|Product Manager|Finserv Labs|Mumbai|180000|Platinum|active|96|+91 99887-76655|2026-09-28|Ambitious yet family-oriented. Enjoys classical dance and cooking.',
+'aisha28|Aisha Khan|Female|United Arab Emirates|1995-11-08|Hyderabad|Dubai|Urdu|Nazia Khan|Imran Khan|Yes: 2 brothers|No|No|Never married|B.Com|Employed|Marketing Lead|Desert Rose Media|Dubai|16000|Gold|active|88|+971 50 123 4567|2026-10-10|Creative marketer who enjoys travel, photography and poetry.',
+'priya19|Priya Iyer|Female|Singapore|1993-05-30|Chennai|Singapore|Tamil|Lakshmi Iyer|Venkat Iyer|No|No|No|Divorced|M.Sc, Data Science|Employed|Data Analyst|MerlionTech|Singapore|7200|Platinum|active|94|+65 8123 4567|2026-10-14|Calm, curious and loves Carnatic music and board games.',
+'arjun07|Arjun Mehta|Male|United States|1992-09-14|Surat|St. Louis|Gujarati|Rekha Mehta|Anil Mehta|Yes: 1 elder sister|No|Yes|Never married|MS, Electrical Engineering|Employed|Hardware Engineer|Gateway Circuits|St. Louis|9800|Silver|active|85|+1 314-634-3144|2026-09-20|Tech lover who enjoys hiking, jazz and weekend cooking.',
+'ananya42|Ananya Roy|Female|United Kingdom|1997-01-19|Kolkata|London|Bengali|Mala Roy|Subir Roy|No|No|No|Never married|MBBS|Employed|Junior Doctor|Thames Community Clinic|London|3900|Gold|pending|70|+44 7700 900123|2026-10-16|Caring doctor, book lover and amateur painter.',
+'neha15|Neha Desai|Female|Canada|1994-12-02|Pune|Toronto|Marathi|Smita Desai|Prakash Desai|Yes: 1 younger brother|No|No|Never married|B.Des|Self-employed|Freelance Designer|Studio Neha|Toronto (remote)|6500|Silver|active|82|+1 416-555-0187|2026-10-05|Independent designer who loves cafes, sketching and long walks.',
+'vikram99|Vikram Rao|Male|Australia|1991-04-06|Bengaluru|Melbourne|Kannada|Geeta Rao|Suresh Rao|Yes: 1 younger sister|Yes|Yes|Divorced|B.E., Civil Engineering|Business|Owner|Rao Build Co.|Melbourne|11000|Platinum|inactive|64|+61 412 345 678|2026-08-30|Entrepreneur who enjoys surfing, football and barbecues.',
+'kavya23|Kavya Nair|Female|Germany|1995-08-21|Kochi|Berlin|Malayalam|Deepa Nair|Mohan Nair|No|No|No|Never married|M.Sc, Mechanical Engineering|Employed|Research Engineer|Spree Mobility GmbH|Berlin|5400|Gold|active|90|+49 1512 3456789|2026-10-12|Loves cycling, classical music and exploring new cities.',
+'rohan11|Rohan Kapoor|Male|South Africa|1993-02-10|Delhi|Johannesburg|Punjabi|Anita Kapoor|Vijay Kapoor|Yes: 1 elder brother|No|No|Never married|BBA|Business|Founder|Kapoor Spices|Johannesburg|85000|Silver|pending|68|+27 82 123 4567|2026-10-17|Spice-trade founder, foodie and safari enthusiast.',
+'meera30|Meera Joshi|Female|New Zealand|1996-06-16|Nagpur|Auckland|Marathi|Asha Joshi|Mukund Joshi|Yes: 1 younger sister|No|No|Never married|B.Ed|Unemployed|Seeking teaching role|-|-|0|Free|inactive|55|+64 21 123 4567|2026-09-02|Gentle and thoughtful. Enjoys gardening, kayaking and storytelling.',
+'siddharth08|Siddharth Verma|Male|France|1994-10-29|Lucknow|Paris|Hindi|Poonam Verma|Rajeev Verma|No|No|Yes|Never married|MS, Culinary Management|Employed|Sous Chef|Le Petit Jardin|Paris|3800|Gold|active|87|+33 6 12 34 56 78|2026-10-15|Passionate chef who loves ghazals, markets and travelling.'];
+const K='user,name,gender,country,dob,birth,city,tongue,mother,father,sib,smoke,alc,marital,edu,emp,job,company,work,monthly,plan,status,pct,phone,joined,about'.split(',');
+const M=rows.map(r=>{const o=Object.fromEntries(r.split('|').map((v,i)=>[K[i],v]));
+  o.monthly=+o.monthly;o.pct=+o.pct;o.first=o.name.split(' ')[0].toLowerCase();
+  o.email=o.first+(o.user.match(/\d+/)||[''])[0]+'@gmail.com';o.age=ageOf(o.dob);return o;});
+// Payments: id|username|date|method|amount (INR)|status
+const P=['PAY-10421|rohini34|2026-10-16|UPI|19999|Completed','PAY-10420|priya19|2026-10-14|Credit Card|19999|Completed','PAY-10419|aisha28|2026-10-10|Net Banking|9999|Completed',
+'PAY-10418|ananya42|2026-10-16|UPI|9999|Pending','PAY-10417|siddharth08|2026-10-15|Debit Card|9999|Completed','PAY-10416|rohan11|2026-10-17|Net Banking|4999|Pending',
+'PAY-10415|kavya23|2026-10-12|UPI|9999|Completed','PAY-10414|rahul21|2026-10-02|UPI|9999|Completed','PAY-10413|neha15|2026-10-05|Credit Card|4999|Completed',
+'PAY-10412|arjun07|2026-09-20|Debit Card|4999|Failed','PAY-10411|vikram99|2026-08-30|Net Banking|19999|Failed','PAY-10410|meera30|2026-09-02|UPI|0|Pending']
+.map(s=>{const a=s.split('|'),m=M.find(x=>x.user==a[1]);return{id:a[0],name:m.name,user:a[1],date:a[2],method:a[3],amount:+a[4],status:a[5],country:m.country,plan:m.plan,pstatus:m.status}});
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'];
+const done=[4.2,4.8,5.1,5.6,6.0,6.4,6.9,7.3,7.9,8.4],pend=[1.1,1.3,.9,1.2,1,1.4,1.1,1.3,1.5,1.2];
+ 
+/* ===== Helpers ===== */
+function ageOf(d){const b=new Date(d),n=new Date();let a=n.getFullYear()-b.getFullYear();if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate()))a--;return a}
+const money=(n,cur)=>new Intl.NumberFormat(cur==='INR'?'en-IN':'en-US',{style:'currency',currency:cur,maximumFractionDigits:0}).format(n);
+const inr=n=>money(n,'INR');
+const stLabel=s=>s==='pending'?'Pending verification':s[0].toUpperCase()+s.slice(1);
+const badge=t=>`<span class="badge b-${t.toLowerCase().split(' ')[0]}">${t}</span>`;
+const flag=c=>`<img class="flag" src="https://flagcdn.com/w40/${C[c][0]}.png" alt="${c} flag" onerror="this.style.visibility='hidden'">`;
+// Placeholder avatar (initials, generated locally – no real photos)
+function av(n){const h=[...n].reduce((a,c)=>a+c.charCodeAt(0),0)%5,col=['#7A1F3D','#F28C28','#2E7D4F','#9C6B00','#5B3A8E'][h],i=n.split(' ').map(w=>w[0]).join('');
+  return'data:image/svg+xml,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="${col}"/><text x="60" y="76" font-size="46" font-family="Georgia" fill="#fff" text-anchor="middle">${i}</text></svg>`)}
+const toast=t=>{const e=$('#toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2200)};
+const spark=(a,c)=>{const mx=Math.max(...a),mn=Math.min(...a),p=a.map((v,i)=>`${i*(100/(a.length-1))},${28-(v-mn)/(mx-mn||1)*24}`).join(' ');
+  return`<svg viewBox="0 0 100 30" width="100%" height="30" aria-hidden="true"><polyline points="${p}" fill="none" stroke="${c}" stroke-width="2.5"/></svg>`};
+ 
+/* ===== Sortable table renderer ===== */
+const sortState={};
+function table(id,cols,data){
+  const st=sortState[id]||(sortState[id]={}),el=document.getElementById(id);
+  if(st.k){data=[...data].sort((a,b)=>(a[st.k]>b[st.k]?1:-1)*st.d)}
+  el.innerHTML=`<table><thead><tr>${cols.map(c=>`<th data-k="${c.k}" tabindex="0">${c.l} <i class="fa-solid fa-sort"></i></th>`).join('')}</tr></thead><tbody>${
+   data.length?data.map(r=>`<tr>${cols.map(c=>`<td>${c.f?c.f(r):r[c.k]}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${cols.length}">No records match these filters.</td></tr>`}</tbody></table>`;
+  el.querySelectorAll('th').forEach(th=>{const go=()=>{st.d=st.k===th.dataset.k?-st.d:1;st.k=th.dataset.k;table(id,cols,data)};th.onclick=go;th.onkeydown=e=>e.key==='Enter'&&go()});
+}
+const payCols=[{k:'name',l:'Member'},{k:'id',l:'Payment ID'},{k:'date',l:'Date'},{k:'method',l:'Method'},{k:'amount',l:'Amount',f:r=>inr(r.amount)},{k:'status',l:'Status',f:r=>badge(r.status)}];
+const memCols=[{k:'name',l:'Member',f:r=>`<a href="#" data-open="${r.user}" style="color:var(--mar);font-weight:700">${r.name}</a>`},{k:'user',l:'Username'},{k:'email',l:'Email'},{k:'country',l:'Country'},{k:'phone',l:'Phone'},{k:'plan',l:'Plan',f:r=>badge(r.plan)},{k:'status',l:'Status',f:r=>badge(stLabel(r.status))}];
+ 
+/* ===== Dashboard ===== */
+function kpis(){
+  const act=M.filter(m=>m.status==='active'),fa=act.filter(m=>m.country!=='India');
+  const pend$=P.filter(p=>p.status==='Pending').reduce((s,p)=>s+p.amount,0)+110000;
+  const d=[['Total Payments Pending',inr(pend$),'fa-hourglass-half','--saf','-3.2%',0,pend],['Payments Completed Online',inr(842300),'fa-credit-card','--grn','+12.4%',1,done],
+   ['Active Members',act.length,'fa-user-check','--mar','+8.1%',1,[3,4,4,5,6,6,7,8,8,act.length]],['Active Foreign Accounts',fa.length,'fa-earth-asia','--gold','+5.6%',1,[1,2,2,3,3,4,5,5,6,fa.length]]];
+  $('#kpis').innerHTML=d.map(x=>`<div class="card kpi" style="--c:var(${x[3]})"><div class="ic"><i class="fa-solid ${x[2]}"></i></div><small>${x[0]}</small><div class="v">${x[1]}</div>
+   <small><span class="${x[5]?'up':'dn'}"><i class="fa-solid fa-arrow-${x[5]?'up':'down'}"></i> ${x[4]}</span> vs last month</small>${spark(x[6],`var(${x[3]})`)}</div>`).join('');
+}
+function filtered(){
+  const f={from:$('#fFrom').value,to:$('#fTo').value,c:$('#fCountry').value,s:$('#fStatus').value,p:$('#fPlan').value};
+  const ok=(x,d)=>(!f.from||d>=f.from)&&(!f.to||d<=f.to)&&(!f.c||x.country===f.c)&&(!f.s||(x.pstatus||x.status)===f.s)&&(!f.p||x.plan===f.p);
+  return{pay:P.filter(p=>ok(p,p.date)),mem:M.filter(m=>ok(m,m.joined))};
+}
+function renderDash(){
+  const{pay,mem}=filtered();
+  table('recentPay',payCols,[...pay].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8));
+  $('#joined').innerHTML=[...mem].sort((a,b)=>b.joined.localeCompare(a.joined)).slice(0,5).map(m=>
+   `<div class="person"><img src="${av(m.name)}" alt="Placeholder photo of ${m.name}"><div style="flex:1"><b>${m.name}</b>, ${m.age}<br><small>${m.city}, ${m.country} · ${m.plan}</small></div>${badge(stLabel(m.status))}</div>`).join('')||'<p>No members match these filters.</p>';
+}
+let ch1,ch2;
+function charts(){
+  if(typeof Chart==='undefined')return;
+  const dark=document.documentElement.dataset.theme==='dark',tc=dark?'#F6ECE6':'#2B1A1F';
+  Chart.defaults.color=tc;Chart.defaults.borderColor=dark?'#43303b':'#F0E2D2';
+  ch1&&ch1.destroy();ch2&&ch2.destroy();
+  ch1=new Chart($('#payChart'),{type:'bar',data:{labels:months,datasets:[{label:'Completed',data:done,backgroundColor:'#2E7D4F'},{label:'Pending',data:pend,backgroundColor:'#F28C28'}]},options:{responsive:true,maintainAspectRatio:false}});
+  const cnt={};M.filter(m=>m.status==='active').forEach(m=>cnt[m.country]=(cnt[m.country]||0)+1);
+  ch2=new Chart($('#cChart'),{type:'doughnut',data:{labels:Object.keys(cnt),datasets:[{data:Object.values(cnt),backgroundColor:['#7A1F3D','#F28C28','#C9A227','#2E7D4F','#9C4A6B','#E8B04A','#5B8C5A','#B5532A','#6C5B7B','#D98E73']}]},options:{responsive:true,maintainAspectRatio:false}});
+}
+ 
+/* ===== Other sections ===== */
+function memberCards(){
+  const q=$('#gsearch').value.trim().toLowerCase(),s=$('#mStatus').value,k=$('#mSort').value;
+  let l=M.filter(m=>(!s||m.status===s)&&(!q||[m.name,m.user,m.email,m.country,m.phone].some(v=>v.toLowerCase().includes(q))));
+  l.sort((a,b)=>k==='name'?a.name.localeCompare(b.name):k==='age'?a.age-b.age:b.pct-a.pct);
+  $('#mGrid').innerHTML=l.map(m=>`<div class="card pcard" tabindex="0" role="button" data-open="${m.user}" aria-label="Open profile of ${m.name}"><img src="${av(m.name)}" alt="Placeholder photo of ${m.name}">
+   <h3>${m.name}</h3><small>@${m.user} · ${m.age} yrs</small><br><small>${m.city}, ${m.country}</small><br>${badge(m.plan)} ${badge(stLabel(m.status))}
+   <div class="bar" title="Profile completion"><i style="width:${m.pct}%"></i></div><small>${m.pct}% complete</small></div>`).join('')||'<p>No members match your search.</p>';
+}
+function countries(){
+  $('#cGrid').innerHTML=Object.keys(C).map(c=>{const g=M.filter(m=>m.country===c);
+   return`<div class="card"><div class="cc">${flag(c)}<div><h3>${c}</h3><small>Calling code ${C[c][1]}</small></div></div>
+   <b>${g.filter(m=>m.status==='active').length}</b> active profile(s)<ul>${g.map(m=>`<li>${m.phone} <small>(${m.name})</small></li>`).join('')}</ul></div>`}).join('');
+}
+function openProfile(u){
+  const m=M.find(x=>x.user===u),cur=C[m.country][2],emp=m.emp==='Unemployed';
+  const f=[['Username','@'+m.user],['Gender',m.gender],['Email',m.email],['Phone',m.phone],['Date of birth',`${m.dob} (age ${m.age})`],['Birthplace',m.birth],['Current location',`${m.city}, ${m.country}`],
+   ['Mother tongue',m.tongue],['Mother',m.mother],['Father',m.father],['Siblings',m.sib],['Smoking',m.smoke],['Alcohol',m.alc],['Marital status',m.marital],['Education',m.edu],
+   ['Employment',m.emp],['Job title',m.job],['Company',m.company],['Work location',m.work],['Monthly salary',emp?'-':money(m.monthly,cur)],['Yearly salary',emp?'-':money(m.monthly*12,cur)],
+   ['Membership plan',m.plan],['Account status',stLabel(m.status)],['Profile completion',m.pct+'%'],['Joined',m.joined]];
+  $('#profileBox').innerHTML=`<div class="mh"><img src="${av(m.name)}" alt="Placeholder photo of ${m.name}"><div><h2>${m.name}</h2>${badge(stLabel(m.status))} ${badge(m.plan)}<p style="margin:6px 0 0">${m.about}</p></div></div>
+   <dl>${f.map(x=>`<div><dt>${x[0]}</dt><dd>${x[1]}</dd></div>`).join('')}</dl><p style="text-align:right"><button class="btn" id="closeP">Close</button></p>`;
+  show('#profileOv');$('#closeP').focus();$('#closeP').onclick=()=>hide('#profileOv');
+}
+const show=s=>$(s).classList.add('show'),hide=s=>$(s).classList.remove('show');
+ 
+/* ===== Navigation & events ===== */
+function go(id){
+  $$('.page').forEach(p=>p.classList.toggle('show',p.id===id));
+  $$('#nav button[data-sec]').forEach(b=>b.classList.toggle('active',b.dataset.sec===id));
+  $('#side').classList.remove('open');window.scrollTo(0,0);
+  if(id==='dashboard')charts();
+}
+$$('[data-sec]').forEach(b=>b.addEventListener('click',()=>{go(b.dataset.sec);$('#pm').classList.remove('open')}));
+$('#burger').onclick=()=>$('#side').classList.toggle('open');
+$('#pmBtn').onclick=()=>$('#pm').classList.toggle('open');
+$('#notifBtn').onclick=()=>toast('3 demo notifications: 2 pending verifications, 1 failed payment');
+$('#gsearch').addEventListener('input',()=>{go('members');memberCards()});
+['mStatus','mSort'].forEach(i=>$('#'+i).onchange=memberCards);
+['fFrom','fTo','fCountry','fStatus','fPlan'].forEach(i=>$('#'+i).onchange=renderDash);
+$('#fReset').onclick=()=>{['fFrom','fTo','fCountry','fStatus','fPlan'].forEach(i=>$('#'+i).value='');renderDash()};
+document.addEventListener('click',e=>{const o=e.target.closest('[data-open]');if(o){e.preventDefault();openProfile(o.dataset.open)}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$$('.ov').forEach(o=>o.classList.remove('show'));
+  if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.open)openProfile(e.target.dataset.open)});
+$$('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('show')}));
+['logoutBtn','pmLogout'].forEach(i=>$('#'+i).onclick=()=>{show('#logoutOv');$('#noOut').focus()});
+$('#noOut').onclick=()=>hide('#logoutOv');
+$('#yesOut').onclick=()=>{hide('#logoutOv');toast('Logged out (demo only – no real session)')};
+$$('.demoBtn').forEach(b=>b.onclick=()=>toast('Demo report generated'));
+$('#csvBtn').onclick=()=>{const h=['name','user','email','country','phone','plan','status'];
+  const csv=[h.join(',')].concat(M.map(m=>h.map(k=>`"${m[k]}"`).join(','))).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='demo-members.csv';a.click()};
+function setTheme(d){document.documentElement.dataset.theme=d?'dark':'light';$('#darkChk').checked=d;
+  $('#themeBtn').innerHTML=`<i class="fa-solid fa-${d?'sun':'moon'}"></i>`;charts()}
+$('#themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme!=='dark');
+$('#darkChk').onchange=e=>setTheme(e.target.checked);
+ 
+/* ===== Init ===== */
+$('#fCountry').innerHTML='<option value="">All</option>'+Object.keys(C).map(c=>`<option>${c}</option>`).join('');
+kpis();renderDash();memberCards();countries();
+table('allPay',payCols,P);
+table('actT',memCols,M.filter(m=>m.status==='active'));
+table('forT',memCols,M.filter(m=>m.country!=='India'));
+document.querySelector('#payChart').parentElement.style.height='360px';
+document.querySelector('#cChart').parentElement.style.height='360px';
+charts();
+</script>
+</body>
+</html>
