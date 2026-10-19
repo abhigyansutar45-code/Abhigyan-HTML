@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RoboLab 3D — Robotic Arm Simulator</title>
+<style>
+:root{--bg:#0b1020;--p:rgba(22,30,56,.78);--l:rgba(110,160,255,.2);--t:#e4eaff;--d:#8b97c6;--c:#35d8ff;--v:#8f7bff;--w:#ffb454;--e:#ff6b7d}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--t);font:13px/1.4 'Segoe UI',system-ui,sans-serif;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}
+header{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 12px;border-bottom:1px solid var(--l);background:#0d1330}
+h1{margin:0 6px 0 0;font-size:16px;letter-spacing:.08em}h1 b{color:var(--c)}.sp{flex:1}
+.badge{padding:2px 10px;border-radius:99px;border:1px solid var(--c);color:var(--c);font-size:12px}.badge.v{border-color:var(--v);color:var(--v)}.badge.err{border-color:var(--e);color:var(--e)}
+main{display:grid;grid-template-columns:290px 1fr 270px;min-height:0}
+aside{overflow:auto;padding:10px;background:var(--p);border-right:1px solid var(--l)}#rt{border-right:0;border-left:1px solid var(--l)}
+#vp{position:relative;min-width:0;min-height:0}#vp canvas{display:block}
+h3{margin:12px 0 5px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--c)}h3:first-child{margin-top:0}
+input,select,button{font:inherit;color:var(--t);background:#0a1030;border:1px solid var(--l);border-radius:6px;padding:4px 7px;min-width:0}
+button{cursor:pointer}button:hover{border-color:var(--c)}button.pri{background:linear-gradient(90deg,#1766ff,var(--v));border:0}
+:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.j{display:grid;grid-template-columns:1fr 62px 24px;gap:3px 5px;align-items:center;margin-bottom:5px}.j label{grid-column:1/4;color:var(--d)}.j input[type=range]{padding:0}
+.r{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0}.r>*{flex:1}.r input[type=number]{width:60px}
+pre{margin:0;font:12px/1.5 ui-monospace,Consolas,monospace;white-space:pre-wrap;color:#c8d2ff}
+footer{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:8px 12px;border-top:1px solid var(--l);background:#0d1330}
+#scrub{flex:1;min-width:140px;padding:0}#kfs{display:flex;gap:4px;flex-wrap:wrap;max-width:100%}
+.kf{padding:1px 6px;font-size:11px}#msg{position:absolute;left:10px;bottom:8px;right:10px;padding:5px 10px;border-radius:8px;background:rgba(10,16,40,.85);border:1px solid var(--l);pointer-events:none}
+#msg.warn{border-color:var(--w);color:var(--w)}#msg.bad{border-color:var(--e);color:var(--e)}
+dialog{background:#10183a;color:var(--t);border:1px solid var(--c);border-radius:12px;max-width:520px}
+.dim{color:var(--d)}
+@media(max-width:900px){body{overflow:auto;display:block}main{grid-template-columns:1fr}#vp{height:60vh}aside{border:0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<header><h1>ROBO<b>LAB</b> 3D</h1><input id="pname" value="Untitled project" size="14" aria-label="Project name">
+<span class="badge" id="status" role="status">Ready</span><span class="badge v" id="modeb">Mode: Manual</span><span class="sp"></span>
+<select id="mode" aria-label="Mode"><option value="Manual">Manual control</option><option value="Target">Target control</option><option value="Sequence">Programmed sequence</option></select>
+<button id="bSave">Save</button><button id="bLoad">Load</button><button id="bExpP">Export project</button><button id="bImpP">Import project</button><input type="file" id="file" accept=".json" hidden>
+<button id="bReset">Reset</button><button id="bSet">Settings</button><button id="bHelp">Help</button><button id="bTests">Run tests</button></header>
+<main>
+<aside id="lf">
+<h3>Joints (degrees)</h3><div id="jc"></div>
+<h3>Gripper</h3><div class="r"><input id="gs" type="range" min="0" max="80" value="40" aria-label="Gripper opening mm"><button id="bOpen">Open</button><button id="bClose">Close</button></div>
+<div class="r"><label for="gspd" class="dim">Speed mm/s</label><input id="gspd" type="number" value="120" min="5" max="500"></div>
+<h3>Inverse kinematics (meters)</h3>
+<div class="r"><input id="tx" type="number" step="0.05" value="0.4" aria-label="Target X"><input id="ty" type="number" step="0.05" value="0.3" aria-label="Target Y"><input id="tz" type="number" step="0.05" value="0.2" aria-label="Target Z"></div>
+<div class="r"><button id="bGo" class="pri">Move to target</button><button id="bCancel">Cancel</button></div>
+<div class="dim">Position IK (damped least squares). Orientation targets are not supported.</div>
+<h3>Objects</h3>
+<div class="r"><button id="aCube">+Cube</button><button id="aSph">+Sphere</button><button id="aCyl">+Cyl</button></div>
+<div class="r"><input id="ocol" type="color" value="#ff8a3d" aria-label="Object color"><input id="ox" type="number" step="0.05" aria-label="Object X"><input id="oz" type="number" step="0.05" aria-label="Object Z"></div>
+<div class="r"><button id="oSet">Set X/Z</button><button id="oRst">Reset pos</button><button id="oDel">Delete</button></div>
+<div class="r"><button id="oGo">Go to object</button><button id="oPick">Pick</button><button id="oRel">Release</button></div>
+<h3>Camera / view</h3>
+<div class="r"><button data-cam="front">Front</button><button data-cam="side">Side</button><button data-cam="top">Top</button><button data-cam="iso">Iso</button></div>
+<div class="r"><label><input type="checkbox" id="tgG" checked>Grid</label><label><input type="checkbox" id="tgA" checked>Axes</label><label><input type="checkbox" id="tgT" checked>Trail</label><label><input type="checkbox" id="tgM" checked>Target</label></div>
+</aside>
+<div id="vp"><div id="msg">Ready.</div></div>
+<aside id="rt"><h3>Telemetry (live)</h3><pre id="tel"></pre></aside>
+</main>
+<footer><button id="bRec">● Record</button><button id="bKey">+ Keyframe</button><button id="bPlay" class="pri">▶ Play</button><button id="bPause">❚❚</button><button id="bStopP">■</button>
+<input id="scrub" type="range" min="0" max="1" step="0.01" value="0" aria-label="Timeline"><label class="dim">Speed <input id="spd" type="number" value="1" min="0.1" max="4" step="0.1" style="width:56px"></label>
+<button id="bExpS">Export seq</button><button id="bImpS">Import seq</button><button id="bClrS">Clear</button><input type="file" id="fileS" accept=".json" hidden><div id="kfs"></div></footer>
+<dialog id="dSet"><h3>Settings</h3><div id="setf"></div><div class="r"><button id="sApply" class="pri">Apply</button><button id="sDef">Restore defaults</button><button id="sClose">Close</button></div></dialog>
+<dialog id="dHelp"><h3>Keyboard shortcuts</h3><pre>Space  play / pause sequence
+R      reset robot
+Home   reset camera
+Esc    cancel target move / close dialog
+Click object in viewport to select it
+ 
+Coordinates: meters. Y up, X right, Z toward viewer (right-handed), origin at base center on floor.
+Joints: J1 about Y, J2 about Z, J3 about Z, J4 about Y, J5 about Z, J6 about Y. Zero pose = arm straight up.
+This is a virtual simulation; it does not control real hardware.</pre><div class="r"><button id="hClose">Close</button></div></dialog>
+<dialog id="dTest"><h3>Test results</h3><pre id="tres"></pre><div class="r"><button id="tClose">Close</button></div></dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const D=Math.PI/180,$=id=>document.getElementById(id),clamp=(v,a,b)=>Math.min(b,Math.max(a,v)),sm=u=>u*u*(3-2*u),now=()=>performance.now()/1000;
+const NAMES=['J1 Base rotation','J2 Shoulder','J3 Elbow','J4 Wrist rotation','J5 Wrist pitch','J6 Wrist roll'],AX=['Y','Z','Z','Y','Z','Y'];
+const DEF={L:{h0:.2,l1:.5,l2:.45,l3:.15,lt:.12},lim:[[-170,170],[-90,90],[-135,135],[-170,170],[-110,110],[-180,180]],cfg:{dur:1.5,iter:300,tol:.002,unit:'m'},gmax:.08};
+const S={q:[0,0,0,0,0,0],grip:.04,gt:.04,L:{...DEF.L},lim:DEF.lim.map(a=>[...a]),cfg:{...DEF.cfg},target:null,objs:[],sel:null,held:null,kf:[],motion:null,play:{on:false,t:0},rec:{on:false,t0:0,last:0},ik:'—',err:null,jsel:0};
+const pre=L=>[L.h0,0,L.l1,L.l2,0,L.l3],UF={m:1,cm:100,mm:1000};
+const msg=(t,k='')=>{const e=$('msg');e.textContent=t;e.className=k},setSt=(t,c='')=>{$('status').textContent=t;$('status').className='badge '+c};
+/* ---------- Forward kinematics: T = Ty(h0)Ry(q1)Rz(q2)Ty(l1)Rz(q3)Ty(l2)Ry(q4)Rz(q5)Ty(l3)Ry(q6)Ty(lt) ---------- */
+const _t=new THREE.Matrix4();
+function fk(q,L=S.L){const m=new THREE.Matrix4(),p=pre(L);for(let i=0;i<6;i++){m.multiply(_t.makeTranslation(0,p[i],0));m.multiply(_t['makeRotation'+AX[i]](q[i]*D))}return m.multiply(_t.makeTranslation(0,L.lt,0))}
+const ee=(q,L)=>new THREE.Vector3().setFromMatrixPosition(fk(q,L));
+const reach=()=>S.L.l1+S.L.l2+S.L.l3+S.L.lt;
+/* ---------- Scene ---------- */
+const vp=$('vp'),scene=new THREE.Scene();scene.background=new THREE.Color(0x0b1020);
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;vp.prepend(renderer.domElement);
+const cam=new THREE.PerspectiveCamera(45,1,.01,50),ctl=new THREE.OrbitControls(cam,renderer.domElement);ctl.enableDamping=true;
+const CAMS={front:[0,.7,2.2],side:[2.2,.7,0],top:[0,2.6,.01],iso:[1.5,1.3,1.5]};
+function setCam(k){cam.position.set(...CAMS[k]);ctl.target.set(0,.5,0);ctl.update()}setCam('iso');
+scene.add(new THREE.HemisphereLight(0xbcd0ff,0x223,.7));const dl=new THREE.DirectionalLight(0xffffff,.9);dl.position.set(2,3,2);dl.castShadow=true;dl.shadow.mapSize.set(1024,1024);Object.assign(dl.shadow.camera,{left:-2,right:2,top:2,bottom:-2});scene.add(dl);
+const grid=new THREE.GridHelper(4,40,0x35d8ff,0x24305a),axes=new THREE.AxesHelper(.6),floor=new THREE.Mesh(new THREE.PlaneGeometry(4,4),new THREE.ShadowMaterial({opacity:.35}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(grid,axes,floor);
+const tmark=new THREE.Mesh(new THREE.SphereGeometry(.025,16,12),new THREE.MeshBasicMaterial({color:0xffb454,wireframe:true}));tmark.visible=false;scene.add(tmark);
+const TN=600,tpos=new Float32Array(TN*3),tgeo=new THREE.BufferGeometry();tgeo.setAttribute('position',new THREE.BufferAttribute(tpos,3));tgeo.setDrawRange(0,0);const trail=new THREE.Line(tgeo,new THREE.LineBasicMaterial({color:0x8f7bff}));trail.frustumCulled=false;scene.add(trail);let tn=0;
+const M={steel:new THREE.MeshStandardMaterial({color:0xaab4c8,metalness:.8,roughness:.35}),dark:new THREE.MeshStandardMaterial({color:0x2a3350,metalness:.6,roughness:.5}),acc:new THREE.MeshStandardMaterial({color:0x1fb7e0,metalness:.5,roughness:.4}),bolt:new THREE.MeshStandardMaterial({color:0x667,metalness:.9,roughness:.3})};
+let rob=null,G=[],tool=null,fl=null,fr=null;
+function mk(geo,mat,y=0,par){const m=new THREE.Mesh(geo,mat);m.position.y=y;m.castShadow=true;par.add(m);return m}
+function build(){if(rob){rob.traverse(o=>o.geometry&&o.geometry.dispose());scene.remove(rob)}
+ rob=new THREE.Group();scene.add(rob);const L=S.L,p=pre(L);G=[];
+ mk(new THREE.CylinderGeometry(.24,.26,.03,40),M.dark,.015,rob);mk(new THREE.CylinderGeometry(.14,.17,L.h0-.03,32),M.steel,.03+(L.h0-.03)/2,rob);
+ for(let i=0;i<4;i++){const b=mk(new THREE.CylinderGeometry(.012,.012,.02,8),M.bolt,.04,rob);b.position.x=Math.cos(i*1.571+.78)*.2;b.position.z=Math.sin(i*1.571+.78)*.2}
+ for(let i=0;i<6;i++){const g=new THREE.Group();g.position.y=p[i];(i?G[i-1]:rob).add(g);G.push(g);const r=[.1,.09,.075,.055,.05,.045][i];
+  const h=mk(new THREE.SphereGeometry(r,24,16),i%2?M.acc:M.dark,0,g);if(i%2===0){const s=mk(new THREE.TorusGeometry(r,.008,8,32),M.acc,0,g);s.rotation.x=Math.PI/2}}
+ G[0].position.y=L.h0;mk(new THREE.CylinderGeometry(.065,.075,L.l1,24),M.steel,L.l1/2,G[1]);mk(new THREE.CylinderGeometry(.05,.06,L.l2,24),M.steel,L.l2/2,G[2]);mk(new THREE.CylinderGeometry(.035,.04,L.l3,20),M.dark,L.l3/2,G[4]);
+ mk(new THREE.BoxGeometry(.1,.02,.06),M.dark,L.lt-.085,G[5]);tool=new THREE.Object3D();tool.position.y=L.lt;G[5].add(tool);
+ const fg=new THREE.BoxGeometry(.015,.08,.04);fl=mk(fg,M.acc,L.lt-.04,G[5]);fr=mk(fg.clone(),M.acc,L.lt-.04,G[5]);applyPose()}
+function applyPose(){G.forEach((g,i)=>{g.rotation.set(0,0,0);g.rotation[AX[i].toLowerCase()]=S.q[i]*D});const x=S.grip/2+.0075;fl.position.x=-x;fr.position.x=x}
+/* ---------- State ---------- */
+function setJoint(i,deg){const v=Number(deg);if(!Number.isFinite(v)){msg('Joint value must be a finite number','warn');return false}
+ const c=clamp(v,S.lim[i][0],S.lim[i][1]);if(c!==v)msg(`${NAMES[i]} limited to [${S.lim[i]}]°`,'warn');S.q[i]=c;applyPose();return true}
+function setPose(q,g){q.forEach((v,i)=>{S.q[i]=clamp(Number.isFinite(v)?v:S.q[i],S.lim[i][0],S.lim[i][1])});if(g!==undefined){S.grip=S.gt=clamp(g,0,DEF.gmax)}applyPose()}
+function resetRobot(){S.motion=null;S.play.on=false;setPose([0,0,0,0,0,0],.04);S.ik='—';S.err=null;tn=0;tgeo.setDrawRange(0,0);setSt('Ready')}
+function buildJointUI(){const c=$('jc');c.innerHTML='';NAMES.forEach((n,i)=>{const d=document.createElement('div');d.className='j';d.innerHTML=`<label for="s${i}">${n} <span class="dim">[${S.lim[i][0]}…${S.lim[i][1]}]°</span></label><input type="range" id="s${i}" min="${S.lim[i][0]}" max="${S.lim[i][1]}" step="0.1"><input type="number" id="n${i}" step="0.5" aria-label="${n} degrees"><button id="r${i}" title="Reset joint" aria-label="Reset ${n}">↺</button>`;c.appendChild(d);
+ const s=$('s'+i),n2=$('n'+i);s.oninput=()=>{S.jsel=i;S.motion=null;setJoint(i,s.value)};n2.onchange=()=>{S.jsel=i;S.motion=null;if(!setJoint(i,n2.value))n2.value=S.q[i].toFixed(1)};$('r'+i).onclick=()=>{S.motion=null;setJoint(i,0)}})}
+function syncUI(){S.q.forEach((v,i)=>{const s=$('s'+i),n=$('n'+i);if(document.activeElement!==s)s.value=v;if(document.activeElement!==n)n.value=v.toFixed(1)});if(document.activeElement!==$('gs'))$('gs').value=S.grip*1000}
+/* ---------- Inverse kinematics: damped least squares on position error ---------- */
+function solve3(A,b){const m=A.map((r,i)=>[...r,b[i]]);for(let c=0;c<3;c++){let p=c;for(let r=c+1;r<3;r++)if(Math.abs(m[r][c])>Math.abs(m[p][c]))p=r;if(Math.abs(m[p][c])<1e-12)return null;[m[c],m[p]]=[m[p],m[c]];for(let r=0;r<3;r++)if(r!==c){const f=m[r][c]/m[c][c];for(let k=c;k<4;k++)m[r][k]-=f*m[c][k]}}return m.map((r,i)=>r[3]/r[i])}
+function ik(tg,start,iter=S.cfg.iter,tol=S.cfg.tol){let q=start.slice(),lam=.05,it=0,err=Infinity;
+ for(;it<iter;it++){const p=ee(q),e=[tg.x-p.x,tg.y-p.y,tg.z-p.z];err=Math.hypot(...e);if(!Number.isFinite(err))return{q:start,err:NaN,it,ok:false};if(err<tol)break;
+  const J=[[],[],[]];for(let j=0;j<6;j++){const q2=q.slice();q2[j]+=.01;const p2=ee(q2);J[0][j]=(p2.x-p.x)/(.01*D);J[1][j]=(p2.y-p.y)/(.01*D);J[2][j]=(p2.z-p.z)/(.01*D)}
+  const A=[0,1,2].map(a=>[0,1,2].map(b=>J[a].reduce((s,v,k)=>s+v*J[b][k],0)+(a===b?lam*lam*1e4:0)));const y=solve3(A,e);if(!y)break;
+  let dq=q.map((_,j)=>J[0][j]*y[0]+J[1][j]*y[1]+J[2][j]*y[2]);const mx=Math.max(...dq.map(Math.abs));if(mx>5)dq=dq.map(v=>v*5/mx); /* limit step to 5° per iteration */
+  q=q.map((v,j)=>clamp(v+dq[j],S.lim[j][0],S.lim[j][1]))}
+ const e2=ee(q).distanceTo(tg);return{q,err:e2,it,ok:e2<tol}}
+function moveToTarget(x,y,z){const v=[x,y,z].map(Number);if(v.some(a=>!Number.isFinite(a))){S.ik='invalid input';msg('Target must be numeric','bad');return false}
+ const tg=new THREE.Vector3(...v);S.target=tg;tmark.position.copy(tg);const d=tg.distanceTo(new THREE.Vector3(0,S.L.h0,0));
+ if(d>reach()||tg.y<0){S.ik='unreachable (outside conservative workspace)';S.err=Math.max(0,d-reach());msg('Target is outside the reachable workspace — not moved','warn');return false}
+ const r=ik(tg,S.q);S.err=r.err;
+ if(r.ok)S.ik=`reached (${r.it} iterations)`;else if(r.err<.01)S.ik=`approximately reached (${(r.err*1000).toFixed(1)} mm)`;else{S.ik='not converged — not moved';msg('IK did not converge (joint limits/singularity?)','warn');return false}
+ startMotion(r.q,S.gt);msg('Moving to target: '+S.ik);return true}
+/* ---------- Motion / sequences ---------- */
+function startMotion(q,g){S.play.on=false;S.motion={from:S.q.slice(),to:q.map((v,i)=>clamp(v,S.lim[i][0],S.lim[i][1])),t0:now(),dur:Math.max(.05,S.cfg.dur/Math.max(.1,+$('spd').value||1))};setSt('Running')}
+function stepMotion(){const m=S.motion,u=Math.min(1,(now()-m.t0)/m.dur),e=sm(u);S.q=m.from.map((a,i)=>clamp(a+(m.to[i]-a)*e,S.lim[i][0],S.lim[i][1]));applyPose();if(u>=1){S.motion=null;setSt('Ready')}}
+const total=()=>S.kf.length?S.kf[S.kf.length-1].t:0;
+function poseAt(t){const k=S.kf;if(!k.length)return null;if(t<=k[0].t)return{q:k[0].q,g:k[0].g};if(t>=k[k.length-1].t){const l=k[k.length-1];return{q:l.q,g:l.g}}
+ let i=0;while(k[i+1].t<t)i++;const a=k[i],b=k[i+1],e=sm((t-a.t)/(b.t-a.t||1));return{q:a.q.map((v,j)=>v+(b.q[j]-v)*e),g:a.g+(b.g-a.g)*e}}
+function seek(t){const p=poseAt(t);if(!p)return;setPose(p.q,p.g);S.play.t=t;$('scrub').value=t}
+function addKey(){const t=S.rec.on?now()-S.rec.t0:(S.kf.length?total()+S.cfg.dur:0);S.kf.push({t:+t.toFixed(3),q:S.q.slice(),g:S.grip});S.kf.sort((a,b)=>a.t-b.t);drawKf()}
+function drawKf(){$('scrub').max=Math.max(.01,total());const c=$('kfs');c.innerHTML='';S.kf.forEach((k,i)=>{const b=document.createElement('button');b.className='kf';b.textContent=`${k.t.toFixed(1)}s ✕`;b.title='Click: go to · ✕ deletes (Shift+click)';b.onclick=e=>{if(e.shiftKey){S.kf.splice(i,1);drawKf()}else seek(k.t)};c.appendChild(b)})}
+function play(){if(S.kf.length<2)return msg('Need at least 2 keyframes to play','warn');S.motion=null;if(S.play.t>=total())S.play.t=0;S.play.on=true;setSt('Running')}
+/* ---------- Objects ---------- */
+function addObj(k,pos,color){const geo=k==='sph'?new THREE.SphereGeometry(.05,24,16):k==='cyl'?new THREE.CylinderGeometry(.04,.04,.1,24):new THREE.BoxGeometry(.08,.08,.08),h=k==='sph'?.05:k==='cyl'?.05:.04;
+ const m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:color||$('ocol').value,roughness:.5}));m.castShadow=true;m.userData={k,h,home:null};const n=S.objs.length;
+ m.position.set(...(pos||[.35+.1*(n%4),h,.25+.1*Math.floor(n/4)]));m.userData.home=m.position.toArray();scene.add(m);S.objs.push(m);select(m);return m}
+function select(o){S.sel=o;S.objs.forEach(x=>x.material.emissive.setHex(x===o?0x224466:0));if(o&&!o.parent.isScene)return;if(o){$('ox').value=o.position.x.toFixed(2);$('oz').value=o.position.z.toFixed(2);$('ocol').value='#'+o.material.color.getHexString()}}
+function tip(){return tool.getWorldPosition(new THREE.Vector3())}
+function pick(){if(S.held)return msg('Gripper already holds an object','warn');const o=S.sel;if(!o)return msg('Select an object first','warn');
+ if(S.grip>.06)return msg('Close the gripper partly before picking','warn');scene.updateMatrixWorld(true);if(o.getWorldPosition(new THREE.Vector3()).distanceTo(tip())>.1)return msg('Object is too far from the gripper (>10 cm)','warn');
+ tool.attach(o);S.held=o;msg('Object attached (kinematic attachment, no contact physics)')}
+function release(){if(!S.held)return msg('Nothing to release','warn');scene.attach(S.held);S.held=null;msg('Object released at current location')}
+function delObj(){const o=S.sel;if(!o)return;if(S.held===o)release();scene.remove(o);o.geometry.dispose();o.material.dispose();S.objs=S.objs.filter(x=>x!==o);S.sel=null}
+let dn=null;renderer.domElement.addEventListener('pointerdown',e=>dn=[e.clientX,e.clientY]);
+renderer.domElement.addEventListener('pointerup',e=>{if(!dn||Math.hypot(e.clientX-dn[0],e.clientY-dn[1])>4)return;const r=renderer.domElement.getBoundingClientRect(),rc=new THREE.Raycaster();rc.setFromCamera(new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1),cam);const h=rc.intersectObjects(S.objs);select(h.length?h[0].object:null)});
+/* ---------- Persistence ---------- */
+const objData=()=>S.objs.map(o=>{scene.updateMatrixWorld(true);const p=o.getWorldPosition(new THREE.Vector3());return{k:o.userData.k,c:'#'+o.material.color.getHexString(),p:p.toArray()}});
+const ser=()=>({format:'robolab3d-v1',name:$('pname').value,L:S.L,lim:S.lim,cfg:S.cfg,q:S.q,grip:S.grip,objs:objData(),kf:S.kf});
+const isN=v=>typeof v==='number'&&Number.isFinite(v),isA=(a,n)=>Array.isArray(a)&&a.length===n&&a.every(isN);
+function validate(p){if(!p||p.format!=='robolab3d-v1')return'Not a RoboLab 3D project';if(!p.L||!['h0','l1','l2','l3','lt'].every(k=>isN(p.L[k])&&p.L[k]>=.05&&p.L[k]<=2))return'Invalid link lengths';
+ if(!Array.isArray(p.lim)||p.lim.length!==6||p.lim.some(l=>!isA(l,2)||l[0]>=l[1]))return'Invalid joint limits';if(!isA(p.q,6))return'Invalid joint angles';if(!isN(p.grip))return'Invalid gripper';
+ if(!p.cfg||!isN(p.cfg.dur)||!isN(p.cfg.iter)||!isN(p.cfg.tol)||!UF[p.cfg.unit])return'Invalid settings';
+ if(!Array.isArray(p.objs)||p.objs.some(o=>!['cube','sph','cyl'].includes(o.k)&&o.k!=='cube'||!isA(o.p,3)||typeof o.c!=='string'||!/^#[0-9a-f]{6}$/i.test(o.c)))return'Invalid objects';
+ if(!Array.isArray(p.kf)||p.kf.some(k=>!isN(k.t)||!isA(k.q,6)||!isN(k.g)))return'Invalid keyframes';return null}
+function applyProject(p){const e=validate(p);if(e)throw Error(e);if(S.held)release();S.objs.slice().forEach(o=>{S.sel=o;delObj()});
+ S.L={...p.L};S.lim=p.lim.map(a=>[...a]);S.cfg={...p.cfg};$('pname').value=String(p.name||'Untitled').slice(0,40);buildJointUI();build();setPose(p.q,p.grip);p.objs.forEach(o=>addObj(o.k,o.p,o.c));S.sel=null;S.kf=p.kf.map(k=>({t:k.t,q:[...k.q],g:k.g})).sort((a,b)=>a.t-b.t);drawKf()}
+function dl(n,t){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'application/json'}));a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function readFile(inp,fn){inp.onchange=()=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{fn(JSON.parse(r.result))}catch(e){msg('Import failed: '+e.message,'bad');setSt('Error','err')}};r.readAsText(f);inp.value=''}}
+/* ---------- Settings ---------- */
+const SF=[['h0','Base height (m)'],['l1','Upper arm (m)'],['l2','Forearm (m)'],['l3','Wrist link (m)'],['lt','Tool length (m)'],['dur','Move duration (s)'],['iter','IK iterations'],['tol','IK tolerance (m)']];
+function openSet(){$('setf').innerHTML=SF.map(([k,n])=>`<div class="r"><label for="f_${k}" style="flex:2">${n}</label><input id="f_${k}" type="number" step="any" value="${S.L[k]??S.cfg[k]}"></div>`).join('')+`<div class="r"><label for="f_u" style="flex:2">Display units</label><select id="f_u">${Object.keys(UF).map(u=>`<option ${u===S.cfg.unit?'selected':''}>${u}</option>`).join('')}</select></div>`+S.lim.map((l,i)=>`<div class="r"><label style="flex:2">${NAMES[i]} limits °</label><input id="lo${i}" type="number" value="${l[0]}"><input id="hi${i}" type="number" value="${l[1]}"></div>`).join('');$('dSet').showModal()}
+function applySet(){try{const g=k=>Number($('f_'+k).value),L={};['h0','l1','l2','l3','lt'].forEach(k=>{const v=g(k);if(!(v>=.08&&v<=2))throw Error('Link lengths must be 0.08–2 m');L[k]=v});
+ const dur=g('dur'),it=g('iter'),tol=g('tol');if(!(dur>=.1&&dur<=30))throw Error('Duration 0.1–30 s');if(!(it>=1&&it<=5000))throw Error('IK iterations 1–5000');if(!(tol>0&&tol<=.1))throw Error('IK tolerance (0, 0.1] m');
+ const lim=S.lim.map((_,i)=>{const a=Number($('lo'+i).value),b=Number($('hi'+i).value);if(!(a<b&&a>=-360&&b<=360))throw Error('Invalid limits for J'+(i+1));return[a,b]});
+ S.L=L;S.lim=lim;S.cfg={dur,iter:Math.floor(it),tol,unit:$('f_u').value};buildJointUI();build();setPose(S.q);$('dSet').close();msg('Settings applied; kinematic model rebuilt','')}catch(e){msg(e.message,'bad')}}
+/* ---------- Telemetry ---------- */
+function telem(fps){const m=fk(S.q),p=new THREE.Vector3().setFromMatrixPosition(m),eu=new THREE.Euler().setFromRotationMatrix(m,'XYZ'),f=UF[S.cfg.unit],u=S.cfg.unit,t=S.target;
+ const ws=Math.hypot(p.x,p.y-S.L.h0,p.z)>reach()+1e-6||S.q.some((v,i)=>v<S.lim[i][0]-1e-6||v>S.lim[i][1]+1e-6);
+ $('tel').textContent=`JOINTS (deg)\n${S.q.map((v,i)=>`J${i+1} ${v.toFixed(2).padStart(8)}`).join('\n')}\n\nEND EFFECTOR (${u})\nX ${(p.x*f).toFixed(2)}  Y ${(p.y*f).toFixed(2)}  Z ${(p.z*f).toFixed(2)}\nRoll ${(eu.x/D).toFixed(1)}° Pitch ${(eu.y/D).toFixed(1)}° Yaw ${(eu.z/D).toFixed(1)}°\n\nTARGET\n${t?`${(t.x*f).toFixed(2)}, ${(t.y*f).toFixed(2)}, ${(t.z*f).toFixed(2)} ${u}\nDistance ${(p.distanceTo(t)*f).toFixed(2)} ${u}`:'none'}\nIK: ${S.ik}\n\nMOTION: ${S.motion?'moving':S.play.on?'playing sequence':S.rec.on?'recording':'idle'}\nGRIPPER: ${(S.grip*1000).toFixed(0)} mm ${S.held?'(holding object)':''}\nObjects ${S.objs.length} · Keyframes ${S.kf.length}\nFPS ${fps.toFixed(0)}\n\nMODEL\nReach ≈ ${(reach()*f).toFixed(1)} ${u} (sum of links, simulated)\nLinks h0 ${S.L.h0} l1 ${S.L.l1} l2 ${S.L.l2} l3 ${S.L.l3} lt ${S.L.lt} m\nWorkspace/limit check: ${ws?'WARNING':'ok'}`}
+/* ---------- Main loop ---------- */
+let last=now(),fps=60,tel=0,lastQ='';
+function frame(){requestAnimationFrame(frame);const t=now(),dt=Math.min(.1,t-last);last=t;fps+=(1/Math.max(dt,1e-3)-fps)*.05;
+ if(S.motion)stepMotion();
+ if(S.play.on){S.play.t+=dt*Math.max(.1,+$('spd').value||1);const p=poseAt(S.play.t);setPose(p.q,p.g);$('scrub').value=S.play.t;if(S.play.t>=total()){S.play.on=false;setSt('Ready')}}
+ if(Math.abs(S.grip-S.gt)>1e-6){const sp=(Number($('gspd').value)||120)/1000*dt;S.grip+=clamp(S.gt-S.grip,-sp,sp);applyPose()}
+ if(S.rec.on&&t-S.rec.last>=.2&&S.q.join()!==lastQ){S.rec.last=t;lastQ=S.q.join();addKey()}
+ const p=tip();if(!tn||Math.hypot(tpos[3*(tn-1)]-p.x,tpos[3*(tn-1)+1]-p.y,tpos[3*(tn-1)+2]-p.z)>.005){if(tn>=TN){tpos.copyWithin(0,3);tn=TN-1}tpos.set([p.x,p.y,p.z],3*tn++);tgeo.attributes.position.needsUpdate=true;tgeo.setDrawRange(0,tn)}
+ if(t-tel>.1){tel=t;telem(fps);syncUI()}
+ ctl.update();renderer.render(scene,cam)}
+function resize(){const w=vp.clientWidth,h=vp.clientHeight||400;renderer.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
+/* ---------- Wiring ---------- */
+$('mode').onchange=()=>$('modeb').textContent='Mode: '+$('mode').value;
+$('gs').oninput=()=>S.gt=clamp($('gs').value/1000,0,DEF.gmax);$('bOpen').onclick=()=>S.gt=DEF.gmax;$('bClose').onclick=()=>S.gt=0;
+$('bGo').onclick=()=>moveToTarget($('tx').value,$('ty').value,$('tz').value);$('bCancel').onclick=()=>{S.motion=null;S.play.on=false;setSt('Ready');msg('Movement cancelled')};
+$('aCube').onclick=()=>addObj('cube');$('aSph').onclick=()=>addObj('sph');$('aCyl').onclick=()=>addObj('cyl');
+$('ocol').oninput=()=>S.sel&&S.sel.material.color.set($('ocol').value);
+$('oSet').onclick=()=>{const o=S.sel;if(!o)return msg('Select an object','warn');if(S.held===o)return msg('Release it first','warn');const x=Number($('ox').value),z=Number($('oz').value);if(!isN(x)||!isN(z))return msg('Enter numeric X/Z','bad');o.position.set(x,o.userData.h,z)};
+$('oRst').onclick=()=>{const o=S.sel;if(!o)return;if(S.held===o)release();o.position.set(...o.userData.home);select(o)};$('oDel').onclick=delObj;
+$('oGo').onclick=()=>{const o=S.sel;if(!o)return msg('Select an object','warn');const p=o.getWorldPosition(new THREE.Vector3());$('tx').value=p.x.toFixed(3);$('ty').value=p.y.toFixed(3);$('tz').value=p.z.toFixed(3);moveToTarget(p.x,p.y,p.z)};
+$('oPick').onclick=pick;$('oRel').onclick=release;
+document.querySelectorAll('[data-cam]').forEach(b=>b.onclick=()=>setCam(b.dataset.cam));
+$('tgG').onchange=()=>grid.visible=$('tgG').checked;$('tgA').onchange=()=>axes.visible=$('tgA').checked;$('tgT').onchange=()=>trail.visible=$('tgT').checked;$('tgM').onchange=()=>tmark.visible=$('tgM').checked&&!!S.target;
+$('bRec').onclick=()=>{S.rec.on=!S.rec.on;$('bRec').textContent=S.rec.on?'■ Stop rec':'● Record';if(S.rec.on){S.kf=[];S.rec.t0=now();S.rec.last=0;lastQ='';addKey();setSt('Recording','err')}else{setSt('Ready');drawKf()}};
+$('bKey').onclick=addKey;$('bPlay').onclick=play;$('bPause').onclick=()=>{S.play.on=false;S.motion&&(S.motion=null);setSt('Paused')};$('bStopP').onclick=()=>{S.play.on=false;seek(0);setSt('Ready')};
+$('scrub').oninput=()=>{S.play.on=false;seek(+$('scrub').value)};
+$('bClrS').onclick=()=>{S.kf=[];S.play.t=0;drawKf()};$('bExpS').onclick=()=>dl('sequence.json',JSON.stringify({format:'robolab3d-seq-v1',kf:S.kf},null,1));
+$('bImpS').onclick=()=>$('fileS').click();readFile($('fileS'),o=>{if(!o||o.format!=='robolab3d-seq-v1'||!Array.isArray(o.kf)||o.kf.some(k=>!isN(k.t)||!isA(k.q,6)||!isN(k.g)))throw Error('Not a valid sequence file');S.kf=o.kf.sort((a,b)=>a.t-b.t);drawKf();msg('Sequence imported')});
+$('bSave').onclick=()=>{try{localStorage.setItem('robolab3d',JSON.stringify(ser()));msg('Saved locally in this browser')}catch(e){msg('Local save failed: '+e.message,'bad')}};
+$('bLoad').onclick=()=>{try{const s=localStorage.getItem('robolab3d');if(!s)return msg('No local save found','warn');applyProject(JSON.parse(s));msg('Loaded local project')}catch(e){msg('Load failed: '+e.message,'bad')}};
+$('bExpP').onclick=()=>dl('robolab-project.json',JSON.stringify(ser(),null,1));$('bImpP').onclick=()=>$('file').click();readFile($('file'),p=>{applyProject(p);msg('Project imported')});
+$('bReset').onclick=()=>{resetRobot();msg('Robot reset')};$('bSet').onclick=openSet;$('sApply').onclick=applySet;$('sClose').onclick=()=>$('dSet').close();
+$('sDef').onclick=()=>{S.L={...DEF.L};S.lim=DEF.lim.map(a=>[...a]);S.cfg={...DEF.cfg};buildJointUI();build();setPose(S.q);openSet()};
+$('bHelp').onclick=()=>$('dHelp').showModal();$('hClose').onclick=()=>$('dHelp').close();$('tClose').onclick=()=>$('dTest').close();
+document.addEventListener('keydown',e=>{if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)||document.querySelector('dialog[open]')&&e.key!=='Escape')return;
+ if(e.key===' '){e.preventDefault();S.play.on?$('bPause').click():play()}else if(e.key==='r'||e.key==='R')$('bReset').click();else if(e.key==='Home')setCam('iso');else if(e.key==='Escape')$('bCancel').click()});
+addEventListener('resize',resize);
+/* ---------- In-app tests (executed when you click "Run tests") ---------- */
+function runTests(){const R=[],near=(a,b,e=1e-6)=>Math.abs(a-b)<e,t=(n,f)=>{try{const v=f();R.push((v===true?'PASS ':'FAIL ')+n+(v===true?'':' — '+v))}catch(x){R.push('FAIL '+n+' — '+x.message)}};
+ const bak=JSON.stringify(ser());
+ t('Zero-pose FK = (0, h0+l1+l2+l3+lt, 0)',()=>{const p=ee([0,0,0,0,0,0]);return near(p.x,0)&&near(p.z,0)&&near(p.y,S.L.h0+reach())});
+ t('Known pose J1=90,J2=90 → tip at (0,h0,reach) along +Z',()=>{const p=ee([90,90,0,0,0,0]);return near(p.x,0)&&near(p.y,S.L.h0)&&near(p.z,reach())||p.toArray().join()});
+ t('Rendered end effector matches FK',()=>{setPose([20,-30,50,40,-20,70]);scene.updateMatrixWorld(true);return tip().distanceTo(ee(S.q))<1e-6});
+ t('Joint limit enforcement',()=>{setJoint(1,500);return S.q[1]===S.lim[1][1]});
+ t('Invalid input rejected',()=>{const b=S.q[0];return setJoint(0,NaN)===false&&S.q[0]===b});
+ t('IK reaches reachable target',()=>{const tg=ee([20,30,40,10,20,5]),r=ik(tg,[0,0,0,0,0,0],600,.002);return r.ok||'err '+r.err});
+ t('Unreachable target reported',()=>{const b=S.ik;moveToTarget(5,0,0);const ok=S.ik.startsWith('unreachable');S.ik=b;return ok});
+ t('Gripper attach/release',()=>{resetRobot();const o=addObj('cube',tip().toArray());S.gt=S.grip=.02;pick();const held=S.held===o;setJoint(0,60);scene.updateMatrixWorld(true);const moved=o.getWorldPosition(new THREE.Vector3()).distanceTo(tip())<1e-6;release();const ok=held&&moved&&!S.held;S.sel=o;delObj();return ok});
+ t('Keyframe interpolation (midpoint of smoothstep)',()=>{const k=S.kf;S.kf=[{t:0,q:[0,0,0,0,0,0],g:.04},{t:2,q:[40,0,0,0,0,0],g:.04}];const p=poseAt(1);S.kf=k;return near(p.q[0],20)});
+ t('Project export/import round trip',()=>{setPose([10,20,30,40,50,60]);const s=JSON.stringify(ser());applyProject(JSON.parse(s));return JSON.stringify(S.q)===JSON.stringify(JSON.parse(s).q)&&validate({})!==null});
+ t('Reset restores defaults',()=>{setPose([10,10,10,10,10,10]);resetRobot();return S.q.every(v=>v===0)});
+ t('Link-length change keeps FK and render consistent',()=>{S.L.l1=.6;build();setPose([0,0,0,0,0,0]);scene.updateMatrixWorld(true);const ok=near(tip().y,S.L.h0+reach());return ok||tip().y});
+ try{applyProject(JSON.parse(bak))}catch(e){}
+ $('tres').textContent=R.join('\n')+`\n\n${R.filter(r=>r[0]==='P').length}/${R.length} passed`;$('dTest').showModal()}
+$('bTests').onclick=runTests;
+/* ---------- Boot ---------- */
+if(typeof THREE==='undefined'||!THREE.OrbitControls){document.body.innerHTML='<p style="padding:20px">Three.js failed to load (needs internet for the CDN scripts). See the script tags at the bottom of this file to point to local copies.</p>'}
+else{buildJointUI();build();resize();addObj('cube');select(null);drawKf();frame()}
+</script></body></html>
+ 
