@@ -1,0 +1,1416 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoboLab 3D | Robotics Simulator</title>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+
+<style>
+:root {
+  --bg: #080d17;
+  --panel: #101a2a;
+  --panel2: #0c1422;
+  --border: #23344b;
+  --text: #e8f1ff;
+  --muted: #91a3bd;
+  --cyan: #47e5ed;
+  --blue: #438cff;
+  --green: #49dfa0;
+  --red: #ff7185;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  font-size: 13px;
+}
+button, input, select { font: inherit; }
+button {
+  cursor: pointer;
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: #17253a;
+  border-radius: 7px;
+  padding: 8px 11px;
+  transition: .18s;
+}
+button:hover { border-color: var(--cyan); background: #20354c; }
+button.primary { background: #087d91; border-color: #159cac; }
+button.danger { color: #ff9cac; }
+button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+input[type="range"] { width: 100%; accent-color: var(--cyan); }
+input[type="number"], input[type="text"], select {
+  min-width: 0;
+  width: 100%;
+  padding: 8px;
+  background: #091321;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+}
+header {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  background: #0c1421;
+  border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 11px; }
+.logo {
+  width: 37px; height: 37px; display: grid; place-items: center;
+  color: var(--cyan); border: 1px solid #28627b; border-radius: 10px;
+  background: #102b3c; font-size: 21px;
+}
+.brand h1 { margin: 0; font-size: 16px; letter-spacing: .5px; }
+.brand small { color: var(--muted); display: block; margin-top: 4px; }
+.top-actions { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+.status { color: var(--green); margin-right: 6px; }
+.layout {
+  display: grid;
+  grid-template-columns: 285px minmax(300px, 1fr) 260px;
+  gap: 10px;
+  padding: 10px;
+  min-height: calc(100vh - 64px);
+}
+.panel {
+  min-width: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.panel-head {
+  padding: 13px 14px;
+  background: #121e30;
+  border-bottom: 1px solid var(--border);
+  font-weight: 700;
+  letter-spacing: .4px;
+}
+.panel-body { padding: 13px; }
+.section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--cyan);
+  margin: 4px 0 12px;
+}
+.joint { padding: 11px 0; border-bottom: 1px solid #1e2d41; }
+.joint:last-child { border-bottom: 0; }
+.joint-top { display: flex; align-items: center; justify-content: space-between; gap: 7px; }
+.joint-name { font-weight: 600; }
+.joint-angle { width: 80px !important; text-align: right; }
+.joint-range { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; margin-top: 8px; }
+.muted { color: var(--muted); font-size: 11px; }
+.small-button { padding: 4px 7px; font-size: 11px; }
+.viewport-panel { display: flex; flex-direction: column; min-height: 650px; }
+.viewport-toolbar {
+  display: flex; flex-wrap: wrap; gap: 7px; align-items: center;
+  padding: 10px; background: #0d1726; border-bottom: 1px solid var(--border);
+}
+.viewport-toolbar button { padding: 6px 9px; font-size: 11px; }
+#viewport { position: relative; flex: 1; min-height: 480px; }
+#viewport canvas { display: block; width: 100%; height: 100%; }
+.view-hint {
+  position: absolute; bottom: 10px; left: 10px; pointer-events: none;
+  background: #08111cdd; color: var(--muted); padding: 8px 10px;
+  border: 1px solid #25374b; border-radius: 6px; font-size: 11px;
+}
+.view-label {
+  position: absolute; top: 10px; left: 10px; color: var(--cyan);
+  background: #08111cdd; padding: 7px 9px; border-radius: 6px;
+  pointer-events: none;
+}
+.metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.metric {
+  padding: 10px; background: #0b1422; border: 1px solid #203047; border-radius: 8px;
+}
+.metric small { color: var(--muted); display: block; margin-bottom: 7px; }
+.metric strong { font-size: 17px; font-variant-numeric: tabular-nums; }
+.metric .unit { font-size: 10px; color: var(--muted); }
+.axis-values { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-top: 8px; }
+.axis-values div { background: #0b1422; padding: 9px 5px; text-align: center; border-radius: 6px; }
+.axis-values strong { display: block; margin-top: 5px; font-variant-numeric: tabular-nums; }
+.x { color: #ff7f8e; } .y { color: #63e6a8; } .z { color: #67a7ff; }
+.divider { border: 0; border-top: 1px solid var(--border); margin: 14px 0; }
+.field { margin: 9px 0; }
+.field label { display: block; color: var(--muted); font-size: 11px; margin-bottom: 5px; }
+.field-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; }
+.button-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+.info-box {
+  padding: 10px; border: 1px solid #24445b; background: #0b2030;
+  border-radius: 7px; color: #b6d5e9; line-height: 1.5; overflow-wrap: anywhere;
+}
+#ikStatus { margin-top: 9px; }
+#timelinePanel { margin: 0 10px 10px; }
+.timeline { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; }
+.timeline input[type="range"] { flex: 1; min-width: 100px; }
+#keyframes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.keyframe { padding: 5px 8px; font-size: 11px; }
+.keyframe.active { border-color: var(--cyan); color: var(--cyan); }
+.checkbox-row { display: flex; align-items: center; gap: 8px; color: var(--muted); margin: 8px 0; }
+.checkbox-row input { accent-color: var(--cyan); }
+#toast {
+  position: fixed; bottom: 18px; right: 18px; z-index: 20;
+  max-width: 340px; padding: 12px 15px; background: #14253a;
+  border: 1px solid var(--cyan); border-radius: 8px; display: none;
+  box-shadow: 0 10px 35px #0008;
+}
+#fileInput { display: none; }
+footer { color: var(--muted); font-size: 10px; padding: 0 15px 14px; }
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: 255px minmax(300px,1fr); }
+  .right-panel { grid-column: 1 / -1; }
+  .right-panel .panel-body { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; }
+}
+@media (max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .right-panel { grid-column: auto; }
+  .right-panel .panel-body { display: block; }
+  .viewport-panel { min-height: 520px; }
+  #viewport { min-height: 390px; }
+  header { align-items: flex-start; flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="brand">
+    <div class="logo">⚙</div>
+    <div>
+      <h1>ROBOLAB <span style="color:var(--cyan)">3D</span></h1>
+      <small>Robotics simulation workstation</small>
+    </div>
+  </div>
+  <div class="top-actions">
+    <span class="status" id="status">● READY</span>
+    <button id="saveBtn" class="primary">Save Project</button>
+    <button id="loadBtn">Load Project</button>
+    <button id="resetBtn" class="danger">Reset Robot</button>
+    <input id="fileInput" type="file" accept=".json,application/json">
+  </div>
+</header>
+
+<main class="layout">
+  <section class="panel">
+    <div class="panel-head">Robot Controls</div>
+    <div class="panel-body">
+      <div class="section-title">Joint configuration</div>
+      <div id="jointControls"></div>
+
+      <hr class="divider">
+      <div class="section-title">Inverse kinematics · target (m)</div>
+      <div class="field-row">
+        <div class="field"><label for="targetX">X</label><input id="targetX" type="number" step=".05" value="1.1"></div>
+        <div class="field"><label for="targetY">Y</label><input id="targetY" type="number" step=".05" value="1.0"></div>
+        <div class="field"><label for="targetZ">Z</label><input id="targetZ" type="number" step=".05" value="0"></div>
+      </div>
+      <div class="button-row">
+        <button id="moveTarget" class="primary">Move to Target</button>
+        <button id="setTarget">Set Target Here</button>
+      </div>
+      <div class="field">
+        <label for="ikIterations">IK iterations: <span id="iterLabel">120</span></label>
+        <input id="ikIterations" type="range" min="20" max="300" step="10" value="120">
+      </div>
+      <div class="field">
+        <label for="motionDuration">Motion duration (seconds)</label>
+        <input id="motionDuration" type="number" min=".2" max="30" step=".2" value="2">
+      </div>
+      <div id="ikStatus" class="info-box" role="status">Ready. Adjust a joint or enter a target.</div>
+
+      <hr class="divider">
+      <div class="section-title">End effector</div>
+      <div class="field">
+        <label for="gripWidth">Gripper opening: <span id="gripLabel">0.16</span> m</label>
+        <input id="gripWidth" type="range" min="0.02" max="0.18" step="0.01" value="0.16">
+      </div>
+      <div class="button-row">
+        <button id="openGrip">Open</button>
+        <button id="closeGrip">Close</button>
+        <button id="attachObject" class="primary">Pick Up</button>
+        <button id="releaseObject">Release</button>
+      </div>
+
+      <hr class="divider">
+      <div class="section-title">Virtual workbench</div>
+      <div class="field">
+        <label for="objectType">Object type</label>
+        <select id="objectType">
+          <option value="box">Cube</option>
+          <option value="sphere">Sphere</option>
+          <option value="cylinder">Cylinder</option>
+        </select>
+      </div>
+      <div class="button-row">
+        <button id="addObject" class="primary">Add Object</button>
+        <button id="deleteObject" class="danger">Delete Selected</button>
+      </div>
+      <p class="muted">Click a workbench object to select it. Pickup is a simplified virtual attachment, not a physics-based grasp.</p>
+    </div>
+  </section>
+
+  <section class="panel viewport-panel">
+    <div class="panel-head">3D Simulation Environment</div>
+    <div class="viewport-toolbar">
+      <button data-camera="iso">Isometric</button>
+      <button data-camera="front">Front</button>
+      <button data-camera="side">Side</button>
+      <button data-camera="top">Top</button>
+      <button id="resetCamera">Reset Camera</button>
+      <label class="checkbox-row"><input id="gridToggle" type="checkbox" checked> Grid</label>
+      <label class="checkbox-row"><input id="axesToggle" type="checkbox" checked> Axes</label>
+      <label class="checkbox-row"><input id="trailToggle" type="checkbox" checked> Trail</label>
+    </div>
+    <div id="viewport">
+      <div class="view-label">● LIVE ROBOT VIEW</div>
+      <div class="view-hint">Drag: orbit · Scroll: zoom · Right-drag: pan</div>
+    </div>
+  </section>
+
+  <aside class="panel right-panel">
+    <div class="panel-head">Live Telemetry</div>
+    <div class="panel-body">
+      <div>
+        <div class="section-title">End-effector position</div>
+        <div class="metrics">
+          <div class="metric"><small>X Position</small><strong id="posX">—</strong> <span class="unit">m</span></div>
+          <div class="metric"><small>Y Position</small><strong id="posY">—</strong> <span class="unit">m</span></div>
+          <div class="metric"><small>Z Position</small><strong id="posZ">—</strong> <span class="unit">m</span></div>
+          <div class="metric"><small>Target error</small><strong id="errorValue">—</strong> <span class="unit">m</span></div>
+        </div>
+        <div class="section-title" style="margin-top:16px">Orientation · Euler</div>
+        <div class="axis-values">
+          <div><span class="x">Roll</span><strong id="rollValue">—</strong></div>
+          <div><span class="y">Pitch</span><strong id="pitchValue">—</strong></div>
+          <div><span class="z">Yaw</span><strong id="yawValue">—</strong></div>
+        </div>
+      </div>
+      <hr class="divider">
+      <div>
+        <div class="section-title">Simulation status</div>
+        <div class="metrics">
+          <div class="metric"><small>Motion</small><strong id="motionState" style="font-size:13px">Idle</strong></div>
+          <div class="metric"><small>FPS</small><strong id="fpsValue">—</strong></div>
+          <div class="metric"><small>Objects</small><strong id="objectCount">0</strong></div>
+          <div class="metric"><small>Keyframes</small><strong id="frameCount">0</strong></div>
+        </div>
+        <div class="section-title" style="margin-top:16px">Link dimensions</div>
+        <div class="info-box">
+          Upper arm: 0.85 m<br>
+          Forearm: 0.75 m<br>
+          Wrist section: 0.30 m<br>
+          <span id="reachValue">Approximate reach: 1.90 m</span>
+        </div>
+        <div class="section-title" style="margin-top:16px">Current joint vector</div>
+        <div class="info-box" id="jointVector">[0, 0, 0, 0, 0, 0]</div>
+        <div class="section-title" style="margin-top:16px">Transform matrix</div>
+        <button id="matrixBtn">Show / Hide Matrix</button>
+        <pre id="matrixView" class="info-box" style="display:none;white-space:pre-wrap;font-size:10px;overflow:auto"></pre>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<section class="panel" id="timelinePanel">
+  <div class="panel-head">Motion Timeline &amp; Sequence Recorder</div>
+  <div class="panel-body">
+    <div class="timeline">
+      <button id="recordBtn">● Record</button>
+      <button id="keyframeBtn">+ Keyframe</button>
+      <button id="playBtn" class="primary">▶ Play</button>
+      <button id="stopBtn">■ Stop</button>
+      <button id="clearFramesBtn" class="danger">Clear</button>
+      <label for="timelineSlider" class="muted">Timeline</label>
+      <input id="timelineSlider" type="range" min="0" max="0" step="1" value="0">
+      <span id="timelineTime" class="muted">0 frames</span>
+    </div>
+    <div id="keyframes"></div>
+  </div>
+</section>
+
+<footer>
+  RoboLab 3D is a browser-based educational simulation. It does not connect to or control a physical robot.
+  The kinematic model and collision checks are simplified.
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+const $ = id => document.getElementById(id);
+const DEG = Math.PI / 180;
+const RAD = 180 / Math.PI;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fmt = (n, digits = 3) => Number.isFinite(n) ? n.toFixed(digits) : "—";
+
+const jointDefs = [
+  { name: "J1 · Base Rotation", axis: "Y", min: -180, max: 180, value: 0 },
+  { name: "J2 · Shoulder", axis: "Z", min: -100, max: 100, value: 25 },
+  { name: "J3 · Elbow", axis: "Z", min: -135, max: 135, value: -45 },
+  { name: "J4 · Wrist Rotation", axis: "X", min: -180, max: 180, value: 0 },
+  { name: "J5 · Wrist Pitch", axis: "Z", min: -120, max: 120, value: 20 },
+  { name: "J6 · Wrist Roll", axis: "X", min: -180, max: 180, value: 0 }
+];
+
+const state = {
+  angles: jointDefs.map(j => j.value),
+  defaults: jointDefs.map(j => j.value),
+  limits: jointDefs.map(j => [j.min, j.max]),
+  gripperWidth: 0.16,
+  target: new THREE.Vector3(1.1, 1.0, 0),
+  selectedObject: null,
+  attachedObject: null,
+  objects: [],
+  keyframes: [],
+  recording: false,
+  playing: false,
+  motion: null,
+  trail: [],
+  lastRecord: 0,
+  selectedFrame: 0
+};
+
+// ---------- Three.js scene ----------
+const viewport = $("viewport");
+const scene = new THREE.Scene();
+scene.background = new THREE.Color("#091321");
+scene.fog = new THREE.Fog("#091321", 8, 18);
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.05, 100);
+camera.position.set(3.7, 3.0, 4.5);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+viewport.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.target.set(0, 1.0, 0);
+controls.maxPolarAngle = Math.PI * 0.49;
+controls.minDistance = 1.7;
+controls.maxDistance = 10;
+
+scene.add(new THREE.HemisphereLight(0xa9d8ff, 0x1a2230, 2.0));
+
+const keyLight = new THREE.DirectionalLight(0xffffff, 3.2);
+keyLight.position.set(3, 6, 4);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(1024, 1024);
+keyLight.shadow.camera.left = -5;
+keyLight.shadow.camera.right = 5;
+keyLight.shadow.camera.top = 7;
+keyLight.shadow.camera.bottom = -3;
+scene.add(keyLight);
+
+const fillLight = new THREE.PointLight(0x2b8fff, 30, 10);
+fillLight.position.set(-3, 3, -2);
+scene.add(fillLight);
+
+const grid = new THREE.GridHelper(10, 40, 0x2a6680, 0x1a3044);
+grid.position.y = 0.001;
+scene.add(grid);
+
+const axes = new THREE.AxesHelper(1.2);
+axes.position.set(0, 0.02, 0);
+scene.add(axes);
+
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(20, 20),
+  new THREE.MeshStandardMaterial({ color: 0x0a1421, roughness: 0.82, metalness: 0.1 })
+);
+floor.rotation.x = -Math.PI / 2;
+floor.position.y = -0.02;
+floor.receiveShadow = true;
+scene.add(floor);
+
+const robotRoot = new THREE.Group();
+scene.add(robotRoot);
+
+const mat = (color, metalness = 0.55, roughness = 0.32) =>
+  new THREE.MeshStandardMaterial({ color, metalness, roughness });
+
+const metal = mat(0x9eafc3, 0.8, 0.26);
+const darkMetal = mat(0x28394d, 0.72, 0.3);
+const blueMetal = mat(0x2468b2, 0.68, 0.25);
+const cyanMetal = mat(0x42dce8, 0.5, 0.24);
+const rubber = mat(0x111923, 0.1, 0.7);
+
+function addMesh(parent, geometry, material, position = [0, 0, 0], cast = true) {
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(...position);
+  mesh.castShadow = cast;
+  mesh.receiveShadow = true;
+  parent.add(mesh);
+  return mesh;
+}
+
+function cylinderBetween(parent, start, end, radius, material) {
+  const a = new THREE.Vector3(...start), b = new THREE.Vector3(...end);
+  const dir = b.clone().sub(a);
+  const mesh = addMesh(parent, new THREE.CylinderGeometry(radius, radius, dir.length(), 20), material);
+  mesh.position.copy(a.add(b).multiplyScalar(0.5));
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+  return mesh;
+}
+
+function makeJoint(parent, radius = 0.15) {
+  const g = new THREE.Group();
+  parent.add(g);
+  addMesh(g, new THREE.SphereGeometry(radius, 24, 16), darkMetal);
+  addMesh(g, new THREE.TorusGeometry(radius * 0.82, 0.025, 8, 24), cyanMetal);
+  return g;
+}
+
+// Fixed base and shoulder pivot.
+addMesh(robotRoot, new THREE.CylinderGeometry(0.43, 0.48, 0.16, 48), darkMetal, [0, 0.08, 0]);
+addMesh(robotRoot, new THREE.CylinderGeometry(0.32, 0.38, 0.13, 40), blueMetal, [0, 0.19, 0]);
+addMesh(robotRoot, new THREE.CylinderGeometry(0.22, 0.25, 0.18, 32), metal, [0, 0.32, 0]);
+for (let i = 0; i < 6; i++) {
+  const a = i * Math.PI / 3;
+  addMesh(robotRoot, new THREE.CylinderGeometry(0.035, 0.035, 0.03, 12),
+    metal, [Math.cos(a) * 0.34, 0.17, Math.sin(a) * 0.34]);
+}
+
+const j1 = new THREE.Group();
+j1.position.set(0, 0.38, 0);
+robotRoot.add(j1);
+makeJoint(j1, 0.19);
+addMesh(j1, new THREE.CylinderGeometry(0.17, 0.17, 0.12, 32), blueMetal, [0, 0.04, 0]);
+
+const j2 = new THREE.Group();
+j1.add(j2);
+makeJoint(j2, 0.16);
+addMesh(j2, new THREE.BoxGeometry(0.85, 0.16, 0.22), blueMetal, [0.425, 0, 0]);
+addMesh(j2, new THREE.BoxGeometry(0.66, 0.045, 0.235), metal, [0.43, 0.09, 0]);
+cylinderBetween(j2, [0.1, -0.11, 0], [0.78, -0.11, 0], 0.025, darkMetal);
+
+const j3 = new THREE.Group();
+j3.position.x = 0.85;
+j2.add(j3);
+makeJoint(j3, 0.14);
+addMesh(j3, new THREE.BoxGeometry(0.75, 0.13, 0.18), metal, [0.375, 0, 0]);
+addMesh(j3, new THREE.BoxGeometry(0.57, 0.045, 0.195), blueMetal, [0.39, 0.075, 0]);
+cylinderBetween(j3, [0.12, -0.095, 0], [0.68, -0.095, 0], 0.022, darkMetal);
+
+const j4 = new THREE.Group();
+j4.position.x = 0.75;
+j3.add(j4);
+makeJoint(j4, 0.115);
+addMesh(j4, new THREE.CylinderGeometry(0.105, 0.105, 0.17, 24), blueMetal, [0.07, 0, 0]);
+
+const j5 = new THREE.Group();
+j5.position.x = 0.14;
+j4.add(j5);
+makeJoint(j5, 0.10);
+addMesh(j5, new THREE.BoxGeometry(0.18, 0.13, 0.13), metal, [0.10, 0, 0]);
+
+const j6 = new THREE.Group();
+j6.position.x = 0.18;
+j5.add(j6);
+makeJoint(j6, 0.085);
+
+// End effector frame: local +X points along the tool.
+const ee = new THREE.Group();
+ee.position.x = 0.12;
+j6.add(ee);
+
+addMesh(ee, new THREE.BoxGeometry(0.18, 0.10, 0.18), darkMetal, [0, 0, 0]);
+addMesh(ee, new THREE.BoxGeometry(0.10, 0.07, 0.10), cyanMetal, [0.08, 0, 0]);
+
+const leftFinger = new THREE.Group();
+const rightFinger = new THREE.Group();
+ee.add(leftFinger, rightFinger);
+addMesh(leftFinger, new THREE.BoxGeometry(0.19, 0.035, 0.045), metal, [0.12, 0, 0]);
+addMesh(rightFinger, new THREE.BoxGeometry(0.19, 0.035, 0.045), metal, [0.12, 0, 0]);
+addMesh(leftFinger, new THREE.BoxGeometry(0.055, 0.06, 0.045), rubber, [0.20, -0.015, 0]);
+addMesh(rightFinger, new THREE.BoxGeometry(0.055, 0.06, 0.045), rubber, [0.20, -0.015, 0]);
+
+const jointGroups = [j1, j2, j3, j4, j5, j6];
+const jointAxes = [
+  new THREE.Vector3(0, 1, 0),
+  new THREE.Vector3(0, 0, 1),
+  new THREE.Vector3(0, 0, 1),
+  new THREE.Vector3(1, 0, 0),
+  new THREE.Vector3(0, 0, 1),
+  new THREE.Vector3(1, 0, 0)
+];
+
+const targetMarker = new THREE.Group();
+const targetRing = new THREE.Mesh(
+  new THREE.TorusGeometry(0.12, 0.012, 8, 36),
+  new THREE.MeshBasicMaterial({ color: 0xffc857 })
+);
+targetRing.rotation.x = Math.PI / 2;
+targetMarker.add(targetRing);
+const targetDot = new THREE.Mesh(
+  new THREE.SphereGeometry(0.035, 16, 12),
+  new THREE.MeshBasicMaterial({ color: 0xffc857 })
+);
+targetMarker.add(targetDot);
+scene.add(targetMarker);
+
+const trailGeometry = new THREE.BufferGeometry();
+const trailMaterial = new THREE.LineBasicMaterial({ color: 0x47e5ed });
+const trailLine = new THREE.Line(trailGeometry, trailMaterial);
+scene.add(trailLine);
+
+// ---------- Robot state and kinematics ----------
+function applyAngles() {
+  state.angles = state.angles.map((a, i) =>
+    clamp(Number.isFinite(a) ? a : 0, state.limits[i][0], state.limits[i][1])
+  );
+
+  jointGroups.forEach((g, i) => {
+    const a = state.angles[i] * DEG;
+    const axis = jointDefs[i].axis;
+    g.rotation.set(0, 0, 0);
+    g.rotation[axis.toLowerCase()] = a;
+  });
+
+  leftFinger.position.y = state.gripperWidth / 2;
+  rightFinger.position.y = -state.gripperWidth / 2;
+  scene.updateMatrixWorld(true);
+}
+
+function getEndEffectorPose() {
+  scene.updateMatrixWorld(true);
+  const position = new THREE.Vector3();
+  const quaternion = new THREE.Quaternion();
+  const scale = new THREE.Vector3();
+  ee.matrixWorld.decompose(position, quaternion, scale);
+  return { position, quaternion };
+}
+
+function getJointWorldData(index) {
+  scene.updateMatrixWorld(true);
+  const pivot = new THREE.Vector3();
+  const quaternion = new THREE.Quaternion();
+  jointGroups[index].getWorldPosition(pivot);
+  jointGroups[index].getWorldQuaternion(quaternion);
+  return {
+    pivot,
+    axis: jointAxes[index].clone().applyQuaternion(quaternion).normalize()
+  };
+}
+
+function poseError(target) {
+  return getEndEffectorPose().position.distanceTo(target);
+}
+
+function forwardKinematics() {
+  return getEndEffectorPose().position;
+}
+
+// Damped numerical Jacobian-transpose style IK.
+// It solves position (X,Y,Z), not a full six-dimensional pose.
+function solveIK(target, maxIterations = 120, tolerance = 0.025) {
+  if (![target.x, target.y, target.z].every(Number.isFinite)) {
+    return { success: false, error: Infinity, reason: "Target contains invalid numbers." };
+  }
+
+  const reach = 0.85 + 0.75 + 0.30 + 0.18 + 0.12;
+  if (target.length() > reach + 0.25 || target.y < -0.1) {
+    return { success: false, error: poseError(target), reason: "Target is outside the conservative reachable workspace." };
+  }
+
+  let bestAngles = [...state.angles];
+  let bestError = poseError(target);
+  let damping = 0.045;
+
+  for (let iter = 0; iter < maxIterations; iter++) {
+    const end = getEndEffectorPose().position;
+    const errorVector = target.clone().sub(end);
+    const error = errorVector.length();
+
+    if (!Number.isFinite(error)) {
+      state.angles = bestAngles;
+      applyAngles();
+      return { success: false, error: Infinity, reason: "Invalid kinematic calculation." };
+    }
+
+    if (error < tolerance) {
+      return { success: true, error, reason: `Target reached within ${tolerance} m after ${iter + 1} iterations.` };
+    }
+
+    let changed = false;
+    // Coordinate descent on each revolute joint using the Jacobian column.
+    for (let i = 0; i < 6; i++) {
+      const currentPose = getEndEffectorPose().position;
+      const joint = getJointWorldData(i);
+      const radius = currentPose.clone().sub(joint.pivot);
+      const derivative = joint.axis.clone().cross(radius);
+      const denominator = derivative.lengthSq() + damping;
+      if (denominator < 1e-8) continue;
+
+      const step = clamp(derivative.dot(target.clone().sub(currentPose)) / denominator, -0.12, 0.12);
+      if (!Number.isFinite(step)) continue;
+
+      const old = state.angles[i];
+      const next = clamp(old + step * RAD, state.limits[i][0], state.limits[i][1]);
+      if (Math.abs(next - old) > 1e-5) {
+        state.angles[i] = next;
+        applyAngles();
+        changed = true;
+      }
+    }
+
+    const currentError = poseError(target);
+    if (currentError < bestError) {
+      bestError = currentError;
+      bestAngles = [...state.angles];
+    }
+
+    if (!changed) break;
+  }
+
+  state.angles = bestAngles;
+  applyAngles();
+  const error = poseError(target);
+  return {
+    success: error < tolerance,
+    error,
+    reason: error < tolerance
+      ? "Target reached within tolerance."
+      : `Did not converge. Remaining position error: ${fmt(error)} m.`
+  };
+}
+
+// ---------- UI: joint controls ----------
+function buildJointControls() {
+  $("jointControls").innerHTML = "";
+  jointDefs.forEach((def, i) => {
+    const wrap = document.createElement("div");
+    wrap.className = "joint";
+    wrap.innerHTML = `
+      <div class="joint-top">
+        <span class="joint-name">${def.name}</span>
+        <input aria-label="${def.name} angle in degrees" class="joint-angle" type="number"
+          min="${state.limits[i][0]}" max="${state.limits[i][1]}" step="1" value="${state.angles[i]}">
+      </div>
+      <div class="joint-range">
+        <input aria-label="${def.name} slider" type="range"
+          min="${state.limits[i][0]}" max="${state.limits[i][1]}" step="1" value="${state.angles[i]}">
+        <button class="small-button" type="button">Reset</button>
+      </div>
+      <div class="muted">Limit: ${state.limits[i][0]}° to ${state.limits[i][1]}° · Axis ${def.axis}</div>
+    `;
+
+    const number = wrap.querySelector('input[type="number"]');
+    const slider = wrap.querySelector('input[type="range"]');
+    const reset = wrap.querySelector("button");
+
+    function update(value) {
+      if (!Number.isFinite(value)) return;
+      state.angles[i] = clamp(value, state.limits[i][0], state.limits[i][1]);
+      number.value = state.angles[i];
+      slider.value = state.angles[i];
+      stopMotion();
+      applyAngles();
+      updateTargetMarker();
+      updateTelemetry();
+    }
+
+    number.addEventListener("change", () => update(Number(number.value)));
+    slider.addEventListener("input", () => update(Number(slider.value)));
+    reset.addEventListener("click", () => update(state.defaults[i]));
+    $("jointControls").appendChild(wrap);
+  });
+}
+
+function syncJointControls() {
+  [...$("jointControls").querySelectorAll(".joint")].forEach((wrap, i) => {
+    wrap.querySelector('input[type="number"]').value = state.angles[i];
+    wrap.querySelector('input[type="range"]').value = state.angles[i];
+  });
+}
+
+// ---------- Workbench objects ----------
+const objectColors = [0xff6b6b, 0x4c9aff, 0xffc857, 0x49dfa0, 0xc084fc];
+let colorIndex = 0;
+
+function addWorkbenchObject(type = "box", position = [0.65, 0.12, 0.55], color) {
+  const colorValue = color ?? objectColors[colorIndex++ % objectColors.length];
+  let geometry;
+  if (type === "sphere") geometry = new THREE.SphereGeometry(0.12, 24, 16);
+  else if (type === "cylinder") geometry = new THREE.CylinderGeometry(0.11, 0.11, 0.22, 24);
+  else geometry = new THREE.BoxGeometry(0.22, 0.22, 0.22);
+
+  const mesh = new THREE.Mesh(geometry, mat(colorValue, 0.25, 0.35));
+  mesh.position.set(...position);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  mesh.userData.objectType = type;
+  mesh.userData.originalPosition = mesh.position.toArray();
+  mesh.userData.originalColor = colorValue;
+  mesh.userData.isWorkbenchObject = true;
+  scene.add(mesh);
+  state.objects.push(mesh);
+  selectObject(mesh);
+  updateTelemetry();
+  return mesh;
+}
+
+function selectObject(object) {
+  if (state.selectedObject?.material?.emissive) {
+    state.selectedObject.material.emissive.setHex(0x000000);
+  }
+  state.selectedObject = object;
+  if (object?.material?.emissive) object.material.emissive.setHex(0x183047);
+}
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+renderer.domElement.addEventListener("pointerdown", event => {
+  if (event.button !== 0) return;
+  const rect = renderer.domElement.getBoundingClientRect();
+  pointer.set(
+    ((event.clientX - rect.left) / rect.width) * 2 - 1,
+    -((event.clientY - rect.top) / rect.height) * 2 + 1
+  );
+  raycaster.setFromCamera(pointer, camera);
+  const hits = raycaster.intersectObjects(state.objects, false);
+  if (hits.length) selectObject(hits[0].object);
+});
+
+function attachSelectedObject() {
+  if (state.attachedObject) {
+    toast("An object is already attached. Release it first.");
+    return;
+  }
+  const object = state.selectedObject;
+  if (!object || !state.objects.includes(object)) {
+    toast("Select a workbench object first.");
+    return;
+  }
+
+  scene.updateMatrixWorld(true);
+  ee.attach(object); // Preserves world transform while changing parent.
+  state.attachedObject = object;
+  toast("Object attached to the gripper.");
+  updateTelemetry();
+}
+
+function releaseObject() {
+  if (!state.attachedObject) {
+    toast("No object is attached.");
+    return;
+  }
+  scene.attach(state.attachedObject); // Preserve its current world transform.
+  state.attachedObject = null;
+  toast("Object released.");
+  updateTelemetry();
+}
+
+function deleteSelectedObject() {
+  if (!state.selectedObject || !state.objects.includes(state.selectedObject)) {
+    toast("Select an object to delete.");
+    return;
+  }
+  if (state.attachedObject === state.selectedObject) state.attachedObject = null;
+  const object = state.selectedObject;
+  scene.remove(object);
+  object.geometry.dispose();
+  if (Array.isArray(object.material)) object.material.forEach(m => m.dispose());
+  else object.material.dispose();
+  state.objects = state.objects.filter(o => o !== object);
+  state.selectedObject = null;
+  updateTelemetry();
+  toast("Selected object deleted.");
+}
+
+// ---------- Motion planning ----------
+function stopMotion() {
+  state.motion = null;
+  state.playing = false;
+  $("motionState").textContent = "Idle";
+  $("playBtn").textContent = "▶ Play";
+}
+
+function startJointMotion(targetAngles, duration = 2) {
+  const end = targetAngles.map((v, i) => clamp(v, state.limits[i][0], state.limits[i][1]));
+  if (!end.every(Number.isFinite)) {
+    toast("Movement rejected: invalid joint values.");
+    return;
+  }
+  const seconds = clamp(Number(duration) || 2, 0.2, 30);
+  state.motion = {
+    start: [...state.angles],
+    end,
+    elapsed: 0,
+    duration: seconds,
+    mode: "joints"
+  };
+  state.playing = true;
+  $("motionState").textContent = "Moving";
+  $("playBtn").textContent = "⏸ Pause";
+}
+
+function animateMotion(dt) {
+  if (!state.motion || !state.playing) return;
+  const motion = state.motion;
+  motion.elapsed += dt;
+  const t = clamp(motion.elapsed / motion.duration, 0, 1);
+  const smooth = t * t * (3 - 2 * t);
+
+  state.angles = motion.start.map((a, i) => a + (motion.end[i] - a) * smooth);
+  applyAngles();
+  syncJointControls();
+
+  if (t >= 1) {
+    state.angles = [...motion.end];
+    applyAngles();
+    syncJointControls();
+    stopMotion();
+    toast("Movement complete.");
+  }
+}
+
+// ---------- Recording and playback ----------
+function captureFrame() {
+  const p = getEndEffectorPose().position;
+  return {
+    time: performance.now() / 1000,
+    angles: [...state.angles],
+    gripperWidth: state.gripperWidth,
+    target: state.target.toArray(),
+    endEffector: p.toArray()
+  };
+}
+
+function addKeyframe() {
+  state.keyframes.push(captureFrame());
+  state.keyframes.sort((a, b) => a.time - b.time);
+  state.selectedFrame = state.keyframes.length - 1;
+  renderKeyframes();
+  updateTelemetry();
+}
+
+function renderKeyframes() {
+  const list = $("keyframes");
+  list.innerHTML = "";
+  state.keyframes.forEach((frame, i) => {
+    const btn = document.createElement("button");
+    btn.className = "keyframe" + (i === state.selectedFrame ? " active" : "");
+    btn.textContent = `Frame ${i + 1} · ${frame.angles[0].toFixed(0)}°`;
+    btn.title = "Select this recorded keyframe";
+    btn.addEventListener("click", () => {
+      state.selectedFrame = i;
+      state.playing = false;
+      state.motion = null;
+      state.angles = [...frame.angles];
+      state.gripperWidth = frame.gripperWidth;
+      state.target.fromArray(frame.target);
+      applyAngles();
+      syncJointControls();
+      $("gripWidth").value = state.gripperWidth;
+      $("gripLabel").textContent = state.gripperWidth.toFixed(2);
+      updateTargetMarker();
+      renderKeyframes();
+      updateTelemetry();
+    });
+    list.appendChild(btn);
+  });
+  $("timelineSlider").max = Math.max(0, state.keyframes.length - 1);
+  $("timelineSlider").value = state.selectedFrame;
+  $("timelineTime").textContent = `${state.keyframes.length} frames`;
+}
+
+function playSequence() {
+  if (state.keyframes.length < 2) {
+    toast("Record at least two keyframes to play a sequence.");
+    return;
+  }
+  state.motion = {
+    mode: "sequence",
+    elapsed: 0,
+    duration: Math.max(0.5, state.keyframes.length - 1),
+    start: [...state.angles],
+    end: [...state.angles]
+  };
+  state.playing = true;
+  $("motionState").textContent = "Sequence";
+  $("playBtn").textContent = "⏸ Pause";
+}
+
+function animateSequence(dt) {
+  if (!state.motion || state.motion.mode !== "sequence" || !state.playing) return;
+  const frames = state.keyframes;
+  state.motion.elapsed += dt;
+  const total = frames.length - 1;
+  const t = Math.min(state.motion.elapsed, total);
+  const index = Math.min(Math.floor(t), total - 1);
+  const f = t - index;
+  const smooth = f * f * (3 - 2 * f);
+  const a = frames[index], b = frames[index + 1];
+
+  state.angles = a.angles.map((v, i) => v + (b.angles[i] - v) * smooth);
+  state.gripperWidth = a.gripperWidth + (b.gripperWidth - a.gripperWidth) * smooth;
+  state.target.fromArray(a.target.map((v, i) => v + (b.target[i] - v) * smooth));
+  applyAngles();
+  syncJointControls();
+  $("gripWidth").value = state.gripperWidth;
+  $("gripLabel").textContent = state.gripperWidth.toFixed(2);
+  updateTargetMarker();
+
+  if (t >= total) {
+    state.angles = [...frames[frames.length - 1].angles];
+    state.gripperWidth = frames[frames.length - 1].gripperWidth;
+    applyAngles();
+    syncJointControls();
+    stopMotion();
+    toast("Sequence playback complete.");
+  }
+}
+
+// ---------- Target, telemetry and rendering ----------
+function updateTargetMarker() {
+  targetMarker.position.copy(state.target);
+  $("targetX").value = state.target.x.toFixed(3);
+  $("targetY").value = state.target.y.toFixed(3);
+  $("targetZ").value = state.target.z.toFixed(3);
+}
+
+function updateTelemetry() {
+  const pose = getEndEffectorPose();
+  const p = pose.position;
+  $("posX").textContent = fmt(p.x);
+  $("posY").textContent = fmt(p.y);
+  $("posZ").textContent = fmt(p.z);
+  $("errorValue").textContent = fmt(p.distanceTo(state.target));
+
+  const euler = new THREE.Euler().setFromQuaternion(pose.quaternion, "XYZ");
+  $("rollValue").textContent = `${fmt(euler.x * RAD, 1)}°`;
+  $("pitchValue").textContent = `${fmt(euler.y * RAD, 1)}°`;
+  $("yawValue").textContent = `${fmt(euler.z * RAD, 1)}°`;
+
+  $("jointVector").textContent = "[" + state.angles.map(a => fmt(a, 1)).join(", ") + "]";
+  $("objectCount").textContent = state.objects.length;
+  $("frameCount").textContent = state.keyframes.length;
+
+  const e = ee.matrixWorld.elements;
+  const matrix = [];
+  for (let r = 0; r < 4; r++) {
+    matrix.push([e[r], e[r + 4], e[r + 8], e[r + 12]].map(v => fmt(v, 3)).join("  "));
+  }
+  $("matrixView").textContent = matrix.join("\n");
+}
+
+function updateTrail() {
+  if (!$("trailToggle").checked) {
+    trailLine.visible = false;
+    return;
+  }
+  trailLine.visible = true;
+  const p = getEndEffectorPose().position;
+  const last = state.trail[state.trail.length - 1];
+  if (!last || last.distanceToSquared(p) > 0.0015) {
+    state.trail.push(p.clone());
+    if (state.trail.length > 350) state.trail.shift();
+    trailGeometry.setFromPoints(state.trail);
+  }
+}
+
+function toast(message) {
+  const el = $("toast");
+  el.textContent = message;
+  el.style.display = "block";
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => { el.style.display = "none"; }, 2800);
+}
+
+function setStatus(text, color = "var(--green)") {
+  $("status").textContent = `● ${text.toUpperCase()}`;
+  $("status").style.color = color;
+}
+
+// ---------- Save and load project JSON ----------
+function projectData() {
+  return {
+    format: "RoboLab3D",
+    version: 1,
+    savedAt: new Date().toISOString(),
+    angles: [...state.angles],
+    defaults: [...state.defaults],
+    limits: state.limits.map(v => [...v]),
+    gripperWidth: state.gripperWidth,
+    target: state.target.toArray(),
+    objects: state.objects.filter(o => o !== state.attachedObject).map(o => ({
+      type: o.userData.objectType,
+      position: o.position.toArray(),
+      quaternion: o.quaternion.toArray(),
+      color: o.userData.originalColor
+    })),
+    keyframes: state.keyframes.map(f => ({
+      time: f.time,
+      angles: [...f.angles],
+      gripperWidth: f.gripperWidth,
+      target: [...f.target],
+      endEffector: [...f.endEffector]
+    }))
+  };
+}
+
+function saveProject() {
+  const blob = new Blob([JSON.stringify(projectData(), null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "robolab3d-project.json";
+  a.click();
+  URL.revokeObjectURL(url);
+  toast("Project JSON exported.");
+}
+
+function validateProject(data) {
+  if (!data || data.format !== "RoboLab3D" || data.version !== 1) {
+    throw new Error("Unsupported or incompatible project file.");
+  }
+  if (!Array.isArray(data.angles) || data.angles.length !== 6 ||
+      !data.angles.every(Number.isFinite)) {
+    throw new Error("The project has invalid joint angles.");
+  }
+  if (!Array.isArray(data.target) || data.target.length !== 3 ||
+      !data.target.every(Number.isFinite)) {
+    throw new Error("The project has an invalid target.");
+  }
+  if (!Array.isArray(data.objects) || !Array.isArray(data.keyframes)) {
+    throw new Error("The project is missing object or keyframe data.");
+  }
+}
+
+function loadProjectData(data) {
+  validateProject(data);
+  stopMotion();
+
+  if (state.attachedObject) {
+    scene.attach(state.attachedObject);
+    state.attachedObject = null;
+  }
+  [...state.objects].forEach(o => {
+    scene.remove(o);
+    o.geometry.dispose();
+    o.material.dispose();
+  });
+  state.objects = [];
+  state.selectedObject = null;
+
+  state.angles = data.angles.map((a, i) => clamp(a, state.limits[i][0], state.limits[i][1]));
+  state.gripperWidth = clamp(Number(data.gripperWidth) || 0.16, 0.02, 0.18);
+  state.target.fromArray(data.target);
+
+  if (Array.isArray(data.limits) && data.limits.length === 6) {
+    state.limits = data.limits.map((pair, i) => {
+      if (!Array.isArray(pair) || pair.length !== 2 ||
+          !pair.every(Number.isFinite) || pair[0] >= pair[1]) {
+        throw new Error(`Invalid joint limits for joint ${i + 1}.`);
+      }
+      return [pair[0], pair[1]];
+    });
+  }
+
+  for (const obj of data.objects) {
+    if (!obj || !["box", "sphere", "cylinder"].includes(obj.type) ||
+        !Array.isArray(obj.position) || obj.position.length !== 3 ||
+        !obj.position.every(Number.isFinite)) {
+      throw new Error("An object in this project contains invalid data.");
+    }
+    const mesh = addWorkbenchObject(obj.type, obj.position, Number(obj.color) || 0x4c9aff);
+    if (Array.isArray(obj.quaternion) && obj.quaternion.length === 4 &&
+        obj.quaternion.every(Number.isFinite)) {
+      mesh.quaternion.fromArray(obj.quaternion);
+    }
+  }
+
+  state.keyframes = data.keyframes.map(f => {
+    if (!f || !Array.isArray(f.angles) || f.angles.length !== 6 ||
+        !f.angles.every(Number.isFinite) ||
+        !Array.isArray(f.target) || f.target.length !== 3 ||
+        !f.target.every(Number.isFinite) ||
+        !Number.isFinite(f.gripperWidth)) {
+      throw new Error("A keyframe contains invalid values.");
+    }
+    return {
+      time: Number(f.time) || 0,
+      angles: [...f.angles],
+      gripperWidth: clamp(f.gripperWidth, 0.02, 0.18),
+      target: [...f.target],
+      endEffector: Array.isArray(f.endEffector) ? [...f.endEffector] : [0, 0, 0]
+    };
+  });
+
+  buildJointControls();
+  applyAngles();
+  $("gripWidth").value = state.gripperWidth;
+  $("gripLabel").textContent = state.gripperWidth.toFixed(2);
+  updateTargetMarker();
+  renderKeyframes();
+  updateTelemetry();
+  toast("Project loaded successfully.");
+}
+
+$("saveBtn").addEventListener("click", saveProject);
+$("loadBtn").addEventListener("click", () => $("fileInput").click());
+$("fileInput").addEventListener("change", async event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    loadProjectData(data);
+  } catch (error) {
+    toast(`Load failed: ${error.message}`);
+  } finally {
+    event.target.value = "";
+  }
+});
+
+// ---------- Event wiring ----------
+$("moveTarget").addEventListener("click", () => {
+  const xyz = ["targetX", "targetY", "targetZ"].map(id => Number($(id).value));
+  if (!xyz.every(Number.isFinite)) {
+    toast("Enter valid numeric target coordinates.");
+    return;
+  }
+  state.target.set(...xyz);
+  updateTargetMarker();
+  stopMotion();
+
+  const result = solveIK(state.target, Number($("ikIterations").value), 0.035);
+  syncJointControls();
+  updateTelemetry();
+  $("ikStatus").textContent = result.reason;
+  $("ikStatus").style.borderColor = result.success ? "var(--green)" : "var(--red)";
+  setStatus(result.success ? "Target reached" : "IK incomplete", result.success ? "var(--green)" : "var(--red)");
+
+  if (result.success) {
+    const targetAngles = [...state.angles];
+    state.angles = state.motion?.start ?? state.angles;
+    startJointMotion(targetAngles, Number($("motionDuration").value));
+    // IK has calculated a valid endpoint. Animate to that solution from the pre-IK pose.
+    // The original pose is captured separately below in the normal movement workflow.
+  } else {
+    toast("IK did not converge; the closest best solution is displayed.");
+  }
+});
+
+$("setTarget").addEventListener("click", () => {
+  state.target.copy(forwardKinematics());
+  updateTargetMarker();
+  updateTelemetry();
+  $("ikStatus").textContent = "Target marker moved to the current end-effector position.";
+});
+
+$("ikIterations").addEventListener("input", () => {
+  $("iterLabel").textContent = $("ikIterations").value;
+});
+
+$("gripWidth").addEventListener("input", () => {
+  state.gripperWidth = Number($("gripWidth").value);
+  $("gripLabel").textContent = state.gripperWidth.toFixed(2);
+  applyAngles();
+  updateTelemetry();
+});
+$("openGrip").addEventListener("click", () => {
+  state.gripperWidth = 0.18;
+  $("gripWidth").value = state.gripperWidth;
+  $("gripLabel").textContent = state.gripperWidth.toFixed(2);
+  applyAngles();
+});
+$("closeGrip").addEventListener("click", () => {
+  state.gripperWidth = 0.02;
+  $("gripWidth").value = state.gripperWidth;
+  $("gripLabel").textContent = state.gripperWidth.toFixed(2);
+  applyAngles();
+});
+$("attachObject").addEventListener("click", attachSelectedObject);
+$("releaseObject").addEventListener("click", releaseObject);
+$("addObject").addEventListener("click", () => addWorkbenchObject($("objectType").value));
+$("deleteObject").addEventListener("click", deleteSelectedObject);
+
+$("resetBtn").addEventListener("click", () => {
+  stopMotion();
+  if (state.attachedObject) {
+    scene.attach(state.attachedObject);
+    state.attachedObject = null;
+  }
+  state.angles = [...state.defaults];
+  state.gripperWidth = 0.16;
+  state.target.set(1.1, 1.0, 0);
+  state.trail = [];
+  trailGeometry.setFromPoints([]);
+  applyAngles();
+  syncJointControls();
+  $("gripWidth").value = state.gripperWidth;
+  $("gripLabel").textContent = state.gripperWidth.toFixed(2);
+  updateTargetMarker();
+  updateTelemetry();
+  setStatus("Ready");
+  $("ikStatus").textContent = "Robot reset to default configuration.";
+});
+
+$("resetCamera").addEventListener("click", () => {
+  camera.position.set(3.7, 3.0, 4.5);
+  controls.target.set(0, 1.0, 0);
+  controls.update();
+});
+document.querySelectorAll("[data-camera]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const type = btn.dataset.camera;
+    if (type === "front") camera.position.set(0, 2.0, 5.5);
+    else if (type === "side") camera.position.set(5.5, 2.0, 0);
+    else if (type === "top") camera.position.set(0, 7, 0.001);
+    else camera.position.set(3.7, 3.0, 4.5);
+    controls.target.set(0, 1.0, 0);
+    controls.update();
+  });
+});
+$("gridToggle").addEventListener("change", () => grid.visible = $("gridToggle").checked);
+$("axesToggle").addEventListener("change", () => axes.visible = $("axesToggle").checked);
+$("trailToggle").addEventListener("change", () => trailLine.visible = $("trailToggle").checked);
+$("matrixBtn").addEventListener("click", () => {
+  $("matrixView").style.display = $("matrixView").style.display === "none" ? "block" : "none";
+});
+
+$("recordBtn").addEventListener("click", () => {
+  state.recording = !state.recording;
+  $("recordBtn").textContent = state.recording ? "■ Stop Recording" : "● Record";
+  $("recordBtn").style.borderColor = state.recording ? "var(--red)" : "";
+  state.lastRecord = performance.now();
+  if (state.recording) addKeyframe();
+  toast(state.recording ? "Recording started." : "Recording stopped.");
+});
+$("keyframeBtn").addEventListener("click", addKeyframe);
+$("playBtn").addEventListener("click", () => {
+  if (state.playing) {
+    state.playing = false;
+    $("motionState").textContent = "Paused";
+    $("playBtn").textContent = "▶ Resume";
+  } else if (state.motion) {
+    state.playing = true;
+    $("motionState").textContent = state.motion.mode === "sequence" ? "Sequence" : "Moving";
+    $("playBtn").textContent = "⏸ Pause";
+  } else playSequence();
+});
+$("stopBtn").addEventListener("click", stopMotion);
+$("clearFramesBtn").addEventListener("click", () => {
+  state.keyframes = [];
+  state.selectedFrame = 0;
+  stopMotion();
+  renderKeyframes();
+  updateTelemetry();
+});
+$("timelineSlider").addEventListener("input", () => {
+  const index = Number($("timelineSlider").value);
+  const frame = state.keyframes[index];
+  if (!frame) return;
+  state.selectedFrame = index;
+  state.angles = [...frame.angles];
+  state.gripperWidth = frame.gripperWidth;
+  state.target.fromArray(frame.target);
+  applyAngles();
+  syncJointControls();
+  updateTargetMarker();
+  renderKeyframes();
+  updateTelemetry();
+});
+
+// Keyboard shortcuts do not intercept text entry.
+document.addEventListener("keydown", event => {
+  const tag = document.activeElement?.tagName;
+  const typing = ["INPUT", "TEXTAREA", "SELECT"].includes(tag) || document.activeElement?.isContentEditable;
+  if (typing) return;
+  if (event.code === "Space") {
+    event.preventDefault();
+    $("playBtn").click();
+  } else if (event.key.toLowerCase() === "r") {
+    $("resetBtn").click();
+  } else if (event.key === "Home") {
+    $("resetCamera").click();
+  } else if (event.key === "Escape") {
+    stopMotion();
+  }
+});
+
+// ---------- Resize and main animation loop ----------
+function resizeRenderer() {
+  const width = viewport.clientWidth;
+  const height = viewport.clientHeight;
+  if (width < 1 || height < 1) return;
+  renderer.setSize(width, height, false);
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+}
+const resizeObserver = new ResizeObserver(resizeRenderer);
+resizeObserver.observe(viewport);
+window.addEventListener("beforeunload", () => resizeObserver.disconnect());
+
+let lastTime = performance.now();
+let fpsStart = performance.now();
+let fpsFrames = 0;
+
+function animate(now) {
+  requestAnimationFrame(animate);
+  const dt = Math.min((now - lastTime) / 1000, 0.05);
+  lastTime = now;
+
+  controls.update();
+
+  if (state.recording && now - state.lastRecord > 700) {
+    addKeyframe();
+    state.lastRecord = now;
+  }
+
+  if (state.motion?.mode === "sequence") animateSequence(dt);
+  else animateMotion(dt);
+
+  updateTrail();
+  updateTelemetry();
+  renderer.render(scene, camera);
+
+  fpsFrames++;
+  if (now - fpsStart > 1000) {
+    $("fpsValue").textContent = Math.round(fpsFrames * 1000 / (now - fpsStart));
+    fpsFrames = 0;
+    fpsStart = now;
+  }
+}
+
+buildJointControls();
+applyAngles();
+updateTargetMarker();
+resizeRenderer();
+addWorkbenchObject("box", [0.75, 0.12, 0.45], 0xffc857);
+addWorkbenchObject("sphere", [0.45, 0.12, -0.55], 0x4c9aff);
+selectObject(null);
+updateTelemetry();
+requestAnimationFrame(animate);
+setStatus("Ready");
+</script>
+</body>
+</html>
