@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#131921">
+<meta name="description" content="AmazoNova — Everything You Love. One Shopping Universe.">
+<title>AmazoNova | One Shopping Universe</title>
+<style>
+:root {
+  --ink: #131921;
+  --nav: #232f3e;
+  --orange: #ff9900;
+  --orange-dark: #e88900;
+  --paper: #eae ded;
+  --white: #ffffff;
+  --muted: #667085;
+  --line: #d5d9d9;
+  --green: #067d62;
+  --radius: 12px;
+  --shadow: 0 5px 20px rgba(19,25,33,.09);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #eaeded;
+  font-family: Arial, Helvetica, sans-serif;
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid #4c9ffe;
+  outline-offset: 2px;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; }
+.hidden { display: none !important; }
+.muted { color: var(--muted); }
+.small { font-size: .82rem; }
+.container { width: min(1440px, 100% - 32px); margin-inline: auto; }
+.top-header {
+  background: var(--ink);
+  color: white;
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 18px;
+}
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 800;
+  letter-spacing: -1.3px;
+  font-size: 1.72rem;
+  white-space: nowrap;
+}
+.logo .nova { color: var(--orange); }
+.logo-mark {
+  width: 22px;
+  height: 15px;
+  border-bottom: 4px solid var(--orange);
+  border-radius: 0 0 50% 50%;
+  display: inline-block;
+  transform: translateY(-3px);
+}
+.delivery {
+  min-width: 105px;
+  border: 1px solid transparent;
+  padding: 5px 8px;
+  border-radius: 4px;
+}
+.delivery:hover, .header-link:hover { border-color: white; }
+.delivery small { display: block; color: #c8cbd0; font-size: .72rem; }
+.delivery strong { font-size: .84rem; }
+.searchbar {
+  flex: 1;
+  min-width: 160px;
+  display: flex;
+  height: 42px;
+  border-radius: 7px;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+.searchbar:focus-within { border-color: var(--orange); }
+.searchbar select {
+  max-width: 125px;
+  border: 0;
+  background: #e6e6e6;
+  color: #333;
+  padding: 0 8px;
+}
+.searchbar input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  padding: 0 12px;
+  outline: none;
+}
+.searchbar button {
+  border: 0;
+  width: 48px;
+  background: var(--orange);
+  font-size: 1.25rem;
+}
+.searchbar button:hover { background: #ffb32c; }
+.header-link {
+  border: 1px solid transparent;
+  padding: 5px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  display: block;
+}
+.header-link small { display: block; font-size: .72rem; }
+.header-link strong { font-size: .85rem; }
+.cart-link { display: flex; align-items: center; gap: 5px; }
+.cart-icon { font-size: 1.7rem; position: relative; }
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  color: var(--orange);
+  font-weight: 800;
+  font-size: .8rem;
+}
+.subnav {
+  background: var(--nav);
+  color: white;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 16px;
+  overflow-x: auto;
+}
+.subnav button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: white;
+  padding: 7px 10px;
+  white-space: nowrap;
+  border-radius: 4px;
+}
+.subnav button:hover { border-color: white; }
+.subnav .all-btn { font-weight: 700; }
+.mobile-menu-button { display: none; }
+.hero {
+  min-height: 330px;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  align-items: center;
+  padding: clamp(24px, 5vw, 70px);
+  background:
+    radial-gradient(circle at 80% 30%, rgba(255,153,0,.35), transparent 35%),
+    linear-gradient(115deg, #17283c, #324b64 60%, #e7a447);
+  color: white;
+}
+.hero-copy { max-width: 660px; position: relative; z-index: 1; }
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: .75rem;
+  color: #ffcf80;
+  font-weight: 700;
+}
+.hero h1 {
+  margin: 12px 0;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  line-height: .98;
+  letter-spacing: -2px;
+}
+.hero p { max-width: 560px; line-height: 1.65; color: #e6edf5; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+.btn {
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-weight: 700;
+  transition: transform .15s, background .15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--orange); color: #111; }
+.btn-primary:hover { background: #ffb52e; }
+.btn-secondary { background: white; color: var(--ink); }
+.btn-dark { background: var(--ink); color: white; }
+.hero-art {
+  justify-self: center;
+  width: min(340px, 100%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, rgba(255,255,255,.24), rgba(255,255,255,.03));
+  border: 1px solid rgba(255,255,255,.25);
+  box-shadow: inset 0 0 50px rgba(255,255,255,.08);
+}
+.hero-art span { font-size: clamp(5rem, 12vw, 9rem); filter: drop-shadow(0 18px 18px #10182066); }
+main { padding: 18px 0 40px; }
+.section { margin: 18px 0 26px; }
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+}
+.section-heading h2 { font-size: 1.35rem; margin: 0; }
+.section-heading p { margin: 4px 0 0; color: var(--muted); font-size: .9rem; }
+.text-link { color: #007185; font-weight: 700; font-size: .9rem; }
+.text-link:hover { text-decoration: underline; }
+.category-strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+.category-tile {
+  border: 0;
+  background: white;
+  padding: 18px 12px;
+  border-radius: var(--radius);
+  text-align: center;
+  box-shadow: var(--shadow);
+  min-height: 116px;
+}
+.category-tile:hover { transform: translateY(-3px); box-shadow: 0 9px 24px #00000018; }
+.category-tile .tile-icon { display: block; font-size: 2rem; margin-bottom: 9px; }
+.category-tile strong { font-size: .9rem; }
+.promo-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.promo-card {
+  background: white;
+  padding: 22px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  min-height: 150px;
+  position: relative;
+  overflow: hidden;
+}
+.promo-card h3 { margin: 0 0 8px; font-size: 1.15rem; }
+.promo-card p { margin: 0 0 15px; color: var(--muted); max-width: 260px; line-height: 1.45; }
+.promo-card .promo-emoji { position: absolute; right: 14px; bottom: 7px; font-size: 4.5rem; opacity: .18; }
+.shop-layout {
+  display: grid;
+  grid-template-columns: 245px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.filters {
+  background: white;
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 12px;
+}
+.filters h3 { margin: 0 0 15px; }
+.filter-group { border-top: 1px solid #eee; padding: 13px 0; }
+.filter-group h4 { margin: 0 0 10px; font-size: .92rem; }
+.filter-group label { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: .88rem; }
+.filter-group input[type="number"] {
+  width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 6px;
+}
+.filter-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.filter-group select { width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 6px; }
+.filter-actions { display: flex; gap: 8px; }
+.filter-actions button { flex: 1; padding: 9px 6px; font-size: .8rem; }
+.shop-toolbar {
+  background: white;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.shop-toolbar select { padding: 8px; border: 1px solid var(--line); border-radius: 6px; }
+.toolbar-left { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.results-count { font-size: .9rem; color: #424b55; }
+.active-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.filter-chip { border-radius: 20px; background: #e7f3f5; color: #176575; padding: 5px 9px; font-size: .78rem; }
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.product-card {
+  background: white;
+  border-radius: 10px;
+  padding: 12px;
+  min-width: 0;
+  box-shadow: 0 2px 9px rgba(0,0,0,.05);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform .15s, box-shadow .15s;
+}
+.product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.product-image-wrap {
+  height: 170px;
+  display: grid;
+  place-items: center;
+  background: #f7f8f8;
+  border-radius: 7px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.product-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transition: transform .2s;
+}
+.product-card:hover img { transform: scale(1.04); }
+.product-title {
+  font-size: .9rem;
+  line-height: 1.35;
+  min-height: 2.45em;
+  margin: 0 0 5px;
+  font-weight: 600;
+}
+.product-brand { color: var(--muted); font-size: .75rem; margin-bottom: 5px; }
+.rating { color: #de8500; font-size: .83rem; margin-bottom: 7px; }
+.rating span { color: #007185; }
+.price-line { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.price { font-weight: 800; font-size: 1.15rem; }
+.old-price { color: #777; font-size: .78rem; text-decoration: line-through; }
+.discount { color: #b12704; font-size: .78rem; }
+.stock { color: var(--green); font-size: .75rem; margin: 7px 0; }
+.stock.low { color: #b12704; }
+.card-actions { display: flex; gap: 6px; margin-top: auto; padding-top: 10px; }
+.card-actions button { border-radius: 20px; border: 1px solid #f0b323; background: #ffd814; padding: 8px 7px; font-size: .76rem; flex: 1; }
+.card-actions button:hover { background: #f7ca00; }
+.card-actions .icon-btn { flex: 0 0 34px; background: white; border-color: #ddd; font-size: 1rem; }
+.badge {
+  position: absolute; top: 10px; left: 10px;
+  background: #cc0c39; color: white; font-size: .68rem;
+  font-weight: 700; padding: 4px 6px; border-radius: 4px;
+}
+.pagination { display: flex; justify-content: center; gap: 6px; margin: 22px 0; flex-wrap: wrap; }
+.pagination button { border: 1px solid #ccd; background: white; padding: 8px 12px; border-radius: 6px; }
+.pagination button.active { background: var(--ink); color: white; }
+.pagination button:disabled { opacity: .4; cursor: not-allowed; }
+.empty-state { background: white; padding: 40px 20px; border-radius: var(--radius); text-align: center; }
+.empty-state .empty-icon { font-size: 3rem; }
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(5,12,20,.62);
+  display: grid; place-items: center; padding: 16px;
+}
+.modal {
+  background: white; width: min(900px, 100%); max-height: 92vh;
+  overflow: auto; border-radius: 14px; box-shadow: 0 20px 70px #0005;
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid #eee;
+}
+.modal-header h2 { margin: 0; font-size: 1.2rem; }
+.close-button { border: 0; background: #f1f3f3; width: 36px; height: 36px; border-radius: 50%; font-size: 1.3rem; }
+.modal-body { padding: 20px; }
+.product-detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 24px; }
+.detail-image { background: #f7f8f8; border-radius: 10px; min-height: 300px; display: grid; place-items: center; }
+.detail-image img { width: 100%; height: 300px; object-fit: contain; }
+.detail-info h1 { font-size: 1.5rem; line-height: 1.25; margin: 0 0 8px; }
+.detail-info p { line-height: 1.55; color: #515b66; }
+.detail-price { font-size: 1.8rem; font-weight: 800; margin: 12px 0; }
+.quantity-control { display: inline-flex; border: 1px solid #ddd; border-radius: 7px; overflow: hidden; align-items: center; }
+.quantity-control button { border: 0; background: #f3f3f3; padding: 7px 13px; }
+.quantity-control span { min-width: 34px; text-align: center; }
+.detail-buttons { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 15px; }
+.cart-drawer { width: min(720px, 100%); }
+.cart-item {
+  display: grid; grid-template-columns: 82px minmax(0,1fr) auto;
+  gap: 12px; padding: 14px 0; border-bottom: 1px solid #eee; align-items: center;
+}
+.cart-item img { width: 82px; height: 82px; object-fit: contain; background: #f7f8f8; border-radius: 6px; }
+.cart-item h4 { margin: 0 0 5px; font-size: .92rem; }
+.cart-item p { margin: 0 0 7px; color: var(--muted); font-size: .8rem; }
+.cart-item .remove { color: #007185; background: transparent; border: 0; font-size: .78rem; padding: 5px 0; }
+.cart-item-total { font-weight: 700; white-space: nowrap; }
+.cart-summary { background: #f7f8f8; padding: 16px; border-radius: 9px; margin-top: 18px; }
+.summary-line { display: flex; justify-content: space-between; gap: 12px; margin: 8px 0; }
+.summary-line.total { font-size: 1.2rem; font-weight: 800; border-top: 1px solid #ddd; padding-top: 12px; }
+.wishlist-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; }
+.form-field.full { grid-column: 1 / -1; }
+.form-field label { font-size: .83rem; font-weight: 700; }
+.form-field input, .form-field textarea, .form-field select {
+  border: 1px solid #cbd0d5; border-radius: 7px; padding: 10px;
+}
+.form-field input.invalid { border-color: #c00; }
+.notice { padding: 12px 14px; background: #e8f6f0; color: #176b4c; border-radius: 8px; margin: 12px 0; }
+.warning { background: #fff5dc; color: #805900; }
+.account-tabs { display: flex; gap: 8px; border-bottom: 1px solid #ddd; margin-bottom: 16px; }
+.account-tabs button { border: 0; background: transparent; padding: 10px 12px; }
+.account-tabs button.active { border-bottom: 3px solid var(--orange); font-weight: 700; }
+.admin-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 18px; }
+.stat-card { background: #f4f6f7; padding: 14px; border-radius: 9px; }
+.stat-card strong { display: block; font-size: 1.5rem; margin-top: 7px; }
+.admin-table-wrap { overflow-x: auto; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.admin-table th, .admin-table td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+.admin-table th { background: #f7f8f8; }
+.admin-table button { margin: 2px; }
+footer { background: var(--ink); color: white; }
+.back-top { display: block; text-align: center; background: #37475a; padding: 14px; font-weight: 700; }
+.footer-main { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; padding: 35px 20px; }
+.footer-main h3 { font-size: .95rem; margin: 0 0 12px; }
+.footer-main a { display: block; color: #d5d9df; font-size: .82rem; margin: 9px 0; }
+.footer-main a:hover { text-decoration: underline; }
+.footer-bottom { text-align: center; border-top: 1px solid #3a4654; padding: 18px; color: #c8cbd0; font-size: .8rem; }
+.toast-region { position: fixed; bottom: 20px; right: 20px; z-index: 200; display: grid; gap: 8px; }
+.toast { background: #17212d; color: white; padding: 12px 16px; border-radius: 8px; box-shadow: var(--shadow); animation: toast-in .2s ease-out; }
+@keyframes toast-in { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@media (max-width: 1150px) {
+  .top-header { gap: 8px; padding-inline: 10px; }
+  .delivery { display: none; }
+  .product-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .category-strip { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
+@media (max-width: 850px) {
+  .top-header { flex-wrap: wrap; }
+  .logo { font-size: 1.5rem; }
+  .searchbar { order: 5; flex-basis: 100%; }
+  .header-link small { display: none; }
+  .subnav { display: none; flex-wrap: wrap; }
+  .subnav.open { display: flex; }
+  .mobile-menu-button { display: inline-block; border: 1px solid #617080; background: transparent; color: white; padding: 8px 10px; border-radius: 5px; }
+  .hero { grid-template-columns: 1fr; min-height: 290px; }
+  .hero-art { display: none; }
+  .shop-layout { grid-template-columns: 1fr; }
+  .filters { position: static; }
+  .filter-groups { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .promo-row { grid-template-columns: 1fr; }
+  .footer-main { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 520px) {
+  .container { width: min(100% - 20px, 1440px); }
+  .top-header { padding: 9px; gap: 5px; }
+  .logo { font-size: 1.35rem; }
+  .header-link { padding: 5px; }
+  .header-link strong { font-size: .75rem; }
+  .cart-icon { font-size: 1.4rem; }
+  .hero { padding: 26px 18px; }
+  .hero h1 { letter-spacing: -1px; }
+  .category-strip { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .filter-groups { grid-template-columns: 1fr; }
+  .product-grid { gap: 8px; }
+  .product-card { padding: 8px; }
+  .product-image-wrap { height: 130px; }
+  .product-title { font-size: .82rem; }
+  .card-actions button { font-size: .7rem; }
+  .section-heading { align-items: start; flex-direction: column; }
+  .shop-toolbar { align-items: start; }
+  .product-detail { grid-template-columns: 1fr; }
+  .detail-image img { height: 220px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-field.full { grid-column: auto; }
+  .admin-stats { grid-template-columns: repeat(2,1fr); }
+  .wishlist-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .footer-main { gap: 15px; padding: 25px 10px; }
+  .cart-item { grid-template-columns: 62px minmax(0,1fr); }
+  .cart-item img { width: 62px; height: 62px; }
+  .cart-item-total { grid-column: 2; }
+}
+</style>
+</head>
+<body>
+<header id="pageTop">
+  <div class="top-header">
+    <a class="logo" href="#home" aria-label="AmazoNova home">
+      <span>Amazo</span><span class="nova">Nova</span><i class="logo-mark" aria-hidden="true"></i>
+    </a>
+    <div class="delivery" aria-label="Delivery location">
+      <small>Deliver to</small><strong>📍 India</strong>
+    </div>
+    <form class="searchbar" id="searchForm" role="search">
+      <select id="searchCategory" aria-label="Search category">
+        <option value="All">All</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Fashion">Fashion</option>
+        <option value="Home & Kitchen">Home & Kitchen</option>
+        <option value="Beauty & Personal Care">Beauty</option>
+        <option value="Grocery">Grocery</option>
+        <option value="Books">Books</option>
+      </select>
+      <input id="searchInput" type="search" placeholder="Search AmazoNova" autocomplete="off" aria-label="Search products">
+      <button type="submit" aria-label="Search">⌕</button>
+    </form>
+    <button class="mobile-menu-button" id="mobileMenuButton" aria-expanded="false">☰ Menu</button>
+    <button class="header-link" id="accountButton"><small>Hello, sign in</small><strong>Account & Lists</strong></button>
+    <button class="header-link" id="ordersButton"><small>Returns</small><strong>& Orders</strong></button>
+    <button class="header-link cart-link" id="cartButton" aria-label="Open shopping cart">
+      <span class="cart-icon">🛒<span class="cart-count" id="cartCount">0</span></span><strong>Cart</strong>
+    </button>
+  </div>
+  <nav class="subnav" id="subnav" aria-label="Main categories">
+    <button class="all-btn" data-category="All">☰ All</button>
+    <button data-category="All">Today's Deals</button>
+    <button data-category="Electronics">Electronics</button>
+    <button data-category="Fashion">Fashion</button>
+    <button data-category="Home & Kitchen">Home & Kitchen</button>
+    <button data-category="Grocery">Grocery</button>
+    <button data-category="Beauty & Personal Care">Beauty</button>
+    <button data-category="Sports & Fitness">Sports</button>
+    <button data-category="Books">Books</button>
+    <button data-category="Toys & Games">Toys</button>
+    <button id="customerServiceButton">Customer Service</button>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-copy">
+    <span class="eyebrow">Your universe of shopping</span>
+    <h1>Discover your<br>next favorite.</h1>
+    <p>Explore technology, fashion, home essentials, books, and everyday finds — all in one friendly shopping universe.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" id="shopNowButton">Shop now</button>
+      <button class="btn btn-secondary" id="exploreCategoriesButton">Explore categories</button>
+    </div>
+  </div>
+  <div class="hero-art" aria-hidden="true"><span>🛍️</span></div>
+</section>
+
+<main class="container">
+  <section class="section" id="categorySection">
+    <div class="section-heading">
+      <div><h2>Shop by category</h2><p>Find the right aisle for whatever you need.</p></div>
+      <a class="text-link" href="#catalog">Explore all products →</a>
+    </div>
+    <div class="category-strip" id="categoryTiles"></div>
+  </section>
+
+  <section class="section" aria-label="Shopping highlights">
+    <div class="promo-row">
+      <article class="promo-card">
+        <h3>Today's discoveries</h3>
+        <p>Fresh finds across your favorite categories.</p>
+        <a class="text-link" href="#catalog" data-promo="deals">Browse deals →</a>
+        <span class="promo-emoji" aria-hidden="true">⚡</span>
+      </article>
+      <article class="promo-card">
+        <h3>Upgrade your everyday</h3>
+        <p>Smart essentials for work, play, and home.</p>
+        <a class="text-link" href="#catalog" data-promo="electronics">Explore tech →</a>
+        <span class="promo-emoji" aria-hidden="true">🎧</span>
+      </article>
+      <article class="promo-card">
+        <h3>Little joys, big finds</h3>
+        <p>Discover new favorites for every corner of life.</p>
+        <a class="text-link" href="#catalog" data-promo="lifestyle">Shop lifestyle →</a>
+        <span class="promo-emoji" aria-hidden="true">✨</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="catalog">
+    <div class="section-heading">
+      <div><h2>Explore the AmazoNova catalog</h2><p>Search, filter, sort, and discover products from our demo catalog.</p></div>
+      <button class="text-link" id="wishlistButton">♡ Wishlist (<span id="wishlistCount">0</span>)</button>
+    </div>
+    <div class="shop-layout">
+      <aside class="filters" id="filterPanel" aria-label="Product filters">
+        <h3>Filters</h3>
+        <div class="filter-groups">
+          <div class="filter-group">
+            <h4>Category</h4>
+            <select id="categoryFilter" aria-label="Filter category">
+              <option value="All">All categories</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <h4>Brand</h4>
+            <select id="brandFilter" aria-label="Filter brand">
+              <option value="All">All brands</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <h4>Price range (₹)</h4>
+            <div class="filter-pair">
+              <input id="minPrice" type="number" min="0" placeholder="Min" aria-label="Minimum price">
+              <input id="maxPrice" type="number" min="0" placeholder="Max" aria-label="Maximum price">
+            </div>
+          </div>
+          <div class="filter-group">
+            <h4>Minimum rating</h4>
+            <select id="ratingFilter" aria-label="Minimum rating">
+              <option value="0">Any rating</option>
+              <option value="3">3★ & above</option>
+              <option value="4">4★ & above</option>
+              <option value="4.5">4.5★ & above</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <h4>Discount</h4>
+            <select id="discountFilter" aria-label="Minimum discount">
+              <option value="0">Any discount</option>
+              <option value="10">10% & above</option>
+              <option value="25">25% & above</option>
+              <option value="40">40% & above</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <h4>Availability</h4>
+            <label><input type="checkbox" id="inStockFilter"> In stock only</label>
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button class="btn btn-dark" id="applyFiltersButton">Apply</button>
+          <button class="btn btn-secondary" id="resetFiltersButton">Reset</button>
+        </div>
+      </aside>
+      <div class="catalog-content">
+        <div class="shop-toolbar">
+          <div class="toolbar-left">
+            <span class="results-count" id="resultsCount" aria-live="polite">Loading catalog…</span>
+            <div class="active-filters" id="activeFilters"></div>
+          </div>
+          <label class="small">Sort by
+            <select id="sortSelect">
+              <option value="featured">Featured</option>
+              <option value="priceAsc">Price: low to high</option>
+              <option value="priceDesc">Price: high to low</option>
+              <option value="rating">Highest rating</option>
+              <option value="reviews">Most reviewed</option>
+              <option value="discount">Biggest discount</option>
+              <option value="newest">Newest</option>
+            </select>
+          </label>
+        </div>
+        <div class="product-grid" id="productGrid" aria-live="polite"></div>
+        <div class="pagination" id="pagination" aria-label="Product pages"></div>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="recommendedSection">
+    <div class="section-heading"><div><h2>Recently viewed</h2><p>Pick up where you left off.</p></div></div>
+    <div class="product-grid" id="recentGrid"></div>
+  </section>
+</main>
+
+<footer>
+  <a class="back-top" href="#pageTop">Back to top ↑</a>
+  <div class="footer-main container">
+    <div><h3>Get to know AmazoNova</h3><a href="#home">About AmazoNova</a><a href="#catalog">Our catalog</a><a href="#categorySection">Categories</a><a href="#admin" id="adminFooterLink">Admin demo</a></div>
+    <div><h3>Make shopping easy</h3><a href="#catalog">Today's deals</a><a href="#catalog">New arrivals</a><a href="#catalog">Best sellers</a><a href="#catalog">Gift ideas</a></div>
+    <div><h3>Help & support</h3><a href="#" id="helpLink">Help center</a><a href="#" id="returnsLink">Returns & refunds</a><a href="#" id="shippingLink">Shipping information</a><a href="#" id="contactLink">Contact us</a></div>
+    <div><h3>Policies</h3><a href="#" data-policy="Privacy policy">Privacy policy</a><a href="#" data-policy="Terms of service">Terms of service</a><a href="#" data-policy="Accessibility">Accessibility</a><a href="#" data-policy="Cookie preferences">Cookie preferences</a></div>
+  </div>
+  <div class="footer-bottom">AmazoNova — Everything You Love. One Shopping Universe. <br>Frontend demonstration · No real payments or orders are processed.</div>
+</footer>
+
+<div class="modal-backdrop hidden" id="modalBackdrop" role="presentation">
+  <section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-header"><h2 id="modalTitle">AmazoNova</h2><button class="close-button" id="modalClose" aria-label="Close dialog">×</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </section>
+</div>
+<div class="toast-region" id="toastRegion" aria-live="polite"></div>
+
+<!-- Catalog and UI implementation notes -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<!-- AmazoNova implementation notes: maintain original branding and demo-only checkout. -->
+<!-- Product data is generated from category templates; IDs are unique in this catalog. -->
+<!-- Search is local and scans product name, brand, category, subcategory, and tags. -->
+<!-- Filtering state is shared by category, brand, price, rating, discount, and stock. -->
+<!-- Sorting is applied after filtering so controls compose correctly. -->
+<!-- Pagination limits the number of product cards inserted into the document. -->
+<!-- Product image loading is lazy for catalog cards to reduce initial network activity. -->
+<!-- Cart, wishlist, recent views, admin additions, and demo orders use local storage. -->
+<!-- This frontend does not provide production authentication or payment processing. -->
+<!-- Before deployment, replace illustrative copy and validate all product image URLs. -->
+<!-- Use reviewed privacy, terms, shipping, and return policies for a real store. -->
+<!-- Add a secure backend before accepting real orders or managing inventory. -->
+<!-- Never place payment secrets, admin credentials, or private API keys in this file. -->
+<!-- Keep keyboard focus visible and use semantic controls for interactive elements. -->
+<!-- The modal supports Escape and backdrop click for dismissal. -->
+<!-- Product cards are rendered through event delegation to avoid per-card listeners. -->
+<!-- Responsive rules cover desktop, tablet, and narrow mobile viewport widths. -->
+<!-- A fallback image is shown if a product image fails to load. -->
+<!-- The catalog is suitable for a static-hosting portfolio demonstration. -->
+<script>
+"use strict";
+
+/* -----------------------------------------------------------
+   AmazoNova product catalog
+   A deterministic local demo catalog with 1,080 unique records.
+   Product IDs and names are unique; category-specific templates
+   are used to keep the catalog compact and easy to maintain.
+----------------------------------------------------------- */
+const categoryDefinitions = [
+  { name: "Electronics", icon: "💻", subcategories: ["Audio", "Accessories", "Smart Devices"] },
+  { name: "Smartphones", icon: "📱", subcategories: ["Android Phones", "Phone Accessories", "Chargers"] },
+  { name: "Laptops", icon: "💻", subcategories: ["Everyday Laptops", "Creator Laptops", "Laptop Accessories"] },
+  { name: "Computers", icon: "🖥️", subcategories: ["Monitors", "Keyboards", "Storage"] },
+  { name: "Accessories", icon: "🔌", subcategories: ["Cables", "Adapters", "Desk Accessories"] },
+  { name: "Headphones", icon: "🎧", subcategories: ["Wireless", "Wired", "Earbuds"] },
+  { name: "Smart Watches", icon: "⌚", subcategories: ["Fitness Watches", "Classic Smartwatches", "Bands"] },
+  { name: "Cameras", icon: "📷", subcategories: ["Digital Cameras", "Camera Accessories", "Tripods"] },
+  { name: "Television", icon: "📺", subcategories: ["Smart TVs", "TV Accessories", "Streaming"] },
+  { name: "Gaming", icon: "🎮", subcategories: ["Controllers", "Gaming Accessories", "PC Gaming"] },
+  { name: "Fashion", icon: "👕", subcategories: ["Everyday Wear", "Seasonal", "Accessories"] },
+  { name: "Men's Clothing", icon: "👔", subcategories: ["Shirts", "T-shirts", "Outerwear"] },
+  { name: "Women's Clothing", icon: "👗", subcategories: ["Dresses", "Tops", "Outerwear"] },
+  { name: "Shoes", icon: "👟", subcategories: ["Sneakers", "Casual Shoes", "Sports Shoes"] },
+  { name: "Watches", icon: "⌚", subcategories: ["Analog", "Digital", "Watch Accessories"] },
+  { name: "Bags", icon: "🎒", subcategories: ["Backpacks", "Handbags", "Travel Bags"] },
+  { name: "Beauty & Personal Care", icon: "🧴", subcategories: ["Personal Care", "Beauty Tools", "Wellness"] },
+  { name: "Skincare", icon: "🧖", subcategories: ["Cleansers", "Moisturizers", "Sun Care"] },
+  { name: "Haircare", icon: "💇", subcategories: ["Shampoo", "Styling", "Hair Tools"] },
+  { name: "Home & Kitchen", icon: "🏡", subcategories: ["Kitchenware", "Home Essentials", "Storage"] },
+  { name: "Furniture", icon: "🪑", subcategories: ["Living Room", "Bedroom", "Office"] },
+  { name: "Home Decor", icon: "🪴", subcategories: ["Lighting", "Decor", "Wall Art"] },
+  { name: "Kitchen Appliances", icon: "🍳", subcategories: ["Small Appliances", "Cookware", "Food Prep"] },
+  { name: "Grocery", icon: "🛒", subcategories: ["Staples", "Snacks", "Beverages"] },
+  { name: "Packed Foods", icon: "🍪", subcategories: ["Biscuits", "Ready to Eat", "Breakfast"] },
+  { name: "Soft Drinks", icon: "🥤", subcategories: ["Juices", "Soda", "Water"] },
+  { name: "Household Essentials", icon: "🧹", subcategories: ["Cleaning", "Laundry", "Paper Products"] },
+  { name: "Sports & Fitness", icon: "🏃", subcategories: ["Fitness Gear", "Outdoor", "Training"] },
+  { name: "Books", icon: "📚", subcategories: ["Fiction", "Learning", "Lifestyle"] },
+  { name: "Toys & Games", icon: "🧸", subcategories: ["Board Games", "Building Toys", "Outdoor Toys"] }
+];
+
+const brandNames = [
+  "NovaCore", "BrightNest", "UrbanTrail", "PixelPeak", "EverBloom",
+  "Northline", "AeroWave", "HomeCraft", "BlueOrbit", "DailyField",
+  "MiraWorks", "PeakForm", "LumaLiving", "CloudNine", "TrueNorth",
+  "Vertex", "Cedar & Co.", "PulseLab", "FreshPath", "Oakstone"
+];
+
+const productNouns = {
+  "Electronics": ["Bluetooth Speaker", "Wireless Mouse", "USB Hub", "Portable Charger", "Desk Microphone", "Smart Plug"],
+  "Smartphones": ["Smartphone", "Fast Charger", "Protective Case", "Screen Protector", "Wireless Stand", "Power Bank"],
+  "Laptops": ["Laptop", "Laptop Stand", "Cooling Pad", "Travel Sleeve", "Docking Station", "Keyboard Cover"],
+  "Computers": ["Monitor", "Mechanical Keyboard", "Desktop SSD", "Webcam", "Desk Mat", "USB Storage Drive"],
+  "Accessories": ["Charging Cable", "Adapter", "Cable Organizer", "Laptop Sleeve", "Desk Lamp", "Compact Hub"],
+  "Headphones": ["Wireless Headphones", "Noise-Isolating Earbuds", "Wired Headset", "Audio Adapter", "Earbud Case", "Studio Headphones"],
+  "Smart Watches": ["Smart Watch", "Fitness Band", "Watch Strap", "Charging Dock", "Screen Guard", "Sport Watch"],
+  "Cameras": ["Digital Camera", "Camera Strap", "Tripod", "Lens Cleaning Kit", "Memory Card", "Camera Bag"],
+  "Television": ["Smart TV", "TV Wall Mount", "Streaming Stick", "Soundbar", "HDMI Cable", "Remote Cover"],
+  "Gaming": ["Game Controller", "Gaming Headset", "Gaming Mouse", "Controller Stand", "Gaming Chair Cushion", "Capture Accessory"],
+  "Fashion": ["Casual Outfit", "Everyday Hoodie", "Light Jacket", "Style Belt", "Travel Cap", "Comfort Wear"],
+  "Men's Clothing": ["Cotton Shirt", "Classic T-shirt", "Casual Jacket", "Chino Trousers", "Polo Shirt", "Winter Sweater"],
+  "Women's Clothing": ["Everyday Dress", "Casual Top", "Light Cardigan", "Comfort Trousers", "Printed Tunic", "Soft Sweater"],
+  "Shoes": ["Sneakers", "Walking Shoes", "Running Shoes", "Casual Loafers", "Indoor Slides", "Training Shoes"],
+  "Watches": ["Analog Watch", "Digital Watch", "Minimal Watch", "Watch Box", "Leather Strap", "Metal Bracelet"],
+  "Bags": ["Travel Backpack", "Everyday Tote", "Laptop Bag", "Crossbody Bag", "Weekend Duffel", "Organizer Pouch"],
+  "Beauty & Personal Care": ["Grooming Kit", "Personal Care Set", "Beauty Mirror", "Travel Toiletry Bag", "Nail Care Set", "Wellness Kit"],
+  "Skincare": ["Face Cleanser", "Daily Moisturizer", "Sun Care Lotion", "Hydrating Serum", "Face Mask Set", "Gentle Toner"],
+  "Haircare": ["Shampoo", "Conditioner", "Hair Brush", "Styling Dryer", "Hair Serum", "Travel Hair Kit"],
+  "Home & Kitchen": ["Storage Basket", "Kitchen Organizer", "Cotton Towel Set", "Reusable Bottle", "Serving Tray", "Home Utility Set"],
+  "Furniture": ["Study Desk", "Accent Chair", "Bookshelf", "Bedside Table", "Storage Cabinet", "Compact Stool"],
+  "Home Decor": ["Table Lamp", "Decorative Vase", "Wall Art Print", "Cushion Cover", "Indoor Planter", "LED String Light"],
+  "Kitchen Appliances": ["Electric Kettle", "Mixer Blender", "Toaster", "Air Fryer", "Rice Cooker", "Food Chopper"],
+  "Grocery": ["Whole Grain Pack", "Everyday Pantry Set", "Mixed Nuts Pack", "Tea Collection", "Cooking Essentials", "Snack Variety Box"],
+  "Packed Foods": ["Biscuit Assortment", "Instant Meal Pack", "Breakfast Cereal", "Granola Bar Box", "Pasta Pack", "Cracker Collection"],
+  "Soft Drinks": ["Fruit Juice Pack", "Sparkling Drink", "Iced Tea Bottle", "Coconut Water Pack", "Lemon Drink", "Flavored Water"],
+  "Household Essentials": ["Cleaning Cloth Set", "Laundry Basket", "Dishwashing Kit", "Floor Cleaner", "Paper Tissue Pack", "Storage Labels"],
+  "Sports & Fitness": ["Yoga Mat", "Resistance Bands", "Training Bottle", "Fitness Gloves", "Jump Rope", "Exercise Ball"],
+  "Books": ["Story Collection", "Learning Workbook", "Creative Journal", "Science Guide", "Mystery Novel", "Personal Growth Book"],
+  "Toys & Games": ["Board Game", "Building Blocks", "Puzzle Set", "Outdoor Play Kit", "Card Game", "Creative Craft Box"]
+};
+
+const productImagePool = {
+  "Electronics": "https://images.unsplash.com/photo-149XXX",
+  "Smartphones": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=700&q=80",
+  "Laptops": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=700&q=80",
+  "Computers": "https://images.unsplash.com/photo-1587831990711-23ca6441447b?auto=format&fit=crop&w=700&q=80",
+  "Accessories": "https://images.unsplash.com/photo-1588508065123-287b28e013da?auto=format&fit=crop&w=700&q=80",
+  "Headphones": "https://images.unsplash.com/photo-1500043204640-6c8e4f4f4f4f?auto=format&fit=crop&w=700&q=80",
+  "Smart Watches": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80",
+  "Cameras": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=700&q=80",
+  "Television": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=700&q=80",
+  "Gaming": "https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=700&q=80",
+  "Fashion": "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=700&q=80",
+  "Men's Clothing": "https://images.unsplash.com/photo-151 одеж?auto=format&fit=crop&w=700&q=80",
+  "Women's Clothing": "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=700&q=80",
+  "Shoes": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80",
+  "Watches": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=700&q=80",
+  "Bags": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=80",
+  "Beauty & Personal Care": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=700&q=80",
+  "Skincare": "https://images.unsplash.com/photo-160 масла?auto=format&fit=crop&w=700&q=80",
+  "Haircare": "https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=700&q=80",
+  "Home & Kitchen": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=700&q=80",
+  "Furniture": "https://images.unsplash.com/photo-155家具?auto=format&fit=crop&w=700&q=80",
+  "Home Decor": "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80",
+  "Kitchen Appliances": "https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=700&q=80",
+  "Grocery": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=80",
+  "Packed Foods": "https://images.unsplash.com/photo-1608198093002-ad4e005484c9?auto=format&fit=crop&w=700&q=80",
+  "Soft Drinks": "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=700&q=80",
+  "Household Essentials": "https://images.unsplash.com/photo-1583947581924-860bda6a26df?auto=format&fit=crop&w=700&q=80",
+  "Sports & Fitness": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=700&q=80",
+  "Books": "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=700&q=80",
+  "Toys & Games": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=700&q=80"
+};
+
+const imageFallbacks = [
+  "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80",
+  "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=700&q=80",
+  "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"
+];
+
+function makeProductImage(category, index) {
+  const direct = productImagePool[category];
+  if (direct && direct.includes("unsplash.com") && !/[XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX|XXX]/.test(direct)) {
+    return direct;
+  }
+  return imageFallbacks[index % imageFallbacks.length];
+}
+
+function buildCatalog() {
+  const catalog = [];
+  let id = 1001;
+  categoryDefinitions.forEach((category, categoryIndex) => {
+    const nouns = productNouns[category.name] || ["Everyday Product"];
+    for (let i = 0; i < 36; i += 1) {
+      const noun = nouns[i % nouns.length];
+      const variation = Math.floor(i / nouns.length) + 1;
+      const brand = brandNames[(categoryIndex * 3 + i) % brandNames.length];
+      const price = Math.round((350 + categoryIndex * 145 + (i * 379) % 4200) / 10) * 10;
+      const originalPrice = Math.round(price * (1.12 + ((i + categoryIndex) % 5) * .09) / 10) * 10;
+      const discount = Math.max(5, Math.round((1 - price / originalPrice) * 100));
+      const subcategory = category.subcategories[i % category.subcategories.length];
+      const name = `${brand} ${noun} ${String(variation).padStart(2, "0")}`;
+      const tags = [category.name.toLowerCase(), subcategory.toLowerCase(), brand.toLowerCase(), noun.toLowerCase()];
+      catalog.push({
+        id,
+        name,
+        category: category.name,
+        subcategory,
+        brand,
+        price,
+        originalPrice,
+        discount,
+        image: makeProductImage(category.name, i + categoryIndex),
+        description: `${name} from ${brand}. A thoughtfully selected ${subcategory.toLowerCase()} item for everyday use. Product details are illustrative for this frontend demonstration.`,
+        rating: Number((3.4 + ((i * 7 + categoryIndex) % 17) / 10).toFixed(1)),
+        reviews: 15 + ((i * 137 + categoryIndex * 61) % 4800),
+        stock: (i + categoryIndex) % 17 === 0 ? 0 : 3 + ((i * 11 + categoryIndex) % 72),
+        featured: i < 4,
+        bestseller: i % 9 === 0,
+        tags,
+        createdAt: Date.now() - (i * 86400000 + categoryIndex * 3600000)
+      });
+      id += 1;
+    }
+  });
+  return catalog;
+}
+
+const products = buildCatalog();
+const STORAGE_KEYS = {
+  cart: "amazonova-cart-v1",
+  wishlist: "amazonova-wishlist-v1",
+  recent: "amazonova-recent-v1",
+  customProducts: "amazonova-admin-products-v1",
+  demoOrders: "amazonova-demo-orders-v1"
+};
+
+const state = {
+  query: "",
+  category: "All",
+  brand: "All",
+  minPrice: "",
+  maxPrice: "",
+  rating: 0,
+  discount: 0,
+  inStock: false,
+  sort: "featured",
+  page: 1,
+  pageSize: 24,
+  cart: readStorage(STORAGE_KEYS.cart, {}),
+  wishlist: readStorage(STORAGE_KEYS.wishlist, []),
+  recent: readStorage(STORAGE_KEYS.recent, []),
+  customProducts: readStorage(STORAGE_KEYS.customProducts, []),
+  modalProductQuantity: 1,
+  modalProductId: null,
+  accountTab: "signin"
+};
+
+function readStorage(key, fallback) {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(key));
+    return parsed === null ? fallback : parsed;
+  } catch (error) {
+    console.warn("Could not read local storage key:", key, error);
+    return fallback;
+  }
+}
+
+function writeStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    toast("Storage is unavailable. Changes may not persist.");
+    console.warn("Could not write local storage:", error);
+  }
+}
+
+function allProducts() {
+  return products.concat(state.customProducts);
+}
+
+function productById(id) {
+  return allProducts().find((product) => Number(product.id) === Number(id));
+}
+
+function money(value) {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0
+  }).format(value);
+}
+
+function escapeHTML(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function safeImage(product) {
+  return product.image || imageFallbacks[0];
+}
+
+function toast(message) {
+  const region = document.getElementById("toastRegion");
+  const item = document.createElement("div");
+  item.className = "toast";
+  item.textContent = message;
+  region.appendChild(item);
+  window.setTimeout(() => item.remove(), 2800);
+}
+
+function setCategory(category) {
+  state.category = category;
+  state.page = 1;
+  document.getElementById("categoryFilter").value = category;
+  document.getElementById("searchCategory").value = category === "All" ? "All" : category;
+  renderCatalog();
+  document.getElementById("catalog").scrollIntoView({ behavior: "smooth" });
+}
+
+function populateFilters() {
+  const categorySelect = document.getElementById("categoryFilter");
+  categoryDefinitions.forEach((category) => {
+    const option = document.createElement("option");
+    option.value = category.name;
+    option.textContent = category.name;
+    categorySelect.appendChild(option);
+  });
+  const brands = [...new Set(allProducts().map((product) => product.brand))].sort();
+  const brandSelect = document.getElementById("brandFilter");
+  brands.forEach((brand) => {
+    const option = document.createElement("option");
+    option.value = brand;
+    option.textContent = brand;
+    brandSelect.appendChild(option);
+  });
+}
+
+function renderCategoryTiles() {
+  const target = document.getElementById("categoryTiles");
+  const featuredCategories = categoryDefinitions.slice(0, 12);
+  target.innerHTML = featuredCategories.map((category) => `
+    <button class="category-tile" data-category="${escapeHTML(category.name)}">
+      <span class="tile-icon" aria-hidden="true">${category.icon}</span>
+      <strong>${escapeHTML(category.name)}</strong>
+    </button>
+  `).join("");
+}
+
+function currentFiltersFromUI() {
+  state.category = document.getElementById("categoryFilter").value;
+  state.brand = document.getElementById("brandFilter").value;
+  state.minPrice = document.getElementById("minPrice").value;
+  state.maxPrice = document.getElementById("maxPrice").value;
+  state.rating = Number(document.getElementById("ratingFilter").value);
+  state.discount = Number(document.getElementById("discountFilter").value);
+  state.inStock = document.getElementById("inStockFilter").checked;
+  state.sort = document.getElementById("sortSelect").value;
+  state.page = 1;
+}
+
+function filteredProducts() {
+  const query = state.query.trim().toLowerCase();
+  let result = allProducts().filter((product) => {
+    const queryMatch = !query || [
+      product.name,
+      product.brand,
+      product.category,
+      product.subcategory,
+      ...(product.tags || [])
+    ].join(" ").toLowerCase().includes(query);
+    const categoryMatch = state.category === "All" || product.category === state.category;
+    const brandMatch = state.brand === "All" || product.brand === state.brand;
+    const minMatch = state.minPrice === "" || product.price >= Number(state.minPrice);
+    const maxMatch = state.maxPrice === "" || product.price <= Number(state.maxPrice);
+    const ratingMatch = product.rating >= state.rating;
+    const discountMatch = product.discount >= state.discount;
+    const stockMatch = !state.inStock || product.stock > 0;
+    return queryMatch && categoryMatch && brandMatch && minMatch && maxMatch &&
+      ratingMatch && discountMatch && stockMatch;
+  });
+
+  switch (state.sort) {
+    case "priceAsc":
+      result.sort((a, b) => a.price - b.price);
+      break;
+    case "priceDesc":
+      result.sort((a, b) => b.price - a.price);
+      break;
+    case "rating":
+      result.sort((a, b) => b.rating - a.rating || b.reviews - a.reviews);
+      break;
+    case "reviews":
+      result.sort((a, b) => b.reviews - a.reviews);
+      break;
+    case "discount":
+      result.sort((a, b) => b.discount - a.discount);
+      break;
+    case "newest":
+      result.sort((a, b) => b.createdAt - a.createdAt);
+      break;
+    default:
+      result.sort((a, b) => Number(b.featured) - Number(a.featured) || a.id - b.id);
+  }
+  return result;
+}
+
+function productCard(product) {
+  const inWishlist = state.wishlist.includes(product.id);
+  const stockText = product.stock > 0 ? `${product.stock} in stock` : "Currently unavailable";
+  const stockClass = product.stock > 0 ? "stock" : "stock low";
+  return `
+    <article class="product-card" data-product-id="${product.id}">
+      ${product.bestseller ? '<span class="badge">Bestseller</span>' : ""}
+      <button class="product-image-wrap" data-action="details" data-id="${product.id}" aria-label="View ${escapeHTML(product.name)}">
+        <img src="${escapeHTML(safeImage(product))}" alt="${escapeHTML(product.name)}" loading="lazy"
+          onerror="this.onerror=null;this.src='${imageFallbacks[0]}'">
+      </button>
+      <div class="product-brand">${escapeHTML(product.brand)} · ${escapeHTML(product.category)}</div>
+      <h3 class="product-title">${escapeHTML(product.name)}</h3>
+      <div class="rating" aria-label="${product.rating} out of 5 stars">★ ${product.rating} <span>(${product.reviews.toLocaleString("en-IN")})</span></div>
+      <div class="price-line"><span class="price">${money(product.price)}</span><span class="old-price">${money(product.originalPrice)}</span><span class="discount">${product.discount}% off</span></div>
+      <div class="${stockClass}">${stockText}</div>
+      <div class="card-actions">
+        <button data-action="add" data-id="${product.id}" ${product.stock <= 0 ? "disabled" : ""}>Add to cart</button>
+        <button class="icon-btn" data-action="wishlist" data-id="${product.id}" aria-label="${inWishlist ? "Remove from" : "Add to"} wishlist">${inWishlist ? "♥" : "♡"}</button>
+        <button class="icon-btn" data-action="details" data-id="${product.id}" aria-label="Quick view">⌕</button>
+      </div>
+    </article>
+  `;
+}
+
+function renderCatalog() {
+  const results = filteredProducts();
+  const totalPages = Math.max(1, Math.ceil(results.length / state.pageSize));
+  state.page = Math.min(state.page, totalPages);
+  const start = (state.page - 1) * state.pageSize;
+  const pageProducts = results.slice(start, start + state.pageSize);
+  document.getElementById("resultsCount").textContent =
+    `${results.length.toLocaleString("en-IN")} products · page ${state.page} of ${totalPages}`;
+  document.getElementById("productGrid").innerHTML = pageProducts.length
+    ? pageProducts.map(productCard).join("")
+    : `<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🔎</div><h3>No products found</h3><p>Try another search or reset your filters.</p><button class="btn btn-primary" id="emptyResetButton">Reset filters</button></div>`;
+  renderPagination(totalPages);
+  renderActiveFilters();
+  if (!pageProducts.length) {
+    const resetButton = document.getElementById("emptyResetButton");
+    if (resetButton) resetButton.addEventListener("click", resetFilters);
+  }
+}
+
+function renderPagination(totalPages) {
+  const target = document.getElementById("pagination");
+  const buttons = [];
+  buttons.push(`<button data-page="${state.page - 1}" ${state.page <= 1 ? "disabled" : ""}>← Prev</button>`);
+  const windowSize = 5;
+  let first = Math.max(1, state.page - Math.floor(windowSize / 2));
+  let last = Math.min(totalPages, first + windowSize - 1);
+  first = Math.max(1, last - windowSize + 1);
+  for (let page = first; page <= last; page += 1) {
+    buttons.push(`<button data-page="${page}" class="${page === state.page ? "active" : ""}" aria-current="${page === state.page ? "page" : "false"}">${page}</button>`);
+  }
+  buttons.push(`<button data-page="${state.page + 1}" ${state.page >= totalPages ? "disabled" : ""}>Next →</button>`);
+  target.innerHTML = buttons.join("");
+}
+
+function renderActiveFilters() {
+  const chips = [];
+  if (state.query) chips.push(`Search: ${state.query}`);
+  if (state.category !== "All") chips.push(state.category);
+  if (state.brand !== "All") chips.push(state.brand);
+  if (state.minPrice !== "") chips.push(`Min ₹${state.minPrice}`);
+  if (state.maxPrice !== "") chips.push(`Max ₹${state.maxPrice}`);
+  if (state.rating) chips.push(`${state.rating}★+`);
+  if (state.discount) chips.push(`${state.discount}%+ off`);
+  if (state.inStock) chips.push("In stock");
+  document.getElementById("activeFilters").innerHTML = chips.map((chip) => `<span class="filter-chip">${escapeHTML(chip)}</span>`).join("");
+}
+
+function resetFilters() {
+  state.query = "";
+  state.category = "All";
+  state.brand = "All";
+  state.minPrice = "";
+  state.maxPrice = "";
+  state.rating = 0;
+  state.discount = 0;
+  state.inStock = false;
+  state.sort = "featured";
+  state.page = 1;
+  document.getElementById("searchInput").value = "";
+  document.getElementById("searchCategory").value = "All";
+  document.getElementById("categoryFilter").value = "All";
+  document.getElementById("brandFilter").value = "All";
+  document.getElementById("minPrice").value = "";
+  document.getElementById("maxPrice").value = "";
+  document.getElementById("ratingFilter").value = "0";
+  document.getElementById("discountFilter").value = "0";
+  document.getElementById("inStockFilter").checked = false;
+  document.getElementById("sortSelect").value = "featured";
+  renderCatalog();
+}
+
+function renderRecent() {
+  const recentProducts = state.recent.map(productById).filter(Boolean).slice(0, 4);
+  const target = document.getElementById("recentGrid");
+  target.innerHTML = recentProducts.length ? recentProducts.map(productCard).join("") :
+    `<div class="empty-state" style="grid-column:1/-1"><p>Products you open will appear here.</p></div>`;
+}
+
+function rememberRecent(productId) {
+  state.recent = [Number(productId), ...state.recent.filter((id) => Number(id) !== Number(productId))].slice(0, 12);
+  writeStorage(STORAGE_KEYS.recent, state.recent);
+  renderRecent();
+}
+
+function cartQuantity() {
+  return Object.values(state.cart).reduce((sum, quantity) => sum + Number(quantity), 0);
+}
+
+function cartSubtotal() {
+  return Object.entries(state.cart).reduce((sum, [id, quantity]) => {
+    const product = productById(id);
+    return sum + (product ? product.price * quantity : 0);
+  }, 0);
+}
+
+function updateBadges() {
+  document.getElementById("cartCount").textContent = cartQuantity();
+  document.getElementById("wishlistCount").textContent = state.wishlist.length;
+}
+
+function saveCart() {
+  writeStorage(STORAGE_KEYS.cart, state.cart);
+  updateBadges();
+}
+
+function addToCart(productId, quantity = 1) {
+  const product = productById(productId);
+  if (!product) return;
+  if (product.stock <= 0) {
+    toast("This product is currently unavailable.");
+    return;
+  }
+  const existing = Number(state.cart[product.id] || 0);
+  const nextQuantity = Math.min(product.stock, existing + Math.max(1, Number(quantity)));
+  state.cart[product.id] = nextQuantity;
+  saveCart();
+  toast(`${product.name} added to cart`);
+}
+
+function setCartQuantity(productId, quantity) {
+  const product = productById(productId);
+  if (!product) return;
+  const value = Math.floor(Number(quantity));
+  if (!Number.isFinite(value) || value <= 0) {
+    delete state.cart[productId];
+  } else {
+    state.cart[productId] = Math.min(product.stock, value);
+  }
+  saveCart();
+  renderCart();
+}
+
+function removeFromCart(productId) {
+  delete state.cart[productId];
+  saveCart();
+  renderCart();
+  toast("Item removed from cart");
+}
+
+function toggleWishlist(productId) {
+  const id = Number(productId);
+  if (state.wishlist.includes(id)) {
+    state.wishlist = state.wishlist.filter((item) => item !== id);
+    toast("Removed from wishlist");
+  } else {
+    state.wishlist.push(id);
+    toast("Added to wishlist");
+  }
+  writeStorage(STORAGE_KEYS.wishlist, state.wishlist);
+  updateBadges();
+  renderCatalog();
+}
+
+function moveWishlistToCart(productId) {
+  addToCart(productId);
+  state.wishlist = state.wishlist.filter((id) => Number(id) !== Number(productId));
+  writeStorage(STORAGE_KEYS.wishlist, state.wishlist);
+  updateBadges();
+  renderWishlist();
+}
+
+function openModal(title, bodyHTML, className = "") {
+  const backdrop = document.getElementById("modalBackdrop");
+  const modal = document.getElementById("modal");
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalBody").innerHTML = bodyHTML;
+  modal.className = `modal ${className}`;
+  backdrop.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  document.getElementById("modalClose").focus();
+}
+
+function closeModal() {
+  document.getElementById("modalBackdrop").classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+function openProductDetails(productId) {
+  const product = productById(productId);
+  if (!product) return;
+  state.modalProductId = product.id;
+  state.modalProductQuantity = 1;
+  rememberRecent(product.id);
+  const body = `
+    <div class="product-detail">
+      <div class="detail-image"><img src="${escapeHTML(safeImage(product))}" alt="${escapeHTML(product.name)}" onerror="this.onerror=null;this.src='${imageFallbacks[0]}'"></div>
+      <div class="detail-info">
+        <div class="product-brand">${escapeHTML(product.brand)} · ${escapeHTML(product.category)} / ${escapeHTML(product.subcategory)}</div>
+        <h1>${escapeHTML(product.name)}</h1>
+        <div class="rating">★ ${product.rating} <span>(${product.reviews.toLocaleString("en-IN")} reviews)</span></div>
+        <div class="detail-price">${money(product.price)} <span class="old-price">${money(product.originalPrice)}</span> <span class="discount">${product.discount}% off</span></div>
+        <p>${escapeHTML(product.description)}</p>
+        <p><strong>Availability:</strong> ${product.stock > 0 ? `${product.stock} in stock` : "Currently unavailable"}</p>
+        <p><strong>Specifications:</strong> Category: ${escapeHTML(product.category)} · Subcategory: ${escapeHTML(product.subcategory)} · Brand: ${escapeHTML(product.brand)}</p>
+        <div class="quantity-control"><button data-action="detail-qty" data-delta="-1" aria-label="Decrease quantity">−</button><span id="detailQuantity">1</span><button data-action="detail-qty" data-delta="1" aria-label="Increase quantity">+</button></div>
+        <div class="detail-buttons">
+          <button class="btn btn-primary" data-action="detail-add" ${product.stock <= 0 ? "disabled" : ""}>Add to cart</button>
+          <button class="btn btn-secondary" data-action="detail-buy" ${product.stock <= 0 ? "disabled" : ""}>Buy now</button>
+          <button class="btn btn-secondary" data-action="detail-wishlist">${state.wishlist.includes(product.id) ? "♥ Wishlisted" : "♡ Wishlist"}</button>
+        </div>
+      </div>
+    </div>
+    <section class="section"><h3>Related products</h3><div class="product-grid" id="relatedGrid"></div></section>
+  `;
+  openModal("Product details", body);
+  const related = allProducts().filter((item) => item.id !== product.id && (item.category === product.category || item.tags.some((tag) => product.tags.includes(tag)))).slice(0, 4);
+  document.getElementById("relatedGrid").innerHTML = related.map(productCard).join("");
+}
+
+function renderCart() {
+  const entries = Object.entries(state.cart).map(([id, quantity]) => ({ product: productById(id), quantity })).filter((entry) => entry.product);
+  const body = entries.length ? `
+    <div>${entries.map(({ product, quantity }) => `
+      <div class="cart-item">
+        <img src="${escapeHTML(safeImage(product))}" alt="${escapeHTML(product.name)}" onerror="this.onerror=null;this.src='${imageFallbacks[0]}'">
+        <div><h4>${escapeHTML(product.name)}</h4><p>${money(product.price)} each</p>
+          <div class="quantity-control"><button data-action="cart-qty" data-id="${product.id}" data-delta="-1" aria-label="Decrease quantity">−</button><span>${quantity}</span><button data-action="cart-qty" data-id="${product.id}" data-delta="1" aria-label="Increase quantity">+</button></div>
+          <button class="remove" data-action="remove-cart" data-id="${product.id}">Remove</button>
+        </div>
+        <div class="cart-item-total">${money(product.price * quantity)}</div>
+      </div>
+    `).join("")}</div>
+    <div class="cart-summary">
+      <div class="summary-line"><span>Subtotal (${cartQuantity()} items)</span><strong>${money(cartSubtotal())}</strong></div>
+      <div class="summary-line"><span>Shipping estimate</span><strong>${cartSubtotal() >= 999 ? "FREE" : money(79)}</strong></div>
+      <div class="summary-line total"><span>Estimated total</span><strong>${money(cartSubtotal() + (cartSubtotal() >= 999 || cartSubtotal() === 0 ? 0 : 79))}</strong></div>
+      <button class="btn btn-primary" style="width:100%;margin-top:12px" data-action="checkout">Proceed to demo checkout</button>
+    </div>
+    <p class="small muted">Demo cart only. No payment will be collected.</p>
+  ` : `<div class="empty-state"><div class="empty-icon">🛒</div><h3>Your cart is empty</h3><p>Discover something you'll love.</p><button class="btn btn-primary" data-action="close-and-shop">Continue shopping</button></div>`;
+  openModal("Your shopping cart", body, "cart-drawer");
+}
+
+function renderWishlist() {
+  const items = state.wishlist.map(productById).filter(Boolean);
+  const body = items.length ? `
+    <div class="wishlist-grid">${items.map((product) => `
+      <article class="product-card">
+        <div class="product-image-wrap"><img src="${escapeHTML(safeImage(product))}" alt="${escapeHTML(product.name)}" loading="lazy" onerror="this.onerror=null;this.src='${imageFallbacks[0]}'"></div>
+        <h3 class="product-title">${escapeHTML(product.name)}</h3><div class="price">${money(product.price)}</div>
+        <div class="card-actions"><button data-action="wishlist-move" data-id="${product.id}">Move to cart</button><button class="icon-btn" data-action="wishlist-remove" data-id="${product.id}">×</button></div>
+      </article>
+    `).join("")}</div>
+  ` : `<div class="empty-state"><div class="empty-icon">♡</div><h3>Your wishlist is empty</h3><p>Tap the heart on a product to save it here.</p></div>`;
+  openModal("Your wishlist", body);
+}
+
+function renderCheckout() {
+  if (!cartQuantity()) {
+    toast("Your cart is empty.");
+    return;
+  }
+  const shipping = cartSubtotal() >= 999 ? 0 : 79;
+  const body = `
+    <div class="notice warning">Demo checkout only. Do not enter real payment information. No payment is processed.</div>
+    <form id="checkoutForm">
+      <h3>Shipping information</h3>
+      <div class="form-grid">
+        <div class="form-field"><label for="checkoutName">Full name *</label><input id="checkoutName" name="name" required autocomplete="name"></div>
+        <div class="form-field"><label for="checkoutEmail">Email *</label><input id="checkoutEmail" name="email" type="email" required autocomplete="email"></div>
+        <div class="form-field full"><label for="checkoutAddress">Address *</label><input id="checkoutAddress" name="address" required autocomplete="street-address"></div>
+        <div class="form-field"><label for="checkoutCity">City *</label><input id="checkoutCity" name="city" required autocomplete="address-level2"></div>
+        <div class="form-field"><label for="checkoutState">State *</label><input id="checkoutState" name="state" required autocomplete="address-level1"></div>
+        <div class="form-field"><label for="checkoutPostal">Postal code *</label><input id="checkoutPostal" name="postal" required inputmode="numeric" pattern="[0-9]{5,6}" autocomplete="postal-code"></div>
+      </div>
+      <div class="cart-summary">
+        <div class="summary-line"><span>Items (${cartQuantity()})</span><strong>${money(cartSubtotal())}</strong></div>
+        <div class="summary-line"><span>Shipping estimate</span><strong>${shipping ? money(shipping) : "FREE"}</strong></div>
+        <div class="summary-line total"><span>Demo order total</span><strong>${money(cartSubtotal() + shipping)}</strong></div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:15px" type="submit">Confirm demo order</button>
+    </form>
+  `;
+  openModal("Demo checkout", body);
+}
+
+function confirmDemoOrder(form) {
+  const formData = new FormData(form);
+  const orderId = `NOVA-${Date.now().toString().slice(-8)}`;
+  const order = {
+    id: orderId,
+    createdAt: new Date().toISOString(),
+    customer: {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      address: formData.get("address"),
+      city: formData.get("city"),
+      state: formData.get("state"),
+      postal: formData.get("postal")
+    },
+    items: Object.entries(state.cart).map(([id, quantity]) => ({ id: Number(id), quantity })),
+    total: cartSubtotal() + (cartSubtotal() >= 999 ? 0 : 79),
+    status: "Demo order — not submitted"
+  };
+  const orders = readStorage(STORAGE_KEYS.demoOrders, []);
+  orders.unshift(order);
+  writeStorage(STORAGE_KEYS.demoOrders, orders.slice(0, 30));
+  state.cart = {};
+  saveCart();
+  openModal("Demo order confirmed", `
+    <div class="notice"><h3>Thanks, ${escapeHTML(order.customer.name)}!</h3><p>Your demo order has been created locally.</p></div>
+    <p><strong>Demo order number:</strong> ${escapeHTML(order.id)}</p>
+    <p><strong>Order total:</strong> ${money(order.total)}</p>
+    <p class="small muted">This is a portfolio demonstration. No payment was taken and no shipment has been requested.</p>
+    <button class="btn btn-primary" data-action="close-and-shop">Continue shopping</button>
+  `);
+}
+
+function renderAccount() {
+  const orders = readStorage(STORAGE_KEYS.demoOrders, []);
+  const body = `
+    <div class="notice warning">Frontend demo account. This does not create a secure account or authenticate with a server.</div>
+    <div class="account-tabs">
+      <button data-action="account-tab" data-tab="signin" class="${state.accountTab === "signin" ? "active" : ""}">Sign in</button>
+      <button data-action="account-tab" data-tab="create" class="${state.accountTab === "create" ? "active" : ""}">Create account</button>
+      <button data-action="account-tab" data-tab="orders" class="${state.accountTab === "orders" ? "active" : ""}">Demo orders (${orders.length})</button>
+    </div>
+    <div id="accountContent">${accountTabContent()}</div>
+  `;
+  openModal("Your account", body);
+}
+
+function accountTabContent() {
+  if (state.accountTab === "orders") {
+    const orders = readStorage(STORAGE_KEYS.demoOrders, []);
+    return orders.length ? orders.map((order) => `<div class="cart-summary"><strong>${escapeHTML(order.id)}</strong><p>${new Date(order.createdAt).toLocaleString()}</p><p>${money(order.total)} · ${escapeHTML(order.status)}</p></div>`).join("") : `<p>No demo orders yet.</p>`;
+  }
+  const isCreate = state.accountTab === "create";
+  return `
+    <form id="accountForm">
+      <div class="form-grid">
+        ${isCreate ? '<div class="form-field full"><label for="accountName">Name</label><input id="accountName" name="name" required></div>' : ""}
+        <div class="form-field full"><label for="accountEmail">Email</label><input id="accountEmail" name="email" type="email" required></div>
+        <div class="form-field full"><label for="accountPassword">Password</label><input id="accountPassword" name="password" type="password" minlength="6" required></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:14px" type="submit">${isCreate ? "Create demo profile" : "Sign in to demo"}</button>
+    </form>
+    <p class="small muted">Credentials are not saved. This is only a visual interaction demo.</p>
+  `;
+}
+
+function renderAdmin() {
+  const catalog = allProducts();
+  const orders = readStorage(STORAGE_KEYS.demoOrders, []);
+  const totalRevenue = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+  const body = `
+    <div class="notice warning">Admin demo — edits are saved only in this browser's local storage. This is not a protected admin system.</div>
+    <div class="admin-stats">
+      <div class="stat-card">Catalog products<strong>${catalog.length.toLocaleString("en-IN")}</strong></div>
+      <div class="stat-card">Categories<strong>${categoryDefinitions.length}</strong></div>
+      <div class="stat-card">Demo orders<strong>${orders.length}</strong></div>
+      <div class="stat-card">Demo revenue<strong>${money(totalRevenue)}</strong></div>
+    </div>
+    <h3>Product management</h3>
+    <form id="adminProductForm">
+      <div class="form-grid">
+        <div class="form-field"><label for="adminName">Product name</label><input id="adminName" required></div>
+        <div class="form-field"><label for="adminBrand">Brand</label><input id="adminBrand" required></div>
+        <div class="form-field"><label for="adminCategory">Category</label><select id="adminCategory">${categoryDefinitions.map((category) => `<option>${escapeHTML(category.name)}</option>`).join("")}</select></div>
+        <div class="form-field"><label for="adminPrice">Price (₹)</label><input id="adminPrice" type="number" min="1" required></div>
+        <div class="form-field"><label for="adminStock">Stock</label><input id="adminStock" type="number" min="0" value="10" required></div>
+        <div class="form-field"><label for="adminImage">Image URL (optional)</label><input id="adminImage" type="url" placeholder="https://…"></div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:12px" type="submit">Add demo product</button>
+    </form>
+    <div class="admin-table-wrap" style="margin-top:18px">
+      <table class="admin-table"><thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
+      <tbody>${catalog.slice(-12).reverse().map((product) => `<tr><td>${product.id}</td><td>${escapeHTML(product.name)}</td><td>${escapeHTML(product.category)}</td><td>${money(product.price)}</td><td>${product.stock}</td><td>${product.custom ? `<button data-action="admin-delete" data-id="${product.id}">Delete</button>` : "Catalog"}</td></tr>`).join("")}</tbody></table>
+    </div>
+  `;
+  openModal("Admin dashboard demo", body);
+}
+
+function handleAdminAdd(form) {
+  const name = document.getElementById("adminName").value.trim();
+  const brand = document.getElementById("adminBrand").value.trim();
+  const category = document.getElementById("adminCategory").value;
+  const price = Number(document.getElementById("adminPrice").value);
+  const stock = Number(document.getElementById("adminStock").value);
+  const image = document.getElementById("adminImage").value.trim();
+  if (!name || !brand || price <= 0 || stock < 0) {
+    toast("Please provide valid product details.");
+    return;
+  }
+  const newProduct = {
+    id: Date.now(),
+    name,
+    category,
+    subcategory: "Admin demo",
+    brand,
+    price,
+    originalPrice: price,
+    discount: 0,
+    image: image || makeProductImage(category, 0),
+    description: `${name}, added through the AmazoNova admin demonstration.`,
+    rating: 4,
+    reviews: 0,
+    stock,
+    featured: false,
+    bestseller: false,
+    tags: [category.toLowerCase(), brand.toLowerCase()],
+    createdAt: Date.now(),
+    custom: true
+  };
+  state.customProducts.push(newProduct);
+  writeStorage(STORAGE_KEYS.customProducts, state.customProducts);
+  populateBrandOptions();
+  renderCatalog();
+  renderAdmin();
+  toast("Demo product added.");
+}
+
+function populateBrandOptions() {
+  const select = document.getElementById("brandFilter");
+  const selected = select.value;
+  select.innerHTML = '<option value="All">All brands</option>';
+  [...new Set(allProducts().map((product) => product.brand))].sort().forEach((brand) => {
+    const option = document.createElement("option");
+    option.value = brand;
+    option.textContent = brand;
+    select.appendChild(option);
+  });
+  if ([...select.options].some((option) => option.value === selected)) select.value = selected;
+}
+
+function deleteAdminProduct(productId) {
+  state.customProducts = state.customProducts.filter((product) => Number(product.id) !== Number(productId));
+  writeStorage(STORAGE_KEYS.customProducts, state.customProducts);
+  populateBrandOptions();
+  renderCatalog();
+  renderAdmin();
+  toast("Demo product deleted.");
+}
+
+function showInfo(title, message) {
+  openModal(title, `<p>${escapeHTML(message)}</p><button class="btn btn-primary" data-action="close-modal">Close</button>`);
+}
+
+function handleProductAction(action, id) {
+  if (action === "details") openProductDetails(id);
+  if (action === "add") addToCart(id);
+  if (action === "wishlist") toggleWishlist(id);
+}
+
+function handleClick(event) {
+  const button = event.target.closest("button, a");
+  if (!button) return;
+  if (button.dataset.category) {
+    setCategory(button.dataset.category);
+    return;
+  }
+  if (button.dataset.page) {
+    const page = Number(button.dataset.page);
+    const totalPages = Math.max(1, Math.ceil(filteredProducts().length / state.pageSize));
+    if (page >= 1 && page <= totalPages) {
+      state.page = page;
+      renderCatalog();
+      document.getElementById("catalog").scrollIntoView({ behavior: "smooth" });
+    }
+    return;
+  }
+  if (button.dataset.action) {
+    const action = button.dataset.action;
+    const id = Number(button.dataset.id);
+    if (["details", "add", "wishlist"].includes(action)) {
+      handleProductAction(action, id);
+      return;
+    }
+    if (action === "cart-qty") {
+      setCartQuantity(id, Number(state.cart[id] || 0) + Number(button.dataset.delta));
+      return;
+    }
+    if (action === "remove-cart") {
+      removeFromCart(id);
+      return;
+    }
+    if (action === "wishlist-move") {
+      moveWishlistToCart(id);
+      return;
+    }
+    if (action === "wishlist-remove") {
+      toggleWishlist(id);
+      renderWishlist();
+      return;
+    }
+    if (action === "detail-qty") {
+      const product = productById(state.modalProductId);
+      state.modalProductQuantity = Math.max(1, Math.min(product ? product.stock : 1, state.modalProductQuantity + Number(button.dataset.delta)));
+      const quantityLabel = document.getElementById("detailQuantity");
+      if (quantityLabel) quantityLabel.textContent = state.modalProductQuantity;
+      return;
+    }
+    if (action === "detail-add") {
+      addToCart(state.modalProductId, state.modalProductQuantity);
+      return;
+    }
+    if (action === "detail-buy") {
+      addToCart(state.modalProductId, state.modalProductQuantity);
+      renderCheckout();
+      return;
+    }
+    if (action === "detail-wishlist") {
+      toggleWishlist(state.modalProductId);
+      openProductDetails(state.modalProductId);
+      return;
+    }
+    if (action === "checkout") {
+      renderCheckout();
+      return;
+    }
+    if (action === "close-and-shop") {
+      closeModal();
+      document.getElementById("catalog").scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    if (action === "close-modal") {
+      closeModal();
+      return;
+    }
+    if (action === "account-tab") {
+      state.accountTab = button.dataset.tab;
+      const content = document.getElementById("accountContent");
+      if (content) content.innerHTML = accountTabContent();
+      document.querySelectorAll(".account-tabs button").forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === state.accountTab));
+      return;
+    }
+    if (action === "admin-delete") {
+      deleteAdminProduct(id);
+      return;
+    }
+  }
+  if (button.id === "cartButton") renderCart();
+  if (button.id === "wishlistButton") renderWishlist();
+  if (button.id === "accountButton") renderAccount();
+  if (button.id === "ordersButton") {
+    state.accountTab = "orders";
+    renderAccount();
+  }
+  if (button.id === "shopNowButton") document.getElementById("catalog").scrollIntoView({ behavior: "smooth" });
+  if (button.id === "exploreCategoriesButton") document.getElementById("categorySection").scrollIntoView({ behavior: "smooth" });
+  if (button.id === "mobileMenuButton") {
+    const nav = document.getElementById("subnav");
+    nav.classList.toggle("open");
+    button.setAttribute("aria-expanded", nav.classList.contains("open"));
+  }
+  if (button.id === "applyFiltersButton") {
+    currentFiltersFromUI();
+    renderCatalog();
+  }
+  if (button.id === "resetFiltersButton") resetFilters();
+  if (button.id === "modalClose") closeModal();
+  if (button.id === "customerServiceButton") showInfo("Customer service", "This portfolio demo does not connect to a live support team. Browse the catalog or use the demo help links.");
+  if (button.id === "adminFooterLink") renderAdmin();
+  if (button.dataset.policy) showInfo(button.dataset.policy, `${button.dataset.policy} information for this demonstration. Replace this content with reviewed policy text before production use.`);
+  if (button.id === "helpLink") showInfo("Help center", "This demo includes product browsing, search, filters, cart, wishlist, and a demonstration checkout.");
+  if (button.id === "returnsLink") showInfo("Returns & refunds", "No real orders are placed, so no real returns or refunds are available in this frontend demo.");
+  if (button.id === "shippingLink") showInfo("Shipping information", "Shipping values are estimates used for the checkout demonstration only.");
+  if (button.id === "contactLink") showInfo("Contact us", "Add a verified business contact address before publishing this project.");
+  if (button.dataset.promo) {
+    const category = button.dataset.promo === "electronics" ? "Electronics" : "All";
+    setCategory(category);
+  }
+}
+
+function handleSubmit(event) {
+  event.preventDefault();
+  if (event.target.id === "searchForm") {
+    state.query = document.getElementById("searchInput").value.trim();
+    const searchCategory = document.getElementById("searchCategory").value;
+    state.category = searchCategory;
+    document.getElementById("categoryFilter").value = searchCategory;
+    state.page = 1;
+    renderCatalog();
+    document.getElementById("catalog").scrollIntoView({ behavior: "smooth" });
+    return;
+  }
+  if (event.target.id === "checkoutForm") {
+    if (!event.target.reportValidity()) return;
+    confirmDemoOrder(event.target);
+    return;
+  }
+  if (event.target.id === "accountForm") {
+    const formData = new FormData(event.target);
+    const email = formData.get("email");
+    toast(`${state.accountTab === "create" ? "Demo profile created" : "Demo sign-in"} for ${email}. No credentials saved.`);
+    return;
+  }
+  if (event.target.id === "adminProductForm") {
+    handleAdminAdd(event.target);
+  }
+}
+
+function handleInput(event) {
+  if (event.target.id === "searchInput") {
+    const query = event.target.value.trim().toLowerCase();
+    if (!query) return;
+    // Lightweight suggestions: use a small sample of matching names.
+    const matches = allProducts().filter((product) => product.name.toLowerCase().includes(query)).slice(0, 5);
+    event.target.setAttribute("aria-description", matches.map((product) => product.name).join(", "));
+  }
+  if (["minPrice", "maxPrice"].includes(event.target.id)) {
+    event.target.value = event.target.value.replace(/[^\d]/g, "");
+  }
+}
+
+function initializeEvents() {
+  document.addEventListener("click", handleClick);
+  document.addEventListener("submit", handleSubmit);
+  document.addEventListener("input", handleInput);
+  document.getElementById("sortSelect").addEventListener("change", () => {
+    state.sort = document.getElementById("sortSelect").value;
+    state.page = 1;
+    renderCatalog();
+  });
+  document.getElementById("modalBackdrop").addEventListener("click", (event) => {
+    if (event.target.id === "modalBackdrop") closeModal();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeModal();
+    if (event.key === "/" && !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) {
+      event.preventDefault();
+      document.getElementById("searchInput").focus();
+    }
+  });
+  document.getElementById("categoryFilter").addEventListener("change", () => {
+    state.category = document.getElementById("categoryFilter").value;
+    state.page = 1;
+    renderCatalog();
+  });
+  document.getElementById("brandFilter").addEventListener("change", () => {
+    state.brand = document.getElementById("brandFilter").value;
+    state.page = 1;
+    renderCatalog();
+  });
+}
+
+function initialize() {
+  populateFilters();
+  renderCategoryTiles();
+  populateBrandOptions();
+  initializeEvents();
+  updateBadges();
+  renderCatalog();
+  renderRecent();
+  console.info(`AmazoNova initialized with ${products.length} unique generated catalog records.`);
+}
+
+initialize();
+</script>
+</body>
+</html>
