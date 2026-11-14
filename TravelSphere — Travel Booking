@@ -1,0 +1,3304 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TravelSphere - Discover destinations, explore hotels and plan unforgettable journeys around the world.">
+    <meta name="theme-color" content="#10243A">
+    <title>TravelSphere | Explore Beyond Boundaries</title>
+
+    <!-- ORIGINAL TRAVELSPHERE FAVICON -->
+    <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%2310243A'/%3E%3Ccircle cx='50' cy='50' r='29' fill='none' stroke='%2355B8F5' stroke-width='5'/%3E%3Cpath d='M21 50h58M50 21c-16 16-16 42 0 58M50 21c16 16 16 42 0 58' fill='none' stroke='%23FF9D45' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M48 8l8 12-8 4-8-4z' fill='%23FF9D45'/%3E%3C/svg%3E">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           TRAVELSPHERE - MAIN DESIGN SYSTEM
+        ========================================= */
+
+        :root {
+            --navy: #10243A;
+            --blue: #1677D2;
+            --sky: #55B8F5;
+            --orange: #FF9D45;
+            --green: #16A36A;
+            --white: #FFFFFF;
+            --background: #F5F8FC;
+            --grey: #E9EEF4;
+            --text: #25364A;
+            --muted: #748398;
+            --shadow: 0 12px 35px rgba(16,36,58,.09);
+            --radius: 18px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        button, input, select, textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+        .section {
+            padding: 85px 0;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .eyebrow {
+            color: var(--blue);
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .section-heading h2 {
+            font-family: 'Manrope', sans-serif;
+            color: var(--navy);
+            font-size: clamp(26px, 4vw, 38px);
+            font-weight: 800;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        .primary-btn {
+            background: var(--blue);
+            color: white;
+            padding: 13px 21px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: .25s;
+        }
+
+        .primary-btn:hover {
+            background: var(--navy);
+            transform: translateY(-2px);
+        }
+
+        .outline-btn {
+            border: 1px solid #dce5ee;
+            background: white;
+            color: var(--navy);
+            padding: 12px 19px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .outline-btn:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        /* =========================================
+           NAVIGATION
+        ========================================= */
+
+        .navbar {
+            height: 78px;
+            background: rgba(255,255,255,.96);
+            backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 18px rgba(16,36,58,.06);
+        }
+
+        .nav-inner {
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--navy);
+            font-family: 'Manrope', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .logo-icon {
+            height: 43px;
+            width: 43px;
+            display: grid;
+            place-items: center;
+            background: var(--navy);
+            border-radius: 13px;
+            color: var(--sky);
+            font-size: 23px;
+        }
+
+        .logo span:last-child {
+            color: var(--blue);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            font-weight: 700;
+            color: #536579;
+            transition: .2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--blue);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .login-btn {
+            background: transparent;
+            border: none;
+            font-weight: 700;
+            color: var(--navy);
+            padding: 10px;
+        }
+
+        .join-btn {
+            background: var(--navy);
+            color: white;
+            padding: 11px 17px;
+            border: none;
+            border-radius: 9px;
+            font-weight: 700;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--navy);
+            font-size: 28px;
+        }
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .hero {
+            min-height: 630px;
+            position: relative;
+            background:
+                linear-gradient(90deg, rgba(7,24,43,.82), rgba(7,24,43,.28)),
+                url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=2000')
+                center/cover;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+
+        .hero-content {
+            padding: 80px 0 145px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: rgba(255,255,255,.15);
+            border: 1px solid rgba(255,255,255,.3);
+            backdrop-filter: blur(8px);
+            padding: 9px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 23px;
+        }
+
+        .hero h1 {
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(42px, 6vw, 72px);
+            line-height: 1.1;
+            max-width: 720px;
+            font-weight: 800;
+        }
+
+        .hero h1 span {
+            color: var(--sky);
+        }
+
+        .hero p {
+            max-width: 580px;
+            color: #e3edf7;
+            line-height: 1.8;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 13px;
+            margin-top: 28px;
+        }
+
+        .hero-buttons .primary-btn {
+            background: var(--orange);
+            color: var(--navy);
+        }
+
+        .hero-buttons .outline-btn {
+            background: rgba(255,255,255,.13);
+            color: white;
+            border-color: rgba(255,255,255,.4);
+        }
+
+        /* =========================================
+           SEARCH PANEL
+        ========================================= */
+
+        .search-wrap {
+            position: relative;
+            z-index: 10;
+            margin-top: -90px;
+        }
+
+        .search-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 19px;
+            box-shadow: var(--shadow);
+        }
+
+        .search-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .search-tab {
+            border: none;
+            background: #f1f5f9;
+            padding: 12px 18px;
+            border-radius: 9px;
+            color: #62748a;
+            font-weight: 700;
+        }
+
+        .search-tab.active {
+            background: var(--navy);
+            color: white;
+        }
+
+        .search-fields {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .field label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            min-width: 0;
+            padding: 13px 12px;
+            border: 1px solid #dce5ee;
+            border-radius: 9px;
+            outline: none;
+            background: white;
+            color: var(--navy);
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(22,119,210,.1);
+        }
+
+        .search-submit {
+            min-height: 45px;
+            white-space: nowrap;
+        }
+
+        /* =========================================
+           DESTINATIONS
+        ========================================= */
+
+        .destination-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .destination-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: .3s;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-7px);
+        }
+
+        .destination-image {
+            height: 210px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .destination-image img {
+            height: 100%;
+            transition: .5s;
+        }
+
+        .destination-card:hover img {
+            transform: scale(1.07);
+        }
+
+        .price-tag {
+            position: absolute;
+            bottom: 13px;
+            left: 13px;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .destination-info {
+            padding: 18px;
+        }
+
+        .destination-info h3 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 19px;
+            color: var(--navy);
+        }
+
+        .destination-info p {
+            color: var(--muted);
+            font-size: 13px;
+            margin: 8px 0 15px;
+            line-height: 1.6;
+        }
+
+        .card-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .text-link {
+            border: none;
+            background: none;
+            color: var(--blue);
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .heart-btn {
+            border: none;
+            background: #f1f5f9;
+            border-radius: 50%;
+            height: 36px;
+            width: 36px;
+            font-size: 17px;
+        }
+
+        .heart-btn.saved {
+            background: #ffe9e9;
+            color: #e34d62;
+        }
+
+        /* =========================================
+           PROMO BANNER
+        ========================================= */
+
+        .promo {
+            padding: 45px;
+            border-radius: 22px;
+            background:
+                linear-gradient(100deg, rgba(16,36,58,.94), rgba(16,36,58,.55)),
+                url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1400')
+                center/cover;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .promo h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(25px, 4vw, 38px);
+            max-width: 570px;
+        }
+
+        .promo p {
+            color: #dce8f5;
+            margin-top: 10px;
+        }
+
+        .promo .primary-btn {
+            background: var(--orange);
+            color: var(--navy);
+            white-space: nowrap;
+        }
+
+        /* =========================================
+           HOTELS
+        ========================================= */
+
+        .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .hotel-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: .3s;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .hotel-image {
+            height: 220px;
+            position: relative;
+        }
+
+        .hotel-image img {
+            height: 100%;
+        }
+
+        .rating {
+            position: absolute;
+            top: 13px;
+            right: 13px;
+            background: white;
+            border-radius: 7px;
+            padding: 7px 10px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .hotel-info {
+            padding: 20px;
+        }
+
+        .hotel-info h3 {
+            font-size: 19px;
+            color: var(--navy);
+        }
+
+        .hotel-location {
+            color: var(--muted);
+            font-size: 13px;
+            margin: 9px 0;
+        }
+
+        .amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin: 14px 0;
+        }
+
+        .amenities span {
+            background: #f0f5fa;
+            color: #526b82;
+            font-size: 11px;
+            padding: 7px 9px;
+            border-radius: 6px;
+        }
+
+        .hotel-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 14px;
+            border-top: 1px solid #edf1f5;
+        }
+
+        .hotel-price strong {
+            color: var(--navy);
+            font-size: 21px;
+        }
+
+        .hotel-price small {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* =========================================
+           EXPERIENCES
+        ========================================= */
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 17px;
+        }
+
+        .experience-card {
+            min-height: 230px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            color: white;
+        }
+
+        .experience-card img {
+            height: 100%;
+            position: absolute;
+            inset: 0;
+            transition: .4s;
+        }
+
+        .experience-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .experience-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,.8));
+        }
+
+        .experience-card div {
+            position: absolute;
+            z-index: 2;
+            bottom: 20px;
+            left: 18px;
+        }
+
+        .experience-card h3 {
+            font-size: 19px;
+        }
+
+        .experience-card p {
+            font-size: 12px;
+            color: #e2eaf2;
+            margin-top: 6px;
+        }
+
+        /* =========================================
+           PACKAGES
+        ========================================= */
+
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .package-card {
+            background: white;
+            padding: 23px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid #edf1f5;
+        }
+
+        .package-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            background: #eaf4ff;
+            font-size: 23px;
+            margin-bottom: 17px;
+        }
+
+        .package-card h3 {
+            color: var(--navy);
+            font-size: 19px;
+        }
+
+        .package-card p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+            margin: 10px 0 18px;
+        }
+
+        .package-card strong {
+            color: var(--blue);
+            font-size: 20px;
+        }
+
+        /* =========================================
+           WHY TRAVELSPHERE
+        ========================================= */
+
+        .features {
+            background: #edf5fc;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .feature {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(16,36,58,.04);
+        }
+
+        .feature-icon {
+            font-size: 31px;
+            margin-bottom: 14px;
+        }
+
+        .feature h3 {
+            color: var(--navy);
+            font-size: 16px;
+            margin-bottom: 9px;
+        }
+
+        .feature p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* =========================================
+           TESTIMONIALS
+        ========================================= */
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .testimonial {
+            padding: 25px;
+            border-radius: 16px;
+            background: white;
+            box-shadow: var(--shadow);
+        }
+
+        .stars {
+            color: #f5a623;
+            letter-spacing: 3px;
+        }
+
+        .testimonial p {
+            color: #64758a;
+            line-height: 1.8;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+
+        .testimonial strong {
+            color: var(--navy);
+        }
+
+        .demo-label {
+            font-size: 10px;
+            color: var(--muted);
+            display: block;
+            margin-top: 8px;
+        }
+
+        /* =========================================
+           NEWSLETTER
+        ========================================= */
+
+        .newsletter {
+            background: var(--navy);
+            padding: 55px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .newsletter h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 31px;
+        }
+
+        .newsletter p {
+            color: #c4d3e3;
+            margin: 12px 0 24px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: auto;
+            gap: 10px;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            min-width: 0;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            outline: none;
+        }
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+            background: #091827;
+            color: white;
+            padding: 60px 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 35px;
+            padding-bottom: 40px;
+        }
+
+        .footer-about p {
+            color: #a8bacd;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-top: 18px;
+            max-width: 310px;
+        }
+
+        footer h4 {
+            margin-bottom: 17px;
+            font-size: 15px;
+        }
+
+        footer ul {
+            list-style: none;
+        }
+
+        footer li {
+            margin-bottom: 12px;
+            color: #a8bacd;
+            font-size: 13px;
+        }
+
+        footer a:hover {
+            color: var(--sky);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #26394c;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            color: #9eb0c3;
+            font-size: 12px;
+        }
+
+        /* =========================================
+           MODAL
+        ========================================= */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(5,17,29,.68);
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: min(520px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            position: relative;
+            animation: appear .25s ease;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 17px;
+            top: 15px;
+            border: none;
+            background: #edf2f7;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 20px;
+        }
+
+        .modal-box h2 {
+            color: var(--navy);
+            margin-bottom: 8px;
+            padding-right: 30px;
+        }
+
+        .modal-box > p {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .modal-form {
+            display: grid;
+            gap: 13px;
+        }
+
+        .modal-form label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .modal-form input,
+        .modal-form select,
+        .modal-form textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dce5ee;
+            border-radius: 8px;
+            margin-top: 7px;
+            outline: none;
+        }
+
+        .modal-form input:focus,
+        .modal-form select:focus,
+        .modal-form textarea:focus {
+            border-color: var(--blue);
+        }
+
+        .confirmation {
+            padding: 20px;
+            background: #eaf8f0;
+            border-radius: 12px;
+            color: #176b46;
+            line-height: 1.8;
+        }
+
+        /* =========================================
+           TOAST
+        ========================================= */
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 3000;
+            background: var(--navy);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: .3s;
+            max-width: min(350px, calc(100% - 40px));
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .demo-notice {
+            background: #fff6e9;
+            color: #80511b;
+            padding: 11px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* =========================================
+           RESPONSIVE DESIGN
+        ========================================= */
+
+        @media(max-width: 1050px) {
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 11px;
+            }
+
+            .destination-grid,
+            .experience-grid,
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-fields {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-submit {
+                width: 100%;
+            }
+        }
+
+        @media(max-width: 760px) {
+            .navbar {
+                height: 68px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 68px;
+                left: 0;
+                width: 100%;
+                background: white;
+                padding: 20px 5%;
+                flex-direction: column;
+                align-items: flex-start;
+                box-shadow: var(--shadow);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+                padding: 8px 0;
+            }
+
+            .nav-links a {
+                font-size: 14px;
+            }
+
+            .nav-actions {
+                display: none;
+            }
+
+            .hero {
+                min-height: 570px;
+            }
+
+            .hero-content {
+                padding-bottom: 130px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .hotel-grid,
+            .package-grid,
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .promo {
+                padding: 30px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-about {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media(max-width: 480px) {
+            .logo {
+                font-size: 20px;
+            }
+
+            .logo-icon {
+                height: 38px;
+                width: 38px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .search-panel {
+                padding: 17px;
+            }
+
+            .search-fields {
+                grid-template-columns: 1fr;
+            }
+
+            .destination-grid,
+            .experience-grid,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .destination-image {
+                height: 230px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+            }
+
+            .hero-buttons {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- DEMO NOTICE -->
+    <div class="demo-notice">
+        ✈ TravelSphere School Project — Sample destinations, prices and bookings are for demonstration only.
+    </div>
+
+    <!-- =========================================
+         NAVIGATION
+    ========================================= -->
+
+    <header class="navbar">
+        <div class="container nav-inner">
+
+            <a href="#home" class="logo">
+                <span class="logo-icon">🌐</span>
+                Travel<span>Sphere</span>
+            </a>
+
+            <button class="menu-toggle" id="menuToggle"
+            aria-label="Open navigation menu" aria-expanded="false">
+                ☰
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a class="active" href="#home">Home</a></li>
+                <li><a href="#destinations">Destinations</a></li>
+                <li><a href="#hotels">Hotels</a></li>
+                <li><a href="#flights">Flights</a></li>
+                <li><a href="#packages">Packages</a></li>
+                <li><a href="#experiences">Experiences</a></li>
+                <li><a href="#mytrips">My Trips</a></li>
+                <li><a href="#footer">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="login-btn" onclick="openModal('login')">
+                    Sign In
+                </button>
+
+                <button class="join-btn" onclick="openModal('signup')">
+                    Join Now
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- =========================================
+         HERO SECTION
+    ========================================= -->
+
+    <section class="hero" id="home">
+        <div class="container hero-content">
+
+            <span class="hero-tag">
+                ✦ DISCOVER THE WORLD WITH TRAVELSPHERE
+            </span>
+
+            <h1>
+                Your Next Adventure
+                <span>Starts Here.</span>
+            </h1>
+
+            <p>
+                Discover incredible destinations, find your perfect stay,
+                and plan unforgettable journeys. The world is waiting for you.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="#destinations" class="primary-btn">
+                    Explore Destinations →
+                </a>
+
+                <a href="#packages" class="outline-btn">
+                    View Packages
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         SEARCH PANEL
+    ========================================= -->
+
+    <div class="container search-wrap">
+        <div class="search-panel">
+
+            <div class="search-tabs">
+                <button class="search-tab active"
+                onclick="switchTab('stays',this)">🏨 Stays</button>
+
+                <button class="search-tab"
+                onclick="switchTab('flights',this)">✈ Flights</button>
+
+                <button class="search-tab"
+                onclick="switchTab('packages',this)">🌴 Packages</button>
+
+                <button class="search-tab"
+                onclick="switchTab('experiences',this)">🎯 Experiences</button>
+            </div>
+
+            <form id="searchForm">
+
+                <div class="search-fields" id="searchFields">
+
+                    <div class="field">
+                        <label>DESTINATION</label>
+                        <input type="text" id="searchDestination"
+                        placeholder="Where do you want to go?" required>
+                    </div>
+
+                    <div class="field">
+                        <label>CHECK IN</label>
+                        <input type="date" id="checkin" required>
+                    </div>
+
+                    <div class="field">
+                        <label>CHECK OUT</label>
+                        <input type="date" id="checkout" required>
+                    </div>
+
+                    <div class="field">
+                        <label>GUESTS</label>
+                        <select id="guests">
+                            <option>1 Guest</option>
+                            <option selected>2 Guests</option>
+                            <option>3 Guests</option>
+                            <option>4 Guests</option>
+                            <option>5 Guests</option>
+                            <option>6+ Guests</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="primary-btn search-submit">
+                        Search →
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- =========================================
+         DESTINATIONS
+    ========================================= -->
+
+    <section class="section" id="destinations">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Explore the world</div>
+                    <h2>Trending Destinations</h2>
+                    <p>Discover the places travellers dream about.</p>
+                </div>
+
+                <a href="#destinations" class="outline-btn">
+                    Explore All
+                </a>
+            </div>
+
+            <div class="destination-grid" id="destinationGrid">
+
+                <article class="destination-card"
+                data-search="paris france europe romance">
+
+                    <div class="destination-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=700"
+                        alt="Paris city and Eiffel Tower">
+
+                        <span class="price-tag">Demo from ₹18,000</span>
+                    </div>
+
+                    <div class="destination-info">
+                        <h3>Paris</h3>
+                        <p>France · Europe<br>Experience iconic architecture, cafés and culture.</p>
+
+                        <div class="card-bottom">
+                            <button class="text-link"
+                            onclick="exploreDestination('Paris','France')">
+                                Explore Destination →
+                            </button>
+
+                            <button class="heart-btn"
+                            aria-label="Save Paris"
+                            onclick="toggleFavorite(this,'Paris')">♡</button>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="destination-card"
+                data-search="bali indonesia asia beach">
+
+                    <div class="destination-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=700"
+                        alt="Bali tropical landscape">
+
+                        <span class="price-tag">Demo from ₹14,000</span>
+                    </div>
+
+                    <div class="destination-info">
+                        <h3>Bali</h3>
+                        <p>Indonesia · Asia<br>Discover tropical beaches and peaceful landscapes.</p>
+
+                        <div class="card-bottom">
+                            <button class="text-link"
+                            onclick="exploreDestination('Bali','Indonesia')">
+                                Explore Destination →
+                            </button>
+
+                            <button class="heart-btn"
+                            aria-label="Save Bali"
+                            onclick="toggleFavorite(this,'Bali')">♡</button>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="destination-card"
+                data-search="dubai uae middle east city">
+
+                    <div class="destination-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=700"
+                        alt="Dubai skyline">
+
+                        <span class="price-tag">Demo from ₹22,000</span>
+                    </div>
+
+                    <div class="destination-info">
+                        <h3>Dubai</h3>
+                        <p>UAE · Middle East<br>Explore modern architecture and desert adventures.</p>
+
+                        <div class="card-bottom">
+                            <button class="text-link"
+                            onclick="exploreDestination('Dubai','UAE')">
+                                Explore Destination →
+                            </button>
+
+                            <button class="heart-btn"
+                            aria-label="Save Dubai"
+                            onclick="toggleFavorite(this,'Dubai')">♡</button>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="destination-card"
+                data-search="tokyo japan asia culture">
+
+                    <div class="destination-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=700"
+                        alt="Tokyo city skyline">
+
+                        <span class="price-tag">Demo from ₹28,000</span>
+                    </div>
+
+                    <div class="destination-info">
+                        <h3>Tokyo</h3>
+                        <p>Japan · Asia<br>Discover a unique blend of tradition and technology.</p>
+
+                        <div class="card-bottom">
+                            <button class="text-link"
+                            onclick="exploreDestination('Tokyo','Japan')">
+                                Explore Destination →
+                            </button>
+
+                            <button class="heart-btn"
+                            aria-label="Save Tokyo"
+                            onclick="toggleFavorite(this,'Tokyo')">♡</button>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="destination-card"
+                data-search="switzerland europe mountains">
+
+                    <div class="destination-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=700"
+                        alt="Swiss mountain landscape">
+
+                        <span class="price-tag">Demo from ₹35,000</span>
+                    </div>
+
+                    <div class="destination-info">
+                        <h3>Switzerland</h3>
+                        <p>Europe · Central Europe<br>Experience alpine scenery and mountain villages.</p>
+
+                        <div class="card-bottom">
+                            <button class="text-link"
+                            onclick="exploreDestination('Switzerland','Europe')">
+                                Explore Destination →
+                            </button>
+
+                            <button class="heart-btn"
+                            aria-label="Save Switzerland"
+                            onclick="toggleFavorite(this,'Switzerland')">♡</button>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="destination-card"
+                data-search="london united kingdom europe">
+
+                    <div class="destination-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=700"
+                        alt="London city">
+
+                        <span class="price-tag">Demo from ₹25,000</span>
+                    </div>
+
+                    <div class="destination-info">
+                        <h3>London</h3>
+                        <p>United Kingdom · Europe<br>Discover history, museums and city life.</p>
+
+                        <div class="card-bottom">
+                            <button class="text-link"
+                            onclick="exploreDestination('London','United Kingdom')">
+                                Explore Destination →
+                            </button>
+
+                            <button class="heart-btn"
+                            aria-label="Save London"
+                            onclick="toggleFavorite(this,'London')">♡</button>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="destination-card"
+                data-search="maldives islands beach">
+
+                    <div class="destination-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=700"
+                        alt="Maldives island resort">
+
+                        <span class="price-tag">Demo from ₹32,000</span>
+                    </div>
+
+                    <div class="destination-info">
+                        <h3>Maldives</h3>
+                        <p>Indian Ocean · Islands<br>Relax among turquoise waters and tropical islands.</p>
+
+                        <div class="card-bottom">
+                            <button class="text-link"
+                            onclick="exploreDestination('Maldives','Indian Ocean')">
+                                Explore Destination →
+                            </button>
+
+                            <button class="heart-btn"
+                            aria-label="Save Maldives"
+                            onclick="toggleFavorite(this,'Maldives')">♡</button>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="destination-card"
+                data-search="new york usa america city">
+
+                    <div class="destination-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=700"
+                        alt="New York skyline">
+
+                        <span class="price-tag">Demo from ₹40,000</span>
+                    </div>
+
+                    <div class="destination-info">
+                        <h3>New York</h3>
+                        <p>USA · North America<br>Experience famous landmarks and vibrant city life.</p>
+
+                        <div class="card-bottom">
+                            <button class="text-link"
+                            onclick="exploreDestination('New York','USA')">
+                                Explore Destination →
+                            </button>
+
+                            <button class="heart-btn"
+                            aria-label="Save New York"
+                            onclick="toggleFavorite(this,'New York')">♡</button>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         PROMOTIONAL BANNER
+    ========================================= -->
+
+    <section class="container">
+        <div class="promo">
+
+            <div>
+                <div class="eyebrow" style="color:#ffbd7b">
+                    YOUR JOURNEY, YOUR STORY
+                </div>
+
+                <h2>Make Your Next Holiday Unforgettable.</h2>
+
+                <p>Explore curated sample holiday packages and discover new experiences.</p>
+            </div>
+
+            <a href="#packages" class="primary-btn">
+                Discover Packages →
+            </a>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         HOTELS
+    ========================================= -->
+
+    <section class="section" id="hotels">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Stay somewhere special</div>
+                    <h2>Popular Hotels & Resorts</h2>
+                    <p>Explore our sample accommodation collection.</p>
+                </div>
+            </div>
+
+            <div class="hotel-grid">
+
+                <article class="hotel-card">
+                    <div class="hotel-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"
+                        alt="Luxury tropical hotel">
+
+                        <span class="rating">★ 4.9</span>
+                    </div>
+
+                    <div class="hotel-info">
+                        <h3>Ocean Pearl Resort</h3>
+                        <div class="hotel-location">📍 Maldives</div>
+
+                        <div class="amenities">
+                            <span>🏊 Swimming Pool</span>
+                            <span>🍽 Restaurant</span>
+                            <span>📶 Wi-Fi</span>
+                        </div>
+
+                        <div class="hotel-price">
+                            <div>
+                                <strong>₹12,500</strong>
+                                <small>/ night · Demo price</small>
+                            </div>
+
+                            <button class="primary-btn"
+                            onclick="bookHotel('Ocean Pearl Resort',12500)">
+                                Book
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="hotel-card">
+                    <div class="hotel-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800"
+                        alt="Resort swimming pool">
+
+                        <span class="rating">★ 4.8</span>
+                    </div>
+
+                    <div class="hotel-info">
+                        <h3>Mountain View Retreat</h3>
+                        <div class="hotel-location">📍 Switzerland</div>
+
+                        <div class="amenities">
+                            <span>🏔 Mountain View</span>
+                            <span>🍳 Breakfast</span>
+                            <span>📶 Wi-Fi</span>
+                        </div>
+
+                        <div class="hotel-price">
+                            <div>
+                                <strong>₹9,800</strong>
+                                <small>/ night · Demo price</small>
+                            </div>
+
+                            <button class="primary-btn"
+                            onclick="bookHotel('Mountain View Retreat',9800)">
+                                Book
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="hotel-card">
+                    <div class="hotel-image">
+                        <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800"
+                        alt="Modern luxury hotel">
+
+                        <span class="rating">★ 4.7</span>
+                    </div>
+
+                    <div class="hotel-info">
+                        <h3>Grand Skyline Hotel</h3>
+                        <div class="hotel-location">📍 Dubai, UAE</div>
+
+                        <div class="amenities">
+                            <span>🏙 City View</span>
+                            <span>🏊 Pool</span>
+                            <span>🍽 Restaurant</span>
+                        </div>
+
+                        <div class="hotel-price">
+                            <div>
+                                <strong>₹8,500</strong>
+                                <small>/ night · Demo price</small>
+                            </div>
+
+                            <button class="primary-btn"
+                            onclick="bookHotel('Grand Skyline Hotel',8500)">
+                                Book
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         EXPERIENCES
+    ========================================= -->
+
+    <section class="section" id="experiences">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Create memories</div>
+                    <h2>Discover Travel Experiences</h2>
+                    <p>Find inspiration for your next adventure.</p>
+                </div>
+            </div>
+
+            <div class="experience-grid">
+
+                <article class="experience-card">
+                    <img loading="lazy"
+                    src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600"
+                    alt="Mountain adventure">
+
+                    <div>
+                        <h3>Mountain Adventures</h3>
+                        <p>Explore the great outdoors</p>
+                    </div>
+                </article>
+
+                <article class="experience-card">
+                    <img loading="lazy"
+                    src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600"
+                    alt="Beach holiday">
+
+                    <div>
+                        <h3>Beach Holidays</h3>
+                        <p>Relax by the ocean</p>
+                    </div>
+                </article>
+
+                <article class="experience-card">
+                    <img loading="lazy"
+                    src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600"
+                    alt="City sightseeing">
+
+                    <div>
+                        <h3>City Sightseeing</h3>
+                        <p>Explore famous landmarks</p>
+                    </div>
+                </article>
+
+                <article class="experience-card">
+                    <img loading="lazy"
+                    src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600"
+                    alt="Food experience">
+
+                    <div>
+                        <h3>Food & Culture</h3>
+                        <p>Discover local flavours</p>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         HOLIDAY PACKAGES
+    ========================================= -->
+
+    <section class="section" id="packages">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Plan your perfect escape</div>
+                    <h2>Featured Holiday Packages</h2>
+                    <p>Sample travel plans for every kind of traveller.</p>
+                </div>
+            </div>
+
+            <div class="package-grid">
+
+                <article class="package-card">
+                    <div class="package-icon">🏝️</div>
+                    <h3>Tropical Bali Escape</h3>
+                    <p>5 days · 4 nights<br>Includes sample accommodation, sightseeing and cultural experiences.</p>
+                    <strong>₹24,999</strong>
+                    <p>Per person · Demo price</p>
+
+                    <button class="primary-btn"
+                    onclick="bookPackage('Tropical Bali Escape',24999)">
+                        View Package →
+                    </button>
+                </article>
+
+                <article class="package-card">
+                    <div class="package-icon">🏔️</div>
+                    <h3>Swiss Mountain Journey</h3>
+                    <p>7 days · 6 nights<br>Explore alpine landscapes, scenic villages and mountain views.</p>
+                    <strong>₹69,999</strong>
+                    <p>Per person · Demo price</p>
+
+                    <button class="primary-btn"
+                    onclick="bookPackage('Swiss Mountain Journey',69999)">
+                        View Package →
+                    </button>
+                </article>
+
+                <article class="package-card">
+                    <div class="package-icon">🏙️</div>
+                    <h3>Dubai City Discovery</h3>
+                    <p>4 days · 3 nights<br>Experience city attractions, desert scenery and local culture.</p>
+                    <strong>₹32,999</strong>
+                    <p>Per person · Demo price</p>
+
+                    <button class="primary-btn"
+                    onclick="bookPackage('Dubai City Discovery',32999)">
+                        View Package →
+                    </button>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         FLIGHTS
+    ========================================= -->
+
+    <section class="section" id="flights">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Fly somewhere wonderful</div>
+                    <h2>Flight Search & Comparison</h2>
+                    <p>Try the demonstration flight search experience.</p>
+                </div>
+            </div>
+
+            <div class="search-panel">
+                <form id="flightForm">
+
+                    <div class="search-fields">
+
+                        <div class="field">
+                            <label>FROM</label>
+                            <input id="flightFrom"
+                            placeholder="e.g. Delhi" required>
+                        </div>
+
+                        <div class="field">
+                            <label>TO</label>
+                            <input id="flightTo"
+                            placeholder="e.g. Tokyo" required>
+                        </div>
+
+                        <div class="field">
+                            <label>DEPARTURE</label>
+                            <input type="date" id="flightDate" required>
+                        </div>
+
+                        <div class="field">
+                            <label>PASSENGERS</label>
+                            <select id="flightPassengers">
+                                <option>1 Passenger</option>
+                                <option selected>2 Passengers</option>
+                                <option>3 Passengers</option>
+                                <option>4 Passengers</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="primary-btn search-submit">
+                            Find Flights →
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <div id="flightResults" style="margin-top:22px"></div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         WHY CHOOSE US
+    ========================================= -->
+
+    <section class="section features">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">The TravelSphere difference</div>
+                    <h2>Why Choose TravelSphere?</h2>
+                    <p>Designed to make travel planning easier.</p>
+                </div>
+            </div>
+
+            <div class="feature-grid">
+
+                <article class="feature">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Global Discovery</h3>
+                    <p>Explore destinations and find inspiration from around the world.</p>
+                </article>
+
+                <article class="feature">
+                    <div class="feature-icon">💎</div>
+                    <h3>Transparent Pricing</h3>
+                    <p>Understand sample costs and estimated travel expenses.</p>
+                </article>
+
+                <article class="feature">
+                    <div class="feature-icon">🧳</div>
+                    <h3>Easy Trip Planning</h3>
+                    <p>Keep your travel ideas and sample bookings organised.</p>
+                </article>
+
+                <article class="feature">
+                    <div class="feature-icon">💬</div>
+                    <h3>Helpful Support</h3>
+                    <p>Find answers and send a demonstration support enquiry.</p>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         TESTIMONIALS
+    ========================================= -->
+
+    <section class="section">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Traveller stories</div>
+                    <h2>What Travellers Say</h2>
+                    <p>Illustrative testimonials for this school project.</p>
+                </div>
+            </div>
+
+            <div class="testimonial-grid">
+
+                <article class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"The TravelSphere concept makes exploring destinations feel simple and organised."</p>
+                    <strong>Alex Morgan</strong>
+                    <span class="demo-label">Sample testimonial — not a verified customer review</span>
+                </article>
+
+                <article class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"I love the clean layout and the idea of keeping travel plans together."</p>
+                    <strong>Sarah Williams</strong>
+                    <span class="demo-label">Sample testimonial — not a verified customer review</span>
+                </article>
+
+                <article class="testimonial">
+                    <div class="stars">★★★★★</div>
+                    <p>"A useful travel platform concept with destinations, stays and experiences in one place."</p>
+                    <strong>Daniel Lee</strong>
+                    <span class="demo-label">Sample testimonial — not a verified customer review</span>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         MY TRIPS
+    ========================================= -->
+
+    <section class="section features" id="mytrips">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Your personal travel space</div>
+                    <h2>My Travel Dashboard</h2>
+                    <p>View your saved destinations and demonstration bookings.</p>
+                </div>
+
+                <button class="primary-btn"
+                onclick="showTrips()">
+                    Refresh Dashboard
+                </button>
+            </div>
+
+            <div class="feature-grid">
+
+                <article class="feature">
+                    <div class="feature-icon">📑</div>
+                    <h3 id="bookingCount">0</h3>
+                    <p>Total Demo Bookings</p>
+                </article>
+
+                <article class="feature">
+                    <div class="feature-icon">❤️</div>
+                    <h3 id="favoriteCount">0</h3>
+                    <p>Saved Destinations</p>
+                </article>
+
+                <article class="feature">
+                    <div class="feature-icon">✈️</div>
+                    <h3 id="tripCount">0</h3>
+                    <p>Planned Trips</p>
+                </article>
+
+                <article class="feature">
+                    <div class="feature-icon">💰</div>
+                    <h3 id="bookingTotal">₹0</h3>
+                    <p>Estimated Demo Total</p>
+                </article>
+
+            </div>
+
+            <div id="tripList"
+            style="margin-top:25px;background:white;padding:23px;border-radius:15px;box-shadow:var(--shadow)">
+                <h3 style="color:var(--navy);margin-bottom:12px">
+                    Your Bookings
+                </h3>
+                <p style="color:var(--muted);font-size:14px">
+                    No bookings yet. Explore a hotel or package to try the demo booking flow.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         NEWSLETTER
+    ========================================= -->
+
+    <section class="newsletter">
+        <div class="container">
+
+            <h2>Get Travel Inspiration</h2>
+
+            <p>Join our sample newsletter experience and discover new places.</p>
+
+            <form class="newsletter-form" id="newsletterForm">
+
+                <input type="email" id="newsletterEmail"
+                placeholder="Enter your email address" required>
+
+                <button type="submit" class="primary-btn">
+                    Subscribe →
+                </button>
+
+            </form>
+
+        </div>
+    </section>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+
+    <footer id="footer">
+        <div class="container">
+
+            <div class="footer-grid">
+
+                <div class="footer-about">
+                    <a href="#home" class="logo" style="color:white">
+                        <span class="logo-icon">🌐</span>
+                        Travel<span>Sphere</span>
+                    </a>
+
+                    <p>
+                        Explore beyond boundaries. Discover destinations,
+                        plan journeys and create unforgettable travel memories
+                        with TravelSphere.
+                    </p>
+                </div>
+
+                <div>
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="#destinations">Destinations</a></li>
+                        <li><a href="#hotels">Hotels</a></li>
+                        <li><a href="#flights">Flights</a></li>
+                        <li><a href="#packages">Packages</a></li>
+                        <li><a href="#experiences">Experiences</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#home">About TravelSphere</a></li>
+                        <li><a href="#footer">Contact</a></li>
+                        <li><a href="#footer">Privacy Policy</a></li>
+                        <li><a href="#footer">Terms</a></li>
+                        <li><a href="#mytrips">My Trips</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4>Help Centre</h4>
+                    <ul>
+                        <li><a href="#footer" onclick="openModal('support')">Booking Help</a></li>
+                        <li><a href="#footer" onclick="openModal('support')">Contact Support</a></li>
+                        <li><a href="#footer" onclick="openModal('support')">FAQs</a></li>
+                        <li><a href="#footer" onclick="openModal('support')">Send Enquiry</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <span>© 2026 TravelSphere. School project demonstration.</span>
+                <span>Explore Beyond Boundaries. 🌍</span>
+            </div>
+
+        </div>
+    </footer>
+
+
+    <!-- =========================================
+         UNIVERSAL MODAL
+    ========================================= -->
+
+    <div class="modal" id="mainModal"
+    role="dialog" aria-modal="true" aria-labelledby="modalTitle"
+    onclick="if(event.target===this)closeModal()">
+
+        <div class="modal-box">
+
+            <button class="modal-close"
+            onclick="closeModal()" aria-label="Close dialog">×</button>
+
+            <div id="modalContent"></div>
+
+        </div>
+    </div>
+
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+
+    <!-- =========================================
+         JAVASCRIPT INTERACTIONS
+    ========================================= -->
+
+    <script>
+
+        /* =========================================
+           APPLICATION DATA
+        ========================================= */
+
+        let currentTab = "stays";
+
+        let favorites = JSON.parse(
+            localStorage.getItem("ts_favorites") || "[]"
+        );
+
+        let bookings = JSON.parse(
+            localStorage.getItem("ts_bookings") || "[]"
+        );
+
+        let currentBooking = null;
+
+        let selectedPrice = 0;
+
+
+        /* =========================================
+           TOAST NOTIFICATION
+        ========================================= */
+
+        function showToast(message) {
+
+            const toast = document.getElementById("toast");
+
+            toast.textContent = message;
+
+            toast.classList.add("show");
+
+            clearTimeout(window.toastTimer);
+
+            window.toastTimer = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+
+
+        /* =========================================
+           MOBILE NAVIGATION
+        ========================================= */
+
+        const menuToggle = document.getElementById("menuToggle");
+
+        const navLinks = document.getElementById("navLinks");
+
+        menuToggle.addEventListener("click", () => {
+
+            const isOpen = navLinks.classList.toggle("open");
+
+            menuToggle.setAttribute("aria-expanded", isOpen);
+
+            menuToggle.textContent = isOpen ? "×" : "☰";
+
+        });
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+
+            link.addEventListener("click", () => {
+
+                navLinks.classList.remove("open");
+
+                menuToggle.setAttribute("aria-expanded", "false");
+
+                menuToggle.textContent = "☰";
+
+                document.querySelectorAll(".nav-links a").forEach(item => {
+                    item.classList.remove("active");
+                });
+
+                link.classList.add("active");
+
+            });
+
+        });
+
+
+        /* =========================================
+           SEARCH TAB SWITCHING
+        ========================================= */
+
+        function switchTab(tab, button) {
+
+            currentTab = tab;
+
+            document.querySelectorAll(".search-tab").forEach(item => {
+                item.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            const fields = document.getElementById("searchFields");
+
+            let html = "";
+
+            if (tab === "stays") {
+
+                html = `
+                    <div class="field">
+                        <label>DESTINATION OR PROPERTY</label>
+                        <input id="searchDestination"
+                        placeholder="Where do you want to go?" required>
+                    </div>
+
+                    <div class="field">
+                        <label>CHECK IN</label>
+                        <input type="date" id="checkin" required>
+                    </div>
+
+                    <div class="field">
+                        <label>CHECK OUT</label>
+                        <input type="date" id="checkout" required>
+                    </div>
+
+                    <div class="field">
+                        <label>GUESTS</label>
+                        <select id="guests">
+                            <option>1 Guest</option>
+                            <option selected>2 Guests</option>
+                            <option>3 Guests</option>
+                            <option>4 Guests</option>
+                        </select>
+                    </div>
+                `;
+
+            } else if (tab === "flights") {
+
+                html = `
+                    <div class="field">
+                        <label>FROM</label>
+                        <input id="searchDestination"
+                        placeholder="Departure city" required>
+                    </div>
+
+                    <div class="field">
+                        <label>TO</label>
+                        <input id="flightDestination"
+                        placeholder="Arrival city" required>
+                    </div>
+
+                    <div class="field">
+                        <label>DEPARTURE DATE</label>
+                        <input type="date" id="checkin" required>
+                    </div>
+
+                    <div class="field">
+                        <label>TRIP TYPE</label>
+                        <select id="tripType">
+                            <option>Round Trip</option>
+                            <option>One Way</option>
+                        </select>
+                    </div>
+                `;
+
+            } else if (tab === "packages") {
+
+                html = `
+                    <div class="field">
+                        <label>DESTINATION</label>
+                        <input id="searchDestination"
+                        placeholder="Choose destination" required>
+                    </div>
+
+                    <div class="field">
+                        <label>START DATE</label>
+                        <input type="date" id="checkin" required>
+                    </div>
+
+                    <div class="field">
+                        <label>TRAVELLERS</label>
+                        <select id="guests">
+                            <option>1 Traveller</option>
+                            <option selected>2 Travellers</option>
+                            <option>3 Travellers</option>
+                            <option>4 Travellers</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>PACKAGE TYPE</label>
+                        <select id="packageType">
+                            <option>Adventure</option>
+                            <option>Luxury</option>
+                            <option>Family</option>
+                            <option>Budget</option>
+                        </select>
+                    </div>
+                `;
+
+            } else {
+
+                html = `
+                    <div class="field">
+                        <label>DESTINATION</label>
+                        <input id="searchDestination"
+                        placeholder="Where to?" required>
+                    </div>
+
+                    <div class="field">
+                        <label>EXPERIENCE</label>
+                        <select id="experienceType">
+                            <option>Adventure</option>
+                            <option>Food & Culture</option>
+                            <option>Nature</option>
+                            <option>Sightseeing</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>DATE</label>
+                        <input type="date" id="checkin" required>
+                    </div>
+
+                    <div class="field">
+                        <label>PARTICIPANTS</label>
+                        <select id="guests">
+                            <option>1 Person</option>
+                            <option selected>2 People</option>
+                            <option>3 People</option>
+                            <option>4 People</option>
+                        </select>
+                    </div>
+                `;
+
+            }
+
+            fields.innerHTML = html + `
+                <button type="submit"
+                class="primary-btn search-submit">
+                    Search →
+                </button>
+            `;
+
+        }
+
+
+        /* =========================================
+           SEARCH VALIDATION
+        ========================================= */
+
+        document.getElementById("searchForm").addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+                const destination =
+                    document.getElementById("searchDestination").value.trim();
+
+                if (!destination) {
+                    showToast("Please enter a destination.");
+                    return;
+                }
+
+                const checkin =
+                    document.getElementById("checkin");
+
+                const checkout =
+                    document.getElementById("checkout");
+
+                if (checkin && checkin.value) {
+
+                    const today = new Date();
+
+                    today.setHours(0,0,0,0);
+
+                    const start = new Date(checkin.value + "T00:00:00");
+
+                    if (start < today) {
+                        showToast("Please select today or a future date.");
+                        return;
+                    }
+
+                    if (checkout && checkout.value) {
+
+                        const end = new Date(checkout.value + "T00:00:00");
+
+                        if (end <= start) {
+                            showToast("Check-out must be after check-in.");
+                            return;
+                        }
+                    }
+                }
+
+                if (currentTab === "flights") {
+
+                    const arrival =
+                        document.getElementById("flightDestination").value.trim();
+
+                    if (!arrival) {
+                        showToast("Please enter an arrival city.");
+                        return;
+                    }
+
+                    if (arrival.toLowerCase() === destination.toLowerCase()) {
+                        showToast("Origin and destination must be different.");
+                        return;
+                    }
+                }
+
+                showToast(
+                    "Showing demonstration " + currentTab +
+                    " results for " + destination + "."
+                );
+
+                if (currentTab === "stays") {
+                    document.getElementById("hotels").scrollIntoView();
+                }
+
+                if (currentTab === "packages") {
+                    document.getElementById("packages").scrollIntoView();
+                }
+
+                if (currentTab === "experiences") {
+                    document.getElementById("experiences").scrollIntoView();
+                }
+
+                if (currentTab === "flights") {
+                    document.getElementById("flights").scrollIntoView();
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           FAVOURITES
+        ========================================= */
+
+        function toggleFavorite(button, destination) {
+
+            if (favorites.includes(destination)) {
+
+                favorites = favorites.filter(
+                    item => item !== destination
+                );
+
+                button.classList.remove("saved");
+
+                button.textContent = "♡";
+
+                showToast(destination + " removed from favourites.");
+
+            } else {
+
+                favorites.push(destination);
+
+                button.classList.add("saved");
+
+                button.textContent = "♥";
+
+                showToast(destination + " added to favourites.");
+
+            }
+
+            localStorage.setItem(
+                "ts_favorites",
+                JSON.stringify(favorites)
+            );
+
+            updateDashboard();
+
+        }
+
+
+        /* =========================================
+           DESTINATION DETAILS
+        ========================================= */
+
+        function exploreDestination(name, country) {
+
+            openCustomModal(
+                "Explore " + name,
+                `
+                    <div class="confirmation"
+                    style="background:#edf6ff;color:#214c74">
+
+                        <h3>${escapeHTML(name)}, ${escapeHTML(country)}</h3>
+
+                        <p style="margin-top:12px">
+                            Welcome to your destination preview!
+                        </p>
+
+                        <p style="margin-top:12px">
+                            Explore local attractions, discover accommodation
+                            ideas and plan a memorable journey.
+                        </p>
+
+                        <p style="margin-top:12px">
+                            This is a sample destination information page.
+                        </p>
+
+                        <button class="primary-btn"
+                        style="margin-top:17px"
+                        onclick="closeModal();document.getElementById('hotels').scrollIntoView()">
+                            Explore Stays →
+                        </button>
+
+                    </div>
+                `
+            );
+
+        }
+
+
+        /* =========================================
+           HOTEL BOOKING
+        ========================================= */
+
+        function bookHotel(name, price) {
+
+            currentBooking = {
+                name: name,
+                price: price,
+                type: "Hotel"
+            };
+
+            openBookingForm();
+
+        }
+
+
+        /* =========================================
+           PACKAGE BOOKING
+        ========================================= */
+
+        function bookPackage(name, price) {
+
+            currentBooking = {
+                name: name,
+                price: price,
+                type: "Holiday Package"
+            };
+
+            openBookingForm();
+
+        }
+
+
+        /* =========================================
+           BOOKING FORM
+        ========================================= */
+
+        function openBookingForm() {
+
+            if (!currentBooking) return;
+
+            openCustomModal(
+                "Complete Your Demo Booking",
+
+                `
+                    <p>
+                        Selected: <strong>${escapeHTML(currentBooking.name)}</strong>
+                    </p>
+
+                    <div class="confirmation" style="margin-bottom:18px">
+                        <strong>Estimated demo price:</strong>
+                        ₹${currentBooking.price.toLocaleString("en-IN")}
+
+                        <br>
+
+                        <small>
+                            No payment will be collected.
+                        </small>
+                    </div>
+
+                    <form class="modal-form" id="bookingForm">
+
+                        <label>
+                            Full Name
+                            <input type="text" id="travellerName"
+                            placeholder="Enter your full name"
+                            maxlength="80" required>
+                        </label>
+
+                        <label>
+                            Email Address
+                            <input type="email" id="travellerEmail"
+                            placeholder="Enter your email"
+                            maxlength="120" required>
+                        </label>
+
+                        <label>
+                            Number of Travellers
+                            <select id="travellerCount">
+                                <option value="1">1 Traveller</option>
+                                <option value="2" selected>2 Travellers</option>
+                                <option value="3">3 Travellers</option>
+                                <option value="4">4 Travellers</option>
+                            </select>
+                        </label>
+
+                        <button type="submit" class="primary-btn">
+                            Confirm Demo Booking →
+                        </button>
+
+                    </form>
+                `
+            );
+
+            document.getElementById("bookingForm").addEventListener(
+                "submit",
+                function(event) {
+
+                    event.preventDefault();
+
+                    const name =
+                        document.getElementById("travellerName").value.trim();
+
+                    const email =
+                        document.getElementById("travellerEmail").value.trim();
+
+                    const count =
+                        Number(document.getElementById("travellerCount").value);
+
+                    if (!name || !email || !email.includes("@")) {
+                        showToast("Please enter valid traveller details.");
+                        return;
+                    }
+
+                    const total = currentBooking.price * count;
+
+                    const booking = {
+
+                        reference: "TS" +
+                            Date.now().toString().slice(-8),
+
+                        name: currentBooking.name,
+
+                        type: currentBooking.type,
+
+                        traveller: name,
+
+                        email: email,
+
+                        people: count,
+
+                        total: total,
+
+                        date: new Date().toLocaleDateString("en-IN")
+
+                    };
+
+                    bookings.push(booking);
+
+                    localStorage.setItem(
+                        "ts_bookings",
+                        JSON.stringify(bookings)
+                    );
+
+                    updateDashboard();
+
+                    document.getElementById("modalContent").innerHTML = `
+
+                        <div style="text-align:center">
+
+                            <div style="font-size:55px">✅</div>
+
+                            <h2 id="modalTitle">
+                                Demo Booking Confirmed!
+                            </h2>
+
+                            <p>
+                                Your demonstration booking has been recorded
+                                in this browser.
+                            </p>
+
+                        </div>
+
+                        <div class="confirmation">
+
+                            <strong>Booking Reference:</strong>
+                            ${escapeHTML(booking.reference)}
+
+                            <br>
+
+                            <strong>Service:</strong>
+                            ${escapeHTML(booking.name)}
+
+                            <br>
+
+                            <strong>Traveller:</strong>
+                            ${escapeHTML(booking.traveller)}
+
+                            <br>
+
+                            <strong>Travellers:</strong>
+                            ${booking.people}
+
+                            <br>
+
+                            <strong>Estimated Total:</strong>
+                            ₹${booking.total.toLocaleString("en-IN")}
+
+                            <br><br>
+
+                            <small>
+                                This is not a real travel reservation or
+                                payment confirmation.
+                            </small>
+
+                        </div>
+
+                        <button class="primary-btn"
+                        style="width:100%;margin-top:20px"
+                        onclick="closeModal();document.getElementById('mytrips').scrollIntoView()">
+                            View My Trips
+                        </button>
+
+                    `;
+
+                    showToast("Demo booking saved successfully!");
+
+                }
+            );
+
+        }
+
+
+        /* =========================================
+           FLIGHT SEARCH
+        ========================================= */
+
+        document.getElementById("flightForm").addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+                const from =
+                    document.getElementById("flightFrom").value.trim();
+
+                const to =
+                    document.getElementById("flightTo").value.trim();
+
+                const date =
+                    document.getElementById("flightDate").value;
+
+                if (!from || !to || !date) {
+                    showToast("Complete all flight search fields.");
+                    return;
+                }
+
+                if (from.toLowerCase() === to.toLowerCase()) {
+                    showToast("Choose two different cities.");
+                    return;
+                }
+
+                const selectedDate = new Date(date + "T00:00:00");
+
+                const today = new Date();
+
+                today.setHours(0,0,0,0);
+
+                if (selectedDate < today) {
+                    showToast("Select a future departure date.");
+                    return;
+                }
+
+                const results = document.getElementById("flightResults");
+
+                results.innerHTML = `
+
+                    <div class="confirmation"
+                    style="background:#edf6ff;color:#214c74">
+
+                        <h3>✈ Sample Flight Search Results</h3>
+
+                        <p style="margin:12px 0">
+                            Route: <strong>${escapeHTML(from)}</strong>
+                            → <strong>${escapeHTML(to)}</strong>
+                        </p>
+
+                        <p>Departure date: ${escapeHTML(date)}</p>
+
+                        <hr style="margin:15px 0;border:0;border-top:1px solid #cbddeb">
+
+                        <p>
+                            <strong>SkyLink Airways — Sample Flight TS101</strong>
+                        </p>
+
+                        <p>Departure: 09:00 · Arrival: 13:30</p>
+
+                        <p>Duration: 4h 30m · Non-stop (sample)</p>
+
+                        <p>
+                            <strong>Demo fare: ₹8,500 per passenger</strong>
+                        </p>
+
+                        <button class="primary-btn"
+                        style="margin-top:15px"
+                        onclick="bookHotel('Sample flight ${escapeHTML(from)} to ${escapeHTML(to)}',8500)">
+                            Select Demo Flight
+                        </button>
+
+                        <p style="font-size:11px;margin-top:12px">
+                            This is fictional sample flight information.
+                            It is not a live airline schedule or fare.
+                        </p>
+
+                    </div>
+
+                `;
+
+                showToast("Sample flight results generated.");
+
+            }
+        );
+
+
+        /* =========================================
+           NEWSLETTER
+        ========================================= */
+
+        document.getElementById("newsletterForm").addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+                const email =
+                    document.getElementById("newsletterEmail").value.trim();
+
+                if (!email || !email.includes("@")) {
+                    showToast("Enter a valid email address.");
+                    return;
+                }
+
+                showToast(
+                    "Thanks! Your demo newsletter subscription is recorded for this session."
+                );
+
+                this.reset();
+
+            }
+        );
+
+
+        /* =========================================
+           MODAL FUNCTIONS
+        ========================================= */
+
+        function openModal(type) {
+
+            let title = "";
+
+            let content = "";
+
+            if (type === "login") {
+
+                title = "Welcome Back";
+
+                content = `
+                    <form class="modal-form" id="loginForm">
+
+                        <label>
+                            Email Address
+                            <input type="email" required
+                            placeholder="Your email address">
+                        </label>
+
+                        <label>
+                            Password
+                            <input type="password" required
+                            placeholder="Your password">
+                        </label>
+
+                        <button class="primary-btn" type="submit">
+                            Sign In
+                        </button>
+
+                    </form>
+
+                    <p style="margin-top:15px">
+                        Demonstration only. No real account authentication
+                        is configured.
+                    </p>
+                `;
+
+            } else if (type === "signup") {
+
+                title = "Create Your TravelSphere Account";
+
+                content = `
+                    <form class="modal-form" id="signupForm">
+
+                        <label>
+                            Full Name
+                            <input type="text" required
+                            maxlength="80" placeholder="Your name">
+                        </label>
+
+                        <label>
+                            Email Address
+                            <input type="email" required
+                            placeholder="Your email">
+                        </label>
+
+                        <label>
+                            Password
+                            <input type="password" required minlength="8"
+                            placeholder="At least 8 characters">
+                        </label>
+
+                        <label>
+                            Confirm Password
+                            <input type="password" required minlength="8"
+                            placeholder="Confirm password">
+                        </label>
+
+                        <button class="primary-btn" type="submit">
+                            Create Demo Account
+                        </button>
+
+                    </form>
+
+                    <p style="margin-top:15px">
+                        Demo registration only. No password or account
+                        is sent to a server.
+                    </p>
+                `;
+
+            } else if (type === "support") {
+
+                title = "TravelSphere Help Centre";
+
+                content = `
+                    <form class="modal-form" id="supportForm">
+
+                        <label>
+                            Your Name
+                            <input type="text" required maxlength="80">
+                        </label>
+
+                        <label>
+                            Email Address
+                            <input type="email" required>
+                        </label>
+
+                        <label>
+                            Your Message
+                            <textarea rows="4" required maxlength="1000"
+                            placeholder="How can we help?"></textarea>
+                        </label>
+
+                        <button class="primary-btn" type="submit">
+                            Send Demo Enquiry
+                        </button>
+
+                    </form>
+                `;
+
+            }
+
+            openCustomModal(title, content);
+
+            if (type === "login") {
+
+                document.getElementById("loginForm").addEventListener(
+                    "submit",
+                    function(event) {
+
+                        event.preventDefault();
+
+                        showToast(
+                            "Demo sign-in form submitted. No real account is connected."
+                        );
+
+                        closeModal();
+
+                    }
+                );
+
+            }
+
+            if (type === "signup") {
+
+                document.getElementById("signupForm").addEventListener(
+                    "submit",
+                    function(event) {
+
+                        event.preventDefault();
+
+                        const passwords =
+                            this.querySelectorAll('input[type="password"]');
+
+                        if (passwords[0].value !== passwords[1].value) {
+
+                            showToast("Passwords do not match.");
+
+                            return;
+
+                        }
+
+                        showToast("Demo registration completed.");
+
+                        closeModal();
+
+                    }
+                );
+
+            }
+
+            if (type === "support") {
+
+                document.getElementById("supportForm").addEventListener(
+                    "submit",
+                    function(event) {
+
+                        event.preventDefault();
+
+                        showToast("Your demo enquiry has been recorded.");
+
+                        closeModal();
+
+                    }
+                );
+
+            }
+
+        }
+
+
+        function openCustomModal(title, content) {
+
+            document.getElementById("modalContent").innerHTML = `
+
+                <h2 id="modalTitle">${escapeHTML(title)}</h2>
+
+                <p>TravelSphere interactive demonstration</p>
+
+                ${content}
+
+            `;
+
+            document.getElementById("mainModal").classList.add("show");
+
+        }
+
+
+        function closeModal() {
+
+            document.getElementById("mainModal").classList.remove("show");
+
+        }
+
+
+        /* =========================================
+           SAFE TEXT DISPLAY
+        ========================================= */
+
+        function escapeHTML(value) {
+
+            return String(value).replace(/[&<>"']/g, function(char) {
+
+                return {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                }[char];
+
+            });
+
+        }
+
+
+        /* =========================================
+           DASHBOARD
+        ========================================= */
+
+        function updateDashboard() {
+
+            document.getElementById("bookingCount").textContent =
+                bookings.length;
+
+            document.getElementById("favoriteCount").textContent =
+                favorites.length;
+
+            document.getElementById("tripCount").textContent =
+                bookings.length;
+
+            const total = bookings.reduce(
+                (sum, booking) => sum + Number(booking.total || 0),
+                0
+            );
+
+            document.getElementById("bookingTotal").textContent =
+                "₹" + total.toLocaleString("en-IN");
+
+            const list = document.getElementById("tripList");
+
+            if (bookings.length === 0) {
+
+                list.innerHTML = `
+
+                    <h3 style="color:var(--navy);margin-bottom:12px">
+                        Your Bookings
+                    </h3>
+
+                    <p style="color:var(--muted);font-size:14px">
+                        No bookings yet. Explore a hotel or package
+                        to try the demo booking flow.
+                    </p>
+
+                `;
+
+                return;
+
+            }
+
+            list.innerHTML = `
+
+                <h3 style="color:var(--navy);margin-bottom:15px">
+                    Your Demo Bookings
+                </h3>
+
+                ${bookings.map(booking => `
+
+                    <div style="
+                        padding:15px;
+                        border:1px solid #e5edf5;
+                        border-radius:10px;
+                        margin-bottom:12px;
+                    ">
+
+                        <strong>${escapeHTML(booking.name)}</strong>
+
+                        <p style="font-size:12px;color:#748398;margin-top:7px">
+                            ${escapeHTML(booking.type)}
+                            · ${escapeHTML(booking.date)}
+                        </p>
+
+                        <p style="font-size:12px;color:#748398;margin-top:5px">
+                            Reference: ${escapeHTML(booking.reference)}
+                        </p>
+
+                        <p style="font-weight:800;color:#1677D2;margin-top:7px">
+                            ₹${Number(booking.total).toLocaleString("en-IN")}
+                        </p>
+
+                    </div>
+
+                `).join("")}
+
+            `;
+
+        }
+
+
+        function showTrips() {
+
+            updateDashboard();
+
+            showToast("Travel dashboard updated.");
+
+        }
+
+
+        /* =========================================
+           DATE VALIDATION DEFAULTS
+        ========================================= */
+
+        const today = new Date();
+
+        const todayString = [
+            today.getFullYear(),
+            String(today.getMonth() + 1).padStart(2, "0"),
+            String(today.getDate()).padStart(2, "0")
+        ].join("-");
+
+        function setDateLimits() {
+
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+
+                input.min = todayString;
+
+            });
+
+        }
+
+
+        /* =========================================
+           INITIALISE APPLICATION
+        ========================================= */
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            updateDashboard();
+
+            setDateLimits();
+
+            favorites.forEach(destination => {
+
+                const buttons = document.querySelectorAll(".heart-btn");
+
+                buttons.forEach(button => {
+
+                    if (button.getAttribute("onclick").includes(
+                        "'" + destination + "'"
+                    )) {
+
+                        button.classList.add("saved");
+
+                        button.textContent = "♥";
+
+                    }
+
+                });
+
+            });
+
+            console.log("TravelSphere initialized successfully.");
+
+        });
+
+    </script>
+
+</body>
+</html>
