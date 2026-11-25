@@ -1,6 +1,6 @@
 <div align="center">
 
-### 🌐 HTML — Web Development Repository
+## 🌐 HTML — Web Development Repository
 
 ### Building the Web, One Line at a Time.
 
