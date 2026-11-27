@@ -24,7 +24,7 @@
 
 Welcome to my **HTML Repository**! This repository is dedicated to learning, practicing, and exploring the fundamentals of HTML (HyperText Markup Language).
 
-Here, you will discover different HTML programs, web development experiments, practical examples, and creative projects.
+Here, you will discover different HTML Projects programs, web development experiments, practical examples, and creative projects.
 
 My goal is to improve my web development skills by building real-world projects and exploring modern web technologies.
 
