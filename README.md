@@ -2,7 +2,7 @@
 
 ### 🌐 HTML — Web Development Repository
 
-### Building the Web, One Line at a Time.
+## Building the Web, One Line at a Time.
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&pause=1000&color=00D9FF&center=true&vCenter=true&width=600&lines=Welcome+to+My+HTML+Repository!;Learning+%26+Building+Web+Experiences;Creating+Beautiful+Web+Pages" />
 
